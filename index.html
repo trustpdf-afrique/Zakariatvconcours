@@ -3,214 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakaria TV Concours V3 - Premium</title>
+    <title>Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde</title>
     <style>
         * {
             box-sizing: border-box;
-            transition: all 0.3s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         body {
             margin: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #edf7ff, #f1faee);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at top right, #edf7ff 0%, #f1faee 100%);
             min-height: 100vh;
+            color: #1d3557;
         }
         .container {
             max-width: 700px;
             margin: auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             min-height: 100vh;
-            padding: 30px 20px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.05);
-            position: relative;
+            padding: 40px 24px;
+            box-shadow: 0 0 50px rgba(29, 53, 87, 0.08);
+            display: flex;
+            flex-direction: column;
         }
         .logo {
             text-align: center;
-            font-size: 36px;
+            font-size: 38px;
             font-weight: 800;
             color: #1d3557;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
             margin-bottom: 5px;
+            text-transform: uppercase;
         }
         .logo span {
             color: #e63946;
+            position: relative;
         }
         .subtitle {
             text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 16px;
+            color: #457b9d;
+            margin-bottom: 35px;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .card {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 20px;
+            background: #ffffff;
+            padding: 28px;
+            border-radius: 24px;
             margin: 20px 0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, .04);
-            border: 1px solid rgba(0,0,0,0.02);
+            box-shadow: 0 10px 30px rgba(29, 53, 87, 0.04);
+            border: 1px solid rgba(69, 123, 157, 0.08);
         }
         button {
             width: 100%;
-            padding: 16px;
+            padding: 16px 20px;
             border: 0;
-            border-radius: 14px;
+            border-radius: 16px;
             background: #1d3557;
             color: white;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             margin: 10px 0;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(29, 53, 87, 0.2);
+            box-shadow: 0 6px 20px rgba(29, 53, 87, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(29, 53, 87, 0.3);
-            opacity: .95;
+            box-shadow: 0 8px 25px rgba(29, 53, 87, 0.25);
+            background: #25446e;
         }
         .red {
-            background: #e63946;
-            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.2);
+            background: linear-gradient(135deg, #e63946, #c92a36);
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.2);
         }
         .red:hover {
-            box-shadow: 0 6px 18px rgba(230, 57, 70, 0.3);
+            background: linear-gradient(135deg, #ff4d5a, #e63946);
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.35);
         }
         .green {
-            background: #2a9d8f;
-            box-shadow: 0 4px 12px rgba(42, 157, 143, 0.2);
+            background: linear-gradient(135deg, #2a9d8f, #20786e);
+            box-shadow: 0 6px 20px rgba(42, 157, 143, 0.2);
         }
         .green:hover {
-            box-shadow: 0 6px 18px rgba(42, 157, 143, 0.3);
+            background: linear-gradient(135deg, #35bdae, #2a9d8f);
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.35);
+        }
+        .btn-delete {
+            background: rgba(230, 57, 70, 0.1);
+            color: #e63946;
+            box-shadow: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+        .btn-delete:hover {
+            background: #e63946;
+            color: white;
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.2);
         }
         input, textarea, select {
             width: 100%;
-            padding: 14px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 14px;
             border: 2px solid #e2e8f0;
             margin: 10px 0;
             font-size: 15px;
-            background-color: #fcfdff;
+            background-color: #f8fafc;
+            color: #1d3557;
+            font-weight: 500;
         }
-        input:focus, textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: #457b9d;
             background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(69, 123, 157, 0.15);
         }
         .screen {
             display: none;
-            animation: fadeIn 0.4s ease-out forwards;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .active {
             display: block;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .admin-title {
             color: #1d3557;
             text-align: center;
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
         }
         .stat {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f1faee;
-            padding: 18px;
-            border-radius: 14px;
-            margin: 12px 0;
-            border-left: 5px solid #457b9d;
+            flex-direction: column;
+            background: linear-gradient(180deg, #ffffff, #f1faee);
+            padding: 15px;
+            border-radius: 18px;
+            text-align: center;
+            border: 1px solid rgba(69, 123, 157, 0.15);
         }
-        .stat span { font-weight: 600; color: #457b9d; }
-        .stat b { font-size: 18px; color: #1d3557; }
+        .stat span { font-size: 12px; font-weight: 700; color: #457b9d; text-transform: uppercase; }
+        .stat b { font-size: 24px; color: #1d3557; display: block; margin-top: 5px; }
         
-        /* Progress Bar Moderne */
         .progress {
             background: #edf2f7;
             border-radius: 10px;
             overflow: hidden;
             margin: 15px 0;
-            height: 8px;
+            height: 10px;
         }
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #2a9d8f, #457b9d);
+            background: linear-gradient(90deg, #e63946, #457b9d);
             width: 0%;
         }
         
-        /* Options QCM interactives */
         .option {
             background: white;
-            padding: 16px;
+            padding: 18px;
             border: 2px solid #edf2f7;
-            border-radius: 12px;
-            margin: 10px 0;
+            border-radius: 16px;
+            margin: 12px 0;
             cursor: pointer;
-            font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.01);
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+            display: flex;
+            align-items: center;
         }
         .option:hover {
             background: #f8fafc;
-            border-color: #cbd5e1;
+            border-color: #457b9d;
+            transform: translateX(3px);
         }
         .option.selected {
-            background: #eef2ff;
+            background: #f1faee;
             border-color: #e63946;
             color: #e63946;
-            font-weight: 600;
-            transform: scale(1.01);
         }
 
-        /* Liste des participants Admin */
         .participant-card {
             background: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 10px 0;
+            padding: 20px;
+            border-radius: 18px;
+            margin: 12px 0;
             border: 1px solid #e2e8f0;
             position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
         .score-badge {
             position: absolute;
-            right: 15px;
-            top: 15px;
-            background: #e63946;
+            right: 20px;
+            top: 20px;
+            background: #1d3557;
             color: white;
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 16px;
         }
 
-        /* COMPTE À REBOURS CIRCULAIRE */
+        /* TIMER CIRCULAIRE DE 10 SECONDES */
         .timer-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 20px 0;
+            margin: 25px 0;
         }
         .circular-timer {
             position: relative;
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
         }
         .circular-timer svg {
             transform: rotate(-90deg);
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
         }
         .circular-timer circle {
             width: 100%;
             height: 100%;
             fill: none;
-            stroke-width: 6;
+            stroke-width: 7;
             stroke-linecap: round;
         }
         .circular-timer .bg-circle {
-            stroke: #f3f4f6;
+            stroke: #f1faee;
         }
         .circular-timer .progress-circle {
             stroke: #e63946;
-            stroke-dasharray: 220;
+            stroke-dasharray: 251.2;
             stroke-dashoffset: 0;
             transition: stroke-dashoffset 1s linear;
         }
@@ -219,8 +256,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 26px;
+            font-weight: 800;
             color: #e63946;
         }
     </style>
@@ -230,13 +267,13 @@
     <!-- ACCUEIL -->
     <div id="home" class="screen active">
         <div class="logo">Zakaria TV <span>Concours</span></div>
-        <p class="subtitle">La plateforme officielle des concours en ligne.</p>
+        <p class="subtitle">Mini-documentaires sur les plus grandes personnalités du monde</p>
         <div class="card">
-            <h3 style="margin-top:0; color:#1d3557;">🏆 Bienvenue</h3>
-            <p style="color:#555; line-height: 1.5;">Participez aux concours organisés par Zakaria TV. Les résultats sont contrôlés avant publication.</p>
+            <h3 style="margin-top:0; color:#1d3557; font-size:20px;">🏆 Grand Concours Officiel</h3>
+            <p style="color:#555; line-height: 1.6; font-size: 15px;">Testez vos connaissances et prouvez votre valeur. Seuls les meilleurs seront récompensés en argent réel ! Les scores sont directement centralisés et vérifiés par notre équipe.</p>
         </div>
-        <button class="red" onclick="openParticipant()">🎯 Participer à un concours</button>
-        <button onclick="openAdminLogin()">🔐 Espace Admin Zakaria TV</button>
+        <button class="red" onclick="openParticipant()">🎯 Participer au concours</button>
+        <button style="background:transparent; color:#457b9d; box-shadow:none;" onclick="openAdminLogin()">🔐 Espace Admin</button>
     </div>
 
     <!-- CONNEXION ADMIN -->
@@ -248,105 +285,114 @@
             <button class="red" onclick="loginAdmin()">Se connecter</button>
             <p id="loginMessage" style="color:#e63946; text-align:center; font-weight:600;"></p>
         </div>
-        <button onclick="show('home')">Retour</button>
+        <button style="background: #457b9d;" onclick="show('home')">Retour</button>
     </div>
 
     <!-- TABLEAU DE BORD ADMIN -->
     <div id="dashboard" class="screen">
         <h2 class="admin-title">📊 Tableau de bord Zakaria TV</h2>
-        <div class="stat"><span>Concours créés</span><b id="totalQuiz">0</b></div>
-        <div class="stat"><span>Participants inscrits</span><b id="totalUsers">0</b></div>
-        <div class="stat"><span>Résultats reçus</span><b id="totalResults">0</b></div>
+        
+        <div class="stat-grid">
+            <div class="stat"><span>Concours</span><b id="totalQuiz">0</b></div>
+            <div class="stat"><span>Inscrits</span><b id="totalUsers">0</b></div>
+            <div class="stat"><span>Résultats</span><b id="totalResults">0</b></div>
+        </div>
         
         <div class="card">
-            <h3 style="margin-top:0;">Actions Admin</h3>
-            <button class="green" onclick="createQuizPage()">➕ Créer un concours</button>
+            <h3 style="margin-top:0; color:#1d3557;">Gestion & Actions</h3>
+            <button class="green" onclick="createQuizPage()">➕ Créer un nouveau concours</button>
             <button onclick="viewResultsPage()">📋 Voir les notes des participants</button>
             <button style="background:#457b9d;" onclick="logout()">🚪 Déconnexion</button>
         </div>
+
+        <div class="card" style="border: 1px dashed #e63946; background: #fff5f5;">
+            <h4 style="margin-top:0; color:#e63946;">Zone Dangereuse</h4>
+            <button class="btn-delete" onclick="clearAllParticipants()">🗑️ Supprimer tous les participants</button>
+            <button class="btn-delete" onclick="clearAllQuizzes()">🗑️ Supprimer tous les concours</button>
+        </div>
     </div>
 
-    <!-- VOIR LES RÉSULTATS (ADMIN PRIVÉ) -->
+    <!-- NOTES DES PARTICIPANTS (ADMIN) -->
     <div id="adminResults" class="screen">
-        <h2 class="admin-title">📋 Notes des Participants</h2>
+        <h2 class="admin-title">📋 Classement & Coordonnées</h2>
         <div id="globalResultsBox"></div>
         <button onclick="show('dashboard')">Retour tableau de bord</button>
     </div>
 
-    <!-- PAGE PARTICIPANT (FORMULAIRE OBLIGATOIRE) -->
+    <!-- INSCRIPTION PARTICIPANT -->
     <div id="participant" class="screen">
-        <h2>🎯 Inscription au Concours</h2>
+        <h2>🎯 Formulaire d'accès</h2>
         <div class="card">
-            <p style="margin-top:0; color:#666;">Veuillez remplir correctement vos informations pour commencer le concours.</p>
-            <input id="partNom" placeholder="Votre Nom">
+            <p style="margin-top:0; color:#666; font-size: 14px;">Identifiants obligatoires requis pour la validation de vos gains financiers potentiels.</p>
+            <input id="partNom" placeholder="Votre Nom de famille">
             <input id="partPrenom" placeholder="Votre Prénom">
-            <input id="partWhatsApp" placeholder="Votre numéro WhatsApp (Ex: 0707...)">
+            <input id="partWhatsApp" placeholder="Votre numéro WhatsApp officiel">
         </div>
-        <button class="red" onclick="startParticipation()">Commencer le Concours</button>
-        <button onclick="show('home')">Retour</button>
+        <button class="red" onclick="startParticipation()">Valider et Commencer</button>
+        <button style="background: #457b9d;" onclick="show('home')">Retour</button>
     </div>
 
-    <!-- CREATION CONCOURS ADMIN -->
+    <!-- CREATION CONCOURS -->
     <div id="createQuiz" class="screen">
         <h2 class="admin-title">➕ Nouveau Concours</h2>
         <div class="card">
-            <input id="quizTitle" placeholder="Titre du concours">
-            <textarea id="quizDesc" placeholder="Description du concours"></textarea>
-            <input id="quizContact" placeholder="WhatsApp Zakaria TV">
+            <input id="quizTitle" value="Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde" placeholder="Titre du concours">
+            <textarea id="quizDesc" placeholder="Description attractive du concours..."></textarea>
+            <input id="quizContact" placeholder="Votre Contact WhatsApp Pro">
         </div>
-        <h3>Questions (QCM à 5 Questions)</h3>
+        <h3>Questions du QCM (10 secondes max par question)</h3>
         <div id="questionsBox"></div>
-        <button class="green" onclick="saveQuiz()">Créer le concours</button>
+        <button class="green" onclick="saveQuiz()">Générer le lien du concours</button>
         <div id="quizLink"></div>
-        <button onclick="backDashboard()">Retour tableau de bord</button>
+        <button style="background: #457b9d;" onclick="backDashboard()">Retour tableau de bord</button>
     </div>
 
-    <!-- PARTICIPATION CONCOURS ACTIF -->
+    <!-- SALLE D'ATTENTE PARTICIPANT -->
     <div id="playQuiz" class="screen">
-        <h2 id="playTitle" style="text-align:center; color:#1d3557;"></h2>
+        <h2 id="playTitle" style="text-align:center; color:#1d3557; font-weight: 800;"></h2>
         <div class="card">
-            <p id="playDesc" style="text-align:center; color:#555;"></p>
+            <p id="playDesc" style="text-align:center; color:#555; line-height: 1.6;"></p>
         </div>
-        <button class="red" onclick="goToQuestions()">Prêt ? C'est parti !</button>
+        <button class="red" onclick="goToQuestions()">Prêt ? Lancer le Chrono</button>
     </div>
 
-    <!-- PAGE DE QUESTION PLAY -->
+    <!-- CORPS DU CONCOURS INTERACTIF -->
     <div id="questionPage" class="screen">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3 id="questionNumber" style="margin:0; color:#457b9d;"></h3>
+            <h3 id="questionNumber" style="margin:0; color:#457b9d; font-weight:700;"></h3>
         </div>
         
-        <!-- Compte à rebours circulaire rouge -->
+        <!-- Chrono Circulaire 10 Secondes Réelles -->
         <div class="timer-container">
             <div class="circular-timer">
                 <svg>
-                    <circle class="bg-circle" cx="40" cy="40" r="35"></circle>
-                    <circle id="progressCircle" class="progress-circle" cx="40" cy="40" r="35"></circle>
+                    <circle class="bg-circle" cx="45" cy="45" r="40"></circle>
+                    <circle id="progressCircle" class="progress-circle" cx="45" cy="45" r="40"></circle>
                 </svg>
-                <div id="timer" class="timer-text">5</div>
+                <div id="timer" class="timer-text">10</div>
             </div>
         </div>
 
         <div class="card">
             <div class="progress"><div id="bar" class="progress-bar"></div></div>
-            <h3 id="playQuestion" style="color:#1d3557; margin-top:10px;"></h3>
+            <h3 id="playQuestion" style="color:#1d3557; margin-top:10px; font-size:20px;"></h3>
             <div id="playAnswers"></div>
         </div>
-        <button class="green" onclick="nextQuestion()">Confirmer et Suivant</button>
+        <button class="green" onclick="nextQuestion()">Enregistrer ma réponse</button>
     </div>
 
-    <!-- PAGE FIN DE CONCOURS -->
+    <!-- PAGE FIN DE CONCOURS SANS RETOUR -->
     <div id="endPage" class="screen">
-        <div class="card" style="text-align: center; padding: 40px 20px;">
-            <span style="font-size: 60px;">🎉</span>
-            <h2>Merci pour votre participation !</h2>
-            <p style="font-size: 16px; color:#555;">Votre participation a bien été enregistrée.</p>
-            <div style="background: #fff3f5; padding: 15px; border-radius: 12px; border: 1px dashed #e63946; margin: 20px 0;">
-                <p style="margin:0; font-weight:600; color:#e63946;">🔒 Votre score reste confidentiel.</p>
-                <p style="margin:5px 0 0 0; font-size:14px; color:#666;">Les résultats officiels seront annoncés uniquement par Zakaria TV.</p>
+        <div class="card" style="text-align: center; padding: 50px 20px; border-radius: 28px;">
+            <span style="font-size: 70px;">🏆</span>
+            <h2 style="color:#1d3557; font-size:26px;">Session terminée avec succès !</h2>
+            <p style="font-size: 16px; color:#555; max-width: 80%;">Vos réponses ont été sécurisées et transmises à l'administration de Zakaria TV.</p>
+            <div style="background: linear-gradient(135deg, #fff3f5, #ffebee); padding: 20px; border-radius: 16px; border: 1px solid rgba(230, 57, 70, 0.2); margin: 30px 0;">
+                <p style="margin:0; font-weight:700; color:#e63946; font-size: 16px;">🔒 Confidentialité des scores activée</p>
+                <p style="margin:8px 0 0 0; font-size:14px; color:#666;">Afin d'éviter toute fuite ou triche entre candidats, votre note finale est visible exclusivement par l'organisateur.</p>
             </div>
-            <p id="endContact" style="font-weight: bold; color:#1d3557;"></p>
-            <button onclick="show('home')">Retour à l'accueil</button>
+            <p id="endContact" style="font-weight: 700; color:#1d3557; font-size:15px;"></p>
+            <p style="color:#94a3b8; font-size: 13px; margin-top:20px;">Vous pouvez fermer cet onglet ou quitter le lien maintenant.</p>
         </div>
     </div>
 </div>
@@ -356,7 +402,7 @@
     let quizzes = JSON.parse(localStorage.getItem("zakariaQuiz")) || [];
 
     function show(id) {
-        document.querySelectorAll(".screen").forEach(e => { e.classList.remove("active"); });
+        document.querySelectorAll(".screen").forEach(e => { e.classList.remove('active'); });
         document.getElementById(id).classList.add('active');
     }
 
@@ -386,6 +432,32 @@
         document.getElementById("totalResults").innerHTML = results.length;
     }
 
+    function clearAllParticipants() {
+        if(confirm("⚠️ Es-tu sûr de vouloir supprimer DÉFINITIVEMENT tous les participants et leurs notes ?")) {
+            localStorage.removeItem("resultsList");
+            localStorage.removeItem("participants");
+            localStorage.removeItem("results");
+            
+            // Nettoyer aussi les verrous de participation des utilisateurs
+            Object.keys(localStorage).forEach(key => {
+                if(key.startsWith("done_")) localStorage.removeItem(key);
+            });
+            
+            alert("Liste des participants réinitialisée !");
+            updateStats();
+            if(document.getElementById("adminResults").classList.contains("active")) viewResultsPage();
+        }
+    }
+
+    function clearAllQuizzes() {
+        if(confirm("⚠️ Es-tu sûr de vouloir supprimer TOUS les concours créés ?")) {
+            localStorage.removeItem("zakariaQuiz");
+            quizzes = [];
+            alert("Tous les concours ont été effacés !");
+            updateStats();
+        }
+    }
+
     function createQuizPage() {
         if (!adminConnected) return;
         show("createQuiz");
@@ -398,18 +470,18 @@
         for (let i = 1; i <= 5; i++) {
             box.innerHTML += `
                 <div class="card">
-                    <b style="color:#e63946;">Question ${i}</b>
+                    <b style="color:#e63946; font-size:16px;">Question ${i}</b>
                     <input id="question${i}" placeholder="Intitulé de la question">
-                    <input id="answer${i}A" placeholder="Réponse A">
-                    <input id="answer${i}B" placeholder="Réponse B">
-                    <input id="answer${i}C" placeholder="Réponse C">
-                    <input id="answer${i}D" placeholder="Réponse D">
+                    <input id="answer${i}A" placeholder="Option A">
+                    <input id="answer${i}B" placeholder="Option B">
+                    <input id="answer${i}C" placeholder="Option C">
+                    <input id="answer${i}D" placeholder="Option D">
                     <select id="correct${i}">
-                        <option value="">-- Choisir la bonne réponse --</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
+                        <option value="">-- Indiquer la réponse correcte --</option>
+                        <option value="A">Option A</option>
+                        <option value="B">Option B</option>
+                        <option value="C">Option C</option>
+                        <option value="D">Option D</option>
                     </select>
                 </div>
             `;
@@ -417,9 +489,10 @@
     }
 
     function saveQuiz() {
+        let titleVal = document.getElementById("quizTitle").value;
         let quiz = {
             id: Date.now(),
-            title: document.getElementById("quizTitle").value,
+            title: titleVal ? titleVal : "Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde",
             description: document.getElementById("quizDesc").value,
             contact: document.getElementById("quizContact").value,
             questions: []
@@ -439,13 +512,13 @@
         quizzes.push(quiz);
         localStorage.setItem("zakariaQuiz", JSON.stringify(quizzes));
 
-        let link = location.href.split("?")[0] + "?quiz=" + btoa(JSON.stringify(quiz));
+        let link = location.href.split("?")[0] + "?quiz=" + btoa(unescape(encodeURIComponent(JSON.stringify(quiz))));
         document.getElementById("quizLink").innerHTML = `
-            <div class="card" style="border: 2px solid #2a9d8f;">
-                <h3 style="color:#2a9d8f; margin-top:0;">✅ Concours créé avec succès !</h3>
-                <p>Partage ce lien avec tes abonnés :</p>
-                <input type="text" value="${link}" readonly style="background:#f1f5f9;">
-                <button class="green" onclick="navigator.clipboard.writeText('${link}'); alert('Lien copié !');">📋 Copier le lien</button>
+            <div class="card" style="border: 2px solid #2a9d8f; background: #fafdfb;">
+                <h3 style="color:#2a9d8f; margin-top:0;">✅ Lien généré avec succès !</h3>
+                <p style="font-size:14px; color:#555;">Copiez le lien crypté sécurisé pour vos abonnés :</p>
+                <input type="text" value="${link}" readonly style="background:#fff; border-color:#2a9d8f;">
+                <button class="green" onclick="navigator.clipboard.writeText('${link}'); alert('Lien copié dans votre presse-papiers !');">📋 Copier le lien unique</button>
             </div>
         `;
         updateStats();
@@ -459,7 +532,7 @@
         let results = JSON.parse(localStorage.getItem("resultsList")) || [];
         
         if(results.length === 0) {
-            box.innerHTML = "<p style='text-align:center; color:#666;'>Aucun participant pour le moment.</p>";
+            box.innerHTML = "<p style='text-align:center; color:#666; padding: 20px;'>Aucun participant enregistré pour le moment.</p>";
             return;
         }
 
@@ -467,9 +540,9 @@
             box.innerHTML += `
                 <div class="participant-card">
                     <div class="score-badge">${r.score} / 5</div>
-                    <strong style="font-size:16px; color:#1d3557;">${r.prenom} ${r.nom}</strong><br>
-                    <span style="color:#2a9d8f; font-weight:600;">📱 WhatsApp : ${r.whatsapp}</span><br>
-                    <small style="color:#666;">Concours : ${r.quiz} | Passé le : ${r.date}</small>
+                    <strong style="font-size:17px; color:#1d3557; text-transform: capitalize;">👤 ${r.prenom} ${r.nom}</strong><br>
+                    <span style="color:#2a9d8f; font-weight:700; display:block; margin: 6px 0 3px 0;">📱 WhatsApp : ${r.whatsapp}</span>
+                    <small style="color:#666; display:block; font-size:12px;">Concours : ${r.quiz} <br> Effectué le : ${r.date}</small>
                 </div>
             `;
         });
@@ -481,7 +554,7 @@
     let currentQuiz = null;
     let qIndex = 0;
     let userAnswers = [];
-    let seconds = 5; // Changé à 5 secondes max
+    let seconds = 10; // 10 secondes réelles
     let clock;
 
     function loadQuizLink() {
@@ -489,13 +562,13 @@
         let code = params.get("quiz");
         if (!code) return;
         try {
-            currentQuiz = JSON.parse(atob(code));
+            currentQuiz = JSON.parse(decodeURIComponent(escape(atob(code))));
             document.getElementById("playTitle").innerHTML = currentQuiz.title;
             document.getElementById("playDesc").innerHTML = currentQuiz.description;
-            document.getElementById("endContact").innerHTML = "📱 Contact Organisateur : " + currentQuiz.contact;
+            document.getElementById("endContact").innerHTML = "📱 Support WhatsApp Organisateur : " + currentQuiz.contact;
             show("playQuiz");
         } catch (e) {
-            alert("Lien de concours invalide");
+            alert("Lien de concours invalide ou corrompu.");
         }
     }
 
@@ -509,19 +582,17 @@
         let whatsapp = document.getElementById("partWhatsApp").value.trim();
 
         if (nom === "" || prenom === "" || whatsapp === "") {
-            alert("⚠️ S'il vous plaît, remplissez toutes vos informations obligatoires.");
+            alert("⚠️ Veuillez fournir des informations valides pour l'attribution des récompenses.");
             return;
         }
 
         let key = "done_" + currentQuiz.id;
         if (localStorage.getItem(key)) {
-            alert("⚠️ Vous avez déjà participé à ce concours.");
+            alert("⚠️ Système de sécurité : Une seule participation par appareil est autorisée.");
             return;
         }
 
-        // Sauvegarde temporaire des infos du joueur actuel
         window.currentPlayer = { nom, prenom, whatsapp };
-
         localStorage.setItem(key, "started");
         qIndex = 0;
         userAnswers = [];
@@ -534,20 +605,20 @@
         let radius = circle.r.baseVal.value;
         let circumference = 2 * Math.PI * radius;
         
-        // Calcul du décalage pour l'animation du cercle
-        let strokeDashoffset = circumference - (seconds / 5) * circumference;
+        // Calcul millimétré de l'animation en fonction des 10 secondes actives
+        let strokeDashoffset = circumference - (seconds / 10) * circumference;
         circle.style.strokeDashoffset = strokeDashoffset;
     }
 
     function showQuestion() {
         clearInterval(clock);
-        seconds = 5; // Initialisation du timer à 5 secondes
+        seconds = 10; 
         document.getElementById("timer").innerHTML = seconds;
         
-        // Reset l'affichage du cercle
         let circle = document.getElementById("progressCircle");
         circle.style.strokeDashoffset = 0;
 
+        // Déclenchement exact des secondes réelles
         clock = setInterval(() => {
             seconds--;
             document.getElementById("timer").innerHTML = seconds;
@@ -555,20 +626,20 @@
             
             if (seconds <= 0) {
                 clearInterval(clock);
-                nextQuestion(); // Passe à la suite automatiquement
+                nextQuestion();
             }
         }, 1000);
 
         let q = currentQuiz.questions[qIndex];
-        document.getElementById("questionNumber").innerHTML = "Question " + (qIndex + 1) + "/" + currentQuiz.questions.length;
+        document.getElementById("questionNumber").innerHTML = "Question " + (qIndex + 1) + " sur " + currentQuiz.questions.length;
         document.getElementById("playQuestion").innerHTML = q.q;
         document.getElementById("bar").style.width = ((qIndex + 1) / currentQuiz.questions.length * 100) + "%";
 
         document.getElementById("playAnswers").innerHTML = `
-            <div class="option" onclick="answer('A',this)"><b>A)</b> ${q.A}</div>
-            <div class="option" onclick="answer('B',this)"><b>B)</b> ${q.B}</div>
-            <div class="option" onclick="answer('C',this)"><b>C)</b> ${q.C}</div>
-            <div class="option" onclick="answer('D',this)"><b>D)</b> ${q.D}</div>
+            <div class="option" onclick="answer('A',this)"><b>A) &nbsp;</b> ${q.A}</div>
+            <div class="option" onclick="answer('B',this)"><b>B) &nbsp;</b> ${q.B}</div>
+            <div class="option" onclick="answer('C',this)"><b>C) &nbsp;</b> ${q.C}</div>
+            <div class="option" onclick="answer('D',this)"><b>D) &nbsp;</b> ${q.D}</div>
         `;
     }
 
@@ -580,9 +651,8 @@
 
     function nextQuestion() {
         clearInterval(clock);
-        // Si aucune réponse n'a été sélectionnée durant les 5s, on enregistre un vide
         if(!userAnswers[qIndex]) {
-            userAnswers[qIndex] = "";
+            userAnswers[qIndex] = ""; // Cas d'expiration de temps
         }
         
         qIndex++;
@@ -594,7 +664,6 @@
     }
 
     function finishQuiz() {
-        // Calcul secret du score
         let finalScore = 0;
         currentQuiz.questions.forEach((q, index) => {
             if(userAnswers[index] === q.correct) {
@@ -602,7 +671,6 @@
             }
         });
 
-        // Structure complète reçue directement par l'admin
         let result = {
             nom: window.currentPlayer.nom,
             prenom: window.currentPlayer.prenom,
@@ -620,7 +688,7 @@
         show("endPage");
     }
 
-    // Protection anti-retour arrière
+    // Blocage strict de la navigation interne
     history.pushState(null, null, location.href);
     window.onpopstate = function () {
         history.pushState(null, null, location.href);
