@@ -5,341 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde</title>
     <style>
-        * {
-            box-sizing: border-box;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        * { box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
         body {
-            margin: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0; font-family: 'Segoe UI', system-ui, sans-serif;
             background: radial-gradient(circle at top right, #edf7ff 0%, #f1faee 100%);
-            min-height: 100vh;
-            color: #1d3557;
-            -webkit-text-size-adjust: 100%;
+            min-height: 100vh; color: #1d3557; -webkit-text-size-adjust: 100%;
         }
         .container {
-            max-width: 700px;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(10px);
-            min-height: 100vh;
-            padding: 40px 24px;
-            box-shadow: 0 0 50px rgba(29, 53, 87, 0.08);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            max-width: 650px; margin: auto; background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px); min-height: 100vh; padding: 35px 20px;
+            box-shadow: 0 0 50px rgba(29, 53, 87, 0.08); display: flex; flex-direction: column; justify-content: space-between;
         }
-        .main-content {
-            flex-grow: 1;
-        }
-        .logo {
-            text-align: center;
-            font-size: 34px;
-            font-weight: 800;
-            color: #1d3557;
-            letter-spacing: -1.5px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-        .logo span {
-            color: #e63946;
-        }
-        .subtitle {
-            text-align: center;
-            color: #457b9d;
-            margin-bottom: 35px;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .card {
-            background: #ffffff;
-            padding: 28px;
-            border-radius: 24px;
-            margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(29, 53, 87, 0.04);
-            border: 1px solid rgba(69, 123, 157, 0.08);
-        }
+        .main-content { flex-grow: 1; }
+        .logo { text-align: center; font-size: 32px; font-weight: 800; color: #1d3557; letter-spacing: -1.5px; text-transform: uppercase; margin-bottom: 5px; }
+        .logo span { color: #e63946; }
+        .subtitle { text-align: center; color: #457b9d; margin-bottom: 30px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .card { background: #ffffff; padding: 25px; border-radius: 24px; margin: 20px 0; box-shadow: 0 10px 30px rgba(29, 53, 87, 0.04); border: 1px solid rgba(69, 123, 157, 0.08); }
         button {
-            width: 100%;
-            padding: 16px 20px;
-            border: 0;
-            border-radius: 16px;
-            background: #1d3557;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            margin: 10px 0;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(29, 53, 87, 0.15);
+            width: 100%; padding: 16px; border: 0; border-radius: 16px; background: linear-gradient(135deg, #e63946, #c92a36);
+            color: white; font-size: 16px; font-weight: 700; margin: 10px 0; cursor: pointer; box-shadow: 0 6px 20px rgba(230, 57, 70, 0.2);
         }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(29, 53, 87, 0.25);
-            background: #25446e;
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(230, 57, 70, 0.35); }
+        input {
+            width: 100%; padding: 15px; border-radius: 14px; border: 2px solid #e2e8f0; margin: 10px 0;
+            font-size: 16px; background-color: #f8fafc; color: #1d3557; font-weight: 500;
         }
-        .red {
-            background: linear-gradient(135deg, #e63946, #c92a36);
-            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.2);
-        }
-        .red:hover {
-            background: linear-gradient(135deg, #ff4d5a, #e63946);
-        }
-        .green {
-            background: linear-gradient(135deg, #2a9d8f, #20786e);
-            box-shadow: 0 6px 20px rgba(42, 157, 143, 0.2);
-        }
-        .green:hover {
-            background: linear-gradient(135deg, #35bdae, #2a9d8f);
-        }
-        .btn-delete {
-            background: rgba(230, 57, 70, 0.1);
-            color: #e63946;
-            box-shadow: none;
-            padding: 10px 15px;
-            font-size: 14px;
-            border-radius: 10px;
-            margin-top: 5px;
-            font-weight: 600;
-        }
-        .btn-delete:hover {
-            background: #e63946;
-            color: white;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 15px;
-            border-radius: 14px;
-            border: 2px solid #e2e8f0;
-            margin: 10px 0;
-            font-size: 16px; /* Empêche le zoom auto iOS */
-            background-color: #f8fafc;
-            color: #1d3557;
-            font-weight: 500;
-        }
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #457b9d;
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(69, 123, 157, 0.15);
-        }
-        .screen {
-            display: none;
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .active {
-            display: block;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .admin-title {
-            color: #1d3557;
-            text-align: center;
-            font-weight: 800;
-            font-size: 26px;
-            margin-bottom: 25px;
-        }
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .stat {
-            background: linear-gradient(180deg, #ffffff, #f1faee);
-            padding: 15px;
-            border-radius: 18px;
-            text-align: center;
-            border: 1px solid rgba(69, 123, 157, 0.15);
-        }
-        .stat span { font-size: 11px; font-weight: 700; color: #457b9d; text-transform: uppercase; }
-        .stat b { font-size: 22px; color: #1d3557; display: block; margin-top: 5px; }
-        
-        /* Liste des prix Premium */
-        .rewards-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .reward-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8fafc;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            border-left: 4px solid #457b9d;
-        }
+        input:focus { outline: none; border-color: #457b9d; background-color: #fff; box-shadow: 0 0 0 4px rgba(69, 123, 157, 0.15); }
+        .screen { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .rewards-list { display: flex; flex-direction: column; gap: 8px; margin: 15px 0; }
+        .reward-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 20px; border-radius: 12px; font-weight: 700; border-left: 4px solid #457b9d; }
         .reward-item.first { border-left-color: #ffb703; background: #fffcf2; }
-        
-        /* Compte à rebours style paris sportifs */
-        .bet-countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .bet-box {
-            background: #1d3557;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 14px;
-            text-align: center;
-            min-width: 70px;
-            box-shadow: 0 6px 15px rgba(29, 53, 87, 0.15);
-        }
-        .bet-box .num {
-            font-size: 28px;
-            font-weight: 800;
-            display: block;
-            font-variant-numeric: tabular-nums;
-        }
-        .bet-box .lbl {
-            font-size: 10px;
-            text-transform: uppercase;
-            opacity: 0.7;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        /* Badges de statut */
-        .status-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        .status-inscrit { background: #e8f5e9; color: #2e7d32; }
-        .status-encours { background: #fff8e1; color: #f57f17; }
-        .status-ecoule { background: #ffebee; color: #c62828; }
-        .status-termine { background: #e3f2fd; color: #1565c0; }
-        .status-nontermine { background: #eceff1; color: #37474f; }
-
-        .progress {
-            background: #edf2f7;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-            height: 10px;
-        }
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #e63946, #457b9d);
-            width: 0%;
-        }
-        
-        .option {
-            background: white;
-            padding: 18px;
-            border: 2px solid #edf2f7;
-            border-radius: 16px;
-            margin: 12px 0;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-        .option:hover {
-            background: #f8fafc;
-            border-color: #457b9d;
-            transform: translateX(3px);
-        }
-        .option.selected {
-            background: #f1faee;
-            border-color: #e63946;
-            color: #e63946;
-        }
-
-        .participant-card {
-            background: white;
-            padding: 20px;
-            border-radius: 18px;
-            margin: 12px 0;
-            border: 1px solid #e2e8f0;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-        }
-        .score-badge {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            background: #e63946;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 15px;
-        }
-
-        .timer-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 25px 0;
-        }
-        .circular-timer {
-            position: relative;
-            width: 90px;
-            height: 90px;
-        }
-        .circular-timer svg {
-            transform: rotate(-90deg);
-            width: 90px;
-            height: 90px;
-        }
-        .circular-timer circle {
-            width: 100%;
-            height: 100%;
-            fill: none;
-            stroke-width: 7;
-            stroke-linecap: round;
-        }
-        .circular-timer .bg-circle {
-            stroke: #f1faee;
-        }
-        .circular-timer .progress-circle {
-            stroke: #e63946;
-            stroke-dasharray: 251.2;
-            stroke-dashoffset: 0;
-        }
-        .circular-timer .timer-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 26px;
-            font-weight: 800;
-            color: #e63946;
-        }
-        .footer-text {
-            text-align: center;
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 40px;
-            line-height: 1.6;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            padding-top: 20px;
-            font-weight: 500;
-        }
+        .bet-countdown { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+        .bet-box { background: #1d3557; color: white; padding: 10px 14px; border-radius: 12px; text-align: center; min-width: 65px; }
+        .bet-box .num { font-size: 24px; font-weight: 800; display: block; }
+        .bet-box .lbl { font-size: 9px; text-transform: uppercase; opacity: 0.7; font-weight: 700; }
+        .progress { background: #edf2f7; border-radius: 10px; overflow: hidden; margin: 15px 0; height: 8px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #e63946, #457b9d); width: 0%; }
+        .option { background: white; padding: 16px; border: 2px solid #edf2f7; border-radius: 16px; margin: 10px 0; cursor: pointer; font-weight: 600; display: flex; align-items: center; }
+        .option:hover { background: #f8fafc; border-color: #457b9d; transform: translateX(3px); }
+        .option.selected { background: #f1faee; border-color: #e63946; color: #e63946; }
+        .timer-container { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
+        .circular-timer { position: relative; width: 85px; height: 85px; }
+        .circular-timer svg { transform: rotate(-90deg); width: 85px; height: 85px; }
+        .circular-timer circle { width: 100%; height: 100%; fill: none; stroke-width: 6; stroke-linecap: round; }
+        .circular-timer .bg-circle { stroke: #f1faee; }
+        .circular-timer .progress-circle { stroke: #e63946; stroke-dasharray: 251.2; stroke-dashoffset: 0; }
+        .circular-timer .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: 800; color: #e63946; }
+        .top10-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .top10-table th, .top10-table td { padding: 12px; text-align: left; border-bottom: 1px solid #edf2f7; }
+        .top10-table th { color: #457b9d; font-size: 13px; text-transform: uppercase; }
+        .rank-badge { display: inline-block; width: 24px; height: 24px; text-align: center; line-height: 24px; border-radius: 50%; font-weight: bold; font-size: 13px; }
+        .rank-1 { background: #fff3cd; color: #856404; }
+        .rank-2 { background: #e2e3e5; color: #383d41; }
+        .rank-3 { background: #f8d7da; color: #721c24; }
+        .footer-text { text-align: center; font-size: 12px; color: #64748b; margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px; font-weight: 500; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="main-content">
-        <!-- ACCUEIL / CONSIGNES -->
+        <!-- ÉCRAN D'ACCUEIL / CONSIGNES -->
         <div id="home" class="screen active">
             <div class="logo">Zakaria TV <span>Concours</span></div>
             <p class="subtitle">Mini-documentaires sur les plus grandes personnalités du monde</p>
             
             <div class="card">
-                <h3 style="margin-top:0; color:#1d3557; font-size:19px; display:flex; align-items:center; gap:8px;">🎁 Récompenses du Concours</h3>
+                <h3 style="margin-top:0; color:#1d3557;">🎁 Récompenses du Concours</h3>
                 <div class="rewards-list">
                     <div class="reward-item first"><span>🥇 1er prix</span><span style="color:#ffb703;">1 000 FCFA</span></div>
                     <div class="reward-item"><span>🥈 2e prix</span><span style="color:#457b9d;">600 FCFA</span></div>
@@ -348,597 +81,274 @@
             </div>
 
             <div class="card">
-                <h3 style="margin-top:0; color:#1d3557; font-size:17px;">⚠️ Consignes Importantes</h3>
+                <h3 style="margin-top:0; color:#1d3557;">⚠️ Consignes Importantes</h3>
                 <ul style="padding-left: 20px; margin: 0; color: #457b9d; font-weight: 500; line-height: 1.8;">
-                    <li>Une seule participation est autorisée par personne.</li>
-                    <li>Toute tentative de triche ou de fraude entraînera une disqualification immédiate.</li>
-                    <li>Les informations fournies lors de l'inscription doivent être exactes.</li>
+                    <li>Une seule participation autorisée par personne & par numéro WhatsApp.</li>
+                    <li>La détection automatique de triche (changement d'onglet) vous disqualifiera.</li>
+                    <li>Les questions et choix de réponses apparaissent dans un ordre aléatoire.</li>
                     <li>Les résultats du concours sont définitifs.</li>
                 </ul>
             </div>
-
-            <!-- État Temporel Dynamique -->
             <div id="timeStatusBox"></div>
-
-            <button style="background:transparent; color:#94a3b8; box-shadow:none; margin-top:20px;" onclick="openAdminLogin()">🔐 Espace Administration</button>
         </div>
 
-        <!-- EN ATTENTE DE DÉBUT (APRÈS INSCRIPTION) -->
+        <!-- FORMULAIRE INSCRIPTION -->
+        <div id="registerScreen" class="screen">
+            <h2>🎯 Formulaire d'accès</h2>
+            <div class="card">
+                <p style="margin-top:0; color:#2a9d8f; font-weight:700; text-align:center;">« Merci de vous inscrire au concours Zakaria TV. Nous vous souhaitons bonne chance ! »</p>
+                <input id="partNom" placeholder="Votre Nom">
+                <input id="partPrenom" placeholder="Votre Prénom">
+                <input id="partWhatsApp" type="tel" placeholder="Votre numéro WhatsApp unique">
+            </div>
+            <button onclick="submitRegistration()">Valider mon inscription</button>
+        </div>
+
+        <!-- SALLE D'ATTENTE DYNAMIQUE -->
         <div id="waitingRoom" class="screen">
             <div class="logo">Zakaria TV <span>Concours</span></div>
             <div class="card" style="text-align:center;">
                 <span style="font-size:50px;">⏳</span>
-                <h3 style="color:#1d3557; margin-top:10px;">Inscription Validée !</h3>
-                <p style="color:#555; line-height:1.6;">Le concours n'a pas encore commencé. Veuillez revenir à l'heure prévue afin de ne pas manquer ce beau concours. Bonne chance !</p>
+                <h3 style="color:#1d3557;">Inscription Validée !</h3>
+                <p>Le concours n'a pas encore commencé. Veuillez patienter sur cette page. Les questions apparaîtront automatiquement dès l'heure exacte atteinte.</p>
                 <div id="waitCountdown" class="bet-countdown"></div>
             </div>
         </div>
 
-        <!-- CONCOURS FERMÉ (TEMPS ÉCOULÉ GLOBAL) -->
-        <div id="closedQuiz" class="screen">
-            <div class="logo">Zakaria TV <span>Concours</span></div>
-            <div class="card" style="text-align:center; padding: 40px 20px;">
-                <span style="font-size:60px;">🏁</span>
-                <h2 style="color:#1d3557; margin-top:15px;">Concours Clôturé</h2>
-                <p style="color:#457b9d; font-size:16px; line-height:1.7; font-weight:600;">
-                    « Le concours est terminé. Merci pour votre participation. Rendez-vous lors de la prochaine édition de Zakaria TV Concours ! Nous espérons vous retrouver très bientôt. »
-                </p>
-            </div>
-        </div>
-
-        <!-- CONNEXION ADMIN -->
-        <div id="adminLogin" class="screen">
-            <h2 class="admin-title">🔐 Connexion Admin</h2>
-            <div class="card">
-                <input id="adminUser" placeholder="Identifiant Admin">
-                <input id="adminPass" type="password" placeholder="Mot de passe">
-                <button class="red" onclick="loginAdmin()">Se connecter</button>
-                <p id="loginMessage" style="color:#e63946; text-align:center; font-weight:600;"></p>
-            </div>
-            <button style="background: #457b9d;" onclick="show('home')">Retour</button>
-        </div>
-
-        <!-- TABLEAU DE BORD ADMIN -->
-        <div id="dashboard" class="screen">
-            <h2 class="admin-title">📊 Espace Administration</h2>
-            
-            <div class="stat-grid">
-                <div class="stat"><span>Concours</span><b id="totalQuiz">0</b></div>
-                <div class="stat"><span>Inscrits</span><b id="totalUsers">0</b></div>
-                <div class="stat"><span>Réponses</span><b id="totalResults">0</b></div>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-top:0; color:#1d3557;">Actions Principales</h3>
-                <button class="green" onclick="createQuizPage()">➕ Planifier un nouveau concours</button>
-                <button onclick="viewResultsPage()">📋 Liste & Statuts des Participants</button>
-                <button style="background:#457b9d;" onclick="logout()">🚪 Déconnexion</button>
-            </div>
-
-            <div class="card" style="border: 1px dashed #e63946; background: #fff5f5;">
-                <h4 style="margin-top:0; color:#e63946;">Nettoyage des Données</h4>
-                <button class="btn-delete" onclick="clearAllParticipants()">🗑️ Supprimer les participants passés</button>
-                <button class="btn-delete" onclick="clearAllQuizzes()">🗑️ Supprimer les concours passés</button>
-            </div>
-        </div>
-
-        <!-- NOTES ET STATUTS DES PARTICIPANTS (ADMIN) -->
-        <div id="adminResults" class="screen">
-            <h2 class="admin-title">📋 Suivi des Participants en Direct</h2>
-            <div id="globalResultsBox"></div>
-            <button onclick="show('dashboard')">Retour</button>
-        </div>
-
-        <!-- INSCRIPTION PARTICIPANT -->
-        <div id="participant" class="screen">
-            <h2>🎯 Inscription Obligatoire</h2>
-            <div class="card">
-                <p style="margin-top:0; color:#2a9d8f; font-weight:700; font-size: 15px; text-align:center;">
-                    « Merci de vous inscrire au concours Zakaria TV. Nous vous souhaitons bonne chance ! »
-                </p>
-                <input id="partNom" placeholder="Votre Nom">
-                <input id="partPrenom" placeholder="Votre Prénom">
-                <input id="partWhatsApp" placeholder="Votre numéro WhatsApp (Paiement des gains) Marges">
-            </div>
-            <button class="red" onclick="startParticipation()">Confirmer mon inscription</button>
-            <button style="background: #457b9d;" onclick="show('home')">Retour</button>
-        </div>
-
-        <!-- CREATION CONCOURS -->
-        <div id="createQuiz" class="screen">
-            <h2 class="admin-title">➕ Configurer un Concours</h2>
-            <div class="card">
-                <input id="quizTitle" value="Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde" placeholder="Titre du concours">
-                <textarea id="quizDesc" placeholder="Description courte..."></textarea>
-                <input id="quizContact" placeholder="Contact Organisateur">
-                
-                <label style="font-weight:700; font-size:13px; color:#457b9d; display:block; margin-top:10px;">📅 DATE ET HEURE DU CONCOURS</label>
-                <input id="quizDate" type="date">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <div>
-                        <label style="font-size:11px; font-weight:600;">Heure de Début</label>
-                        <input id="quizStartTime" type="time">
-                    </div>
-                    <div>
-                        <label style="font-size:11px; font-weight:600;">Heure de Fin</label>
-                        <input id="quizEndTime" type="time">
-                    </div>
-                </div>
-            </div>
-            <h3>Questions (QCM à 5 Questions)</h3>
-            <div id="questionsBox"></div>
-            <button class="green" onclick="saveQuiz()">Générer et crypter le concours</button>
-            <div id="quizLink"></div>
-            <button style="background: #457b9d;" onclick="backDashboard()">Retour</button>
-        </div>
-
-        <!-- CORPS DU CONCOURS INTERACTIF -->
+        <!-- LE CONCOURS (QUESTIONS) -->
         <div id="questionPage" class="screen">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h3 id="questionNumber" style="margin:0; color:#457b9d; font-weight:700;"></h3>
             </div>
-            
-            <!-- Chrono Circulaire 10 Secondes Réelles -->
             <div class="timer-container">
                 <div class="circular-timer">
-                    <svg>
-                        <circle class="bg-circle" cx="45" cy="45" r="40"></circle>
-                        <circle id="progressCircle" class="progress-circle" cx="45" cy="45" r="40"></circle>
-                    </svg>
+                    <svg><circle class="bg-circle" cx="42" cy="42" r="38"></circle><circle id="progressCircle" class="progress-circle" cx="42" cy="42" r="38"></circle></svg>
                     <div id="timer" class="timer-text">10</div>
                 </div>
             </div>
-
             <div class="card">
                 <div class="progress"><div id="bar" class="progress-bar"></div></div>
-                <h3 id="playQuestion" style="color:#1d3557; margin-top:10px; font-size:19px;"></h3>
+                <h3 id="playQuestion" style="color:#1d3557; margin-top:10px;"></h3>
                 <div id="playAnswers"></div>
             </div>
-            <button class="green" onclick="nextQuestion()">Valider cette réponse</button>
+            <button style="background:linear-gradient(135deg, #2a9d8f, #20786e);" onclick="nextQuestion()">Enregistrer ma réponse</button>
         </div>
 
-        <!-- PAGE FIN DE CONCOURS FINALE SANS BOUTON -->
+        <!-- FIN DE CONCOURS ET LE TOP 10 DIRECT -->
         <div id="endPage" class="screen">
-            <div class="card" style="text-align: center; padding: 50px 20px;">
-                <span style="font-size: 70px;">🏆</span>
-                <h2 style="color:#1d3557; font-size:24px;">Participation Enregistrée !</h2>
-                <p style="font-size: 15px; color:#555;">Vos réponses ont été sécurisées avec succès.</p>
-                <div style="background: linear-gradient(135deg, #fff3f5, #ffebee); padding: 20px; border-radius: 16px; border: 1px solid rgba(230, 57, 70, 0.15); margin: 30px 0;">
-                    <p style="margin:0; font-weight:700; color:#e63946;">🔒 Score confidentiel et crypté</p>
-                    <p style="margin:8px 0 0 0; font-size:14px; color:#666;">Les résultats et attributions de prix financiers seront communiqués sur les canaux officiels Zakaria TV.</p>
-                </div>
-                <p id="endContact" style="font-weight: 700; color:#1d3557;"></p>
-                <p style="color:#94a3b8; font-size: 13px; margin-top:30px;">Vous pouvez fermer cet onglet ou quitter ce lien en toute sécurité.</p>
+            <div class="card" style="text-align: center;">
+                <span style="font-size: 50px;">🏆</span>
+                <h2>Session Enregistrée !</h2>
+                <p>Vos réponses ont été transmises. Votre score reste secret pour éviter les fraudes.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin-top:0; color:#1d3557; text-align:center;">📊 Classement en Direct (Top 10)</h3>
+                <table class="top10-table"><thead><tr><th>Rang</th><th>Participant</th><th>Score</th></tr></thead><tbody id="top10Rows"></tbody></table>
+            </div>
+            <p style="text-align:center; color:#94a3b8; font-size: 13px;">Vous pouvez maintenant fermer sereinement cet onglet.</p>
+        </div>
+
+        <!-- CONCOURS EXPIRED FERMÉ -->
+        <div id="closedQuiz" class="screen">
+            <div class="logo">Zakaria TV <span>Concours</span></div>
+            <div class="card" style="text-align:center; padding: 40px 20px;">
+                <span style="font-size:50px;">🏁</span>
+                <h3 style="color:#1d3557; margin-top:15px;">Concours Terminé</h3>
+                <p style="color:#457b9d; font-size:15px; line-height:1.7; font-weight:600;">
+                    « Le concours est terminé. Merci pour votre participation. Rendez-vous lors de la prochaine édition de Zakaria TV Concours ! Nous espérons vous retrouver très bientôt. »
+                </p>
+            </div>
+            <div class="card">
+                <h3 style="margin-top:0; color:#1d3557; text-align:center;">📊 Classement Final (Top 10)</h3>
+                <table class="top10-table"><thead><tr><th>Rang</th><th>Participant</th><th>Score</th></tr></thead><tbody id="top10RowsClosed"></tbody></table>
             </div>
         </div>
     </div>
-
-    <!-- FOOTER PERMANENT OBLIGATOIRE -->
-    <div class="footer-text">
-        Merci.<br>
-        <strong>ZAKARIA TV</strong> – Mini-documentaires sur les plus grandes personnalités du monde.
-    </div>
+    <div class="footer-text">Merci.<br><strong>ZAKARIA TV</strong> – Mini-documentaires sur les plus grandes personnalités du monde.</div>
 </div>
 
 <script>
-    let adminConnected = false;
-    let quizzes = JSON.parse(localStorage.getItem("zakariaQuiz")) || [];
-    let globalTimerInterval;
+    let currentQuiz = null; let shuffledQuestions = []; let qIndex = 0; let userAnswers = [];
+    let seconds = 10; let clock; let timelineInterval; let antiCheatTriggered = false;
 
     function show(id) {
-        document.querySelectorAll(".screen").forEach(e => { e.classList.remove('active'); });
+        document.querySelectorAll(".screen").forEach(e => e.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        window.scrollTo(0, 0);
+        window.scrollTo(0,0);
     }
 
-    function openAdminLogin() { show("adminLogin"); }
-
-    function loginAdmin() {
-        let user = document.getElementById("adminUser").value;
-        let pass = document.getElementById("adminPass").value;
-        if (user === "ZakariaTV" && pass === "123456") {
-            adminConnected = true;
-            show("dashboard");
-            updateStats();
-        } else {
-            document.getElementById("loginMessage").innerHTML = "❌ Identifiant erroné.";
-        }
+    function loadQuizFromURL() {
+        let params = new URLSearchParams(location.search);
+        let code = params.get("quiz");
+        if (!code) { document.body.innerHTML = "<div style='text-align:center;padding:50px;font-weight:700;'>Aucun concours actif trouvé via ce lien.</div>"; return; }
+        try {
+            currentQuiz = JSON.parse(decodeURIComponent(escape(atob(code))));
+            startTimelineEngine();
+        } catch (e) { alert("Lien corrompu ou invalide."); }
     }
 
-    function logout() { adminConnected = false; show("home"); }
-
-    function updateStats() {
-        let results = JSON.parse(localStorage.getItem("resultsList")) || [];
-        document.getElementById("totalQuiz").innerHTML = quizzes.length;
-        document.getElementById("totalUsers").innerHTML = results.length;
-        document.getElementById("totalResults").innerHTML = results.filter(r => r.status === "terminé").length;
+    function getLocalSession() {
+        let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
+        return results.find(r => r.isMe === true) || null;
     }
 
-    function clearAllParticipants() {
-        if(confirm("Supprimer définitivement l'historique et les notes de tous les participants ?")) {
-            localStorage.removeItem("resultsList");
-            alert("Historique des participants effacé !");
-            updateStats();
-            if(document.getElementById("adminResults").classList.contains("active")) viewResultsPage();
-        }
-    }
+    function startTimelineEngine() {
+        clearInterval(timelineInterval);
+        function loop() {
+            let now = new Date();
+            let startTime = new Date(currentQuiz.date + "T" + currentQuiz.startTime);
+            let endTime = new Date(currentQuiz.date + "T" + currentQuiz.endTime);
+            let session = getLocalSession();
 
-    function clearAllQuizzes() {
-        if(confirm("Supprimer définitivement tous les anciens concours configurés ?")) {
-            localStorage.removeItem("zakariaQuiz");
-            quizzes = [];
-            alert("Tous les concours ont été effacés !");
-            updateStats();
-        }
-    }
-
-    function createQuizPage() {
-        if (!adminConnected) return;
-        show("createQuiz");
-        generateQuestionForm();
-    }
-
-    function generateQuestionForm() {
-        let box = document.getElementById("questionsBox");
-        box.innerHTML = "";
-        for (let i = 1; i <= 5; i++) {
-            box.innerHTML += `
-                <div class="card">
-                    <b style="color:#e63946;">Question ${i}</b>
-                    <input id="question${i}" placeholder="Intitulé">
-                    <input id="answer${i}A" placeholder="Option A">
-                    <input id="answer${i}B" placeholder="Option B">
-                    <input id="answer${i}C" placeholder="Option C">
-                    <input id="answer${i}D" placeholder="Option D">
-                    <select id="correct${i}">
-                        <option value="">-- Réponse correcte --</option>
-                        <option value="A">Option A</option>
-                        <option value="B">Option B</option>
-                        <option value="C">Option C</option>
-                        <option value="D">Option D</option>
-                    </select>
-                </div>
-            `;
-        }
-    }
-
-    function saveQuiz() {
-        let quiz = {
-            id: Date.now(),
-            title: document.getElementById("quizTitle").value || "Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde",
-            description: document.getElementById("quizDesc").value,
-            contact: document.getElementById("quizContact").value,
-            date: document.getElementById("quizDate").value,
-            startTime: document.getElementById("quizStartTime").value,
-            endTime: document.getElementById("quizEndTime").value,
-            questions: []
-        };
-
-        for (let i = 1; i <= 5; i++) {
-            quiz.questions.push({
-                q: document.getElementById("question" + i).value,
-                A: document.getElementById("answer" + i + "A").value,
-                B: document.getElementById("answer" + i + "B").value,
-                C: document.getElementById("answer" + i + "C").value,
-                D: document.getElementById("answer" + i + "D").value,
-                correct: document.getElementById("correct" + i).value
-            });
-        }
-
-        quizzes.push(quiz);
-        localStorage.setItem("zakariaQuiz", JSON.stringify(quizzes));
-
-        let link = location.href.split("?")[0] + "?quiz=" + btoa(unescape(encodeURIComponent(JSON.stringify(quiz))));
-        document.getElementById("quizLink").innerHTML = `
-            <div class="card" style="border: 2px solid #2a9d8f; background: #fafdfb;">
-                <h3 style="color:#2a9d8f; margin-top:0;">✅ Concours Planifié !</h3>
-                <input type="text" value="${link}" readonly>
-                <button class="green" onclick="navigator.clipboard.writeText('${link}'); alert('Lien copié !');">📋 Copier le lien unique</button>
-            </div>
-        `;
-        updateStats();
-    }
-
-    function viewResultsPage() {
-        if (!adminConnected) return;
-        show("adminResults");
-        let box = document.getElementById("globalResultsBox");
-        box.innerHTML = "";
-        let results = JSON.parse(localStorage.getItem("resultsList")) || [];
-        
-        if(results.length === 0) {
-            box.innerHTML = "<p style='text-align:center; padding:20px;'>Aucun participant enregistré.</p>";
-            return;
-        }
-
-        results.reverse().forEach(r => {
-            let badgeClass = "status-inscrit";
-            let statusText = "🟢 Inscrit";
-            if(r.status === "en cours") { badgeClass = "status-encours"; statusText = "🟡 En cours"; }
-            else if(r.status === "temps écoulé") { badgeClass = "status-ecoule"; statusText = "🔴 Temps écoulé"; }
-            else if(r.status === "terminé") { badgeClass = "status-termine"; statusText = "🔵 Terminé"; }
-            else if(r.status === "non terminé") { badgeClass = "status-nontermine"; statusText = "⚪ Non terminé"; }
-
-            let dispScore = (r.status === "terminé") ? `<b>${r.score} / 5</b>` : `<i style="color:#94a3b8;font-size:13px;">Masqué (En cours/Incomplet)</i>`;
-
-            box.innerHTML += `
-                <div class="participant-card">
-                    <div class="score-badge">${dispScore}</div>
-                    <strong style="font-size:16px;">👤 ${r.prenom} ${r.nom}</strong><br>
-                    <span style="color:#2a9d8f; font-weight:700; display:block; margin:5px 0;">📱 WhatsApp : ${r.whatsapp}</span>
-                    <div style="margin-top:8px;">Statut : <span class="status-badge ${badgeClass}">${statusText}</span></div>
-                    <small style="color:#666; display:block; margin-top:5px; font-size:11px;">ID Concours : ${r.quizId}</small>
-                </div>
-            `;
-        });
-    }
-
-    function backDashboard() { show("dashboard"); }
-    function openParticipant() {
-        let userSession = getUserSession();
-        if(userSession) {
-            checkTimeline(); // Redirection automatique si déjà inscrit
-        } else {
-            show("participant");
-        }
-    }
-
-    let currentQuiz = null;
-    let qIndex = 0;
-    let userAnswers = [];
-    let seconds = 10;
-    let clock;
-
-    function getUserSession() {
-        if(!currentQuiz) return null;
-        let results = JSON.parse(localStorage.getItem("resultsList")) || [];
-        // Recherche si cet appareil s'est déjà enregistré pour CE concours précis
-        return results.find(r => r.quizId === currentQuiz.id && r.isMe === true) || null;
-    }
-
-    function updateUserStatusInStorage(status, finalScore = null) {
-        let results = JSON.parse(localStorage.getItem("resultsList")) || [];
-        let index = results.findIndex(r => r.quizId === currentQuiz.id && r.isMe === true);
-        if(index !== -1) {
-            results[index].status = status;
-            if(finalScore !== null) results[index].score = finalScore;
-            localStorage.setItem("resultsList", JSON.stringify(results));
-        }
-    }
-
-    function checkTimeline() {
-        if (!currentQuiz) return;
-        clearInterval(globalTimerInterval);
-
-        let now = new Date();
-        let startStr = currentQuiz.date + "T" + currentQuiz.startTime;
-        let endStr = currentQuiz.date + "T" + currentQuiz.endTime;
-        let startTime = new Date(startStr);
-        let endTime = new Date(endStr);
-
-        // 1. APRÈS LA FIN DU CONCOURS
-        if (now > endTime) {
-            show("closedQuiz");
-            return;
-        }
-
-        // Vérification du statut de l'utilisateur s'il est inscrit
-        let session = getUserSession();
-
-        // 2. AVANT LE DÉBUT DU CONCOURS
-        if (now < startTime) {
-            if (session) {
-                show("waitingRoom");
-                startGlobalCountdown(startTime, "waitCountdown");
-            } else {
-                buildHomeTimeUI(startTime, false);
+            if (now > endTime) {
+                clearInterval(timelineInterval); clearInterval(clock);
+                buildTop10List("top10RowsClosed"); show("closedQuiz"); return;
             }
-            return;
-        }
-
-        // 3. PENDANT LE CONCOURS (ACCÈS NORMAL EN COURS)
-        if (now >= startTime && now <= endTime) {
-            if (session) {
-                if (session.status === "terminé" || session.status === "temps écoulé") {
-                    show("endPage");
-                } else {
-                    // Si l'utilisateur est inscrit mais n'a pas fini, il peut lancer les questions
-                    buildHomeTimeUI(null, true, true);
-                }
-            } else {
-                buildHomeTimeUI(null, true, false);
-            }
-        }
-    }
-
-    function buildHomeTimeUI(targetTime, isRunning, isRegistered = false) {
-        let box = document.getElementById("timeStatusBox");
-        box.innerHTML = "";
-
-        if (!isRunning) {
-            box.innerHTML = `
-                <div style="text-align:center; margin-top:15px;">
-                    <span style="font-weight:700; color:#e63946; text-transform:uppercase; font-size:12px; letter-spacing:0.5px; display:block; margin-bottom:5px;">⏳ Ouverture imminente du concours</span>
-                    <div id="homeCountdown" class="bet-countdown"></div>
-                    <button class="green" onclick="openParticipant()" style="margin-top:10px;">📋 S'inscrire à l'avance</button>
-                </div>
-            `;
-            startGlobalCountdown(targetTime, "homeCountdown");
-        } else {
-            if(isRegistered) {
-                box.innerHTML = `<button class="red" onclick="startQuizGameplay()">🎯 Lancer le Questionnaire</button>`;
-            } else {
-                box.innerHTML = `<button class="red" onclick="openParticipant()">✍️ S'inscrire & Participer maintenant</button>`;
-            }
-        }
-    }
-
-    function startGlobalCountdown(targetDate, elementId) {
-        function updateBox() {
-            let diff = targetDate - new Date();
-            if (diff <= 0) {
-                clearInterval(globalTimerInterval);
-                checkTimeline();
+            if (now < startTime) {
+                if (session) { show("waitingRoom"); startLiveCountdown(startTime, "waitCountdown"); }
+                else { buildHomeUI(startTime, false); }
                 return;
             }
-            let hrs = Math.floor(diff / 3600000);
-            let mins = Math.floor((diff % 3600000) / 60000);
-            let secs = Math.floor((diff % 60000) / 1000);
-
-            let el = document.getElementById(elementId);
-            if(el) {
-                el.innerHTML = `
-                    <div class="bet-box"><span class="num">${hrs.toString().padStart(2,'0')}</span><span class="lbl">Heures</span></div>
-                    <div class="bet-box"><span class="num">${mins.toString().padStart(2,'0')}</span><span class="lbl">Min</span></div>
-                    <div class="bet-box"><span class="num">${secs.toString().padStart(2,'0')}</span><span class="lbl">Sec</span></div>
-                `;
+            if (now >= startTime && now <= endTime) {
+                if (session) {
+                    if (session.status === "terminé" || session.status === "disqualifié") {
+                        clearInterval(timelineInterval); buildTop10List("top10Rows"); show("endPage");
+                    } else if (session.status === "inscrit" && !document.getElementById("questionPage").classList.contains("active")) {
+                        clearInterval(timelineInterval); startQuizGameplay();
+                    }
+                } else { buildHomeUI(null, true); }
             }
         }
-        updateBox();
-        globalTimerInterval = setInterval(updateBox, 1000);
+        loop(); timelineInterval = setInterval(loop, 1000);
     }
 
-    function startParticipation() {
+    function buildHomeUI(targetTime, isRunning) {
+        let box = document.getElementById("timeStatusBox");
+        if (!isRunning) {
+            box.innerHTML = `<div style="text-align:center; margin-top:15px;"><span style="font-weight:700; color:#e63946; font-size:12px; display:block; margin-bottom:5px;">⏳ OUVERTURE DU CONCOURS DANS :</span><div id="homeCountdown" class="bet-countdown"></div><button onclick="show('registerScreen')">📋 S'inscrire à l'avance</button></div>`;
+            startLiveCountdown(targetTime, "homeCountdown");
+        } else {
+            box.innerHTML = `<button onclick="show('registerScreen')">✍️ S'inscrire & Participer en direct</button>`;
+        }
+    }
+
+    function startLiveCountdown(target, elementId) {
+        let diff = target - new Date();
+        if(diff <= 0) return;
+        let hrs = Math.floor(diff / 3600000); let mins = Math.floor((diff % 3600000) / 60000); let secs = Math.floor((diff % 60000) / 1000);
+        let el = document.getElementById(elementId);
+        if(el) { el.innerHTML = `<div class="bet-box"><span class="num">${hrs.toString().padStart(2,'0')}</span><span class="lbl">Heures</span></div><div class="bet-box"><span class="num">${mins.toString().padStart(2,'0')}</span><span class="lbl">Min</span></div><div class="bet-box"><span class="num">${secs.toString().padStart(2,'0')}</span><span class="lbl">Sec</span></div>`; }
+    }
+
+    function submitRegistration() {
         let nom = document.getElementById("partNom").value.trim();
         let prenom = document.getElementById("partPrenom").value.trim();
         let whatsapp = document.getElementById("partWhatsApp").value.trim();
+        if (!nom || !prenom || !whatsapp) { alert("Veuillez remplir tous les champs."); return; }
 
-        if (!nom || !prenom || !whatsapp) {
-            alert("⚠️ Veuillez remplir tous les champs requis.");
-            return;
-        }
+        let globalResults = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
+        if (globalResults.some(r => r.whatsapp === whatsapp)) { alert("⚠️ Ce numéro WhatsApp a déjà été inscrit pour ce concours."); return; }
 
-        // Création immédiate du profil avec le badge initial "Inscrit"
-        let result = {
-            nom: nom,
-            prenom: prenom,
-            whatsapp: whatsapp,
-            quizId: currentQuiz.id,
-            score: 0,
-            status: "inscrit", 
-            isMe: true,
-            date: new Date().toLocaleString()
-        };
-
-        let results = JSON.parse(localStorage.getItem("resultsList")) || [];
-        results.push(result);
-        localStorage.setItem("resultsList", JSON.stringify(results));
-
-        // Analyse en direct de la ligne du temps pour redirection automatique
-        checkTimeline();
+        let newPlayer = { nom, prenom, whatsapp, quizId: currentQuiz.id, score: 0, status: "inscrit", isMe: true, date: new Date().toLocaleString() };
+        globalResults.push(newPlayer); localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(globalResults));
+        startTimelineEngine();
     }
 
     function startQuizGameplay() {
-        updateUserStatusInStorage("en cours");
-        qIndex = 0;
-        userAnswers = [];
-        show("questionPage");
-        showQuestion();
+        let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
+        let myIndex = results.findIndex(r => r.quizId === currentQuiz.id && r.isMe === true);
+        if(myIndex !== -1) { results[myIndex].status = "en cours"; localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(results)); }
+
+        // Système de Triche : Détection de changement d'onglet
+        document.addEventListener("visibilitychange", triggerAntiCheat);
+
+        // Mélange des questions (Ordre aléatoire)
+        shuffledQuestions = [...currentQuiz.questions].sort(() => Math.random() - 0.5);
+        qIndex = 0; userAnswers = [];
+        show("questionPage"); showQuestion();
     }
 
-    function updateTimerCircle() {
-        let circle = document.getElementById("progressCircle");
-        let radius = circle.r.baseVal.value;
-        let circumference = 2 * Math.PI * radius;
-        let strokeDashoffset = circumference - (seconds / 10) * circumference;
-        circle.style.strokeDashoffset = strokeDashoffset;
+    function triggerAntiCheat() {
+        if (document.hidden && !antiCheatTriggered) {
+            antiCheatTriggered = true; clearInterval(clock);
+            alert("🚨 TRICHE DÉTECTÉE : Vous avez quitté l'onglet du concours. Vous êtes disqualifié.");
+            finishQuiz(true);
+        }
     }
 
     function showQuestion() {
-        clearInterval(clock);
-        seconds = 10;
+        clearInterval(clock); seconds = 10;
         document.getElementById("timer").innerHTML = seconds;
-        
         let circle = document.getElementById("progressCircle");
-        circle.style.strokeDashoffset = 0;
-        circle.style.transition = "stroke-dashoffset 1s linear";
+        circle.style.strokeDashoffset = 0; circle.style.transition = "stroke-dashoffset 1s linear";
 
         clock = setInterval(() => {
-            seconds--;
-            document.getElementById("timer").innerHTML = seconds;
-            updateTimerCircle();
-            
-            if (seconds <= 0) {
-                clearInterval(clock);
-                nextQuestion();
-            }
+            seconds--; document.getElementById("timer").innerHTML = seconds;
+            circle.style.strokeDashoffset = (251.2 - (seconds / 10) * 251.2);
+            if (seconds <= 0) { clearInterval(clock); nextQuestion(); }
         }, 1000);
 
-        let q = currentQuiz.questions[qIndex];
-        document.getElementById("questionNumber").innerHTML = "Question " + (qIndex + 1) + " / " + currentQuiz.questions.length;
+        let q = shuffledQuestions[qIndex];
+        document.getElementById("questionNumber").innerHTML = "Question " + (qIndex + 1) + " / " + shuffledQuestions.length;
         document.getElementById("playQuestion").innerHTML = q.q;
-        document.getElementById("bar").style.width = ((qIndex + 1) / currentQuiz.questions.length * 100) + "%";
+        document.getElementById("bar").style.width = ((qIndex + 1) / shuffledQuestions.length * 100) + "%";
 
-        document.getElementById("playAnswers").innerHTML = `
-            <div class="option" onclick="answer('A',this)"><b>A)</b> &nbsp;${q.A}</div>
-            <div class="option" onclick="answer('B',this)"><b>B)</b> &nbsp;${q.B}</div>
-            <div class="option" onclick="answer('C',this)"><b>C)</b> &nbsp;${q.C}</div>
-            <div class="option" onclick="answer('D',this)"><b>D)</b> &nbsp;${q.D}</div>
-        `;
+        // Mélange des Réponses (A, B, C, D changent d'ordre)
+        let answersArray = [
+            { key: 'A', text: q.A }, { key: 'B', text: q.B },
+            { key: 'C', text: q.C }, { key: 'D', text: q.D }
+        ].sort(() => Math.random() - 0.5);
+
+        let containerBox = document.getElementById("playAnswers"); containerBox.innerHTML = "";
+        answersArray.forEach(item => {
+            containerBox.innerHTML += `<div class="option" onclick="selectAnswer('${item.key}', this)"><b>•</b> &nbsp;${item.text}</div>`;
+        });
     }
 
-    function answer(letter, element) {
+    function selectAnswer(letter, element) {
         userAnswers[qIndex] = letter;
-        document.querySelectorAll(".option").forEach(e => { e.classList.remove("selected"); });
+        document.querySelectorAll(".option").forEach(e => e.classList.remove("selected"));
         element.classList.add("selected");
     }
 
     function nextQuestion() {
         clearInterval(clock);
-        if(!userAnswers[qIndex]) {
-            userAnswers[qIndex] = ""; 
-        }
-        
+        if (!userAnswers[qIndex]) userAnswers[qIndex] = "";
         qIndex++;
-        if (qIndex < currentQuiz.questions.length) {
-            showQuestion();
-        } else {
-            finishQuiz();
-        }
+        if (qIndex < shuffledQuestions.length) { showQuestion(); } 
+        else { finishQuiz(false); }
     }
 
-    function finishQuiz() {
+    function finishQuiz(isDisqualified) {
+        document.removeEventListener("visibilitychange", triggerAntiCheat);
         let finalScore = 0;
-        currentQuiz.questions.forEach((q, index) => {
-            if(userAnswers[index] === q.correct) finalScore++;
+        if (!isDisqualified) {
+            shuffledQuestions.forEach((q, idx) => { if (userAnswers[idx] === q.correct) finalScore++; });
+        }
+        let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
+        let myIndex = results.findIndex(r => r.quizId === currentQuiz.id && r.isMe === true);
+        if(myIndex !== -1) {
+            results[myIndex].status = isDisqualified ? "disqualifié" : "terminé";
+            results[myIndex].score = finalScore;
+            localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(results));
+        }
+        buildTop10List("top10Rows"); show("endPage");
+    }
+
+    function buildTop10List(elementId) {
+        let box = document.getElementById(elementId); box.innerHTML = "";
+        let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
+        let cleanList = results.filter(r => r.status === "terminé").sort((a,b) => b.score - a.score).slice(0, 10);
+        if(cleanList.length === 0) { box.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#666;'>Aucun score validé pour le moment.</td></tr>"; return; }
+        cleanList.forEach((r, i) => {
+            let rankClass = (i === 0) ? 'rank-1' : (i === 1) ? 'rank-2' : (i === 2) ? 'rank-3' : '';
+            box.innerHTML += `<tr><td><span class="rank-badge ${rankClass}">${i+1}</span></td><td style="text-transform:capitalize;">${r.prenom} ${r.nom[0]}.</td><td><b>${r.score} / 5</b></td></tr>`;
         });
-
-        // Détermination du badge final automatique
-        let uncompleted = userAnswers.includes("");
-        let finalStatus = uncompleted ? "non terminé" : "terminé";
-
-        // Si le temps global du concours venait à expirer pile pendant sa session
-        let endStr = currentQuiz.date + "T" + currentQuiz.endTime;
-        if(new Date() > new Date(endStr)) {
-            finalStatus = "temps écoulé";
-        }
-
-        updateUserStatusInStorage(finalStatus, finalScore);
-        
-        document.getElementById("endContact").innerHTML = "📱 Canal WhatsApp Pro : " + currentQuiz.contact;
-        show("endPage");
     }
 
-    function loadQuizLink() {
-        let params = new URLSearchParams(location.search);
-        let code = params.get("quiz");
-        if (!code) return;
-        try {
-            currentQuiz = JSON.parse(decodeURIComponent(escape(atob(code))));
-            document.getElementById("endContact").innerHTML = "📱 Support WhatsApp : " + currentQuiz.contact;
-            checkTimeline();
-        } catch (e) {
-            alert("Lien corrompu ou invalide.");
-        }
-    }
-
-    // Protection anti-retour en arrière mobile
+    window.onpopstate = function () { history.pushState(null, null, location.href); };
     history.pushState(null, null, location.href);
-    window.onpopstate = function () {
-        history.pushState(null, null, location.href);
-    };
-
-    loadQuizLink();
+    loadQuizFromURL();
 </script>
 </body>
 </html>
