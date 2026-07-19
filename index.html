@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Zakaria TV Concours</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#f1faee;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+background:white;
+min-height:100vh;
+padding:20px;
+}
+
+h1,h2{
+text-align:center;
+color:#1d3557;
+}
+
+.logo span{
+color:#e63946;
+}
+
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+background:#1d3557;
+color:white;
+font-size:16px;
+margin:8px 0;
+cursor:pointer;
+}
+
+.red{
+background:#e63946;
+}
+
+
+input,textarea,select{
+
+width:100%;
+padding:12px;
+margin:8px 0;
+
+border:1px solid #ddd;
+border-radius:8px;
+
+}
+
+
+.card{
+
+background:#f8f9fa;
+padding:15px;
+border-radius:10px;
+margin:15px 0;
+
+}
+
+
+.screen{
+
+display:none;
+
+}
+
+
+.active{
+
+display:block;
+
+}
+
+
+.option{
+
+background:white;
+border:2px solid #ddd;
+padding:12px;
+border-radius:8px;
+margin:10px 0;
+
+}
+
+
+.option:hover{
+
+border-color:#e63946;
+
+}
+
+
+.selected{
+
+background:#ffe5e5;
+border-color:#e63946;
+
+}
+
+
+.link-box{
+
+background:#eee;
+padding:10px;
+word-break:break-all;
+border-radius:8px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+
+<div id="home" class="screen active">
+
+<h1 class="logo">
+Zakaria TV <span>Concours</span>
+</h1>
+
+
+<p style="text-align:center">
+Participez aux meilleurs concours en ligne.
+</p>
+
+
+<button onclick="openAdmin()">
+🔐 Créer un concours
+</button>
+
+
+<button class="red" onclick="openQuizLink()">
+🎯 Participer
+</button>
+
+
+</div>
+
+
+
+<div id="admin" class="screen">
+
+<h2>Espace Admin</h2>
+
+
+<input id="title" placeholder="Titre du concours">
+
+
+<textarea id="description"
+placeholder="Description du concours">
+</textarea>
+
+
+<div id="builder"></div>
+
+
+<button class="red" onclick="generateLink()">
+Créer le lien du concours
+</button>
+
+
+<div id="resultLink"></div>
+
+
+</div>
+<div id="register" class="screen">
+
+<h2 id="quizName"></h2>
+
+<p id="quizDescription"></p>
+
+<input id="firstname" placeholder="Votre prénom">
+
+<input id="lastname" placeholder="Votre nom">
+
+
+<button class="red" onclick="startQuiz()">
+Commencer le concours
+</button>
+
+</div>
+
+
+
+<div id="game" class="screen">
+
+<h2 id="counter"></h2>
+
+
+<div class="card">
+
+<h3 id="question"></h3>
+
+
+<div id="answers"></div>
+
+
+</div>
+
+
+<button class="red" onclick="nextQuestion()">
+Question suivante
+</button>
+
+
+</div>
+
+
+
+<div id="finish" class="screen">
+
+<h2>🎉 Concours terminé</h2>
+
+
+<h1 id="finalScore"></h1>
+
+
+<button onclick="goHome()">
+Retour accueil
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+<script>
+
+
+let quiz=null;
+
+let current=0;
+
+let score=0;
+
+let selected=null;
+
+
+
+function show(id){
+
+document.querySelectorAll(".screen")
+.forEach(e=>e.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+}
+
+
+
+
+/* Création des questions */
+
+let builder=document.getElementById("builder");
+
+
+for(let i=1;i<=5;i++){
+
+
+builder.innerHTML+=`
+
+<div class="card">
+
+<b>Question ${i}</b>
+
+<input id="q${i}" placeholder="Question">
+
+
+<input id="q${i}A" placeholder="Réponse A">
+
+
+<input id="q${i}B" placeholder="Réponse B">
+
+
+<input id="q${i}C" placeholder="Réponse C">
+
+
+<input id="q${i}D" placeholder="Réponse D">
+
+
+<select id="q${i}OK">
+
+<option>A</option>
+
+<option>B</option>
+
+<option>C</option>
+
+<option>D</option>
+
+</select>
+
+
+</div>
+
+
+`;
+
+
+}
+
+
+
+
+function openAdmin(){
+
+show("admin");
+
+}
+
+
+
+
+function generateLink(){
+
+
+let data={
+
+title:title.value,
+
+description:description.value,
+
+questions:[]
+
+};
+
+
+
+for(let i=1;i<=5;i++){
+
+
+data.questions.push({
+
+question:
+document.getElementById("q"+i).value,
+
+
+A:
+document.getElementById("q"+i+"A").value,
+
+
+B:
+document.getElementById("q"+i+"B").value,
+
+
+C:
+document.getElementById("q"+i+"C").value,
+
+
+D:
+document.getElementById("q"+i+"D").value,
+
+
+correct:
+document.getElementById("q"+i+"OK").value
+
+
+});
+
+
+}
+
+
+
+
+let code =
+btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+
+
+
+let link =
+window.location.origin+
+window.location.pathname+
+"?quiz="+code;
+
+
+
+resultLink.innerHTML=`
+
+<h3>Lien du concours :</h3>
+
+<div class="link-box">
+
+${link}
+
+</div>
+
+
+<button onclick="copyLink('${link}')">
+
+📋 Copier le lien
+
+</button>
+
+`;
+
+
+
+}
+
+
+
+
+
+function copyLink(text){
+
+navigator.clipboard.writeText(text);
+
+alert("Lien copié !");
+
+}
+function openQuizLink(){
+
+let params=new URLSearchParams(window.location.search);
+
+let code=params.get("quiz");
+
+
+if(!code){
+
+alert("Ouvrez un lien de concours valide.");
+
+return;
+
+}
+
+
+try{
+
+quiz=JSON.parse(
+decodeURIComponent(
+escape(
+atob(code)
+)
+)
+);
+
+
+quizName.innerHTML=quiz.title;
+
+quizDescription.innerHTML=quiz.description;
+
+
+show("register");
+
+
+}
+
+catch(e){
+
+alert("Lien de concours invalide.");
+
+}
+
+
+}
+
+
+
+
+
+function startQuiz(){
+
+if(firstname.value==="" || lastname.value===""){
+
+alert("Veuillez remplir votre nom et prénom.");
+
+return;
+
+}
+
+
+current=0;
+
+score=0;
+
+
+show("game");
+
+
+displayQuestion();
+
+
+}
+
+
+
+
+function displayQuestion(){
+
+
+selected=null;
+
+
+let q=quiz.questions[current];
+
+
+counter.innerHTML=
+"Question "+(current+1)+"/5";
+
+
+
+question.innerHTML=q.question;
+
+
+
+answers.innerHTML=`
+
+
+<div class="option" onclick="choose('A',this)">
+A) ${q.A}
+</div>
+
+
+<div class="option" onclick="choose('B',this)">
+B) ${q.B}
+</div>
+
+
+<div class="option" onclick="choose('C',this)">
+C) ${q.C}
+</div>
+
+
+<div class="option" onclick="choose('D',this)">
+D) ${q.D}
+</div>
+
+
+
+`;
+
+
+
+}
+
+
+
+
+
+function choose(letter,element){
+
+selected=letter;
+
+
+document.querySelectorAll(".option")
+.forEach(e=>e.classList.remove("selected"));
+
+
+element.classList.add("selected");
+
+
+}
+
+
+
+
+function nextQuestion(){
+
+
+if(!selected){
+
+alert("Choisissez une réponse.");
+
+return;
+
+}
+
+
+
+if(selected===quiz.questions[current].correct){
+
+score++;
+
+}
+
+
+
+current++;
+
+
+
+if(current<5){
+
+displayQuestion();
+
+}
+
+else{
+
+finish();
+
+}
+
+
+
+}
+
+
+
+
+function finish(){
+
+
+finalScore.innerHTML=
+"Votre score : "+score+"/5";
+
+
+show("finish");
+
+
+}
+
+
+
+
+
+function goHome(){
+
+show("home");
+
+}
+
+
+
+
+/* ouverture automatique avec un lien */
+
+if(
+new URLSearchParams(window.location.search)
+.get("quiz")
+){
+
+openQuizLink();
+
+}
+
+
+</script>
+
+
+</body>
+  </html>
