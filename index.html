@@ -1,670 +1,412 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Zakaria TV Concours</title>
-
-<style>
-
-*{
-box-sizing:border-box;
-}
-
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#f1faee;
-}
-
-.container{
-max-width:600px;
-margin:auto;
-background:white;
-min-height:100vh;
-padding:20px;
-}
-
-h1,h2{
-text-align:center;
-color:#1d3557;
-}
-
-.logo span{
-color:#e63946;
-}
-
-
-button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:#1d3557;
-color:white;
-font-size:16px;
-margin:8px 0;
-cursor:pointer;
-}
-
-.red{
-background:#e63946;
-}
-
-
-input,textarea,select{
-
-width:100%;
-padding:12px;
-margin:8px 0;
-
-border:1px solid #ddd;
-border-radius:8px;
-
-}
-
-
-.card{
-
-background:#f8f9fa;
-padding:15px;
-border-radius:10px;
-margin:15px 0;
-
-}
-
-
-.screen{
-
-display:none;
-
-}
-
-
-.active{
-
-display:block;
-
-}
-
-
-.option{
-
-background:white;
-border:2px solid #ddd;
-padding:12px;
-border-radius:8px;
-margin:10px 0;
-
-}
-
-
-.option:hover{
-
-border-color:#e63946;
-
-}
-
-
-.selected{
-
-background:#ffe5e5;
-border-color:#e63946;
-
-}
-
-
-.link-box{
-
-background:#eee;
-padding:10px;
-word-break:break-all;
-border-radius:8px;
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakaria TV Concours V3</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #edf7ff, #f1faee);
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .logo {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #1d3557;
+        }
+        .logo span {
+            color: #e63946;
+        }
+        .subtitle {
+            text-align: center;
+            color: #555;
+        }
+        .card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            border: 0;
+            border-radius: 12px;
+            background: #1d3557;
+            color: white;
+            font-size: 16px;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: .9;
+        }
+        .red {
+            background: #e63946;
+        }
+        .green {
+            background: #2a9d8f;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin: 8px 0;
+            font-size: 15px;
+        }
+        .screen {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .admin-title {
+            color: #1d3557;
+            text-align: center;
+        }
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+        .progress {
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #2a9d8f;
+            width: 0%;
+            transition: 0.3s;
+        }
+        .option {
+            background: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .option:hover {
+            background: #f1faee;
+        }
+        .option.selected {
+            background: #a8dadc;
+            border-color: #457b9d;
+        }
+    </style>
 </head>
-
 <body>
-
-
 <div class="container">
+    <!-- ACCUEIL -->
+    <div id="home" class="screen active">
+        <div class="logo">Zakaria TV <span>Concours</span></div>
+        <p class="subtitle">La plateforme officielle des concours en ligne.</p>
+        <div class="card">
+            <h3>🏆 Bienvenue</h3>
+            <p>Participez aux concours organisés par Zakaria TV. Les résultats sont contrôlés avant publication.</p>
+        </div>
+        <button class="red" onclick="openParticipant()">🎯 Participer à un concours</button>
+        <button onclick="openAdminLogin()">🔐 Espace Admin Zakaria TV</button>
+    </div>
 
+    <!-- CONNEXION ADMIN -->
+    <div id="adminLogin" class="screen">
+        <h2 class="admin-title">🔐 Connexion Admin</h2>
+        <div class="card">
+            <input id="adminUser" placeholder="Identifiant Admin">
+            <input id="adminPass" type="password" placeholder="Mot de passe">
+            <button class="red" onclick="loginAdmin()">Se connecter</button>
+            <p id="loginMessage"></p>
+        </div>
+    </div>
 
-<div id="home" class="screen active">
+    <!-- TABLEAU DE BORD ADMIN -->
+    <div id="dashboard" class="screen">
+        <h2 class="admin-title">📊 Tableau de bord Zakaria TV</h2>
+        <div class="stat"><span>Concours créés</span><b id="totalQuiz">0</b></div>
+        <div class="stat"><span>Participants</span><b id="totalUsers">0</b></div>
+        <div class="stat"><span>Résultats reçus</span><b id="totalResults">0</b></div>
+        <div class="card">
+            <h3>Actions Admin</h3>
+            <button class="green" onclick="createQuizPage()">➕ Créer un concours</button>
+            <button onclick="logout()">🚪 Déconnexion</button>
+        </div>
+    </div>
 
-<h1 class="logo">
-Zakaria TV <span>Concours</span>
-</h1>
+    <!-- PAGE PARTICIPANT -->
+    <div id="participant" class="screen">
+        <h2>🎯 Participation</h2>
+        <div class="card">
+            <p>La page de participation sera connectée aux concours créés.</p>
+        </div>
+    </div>
 
+    <!-- CREATION CONCOURS ADMIN -->
+    <div id="createQuiz" class="screen">
+        <h2 class="admin-title">➕ Nouveau Concours</h2>
+        <div class="card">
+            <input id="quizTitle" placeholder="Titre du concours">
+            <textarea id="quizDesc" placeholder="Description du concours"></textarea>
+            <input id="quizContact" placeholder="WhatsApp Zakaria TV">
+        </div>
+        <h3>Questions</h3>
+        <div id="questionsBox"></div>
+        <button class="green" onclick="saveQuiz()">Créer le concours</button>
+        <div id="quizLink"></div>
+        <button onclick="backDashboard()">Retour tableau de bord</button>
+    </div>
 
-<p style="text-align:center">
-Participez aux meilleurs concours en ligne.
-</p>
+    <!-- PARTICIPATION CONCOURS -->
+    <div id="playQuiz" class="screen">
+        <h2 id="playTitle"></h2>
+        <div class="card">
+            <p id="playDesc"></p>
+        </div>
+        <input id="playerName" placeholder="Votre nom et prénom">
+        <button class="red" onclick="startParticipation()">Commencer</button>
+    </div>
 
+    <div id="questionPage" class="screen">
+        <h3 id="questionNumber"></h3>
+        <div class="card">
+            <div class="stat"><span>Temps restant</span><b id="timer">30</b></div>
+            <div class="progress"><div id="bar" class="progress-bar"></div></div>
+            <h3 id="playQuestion"></h3>
+            <div id="playAnswers"></div>
+        </div>
+        <button onclick="nextQuestion()">Question suivante</button>
+    </div>
 
-<button onclick="openAdmin()">
-🔐 Créer un concours
-</button>
-
-
-<button class="red" onclick="openQuizLink()">
-🎯 Participer
-</button>
-
-
+    <div id="endPage" class="screen">
+        <div class="message">
+            <h2>🎉 Merci pour votre participation !</h2>
+            <p>Votre participation a été enregistrée.</p>
+            <p>Votre score reste confidentiel. Les résultats officiels seront annoncés uniquement par <b>Zakaria TV</b>.</p>
+            <p id="endContact"></p>
+        </div>
+    </div>
 </div>
-
-
-
-<div id="admin" class="screen">
-
-<h2>Espace Admin</h2>
-
-
-<input id="title" placeholder="Titre du concours">
-
-
-<textarea id="description"
-placeholder="Description du concours">
-</textarea>
-
-
-<div id="builder"></div>
-
-
-<button class="red" onclick="generateLink()">
-Créer le lien du concours
-</button>
-
-
-<div id="resultLink"></div>
-
-
-</div>
-<div id="register" class="screen">
-
-<h2 id="quizName"></h2>
-
-<p id="quizDescription"></p>
-
-<input id="firstname" placeholder="Votre prénom">
-
-<input id="lastname" placeholder="Votre nom">
-
-
-<button class="red" onclick="startQuiz()">
-Commencer le concours
-</button>
-
-</div>
-
-
-
-<div id="game" class="screen">
-
-<h2 id="counter"></h2>
-
-
-<div class="card">
-
-<h3 id="question"></h3>
-
-
-<div id="answers"></div>
-
-
-</div>
-
-
-<button class="red" onclick="nextQuestion()">
-Question suivante
-</button>
-
-
-</div>
-
-
-
-<div id="finish" class="screen">
-
-<h2>🎉 Concours terminé</h2>
-
-
-<h1 id="finalScore"></h1>
-
-
-<button onclick="goHome()">
-Retour accueil
-</button>
-
-
-</div>
-
-
-
-</div>
-
-
 
 <script>
-
-
-let quiz=null;
-
-let current=0;
-
-let score=0;
-
-let selected=null;
-
-
-
-function show(id){
-
-document.querySelectorAll(".screen")
-.forEach(e=>e.classList.remove("active"));
-
-document.getElementById(id)
-.classList.add("active");
-
-}
-
-
-
-
-/* Création des questions */
-
-let builder=document.getElementById("builder");
-
-
-for(let i=1;i<=5;i++){
-
-
-builder.innerHTML+=`
-
-<div class="card">
-
-<b>Question ${i}</b>
-
-<input id="q${i}" placeholder="Question">
-
-
-<input id="q${i}A" placeholder="Réponse A">
-
-
-<input id="q${i}B" placeholder="Réponse B">
-
-
-<input id="q${i}C" placeholder="Réponse C">
-
-
-<input id="q${i}D" placeholder="Réponse D">
-
-
-<select id="q${i}OK">
-
-<option>A</option>
-
-<option>B</option>
-
-<option>C</option>
-
-<option>D</option>
-
-</select>
-
-
-</div>
-
-
-`;
-
-
-}
-
-
-
-
-function openAdmin(){
-
-show("admin");
-
-}
-
-
-
-
-function generateLink(){
-
-
-let data={
-
-title:title.value,
-
-description:description.value,
-
-questions:[]
-
-};
-
-
-
-for(let i=1;i<=5;i++){
-
-
-data.questions.push({
-
-question:
-document.getElementById("q"+i).value,
-
-
-A:
-document.getElementById("q"+i+"A").value,
-
-
-B:
-document.getElementById("q"+i+"B").value,
-
-
-C:
-document.getElementById("q"+i+"C").value,
-
-
-D:
-document.getElementById("q"+i+"D").value,
-
-
-correct:
-document.getElementById("q"+i+"OK").value
-
-
-});
-
-
-}
-
-
-
-
-let code =
-btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-
-
-
-let link =
-window.location.origin+
-window.location.pathname+
-"?quiz="+code;
-
-
-
-resultLink.innerHTML=`
-
-<h3>Lien du concours :</h3>
-
-<div class="link-box">
-
-${link}
-
-</div>
-
-
-<button onclick="copyLink('${link}')">
-
-📋 Copier le lien
-
-</button>
-
-`;
-
-
-
-}
-
-
-
-
-
-function copyLink(text){
-
-navigator.clipboard.writeText(text);
-
-alert("Lien copié !");
-
-}
-function openQuizLink(){
-
-let params=new URLSearchParams(window.location.search);
-
-let code=params.get("quiz");
-
-
-if(!code){
-
-alert("Ouvrez un lien de concours valide.");
-
-return;
-
-}
-
-
-try{
-
-quiz=JSON.parse(
-decodeURIComponent(
-escape(
-atob(code)
-)
-)
-);
-
-
-quizName.innerHTML=quiz.title;
-
-quizDescription.innerHTML=quiz.description;
-
-
-show("register");
-
-
-}
-
-catch(e){
-
-alert("Lien de concours invalide.");
-
-}
-
-
-}
-
-
-
-
-
-function startQuiz(){
-
-if(firstname.value==="" || lastname.value===""){
-
-alert("Veuillez remplir votre nom et prénom.");
-
-return;
-
-}
-
-
-current=0;
-
-score=0;
-
-
-show("game");
-
-
-displayQuestion();
-
-
-}
-
-
-
-
-function displayQuestion(){
-
-
-selected=null;
-
-
-let q=quiz.questions[current];
-
-
-counter.innerHTML=
-"Question "+(current+1)+"/5";
-
-
-
-question.innerHTML=q.question;
-
-
-
-answers.innerHTML=`
-
-
-<div class="option" onclick="choose('A',this)">
-A) ${q.A}
-</div>
-
-
-<div class="option" onclick="choose('B',this)">
-B) ${q.B}
-</div>
-
-
-<div class="option" onclick="choose('C',this)">
-C) ${q.C}
-</div>
-
-
-<div class="option" onclick="choose('D',this)">
-D) ${q.D}
-</div>
-
-
-
-`;
-
-
-
-}
-
-
-
-
-
-function choose(letter,element){
-
-selected=letter;
-
-
-document.querySelectorAll(".option")
-.forEach(e=>e.classList.remove("selected"));
-
-
-element.classList.add("selected");
-
-
-}
-
-
-
-
-function nextQuestion(){
-
-
-if(!selected){
-
-alert("Choisissez une réponse.");
-
-return;
-
-}
-
-
-
-if(selected===quiz.questions[current].correct){
-
-score++;
-
-}
-
-
-
-current++;
-
-
-
-if(current<5){
-
-displayQuestion();
-
-}
-
-else{
-
-finish();
-
-}
-
-
-
-}
-
-
-
-
-function finish(){
-
-
-finalScore.innerHTML=
-"Votre score : "+score+"/5";
-
-
-show("finish");
-
-
-}
-
-
-
-
-
-function goHome(){
-
-show("home");
-
-}
-
-
-
-
-/* ouverture automatique avec un lien */
-
-if(
-new URLSearchParams(window.location.search)
-.get("quiz")
-){
-
-openQuizLink();
-
-}
-
-
+    let adminConnected = false;
+    let quizzes = JSON.parse(localStorage.getItem("zakariaQuiz")) || [];
+
+    function show(id) {
+        document.querySelectorAll(".screen").forEach(e => { e.classList.remove("active"); });
+        document.getElementById(id).classList.add('active');
+    }
+
+    function openAdminLogin() { show("adminLogin"); }
+
+    function loginAdmin() {
+        let user = document.getElementById("adminUser").value;
+        let pass = document.getElementById("adminPass").value;
+        if (user === "ZakariaTV" && pass === "123456") {
+            adminConnected = true;
+            show("dashboard");
+            updateStats();
+        } else {
+            document.getElementById("loginMessage").innerHTML = "❌ Identifiant ou mot de passe incorrect";
+        }
+    }
+
+    function logout() {
+        adminConnected = false;
+        show("home");
+    }
+
+    function updateStats() {
+        document.getElementById("totalQuiz").innerHTML = quizzes.length;
+        document.getElementById("totalUsers").innerHTML = localStorage.getItem("participants") || 0;
+        document.getElementById("totalResults").innerHTML = localStorage.getItem("results") || 0;
+    }
+
+    function createQuizPage() {
+        if (!adminConnected) return;
+        show("createQuiz");
+        generateQuestionForm();
+    }
+
+    function generateQuestionForm() {
+        let box = document.getElementById("questionsBox");
+        box.innerHTML = "";
+        for (let i = 1; i <= 5; i++) {
+            box.innerHTML += `
+                <div class="card">
+                    <b>Question ${i}</b>
+                    <input id="question${i}" placeholder="Question">
+                    <input id="answer${i}A" placeholder="Réponse A">
+                    <input id="answer${i}B" placeholder="Réponse B">
+                    <input id="answer${i}C" placeholder="Réponse C">
+                    <input id="answer${i}D" placeholder="Réponse D">
+                    <input id="correct${i}" placeholder="Bonne réponse (A/B/C/D)">
+                </div>
+            `;
+        }
+    }
+
+    function saveQuiz() {
+        let quiz = {
+            id: Date.now(),
+            title: document.getElementById("quizTitle").value,
+            description: document.getElementById("quizDesc").value,
+            contact: document.getElementById("quizContact").value,
+            questions: []
+        };
+
+        for (let i = 1; i <= 5; i++) {
+            quiz.questions.push({
+                q: document.getElementById("question" + i).value,
+                A: document.getElementById("answer" + i + "A").value,
+                B: document.getElementById("answer" + i + "B").value,
+                C: document.getElementById("answer" + i + "C").value,
+                D: document.getElementById("answer" + i + "D").value,
+                correct: document.getElementById("correct" + i).value.toUpperCase()
+            });
+        }
+
+        quizzes.push(quiz);
+        localStorage.setItem("zakariaQuiz", JSON.stringify(quizzes));
+
+        let link = location.href.split("?")[0] + "?quiz=" + btoa(JSON.stringify(quiz));
+        document.getElementById("quizLink").innerHTML = `
+            <div class="card">
+                <h3>✅ Concours créé</h3>
+                <p>Lien participant :</p>
+                <p>${link}</p>
+                <button onclick="navigator.clipboard.writeText('${link}')">📋 Copier le lien</button>
+            </div>
+        `;
+        updateStats();
+    }
+
+    function backDashboard() { show("dashboard"); }
+    function openParticipant() { show("participant"); }
+
+    let currentQuiz = null;
+    let qIndex = 0;
+    let userAnswers = [];
+    let seconds = 30;
+    let clock;
+
+    function loadQuizLink() {
+        let params = new URLSearchParams(location.search);
+        let code = params.get("quiz");
+        if (!code) return;
+        try {
+            currentQuiz = JSON.parse(atob(code));
+            document.getElementById("playTitle").innerHTML = currentQuiz.title;
+            document.getElementById("playDesc").innerHTML = currentQuiz.description;
+            document.getElementById("endContact").innerHTML = "📱 Contact : " + currentQuiz.contact;
+            show("playQuiz");
+        } catch (e) {
+            alert("Lien de concours invalide");
+        }
+    }
+
+    function startParticipation() {
+        let name = document.getElementById("playerName").value.trim();
+        if (name === "") {
+            alert("Entrez votre nom");
+            return;
+        }
+        let key = "done_" + currentQuiz.id;
+        if (localStorage.getItem(key)) {
+            alert("⚠️ Vous avez déjà participé à ce concours.");
+            return;
+        }
+        localStorage.setItem(key, "started");
+        localStorage.setItem("participants", Number(localStorage.getItem("participants") || 0) + 1);
+        qIndex = 0;
+        userAnswers = [];
+        show("questionPage");
+        showQuestion();
+    }
+
+    function showQuestion() {
+        clearInterval(clock);
+        seconds = 30;
+        document.getElementById("timer").innerHTML = seconds;
+        clock = setInterval(() => {
+            seconds--;
+            document.getElementById("timer").innerHTML = seconds;
+            if (seconds <= 0) {
+                clearInterval(clock);
+                nextQuestion();
+            }
+        }, 1000);
+
+        let q = currentQuiz.questions[qIndex];
+        document.getElementById("questionNumber").innerHTML = "Question " + (qIndex + 1) + "/" + currentQuiz.questions.length;
+        document.getElementById("playQuestion").innerHTML = q.q;
+        document.getElementById("bar").style.width = ((qIndex + 1) / currentQuiz.questions.length * 100) + "%";
+
+        document.getElementById("playAnswers").innerHTML = `
+            <div class="option" onclick="answer('A',this)">A) ${q.A}</div>
+            <div class="option" onclick="answer('B',this)">B) ${q.B}</div>
+            <div class="option" onclick="answer('C',this)">C) ${q.C}</div>
+            <div class="option" onclick="answer('D',this)">D) ${q.D}</div>
+        `;
+    }
+
+    function answer(letter, element) {
+        userAnswers[qIndex] = letter;
+        document.querySelectorAll(".option").forEach(e => { e.classList.remove("selected"); });
+        element.classList.add("selected");
+    }
+
+    function nextQuestion() {
+        clearInterval(clock);
+        qIndex++;
+        if (qIndex < currentQuiz.questions.length) {
+            showQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function finishQuiz() {
+        let result = {
+            quiz: currentQuiz.title,
+            answers: userAnswers,
+            date: new Date().toLocaleString()
+        };
+        let results = JSON.parse(localStorage.getItem("resultsList")) || [];
+        results.push(result);
+        localStorage.setItem("resultsList", JSON.stringify(results));
+        localStorage.setItem("results", results.length);
+        localStorage.setItem("done_" + currentQuiz.id, "finished");
+        show("endPage");
+    }
+
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.pushState(null, null, location.href);
+    };
+
+    loadQuizLink();
 </script>
-
-
 </body>
-  </html>
+</html>
