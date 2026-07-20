@@ -2,7 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CORRECTION : Blocage strict du zoom tactile pour garder la page fixe -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimum-scale=1.0">
     <title>Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde</title>
     <style>
         * {
@@ -482,7 +483,6 @@
             <div id="questionsContainer"></div>
             <button class="green-btn" onclick="generateLink()">Enregistrer le Concours et Activer</button>
             
-            <!-- MODIFICATION : Structure modifiée pour accueillir le bouton "Copier le lien" -->
             <div id="linkOutput"></div>
             
             <button style="background:#64748b;" onclick="show('adminDashboard')">Retour Dashboard</button>
@@ -505,10 +505,9 @@
     let currentQuiz = null; let shuffledQuestions = []; let qIndex = 0; let userAnswers = [];
     let seconds = 10; let clock; let timelineInterval; let antiCheatTriggered = false;
 
-    // CORRECTION DU SROLL AUTO : Ajout d'un paramètre optionnel "preventScroll" pour éviter les sauts brutaux en arrière-plan
     function show(id, preventScroll = false) {
         let target = document.getElementById(id);
-        if (target && target.classList.contains('active')) return; // Évite de recharger l'écran s'il est déjà actif
+        if (target && target.classList.contains('active')) return;
         
         document.querySelectorAll(".screen").forEach(e => e.classList.remove('active'));
         target.classList.add('active');
@@ -549,7 +548,6 @@
         return results.find(r => r.isMe === true) || null;
     }
 
-    // INTERFACE DE SÉCURITÉ OPTIMISÉE : Ne force plus le changement d'écran si l'utilisateur est sur l'inscription
     function startTimelineEngine() {
         clearInterval(timelineInterval);
         if(!currentQuiz) return;
@@ -568,7 +566,6 @@
                     show("waitingRoom", true); 
                     startLiveCountdown(startTime, "waitCountdown"); 
                 } else { 
-                    // Si l'utilisateur a ouvert le formulaire d'inscription, on ne le force pas à revenir sur l'accueil
                     if (!document.getElementById("registerScreen").classList.contains("active")) {
                         show("home", true); 
                         buildHomeUI(startTime, false); 
@@ -767,7 +764,6 @@
             </div>`;
     }
 
-    // MODIFICATION : Ajout du bouton "Copier le lien" dynamique après la génération
     function generateLink() {
         let q = {
             id: Date.now(), title: document.getElementById("qTitle").value, date: document.getElementById("qDate").value,
@@ -788,7 +784,6 @@
         updateStats();
     }
 
-    // NOUVELLE FONCTIONALITÉ : Copie ultra-rapide et sécurisée
     function copyQuizLink() {
         let linkArea = document.getElementById("generatedLinkArea");
         if(linkArea) {
