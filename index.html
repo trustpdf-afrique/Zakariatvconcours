@@ -15,7 +15,6 @@
             background: radial-gradient(circle at top right, #edf7ff 0%, #f1faee 100%);
             min-height: 100vh;
             color: #1d3557;
-            /* Autorise le défilement naturel de haut en bas sur tous les appareils */
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
@@ -35,7 +34,6 @@
             flex-grow: 1;
         }
         
-        /* ESPACE DÉDIÉ POUR TA PHOTO / LOGO */
         .logo-photo-container {
             width: 120px;
             height: 120px;
@@ -341,9 +339,8 @@
 <body>
 <div class="container">
     <div class="main-content">
-        <!-- ESPACE DÉDIÉ POUR METTRE TA PHOTO PLUS TARD -->
+        <!-- ESPACE DÉDIÉ POUR METTRE TA PHOTO -->
         <div class="logo-photo-container">
-            <!-- Remplace la ligne ci-dessous par : <img src="ta_photo.jpg" alt="Logo Zakaria TV"> -->
             <div class="logo-placeholder-text">[ Emplacement Photo ]</div>
         </div>
 
@@ -363,9 +360,8 @@
             <button class="green-btn" onclick="loginAdmin()">Se connecter au Tableau de Bord</button>
         </div>
 
-        <!-- ÉCRAN D'ACCUEIL PUBLIC PARTICIPANTS (COMPTE À REBOURS ET INSCRIPTION EN PREMIER) -->
+        <!-- ÉCRAN D'ACCUEIL PUBLIC PARTICIPANTS -->
         <div id="home" class="screen">
-            <!-- MODIFICATION : Placé tout en haut pour une visibilité immédiate sans défilement -->
             <div id="timeStatusBox"></div>
 
             <div class="card">
@@ -398,7 +394,7 @@
             <button onclick="submitRegistration()">Valider mon inscription</button>
         </div>
 
-        <!-- SALLE D'ATTENTE PARTICIPANT (AUTOMATISÉE) -->
+        <!-- SALLE D'ATTENTE PARTICIPANT -->
         <div id="waitingRoom" class="screen">
             <div class="card" style="text-align:center;">
                 <span style="font-size:50px;">⏳</span>
@@ -485,7 +481,10 @@
             </div>
             <div id="questionsContainer"></div>
             <button class="green-btn" onclick="generateLink()">Enregistrer le Concours et Activer</button>
+            
+            <!-- MODIFICATION : Structure modifiée pour accueillir le bouton "Copier le lien" -->
             <div id="linkOutput"></div>
+            
             <button style="background:#64748b;" onclick="show('adminDashboard')">Retour Dashboard</button>
         </div>
 
@@ -498,7 +497,6 @@
         </div>
     </div>
     
-    <!-- MODIFICATION : Mention de droit d'auteur mise à jour en bas de page -->
     <div class="footer-text">© 2026 ZAKARIA TV – Tous droits réservés.</div>
 </div>
 
@@ -507,10 +505,14 @@
     let currentQuiz = null; let shuffledQuestions = []; let qIndex = 0; let userAnswers = [];
     let seconds = 10; let clock; let timelineInterval; let antiCheatTriggered = false;
 
-    function show(id) {
+    // CORRECTION DU SROLL AUTO : Ajout d'un paramètre optionnel "preventScroll" pour éviter les sauts brutaux en arrière-plan
+    function show(id, preventScroll = false) {
+        let target = document.getElementById(id);
+        if (target && target.classList.contains('active')) return; // Évite de recharger l'écran s'il est déjà actif
+        
         document.querySelectorAll(".screen").forEach(e => e.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        window.scrollTo(0,0);
+        target.classList.add('active');
+        if (!preventScroll) window.scrollTo(0,0);
     }
 
     function routingEngine() {
@@ -547,6 +549,7 @@
         return results.find(r => r.isMe === true) || null;
     }
 
+    // INTERFACE DE SÉCURITÉ OPTIMISÉE : Ne force plus le changement d'écran si l'utilisateur est sur l'inscription
     function startTimelineEngine() {
         clearInterval(timelineInterval);
         if(!currentQuiz) return;
@@ -561,8 +564,18 @@
                 buildTop10List("top10RowsClosed"); show("closedQuiz"); return;
             }
             if (now < startTime) {
-                if (session) { show("waitingRoom"); startLiveCountdown(startTime, "waitCountdown"); }
-                else { show("home"); buildHomeUI(startTime, false); }
+                if (session) { 
+                    show("waitingRoom", true); 
+                    startLiveCountdown(startTime, "waitCountdown"); 
+                } else { 
+                    // Si l'utilisateur a ouvert le formulaire d'inscription, on ne le force pas à revenir sur l'accueil
+                    if (!document.getElementById("registerScreen").classList.contains("active")) {
+                        show("home", true); 
+                        buildHomeUI(startTime, false); 
+                    } else {
+                        startLiveCountdown(startTime, "homeCountdown");
+                    }
+                }
                 return;
             }
             if (now >= startTime && now <= endTime) {
@@ -572,7 +585,12 @@
                     } else if (session.status === "inscrit" && !document.getElementById("questionPage").classList.contains("active")) {
                         clearInterval(timelineInterval); startQuizGameplay();
                     }
-                } else { show("home"); buildHomeUI(null, true); }
+                } else { 
+                    if (!document.getElementById("registerScreen").classList.contains("active")) {
+                        show("home", true); 
+                        buildHomeUI(null, true); 
+                    }
+                }
             }
         }
         loop(); timelineInterval = setInterval(loop, 1000);
@@ -580,14 +598,17 @@
 
     function buildHomeUI(targetTime, isRunning) {
         let box = document.getElementById("timeStatusBox");
+        if (!box) return;
         if (!isRunning) {
-            box.innerHTML = `
-                <div class="card" style="text-align:center; margin-top:0; border-color: rgba(230, 57, 70, 0.2);">
-                    <span style="font-weight:700; color:#e63946; font-size:13px; display:block; margin-bottom:10px; text-transform:uppercase;">⏳ OUVERTURE DU CONCOURS DANS :</span>
-                    <div id="homeCountdown" class="bet-countdown"></div>
-                    <button style="margin-top:15px; margin-bottom:0;" onclick="show('registerScreen')">📋 S'inscrire à l'avance</button>
-                </div>`;
-            startLiveCountdown(targetTime, "homeCountdown");
+            if(!document.getElementById("homeCountdown")) {
+                box.innerHTML = `
+                    <div class="card" style="text-align:center; margin-top:0; border-color: rgba(230, 57, 70, 0.2);">
+                        <span style="font-weight:700; color:#e63946; font-size:13px; display:block; margin-bottom:10px; text-transform:uppercase;">⏳ OUVERTURE DU CONCOURS DANS :</span>
+                        <div id="homeCountdown" class="bet-countdown"></div>
+                        <button style="margin-top:15px; margin-bottom:0;" onclick="show('registerScreen')">📋 S'inscrire à l'avance</button>
+                    </div>`;
+            }
+            if (targetTime) startLiveCountdown(targetTime, "homeCountdown");
         } else {
             box.innerHTML = `
                 <div class="card" style="text-align:center; margin-top:0; border-color: rgba(42, 157, 143, 0.2);">
@@ -616,7 +637,6 @@
 
         let globalResults = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
         
-        // MODIFICATION : Blocage strict par numéro WhatsApp OU par nom complet (Anti-fraude absolu)
         let dataDuplicate = globalResults.some(r => r.whatsapp === whatsapp || (r.nom.toLowerCase() === nom && r.prenom.toLowerCase() === prenom));
         let sessionDuplicate = getLocalSession();
 
@@ -640,7 +660,6 @@
         globalResults.push(newPlayer); 
         localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(globalResults));
         
-        // MODIFICATION : Message de confirmation respectueux et clair
         alert("Votre inscription a été enregistrée avec succès. Bonne chance pour le concours !");
         
         startTimelineEngine();
@@ -748,6 +767,7 @@
             </div>`;
     }
 
+    // MODIFICATION : Ajout du bouton "Copier le lien" dynamique après la génération
     function generateLink() {
         let q = {
             id: Date.now(), title: document.getElementById("qTitle").value, date: document.getElementById("qDate").value,
@@ -761,8 +781,25 @@
         let encryptedBase = btoa(unescape(encodeURIComponent(JSON.stringify(q))));
         let fullUrl = window.location.origin + window.location.pathname + "?quiz=" + encryptedBase;
         
-        document.getElementById("linkOutput").innerHTML = `<textarea style="height:80px; margin-top:10px;" readonly>${fullUrl}</textarea><p style="color:#2a9d8f; font-weight:bold;">Le concours a été activé ! Transmets ce lien à tes participants.</p>`;
+        document.getElementById("linkOutput").innerHTML = `
+            <textarea id="generatedLinkArea" style="height:80px; margin-top:10px;" readonly>${fullUrl}</textarea>
+            <button class="green-btn" style="margin-top:5px;" onclick="copyQuizLink()">📋 Copier le lien en 1 clic</button>
+            <p style="color:#2a9d8f; font-weight:bold; text-align:center;">Le concours a été activé ! Transmets ce lien à tes participants.</p>`;
         updateStats();
+    }
+
+    // NOUVELLE FONCTIONALITÉ : Copie ultra-rapide et sécurisée
+    function copyQuizLink() {
+        let linkArea = document.getElementById("generatedLinkArea");
+        if(linkArea) {
+            linkArea.select();
+            linkArea.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(linkArea.value).then(() => {
+                alert("Le lien du concours a été copié avec succès dans votre presse-papiers !");
+            }).catch(() => {
+                alert("Copie manuelle : Sélectionnez le texte et copiez-le.");
+            });
+        }
     }
 
     function openResults() {
