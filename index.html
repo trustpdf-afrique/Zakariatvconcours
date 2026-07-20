@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde</title>
     <style>
         * {
@@ -15,15 +15,17 @@
             background: radial-gradient(circle at top right, #edf7ff 0%, #f1faee 100%);
             min-height: 100vh;
             color: #1d3557;
-            -webkit-text-size-adjust: 100%;
+            /* Autorise le défilement naturel de haut en bas sur tous les appareils */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .container {
             max-width: 650px;
-            margin: auto;
+            margin: 0 auto;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             min-height: 100vh;
-            padding: 35px 20px;
+            padding: 25px 20px;
             box-shadow: 0 0 50px rgba(29, 53, 87, 0.08);
             display: flex;
             flex-direction: column;
@@ -32,6 +34,34 @@
         .main-content {
             flex-grow: 1;
         }
+        
+        /* ESPACE DÉDIÉ POUR TA PHOTO / LOGO */
+        .logo-photo-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            margin: 10px auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #e63946;
+            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.15);
+            overflow: hidden;
+        }
+        .logo-photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .logo-placeholder-text {
+            font-size: 11px;
+            color: #64748b;
+            text-align: center;
+            font-weight: 600;
+            padding: 5px;
+        }
+
         .logo {
             text-align: center;
             font-size: 32px;
@@ -47,17 +77,18 @@
         .subtitle {
             text-align: center;
             color: #457b9d;
-            margin-bottom: 30px;
-            font-size: 12px;
+            margin-bottom: 25px;
+            font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
+            padding: 0 10px;
         }
         .card {
             background: #ffffff;
             padding: 25px;
             border-radius: 24px;
-            margin: 20px 0;
+            margin: 15px 0;
             box-shadow: 0 10px 30px rgba(29, 53, 87, 0.04);
             border: 1px solid rgba(69, 123, 157, 0.08);
         }
@@ -73,6 +104,7 @@
             margin: 10px 0;
             cursor: pointer;
             box-shadow: 0 6px 20px rgba(230, 57, 70, 0.2);
+            -webkit-tap-highlight-color: transparent;
         }
         button:hover {
             transform: translateY(-2px);
@@ -95,6 +127,7 @@
             background-color: #f8fafc;
             color: #1d3557;
             font-weight: 500;
+            -webkit-appearance: none;
         }
         input:focus, textarea:focus, select:focus {
             outline: none;
@@ -110,7 +143,7 @@
             display: block;
         }
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .rewards-list {
@@ -135,7 +168,7 @@
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin: 20px 0;
+            margin: 15px 0;
         }
         .bet-box {
             background: #1d3557;
@@ -143,7 +176,7 @@
             padding: 10px 14px;
             border-radius: 12px;
             text-align: center;
-            min-width: 65px;
+            min-width: 68px;
         }
         .bet-box .num {
             font-size: 24px;
@@ -292,25 +325,33 @@
         .b-cours { background: #fff8e1; color: #f57f17; }
         .b-termine { background: #e3f2fd; color: #1565c0; }
         .b-fraud { background: #ffebee; color: #c62828; }
+        
         .footer-text {
             text-align: center;
             font-size: 12px;
             color: #64748b;
             margin-top: 40px;
-            border-top: 1px solid rgba(0,0,0,0.05);
+            border-top: 1px solid rgba(0,0,0,0.06);
             padding-top: 20px;
-            font-weight: 500;
+            font-weight: 600;
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="main-content">
+        <!-- ESPACE DÉDIÉ POUR METTRE TA PHOTO PLUS TARD -->
+        <div class="logo-photo-container">
+            <!-- Remplace la ligne ci-dessous par : <img src="ta_photo.jpg" alt="Logo Zakaria TV"> -->
+            <div class="logo-placeholder-text">[ Emplacement Photo ]</div>
+        </div>
+
         <!-- EN-TÊTE DE L'APPLICATION -->
         <div class="logo">Zakaria TV <span>Concours</span></div>
         <p class="subtitle">Mini-documentaires sur les plus grandes personnalités du monde</p>
 
-        <!-- ================= CONNEXION DIRECTE ADMIN (S'AFFICHE À LA SURFACE DU LIEN RACINE) ================= -->
+        <!-- ================= CONNEXION DIRECTE ADMIN ================= -->
         <div id="adminLogin" class="screen">
             <h2>🔐 Connexion Super-Admin</h2>
             <div class="card">
@@ -322,8 +363,11 @@
             <button class="green-btn" onclick="loginAdmin()">Se connecter au Tableau de Bord</button>
         </div>
 
-        <!-- ÉCRAN D'ACCUEIL PUBLIC PARTICIPANTS (S'AFFICHE SUR LE LIEN DU CONCOURS) -->
+        <!-- ÉCRAN D'ACCUEIL PUBLIC PARTICIPANTS (COMPTE À REBOURS ET INSCRIPTION EN PREMIER) -->
         <div id="home" class="screen">
+            <!-- MODIFICATION : Placé tout en haut pour une visibilité immédiate sans défilement -->
+            <div id="timeStatusBox"></div>
+
             <div class="card">
                 <h3 style="margin-top:0; color:#1d3557;">🎁 Récompenses du Concours</h3>
                 <div class="rewards-list">
@@ -340,8 +384,6 @@
                     <li>Les questions et choix de réponses apparaissent dans un ordre aléatoire.</li>
                 </ul>
             </div>
-            <!-- Emplacement du compte à rebours ou bouton d'inscription -->
-            <div id="timeStatusBox"></div>
         </div>
 
         <!-- FORMULAIRE INSCRIPTION PARTICIPANT -->
@@ -390,7 +432,7 @@
             <div class="card" style="text-align: center;">
                 <span style="font-size: 50px;">🏆</span>
                 <h2>Session Enregistrée !</h2>
-                <p>Vos réponses ont été transmises. Votre score reste secret pour éviter les fraudes.</p>
+                <p>Vos réponses ont été transmises avec succès. Votre score reste secret pour éviter les fraudes.</p>
             </div>
             <div class="card">
                 <h3 style="margin-top:0; color:#1d3557; text-align:center;">📊 Classement en Direct (Top 10)</h3>
@@ -419,7 +461,7 @@
             </div>
         </div>
 
-        <!-- ================= PANNEAU ADMIN ACTIF UNIQUEMENT APRÈS LOGIN ================= -->
+        <!-- ================= PANNEAU ADMIN ================= -->
         <div id="adminDashboard" class="screen" style="border-top: 4px solid #1d3557; padding-top:20px;">
             <h2 style="color:#e63946;">🛠️ Espace Privé Administrateur</h2>
             <div class="stat-grid">
@@ -455,7 +497,9 @@
             <button style="background:#64748b;" onclick="show('adminDashboard')">Retour Dashboard</button>
         </div>
     </div>
-    <div class="footer-text">Merci.<br><strong>ZAKARIA TV</strong> – Mini-documentaires sur les plus grandes personnalités du monde.</div>
+    
+    <!-- MODIFICATION : Mention de droit d'auteur mise à jour en bas de page -->
+    <div class="footer-text">© 2026 ZAKARIA TV – Tous droits réservés.</div>
 </div>
 
 <script>
@@ -469,23 +513,20 @@
         window.scrollTo(0,0);
     }
 
-    // GESTION DU DOUBLE ACCÈS ROUTÉ EN FONCTION DU LIEN
     function routingEngine() {
         let params = new URLSearchParams(location.search);
         let code = params.get("quiz");
         
         if (code) {
-            // SCÉNARIO LIEN PARTICIPANT : Chargement dynamique du concours et masquage total de l'admin
             try {
                 currentQuiz = JSON.parse(decodeURIComponent(escape(atob(code))));
                 startTimelineEngine();
             } catch (e) { 
-                alert("Lien corrompu."); 
+                alert("Le lien du concours semble corrompu ou incomplet."); 
                 document.getElementById("timeStatusBox").innerHTML = "<p style='text-align:center;font-weight:700;color:#64748b;'>Code concours invalide.</p>";
                 show("home");
             }
         } else {
-            // SCÉNARIO LIEN DE BASE À LA SURFACE : Affichage instantané du formulaire de connexion admin
             show("adminLogin");
         }
     }
@@ -506,7 +547,6 @@
         return results.find(r => r.isMe === true) || null;
     }
 
-    // ENGINE DE MISE À JOUR INSTANTANÉE EN DIRECT SANS RECHARGEMENT DE PAGE
     function startTimelineEngine() {
         clearInterval(timelineInterval);
         if(!currentQuiz) return;
@@ -530,7 +570,7 @@
                     if (session.status === "terminé" || session.status === "disqualifié") {
                         clearInterval(timelineInterval); buildTop10List("top10Rows"); show("endPage");
                     } else if (session.status === "inscrit" && !document.getElementById("questionPage").classList.contains("active")) {
-                        clearInterval(timelineInterval); startQuizGameplay(); // Se déclenche à la seconde pile sans rafraîchir !
+                        clearInterval(timelineInterval); startQuizGameplay();
                     }
                 } else { show("home"); buildHomeUI(null, true); }
             }
@@ -541,10 +581,19 @@
     function buildHomeUI(targetTime, isRunning) {
         let box = document.getElementById("timeStatusBox");
         if (!isRunning) {
-            box.innerHTML = `<div style="text-align:center; margin-top:15px;"><span style="font-weight:700; color:#e63946; font-size:12px; display:block; margin-bottom:5px;">⏳ OUVERTURE DU CONCOURS DANS :</span><div id="homeCountdown" class="bet-countdown"></div><button onclick="show('registerScreen')">📋 S'inscrire à l'avance</button></div>`;
+            box.innerHTML = `
+                <div class="card" style="text-align:center; margin-top:0; border-color: rgba(230, 57, 70, 0.2);">
+                    <span style="font-weight:700; color:#e63946; font-size:13px; display:block; margin-bottom:10px; text-transform:uppercase;">⏳ OUVERTURE DU CONCOURS DANS :</span>
+                    <div id="homeCountdown" class="bet-countdown"></div>
+                    <button style="margin-top:15px; margin-bottom:0;" onclick="show('registerScreen')">📋 S'inscrire à l'avance</button>
+                </div>`;
             startLiveCountdown(targetTime, "homeCountdown");
         } else {
-            box.innerHTML = `<button onclick="show('registerScreen')">✍️ Le concours a débuté ! Rejoindre maintenant</button>`;
+            box.innerHTML = `
+                <div class="card" style="text-align:center; margin-top:0; border-color: rgba(42, 157, 143, 0.2);">
+                    <span style="font-weight:700; color:#2a9d8f; font-size:13px; display:block; margin-bottom:5px;">⚡ LE CONCOURS A DÉBUTÉ !</span>
+                    <button class="green-btn" style="margin-bottom:0;" onclick="show('registerScreen')">✍️ Rejoindre et participer maintenant</button>
+                </div>`;
         }
     }
 
@@ -556,16 +605,44 @@
     }
 
     function submitRegistration() {
-        let nom = document.getElementById("partNom").value.trim();
-        let prenom = document.getElementById("partPrenom").value.trim();
+        let nom = document.getElementById("partNom").value.trim().toLowerCase();
+        let prenom = document.getElementById("partPrenom").value.trim().toLowerCase();
         let whatsapp = document.getElementById("partWhatsApp").value.trim();
-        if (!nom || !prenom || !whatsapp) { alert("Veuillez remplir tous les champs."); return; }
+        
+        if (!nom || !prenom || !whatsapp) { 
+            alert("Veuillez remplir correctement tous les champs du formulaire."); 
+            return; 
+        }
 
         let globalResults = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
-        if (globalResults.some(r => r.whatsapp === whatsapp)) { alert("⚠️ Ce numéro WhatsApp a déjà été inscrit."); return; }
+        
+        // MODIFICATION : Blocage strict par numéro WhatsApp OU par nom complet (Anti-fraude absolu)
+        let dataDuplicate = globalResults.some(r => r.whatsapp === whatsapp || (r.nom.toLowerCase() === nom && r.prenom.toLowerCase() === prenom));
+        let sessionDuplicate = getLocalSession();
 
-        let newPlayer = { nom, prenom, whatsapp, quizId: currentQuiz.id, score: 0, status: "inscrit", isMe: true, date: new Date().toLocaleString() };
-        globalResults.push(newPlayer); localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(globalResults));
+        if (dataDuplicate || sessionDuplicate) { 
+            alert("⚠️ Désolé, cette personne ou ce numéro WhatsApp est déjà inscrit à ce concours. Les participations multiples sont interdites."); 
+            show("home");
+            return; 
+        }
+
+        let newPlayer = { 
+            nom: nom, 
+            prenom: prenom, 
+            whatsapp: whatsapp, 
+            quizId: currentQuiz.id, 
+            score: 0, 
+            status: "inscrit", 
+            isMe: true, 
+            date: new Date().toLocaleString() 
+        };
+        
+        globalResults.push(newPlayer); 
+        localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(globalResults));
+        
+        // MODIFICATION : Message de confirmation respectueux et clair
+        alert("Votre inscription a été enregistrée avec succès. Bonne chance pour le concours !");
+        
         startTimelineEngine();
     }
 
@@ -582,7 +659,7 @@
     function triggerAntiCheat() {
         if (document.hidden && !antiCheatTriggered) {
             antiCheatTriggered = true; clearInterval(clock);
-            alert("🚨 TRICHE DÉTECTÉE : Changement d'onglet interdit. Vous êtes disqualifié.");
+            alert("🚨 TRICHE DÉTECTÉE : Le changement d'onglet ou d'application est strictement interdit durant le jeu. Vous êtes disqualifié.");
             finishQuiz(true);
         }
     }
@@ -642,14 +719,13 @@
         let box = document.getElementById(elementId); box.innerHTML = "";
         let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
         let cleanList = results.filter(r => r.status === "terminé").sort((a,b) => b.score - a.score).slice(0, 10);
-        if(cleanList.length === 0) { box.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#666;'>Aucun score enregistré.</td></tr>"; return; }
+        if(cleanList.length === 0) { box.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#666;'>Aucun score enregistré pour le moment.</td></tr>"; return; }
         cleanList.forEach((r, i) => {
             let rankClass = (i === 0) ? 'rank-1' : (i === 1) ? 'rank-2' : (i === 2) ? 'rank-3' : '';
             box.innerHTML += `<tr><td><span class="rank-badge ${rankClass}">${i+1}</span></td><td style="text-transform:capitalize;">${r.prenom} ${r.nom[0]}.</td><td><b>${r.score} / 5</b></td></tr>`;
         });
     }
 
-    // ================= SCRIPT LOGIQUE DU TABLEAU DE BORD ADMIN =================
     function updateStats() {
         document.getElementById("c1").innerHTML = activeQuizList.length;
         let totalUsers = 0; let totalDone = 0;
@@ -721,7 +797,7 @@
     }
 
     function clearData() {
-        if(confirm("Purger l'intégralité des concours et résultats ?")) {
+        if(confirm("Voulez-vous purger l'intégralité des concours et résultats ? Cette action est irréversible.")) {
             localStorage.clear(); activeQuizList = []; updateStats(); show("adminLogin");
         }
     }
@@ -729,7 +805,6 @@
     window.onpopstate = function () { history.pushState(null, null, location.href); };
     history.pushState(null, null, location.href);
     
-    // DÉMARRAGE DU ROUTAGE DÈS L'OUVERTURE DE L'APPLICATION
     routingEngine();
 </script>
 </body>
