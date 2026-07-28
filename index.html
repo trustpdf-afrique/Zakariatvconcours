@@ -1,848 +1,613 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: radial-gradient(circle at top right, #edf7ff 0%, #f1faee 100%);
-            min-height: 100vh;
-            color: #1d3557;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .container {
-            max-width: 650px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            min-height: 100vh;
-            padding: 25px 20px;
-            box-shadow: 0 0 50px rgba(29, 53, 87, 0.08);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .main-content {
-            flex-grow: 1;
-        }
-        
-        .logo-photo-container {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            margin: 10px auto 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid #e63946;
-            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.15);
-            overflow: hidden;
-        }
-        .logo-photo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .logo-placeholder-text {
-            font-size: 11px;
-            color: #64748b;
-            text-align: center;
-            font-weight: 600;
-            padding: 5px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizBet - Pariez sur vos connaissances</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #10b981;
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-gold: #f59e0b;
+      --danger: #ef4444;
+    }
 
-        .logo {
-            text-align: center;
-            font-size: 32px;
-            font-weight: 800;
-            color: #1d3557;
-            letter-spacing: -1.5px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        .logo span {
-            color: #e63946;
-        }
-        .subtitle {
-            text-align: center;
-            color: #457b9d;
-            margin-bottom: 25px;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 0 10px;
-        }
-        .card {
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 24px;
-            margin: 15px 0;
-            box-shadow: 0 10px 30px rgba(29, 53, 87, 0.04);
-            border: 1px solid rgba(69, 123, 157, 0.08);
-        }
-        button {
-            width: 100%;
-            padding: 16px;
-            border: 0;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #e63946, #c92a36);
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            margin: 10px 0;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.2);
-            -webkit-tap-highlight-color: transparent;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.35);
-        }
-        .green-btn {
-            background: linear-gradient(135deg, #2a9d8f, #20786e);
-            box-shadow: 0 6px 20px rgba(42, 157, 143, 0.2);
-        }
-        .green-btn:hover {
-            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.35);
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 15px;
-            border-radius: 14px;
-            border: 2px solid #e2e8f0;
-            margin: 10px 0;
-            font-size: 16px;
-            background-color: #f8fafc;
-            color: #1d3557;
-            font-weight: 500;
-            -webkit-appearance: none;
-        }
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #457b9d;
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(69, 123, 157, 0.15);
-        }
-        .screen {
-            display: none;
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .active {
-            display: block;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .rewards-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 15px 0;
-        }
-        .reward-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8fafc;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            border-left: 4px solid #457b9d;
-        }
-        .reward-item.first { border-left-color: #ffb703; background: #fffcf2; }
-        
-        .bet-countdown {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 15px 0;
-        }
-        .bet-box {
-            background: #1d3557;
-            color: white;
-            padding: 10px 14px;
-            border-radius: 12px;
-            text-align: center;
-            min-width: 68px;
-        }
-        .bet-box .num {
-            font-size: 24px;
-            font-weight: 800;
-            display: block;
-        }
-        .bet-box .lbl {
-            font-size: 9px;
-            text-transform: uppercase;
-            opacity: 0.7;
-            font-weight: 700;
-        }
-        .progress {
-            background: #edf2f7;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-            height: 8px;
-        }
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #e63946, #457b9d);
-            width: 0%;
-        }
-        .option {
-            background: white;
-            padding: 16px;
-            border: 2px solid #edf2f7;
-            border-radius: 16px;
-            margin: 10px 0;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-        .option:hover {
-            background: #f8fafc;
-            border-color: #457b9d;
-            transform: translateX(3px);
-        }
-        .option.selected {
-            background: #f1faee;
-            border-color: #e63946;
-            color: #e63946;
-        }
-        .timer-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-        }
-        .circular-timer {
-            position: relative;
-            width: 85px;
-            height: 85px;
-        }
-        .circular-timer svg {
-            transform: rotate(-90deg);
-            width: 85px;
-            height: 85px;
-        }
-        .circular-timer circle {
-            width: 100%;
-            height: 100%;
-            fill: none;
-            stroke-width: 6;
-            stroke-linecap: round;
-        }
-        .circular-timer .bg-circle {
-            stroke: #f1faee;
-        }
-        .circular-timer .progress-circle {
-            stroke: #e63946;
-            stroke-dasharray: 251.2;
-            stroke-dashoffset: 0;
-        }
-        .circular-timer .timer-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            font-weight: 800;
-            color: #e63946;
-        }
-        .top10-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        .top10-table th, .top10-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #edf2f7;
-        }
-        .top10-table th {
-            color: #457b9d;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-        .rank-badge {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            text-align: center;
-            line-height: 24px;
-            border-radius: 50%;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        .rank-1 { background: #fff3cd; color: #856404; }
-        .rank-2 { background: #e2e3e5; color: #383d41; }
-        .rank-3 { background: #f8d7da; color: #721c24; }
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .stat {
-            background: #f1faee;
-            padding: 15px;
-            border-radius: 14px;
-            text-align: center;
-            border: 1px solid rgba(69, 123, 157, 0.2);
-        }
-        .stat b { font-size: 24px; display: block; }
-        .p-card {
-            background: #fff;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 10px 0;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .badge {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .b-inscrit { background: #e8f5e9; color: #2e7d32; }
-        .b-cours { background: #fff8e1; color: #f57f17; }
-        .b-termine { background: #e3f2fd; color: #1565c0; }
-        .b-fraud { background: #ffebee; color: #c62828; }
-        
-        .footer-text {
-            text-align: center;
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 40px;
-            border-top: 1px solid rgba(0,0,0,0.06);
-            padding-top: 20px;
-            font-weight: 600;
-            line-height: 1.6;
-        }
-    </style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* Container global style Mobile App */
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      background-color: #0B1120;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+      overflow-x: hidden;
+    }
+
+    /* En-tête */
+    header {
+      background-color: var(--card-bg);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .brand span { color: var(--accent-gold); }
+
+    .wallet-badge {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Vues */
+    .view {
+      display: none;
+      padding: 20px;
+      flex: 1;
+      padding-bottom: 80px;
+    }
+
+    .view.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation Basse */
+    nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--card-bg);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      border-top: 1px solid var(--card-border);
+      z-index: 10;
+    }
+
+    .nav-item {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Titres et éléments d'interface */
+    h2 { font-size: 1.2rem; margin-bottom: 15px; }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .cat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .cat-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .cat-title { font-weight: 600; font-size: 0.95rem; }
+    .cat-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* Modale de Mise */
+    .bet-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .bet-content {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 400px;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--card-border);
+    }
+
+    .bet-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .bet-btn {
+      background: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .bet-btn.selected {
+      border-color: var(--accent-gold);
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent-gold);
+    }
+
+    .btn-main {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    /* Écran de Jeu (Quiz) */
+    .timer-bar {
+      width: 100%;
+      height: 6px;
+      background: var(--card-border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .timer-fill {
+      height: 100%;
+      background: var(--accent-gold);
+      width: 100%;
+      transition: width 1s linear;
+    }
+
+    .q-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 20px;
+    }
+
+    .answers { display: flex; flex-direction: column; gap: 10px; }
+
+    .ans-btn {
+      background: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 14px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .ans-btn.correct { background: var(--secondary); border-color: var(--secondary); }
+    .ans-btn.wrong { background: var(--danger); border-color: var(--danger); }
+
+    /* Résultat */
+    .result-card {
+      text-align: center;
+      background: var(--card-bg);
+      padding: 30px 20px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+    }
+
+    .result-title { font-size: 1.5rem; margin-bottom: 10px; }
+    .result-amount { font-size: 2rem; font-weight: 800; color: var(--secondary); margin: 15px 0; }
+
+    /* Portefeuille */
+    .wallet-card {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+
+    .tx-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.85rem;
+    }
+
+    .tx-gain { color: var(--secondary); font-weight: 600; }
+    .tx-perte { color: var(--danger); font-weight: 600; }
+  </style>
 </head>
 <body>
-<div class="container">
-    <div class="main-content">
-        <!-- ESPACE DÉDIÉ POUR METTRE TA PHOTO -->
-<div class="logo-photo-container">
-    <img src="https://i.postimg.cc/QMvtmV9t/file-000000009dc8724699d54da957936110.png" alt="Photo" class="logo-photo">
-</div>
 
-        <!-- EN-TÊTE DE L'APPLICATION -->
-        <div class="logo">Zakaria TV <span>Concours</span></div>
-        <p class="subtitle">Mini-documentaires sur les plus grandes personnalités du monde</p>
+  <div class="app-container">
+    <!-- Header -->
+    <header>
+      <div class="brand">Quiz<span>Bet</span></div>
+      <div class="wallet-badge">
+        <span id="user-balance">5 000</span> FCFA
+      </div>
+    </header>
 
-        <!-- ================= CONNEXION DIRECTE ADMIN ================= -->
-        <div id="adminLogin" class="screen">
-            <h2>🔐 Connexion Super-Admin</h2>
-            <div class="card">
-                <p style="margin-top:0; color:#457b9d; font-weight:600;">Cette zone est réservée à la gestion des concours.</p>
-                <input id="adminUser" placeholder="Nom d'utilisateur">
-                <input id="adminPass" type="password" placeholder="Mot de passe confidentiel">
-                <div id="loginMessage" style="color:#e63946; font-weight:700; margin-top:5px;"></div>
-            </div>
-            <button class="green-btn" onclick="loginAdmin()">Se connecter au Tableau de Bord</button>
+    <!-- VUE 1 : ACQUEIL & CATEGORIES -->
+    <section id="view-home" class="view active">
+      <h2>Catégories de Quiz</h2>
+      <div class="category-grid">
+        <div class="cat-card" onclick="openBetModal('Football')">
+          <div class="cat-title">⚽ Football</div>
+          <div class="cat-sub">5 Questions • x3 max</div>
         </div>
-
-        <!-- ÉCRAN D'ACCUEIL PUBLIC PARTICIPANTS -->
-        <div id="home" class="screen">
-            <div id="timeStatusBox"></div>
-
-            <div class="card">
-                <h3 style="margin-top:0; color:#1d3557;">🎁 Récompenses du Concours</h3>
-                <div class="rewards-list">
-                    <div class="reward-item first"><span>🥇 1er prix</span><span style="color:#ffb703;">1 000 FCFA</span></div>
-                    <div class="reward-item"><span>🥈 2e prix</span><span style="color:#457b9d;">600 FCFA</span></div>
-                    <div class="reward-item"><span>🥉 3e prix</span><span style="color:#e63946;">400 FCFA</span></div>
-                </div>
-            </div>
-            <div class="card">
-                <h3 style="margin-top:0; color:#1d3557;">⚠️ Consignes Importantes</h3>
-                <ul style="padding-left: 20px; margin: 0; color: #457b9d; font-weight: 500; line-height: 1.8;">
-                    <li>Une seule participation autorisée par personne & par numéro WhatsApp.</li>
-                    <li>La détection automatique de triche (changement d'onglet) vous disqualifiera.</li>
-                    <li>Les questions et choix de réponses apparaissent dans un ordre aléatoire.</li>
-                </ul>
-            </div>
+        <div class="cat-card" onclick="openBetModal('Culture Générale')">
+          <div class="cat-title">🧠 Culture Générale</div>
+          <div class="cat-sub">5 Questions • x3 max</div>
         </div>
-
-        <!-- FORMULAIRE INSCRIPTION PARTICIPANT -->
-        <div id="registerScreen" class="screen">
-            <h2>🎯 Formulaire d'accès</h2>
-            <div class="card">
-                <p style="margin-top:0; color:#2a9d8f; font-weight:700; text-align:center;">« Merci de vous inscrire au concours Zakaria TV. Nous vous souhaitons bonne chance ! »</p>
-                <input id="partNom" placeholder="Votre Nom">
-                <input id="partPrenom" placeholder="Votre Prénom">
-                <input id="partWhatsApp" type="tel" placeholder="Votre numéro WhatsApp unique">
-            </div>
-            <button onclick="submitRegistration()">Valider mon inscription</button>
+        <div class="cat-card" onclick="openBetModal('Histoire')">
+          <div class="cat-title">📜 Histoire</div>
+          <div class="cat-sub">5 Questions • x3 max</div>
         </div>
-
-        <!-- SALLE D'ATTENTE PARTICIPANT -->
-        <div id="waitingRoom" class="screen">
-            <div class="card" style="text-align:center;">
-                <span style="font-size:50px;">⏳</span>
-                <h3 style="color:#1d3557;">Inscription Validée !</h3>
-                <p>Le concours n'a pas encore commencé. Veuillez patienter sur cette page. Les questions apparaîtront automatiquement dès l'heure exacte atteinte.</p>
-                <div id="waitCountdown" class="bet-countdown"></div>
-            </div>
+        <div class="cat-card" onclick="openBetModal('Cinéma')">
+          <div class="cat-title">🎬 Cinéma</div>
+          <div class="cat-sub">5 Questions • x3 max</div>
         </div>
+      </div>
+    </section>
 
-        <!-- LE CONCOURS (INTERFACE DE JEU) -->
-        <div id="questionPage" class="screen">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3 id="questionNumber" style="margin:0; color:#457b9d; font-weight:700;"></h3>
-            </div>
-            <div class="timer-container">
-                <div class="circular-timer">
-                    <svg><circle class="bg-circle" cx="42" cy="42" r="38"></circle><circle id="progressCircle" class="progress-circle" cx="42" cy="42" r="38"></circle></svg>
-                    <div id="timer" class="timer-text">10</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="progress"><div id="bar" class="progress-bar"></div></div>
-                <h3 id="playQuestion" style="color:#1d3557; margin-top:10px;"></h3>
-                <div id="playAnswers"></div>
-            </div>
-            <button class="green-btn" onclick="nextQuestion()">Enregistrer ma réponse</button>
+    <!-- VUE 2 : PORTEFEUILLE -->
+    <section id="view-wallet" class="view">
+      <h2>Votre Portefeuille</h2>
+      <div class="wallet-card">
+        <div style="font-size: 0.8rem; opacity: 0.8;">Solde Total</div>
+        <div style="font-size: 2rem; font-weight: 800; margin-top: 5px;" id="wallet-total">5 000 FCFA</div>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <button class="btn-main" style="background: #fff; color: #000;" onclick="deposit()">Déposer</button>
+          <button class="btn-main" style="background: rgba(255,255,255,0.2);" onclick="alert('Retrait en cours de traitement...')">Retirer</button>
         </div>
+      </div>
+      <h3>Historique des activités</h3>
+      <div id="tx-history">
+        <!-- Rempli en JS -->
+      </div>
+    </section>
 
-        <!-- FIN DE CONCOURS ET TOP 10 PARTICIPANT -->
-        <div id="endPage" class="screen">
-            <div class="card" style="text-align: center;">
-                <span style="font-size: 50px;">🏆</span>
-                <h2>Session Enregistrée !</h2>
-                <p>Vos réponses ont été transmises avec succès. Votre score reste secret pour éviter les fraudes.</p>
-            </div>
-            <div class="card">
-                <h3 style="margin-top:0; color:#1d3557; text-align:center;">📊 Classement en Direct (Top 10)</h3>
-                <table class="top10-table">
-                    <thead><tr><th>Rang</th><th>Participant</th><th>Score</th></tr></thead>
-                    <tbody id="top10Rows"></tbody>
-                </table>
-            </div>
+    <!-- VUE 3 : CLASSEMENT -->
+    <section id="view-leaderboard" class="view">
+      <h2>Meilleurs Joueurs</h2>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="cat-card" style="display: flex; justify-content: space-between;">
+          <span>🥇 Mamadou S.</span>
+          <span style="color: var(--accent-gold); font-weight: 700;">142 500 FCFA</span>
         </div>
+        <div class="cat-card" style="display: flex; justify-content: space-between;">
+          <span>🥈 Jean-Luc K.</span>
+          <span style="color: var(--accent-gold); font-weight: 700;">98 000 FCFA</span>
+        </div>
+        <div class="cat-card" style="display: flex; justify-content: space-between;">
+          <span>🥉 Amina D.</span>
+          <span style="color: var(--accent-gold); font-weight: 700;">75 200 FCFA</span>
+        </div>
+      </div>
+    </section>
 
-        <!-- CONCOURS EXPIRED FERMÉ -->
-        <div id="closedQuiz" class="screen">
-            <div class="card" style="text-align:center; padding: 30px 10px;">
-                <span style="font-size:50px;">🏁</span>
-                <h3 style="color:#1d3557; margin-top:15px;">Concours Terminé</h3>
-                <p style="color:#457b9d; font-size:15px; line-height:1.7; font-weight:600;">
-                    « Le concours est terminé. Merci pour votre participation. Rendez-vous lors de la prochaine édition de Zakaria TV Concours ! »
-                </p>
-            </div>
-            <div class="card">
-                <h3 style="margin-top:0; color:#1d3557; text-align:center;">📊 Classement Final (Top 10)</h3>
-                <table class="top10-table">
-                    <thead><tr><th>Rang</th><th>Participant</th><th>Score</th></tr></thead>
-                    <tbody id="top10RowsClosed"></tbody>
-                </table>
-            </div>
-        </div>
+    <!-- VUE 4 : ECRAN DE QUIZ (Pendant le jeu) -->
+    <section id="view-quiz" class="view">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; color: var(--text-muted);">
+        <span id="quiz-progress">Question 1/5</span>
+        <span id="quiz-cat-name">Football</span>
+      </div>
+      <div class="timer-bar">
+        <div class="timer-fill" id="timer"></div>
+      </div>
+      <div class="q-card">
+        <h3 id="question-text" style="font-size: 1rem; font-weight: 600;">Chargement...</h3>
+      </div>
+      <div class="answers" id="answers-container">
+        <!-- Boutons de réponses injectés dynamiquement -->
+      </div>
+    </section>
 
-        <!-- ================= PANNEAU ADMIN ================= -->
-        <div id="adminDashboard" class="screen" style="border-top: 4px solid #1d3557; padding-top:20px;">
-            <h2 style="color:#e63946;">🛠️ Espace Privé Administrateur</h2>
-            <div class="stat-grid">
-                <div class="stat"><span>Concours</span><b id="c1">0</b></div>
-                <div class="stat"><span>Inscrits</span><b id="c2">0</b></div>
-                <div class="stat"><span>Terminés</span><b id="c3">0</b></div>
-            </div>
-            <button class="green-btn" onclick="show('adminCreateQuiz')">➕ Créer & Planifier un Concours</button>
-            <button style="background:#457b9d;" onclick="openResults()">📋 Suivre les Participants en Direct</button>
-            <button style="background:#64748b; margin-top:25px;" onclick="clearData()">🗑️ Purger toutes les bases de données</button>
-        </div>
+    <!-- VUE 5 : RESULTAT DU QUIZ -->
+    <section id="view-result" class="view">
+      <div class="result-card">
+        <div class="result-title" id="res-status">Fin du Quiz !</div>
+        <p style="color: var(--text-muted); font-size: 0.9rem;" id="res-score">Vous avez obtenu 0/5 bonnes réponses</p>
+        <div class="result-amount" id="res-money">+0 FCFA</div>
+        <button class="btn-main" onclick="switchView('home')">Retour à l'accueil</button>
+      </div>
+    </section>
 
-        <!-- CREATION CONCOURS (ADMIN) -->
-        <div id="adminCreateQuiz" class="screen">
-            <h3>➕ Planifier une nouvelle Édition</h3>
-            <input id="qTitle" value="Zakaria TV : Mini-documentaires sur les plus grandes personnalités du monde">
-            <input id="qDate" type="date">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <input id="qStart" type="time" placeholder="Début">
-                <input id="qEnd" type="time" placeholder="Fin">
-            </div>
-            <div id="questionsContainer"></div>
-            <button class="green-btn" onclick="generateLink()">Enregistrer le Concours et Activer</button>
-            
-            <!-- MODIFICATION : Structure modifiée pour accueillir le bouton "Copier le lien" -->
-            <div id="linkOutput"></div>
-            
-            <button style="background:#64748b;" onclick="show('adminDashboard')">Retour Dashboard</button>
+    <!-- MODALE SELECTION DE LA MISE -->
+    <div class="bet-modal" id="betModal">
+      <div class="bet-content">
+        <h3>Choisir votre mise</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Le montant sera prélevé de votre solde.</p>
+        <div class="bet-options">
+          <button class="bet-btn selected" onclick="selectBet(500, this)">500 FCFA</button>
+          <button class="bet-btn" onclick="selectBet(1000, this)">1 000 FCFA</button>
+          <button class="bet-btn" onclick="selectBet(2000, this)">2 000 FCFA</button>
+          <button class="bet-btn" onclick="selectBet(5000, this)">5 000 FCFA</button>
         </div>
-
-        <!-- TABLEAU DE BORD DE SUIVI DES SCORES (ADMIN) -->
-        <div id="adminResultsScreen" class="screen">
-            <h3>📋 Table de Suivi des Inscriptions & Statuts</h3>
-            <select id="quizSelector" onchange="loadSelectedQuizResults()"><option value="">-- Choisir le concours --</option></select>
-            <div id="participantsList" style="margin-top:15px;"></div>
-            <button style="background:#64748b;" onclick="show('adminDashboard')">Retour Dashboard</button>
+        <div style="font-size: 0.8rem; margin-bottom: 15px; color: var(--accent-gold);">
+          💡 Gains potentiels (Sans-faute): <strong id="potential-win">1 500 FCFA</strong>
         </div>
+        <button class="btn-main" onclick="startQuiz()">Valider et Jouer</button>
+        <button class="btn-main" style="background: transparent; color: var(--text-muted);" onclick="closeBetModal()">Annuler</button>
+      </div>
     </div>
-    
-    <div class="footer-text">© 2026 ZAKARIA TV – Tous droits réservés.</div>
-</div>
 
-<script>
-    let activeQuizList = JSON.parse(localStorage.getItem("adminQuizzes")) || [];
-    let currentQuiz = null; let shuffledQuestions = []; let qIndex = 0; let userAnswers = [];
-    let seconds = 10; let clock; let timelineInterval; let antiCheatTriggered = false;
+    <!-- Navigation du bas -->
+    <nav>
+      <div class="nav-item active" onclick="switchView('home', this)">
+        <span>🏠</span>
+        <span>Accueil</span>
+      </div>
+      <div class="nav-item" onclick="switchView('wallet', this)">
+        <span>💳</span>
+        <span>Portefeuille</span>
+      </div>
+      <div class="nav-item" onclick="switchView('leaderboard', this)">
+        <span>🏆</span>
+        <span>Classement</span>
+      </div>
+    </nav>
+  </div>
 
-    // CORRECTION DU SROLL AUTO : Ajout d'un paramètre optionnel "preventScroll" pour éviter les sauts brutaux en arrière-plan
-    function show(id, preventScroll = false) {
-        let target = document.getElementById(id);
-        if (target && target.classList.contains('active')) return; // Évite de recharger l'écran s'il est déjà actif
-        
-        document.querySelectorAll(".screen").forEach(e => e.classList.remove('active'));
-        target.classList.add('active');
-        if (!preventScroll) window.scrollTo(0,0);
+  <script>
+    // --- DONNÉES DE L'APPLICATION ---
+    let balance = 5000;
+    let selectedBet = 500;
+    let currentCategory = "";
+    let currentQuestionIdx = 0;
+    let score = 0;
+    let timerInterval = null;
+    let transactions = [
+      { type: 'Gain', amount: '+1 500 FCFA', date: 'Hier', isGain: true },
+      { type: 'Mise', amount: '-500 FCFA', date: 'Hier', isGain: false }
+    ];
+
+    const questionsDb = {
+      "Football": [
+        { q: "Quel pays a remporté la Coupe du Monde 2022 ?", options: ["France", "Brésil", "Argentine", "Allemagne"], answer: 2 },
+        { q: "Quel joueur détient le plus de Ballons d'Or ?", options: ["Ronaldo", "Messi", "Zidane", "Pelé"], answer: 1 },
+        { q: "Combien de temps dure un match de football standard ?", options: ["80 min", "90 min", "100 min", "60 min"], answer: 1 },
+        { q: "Quel club a remporté la Ligue des Champions 2023 ?", options: ["Real Madrid", "Man City", "PSG", "Bayern"], answer: 1 },
+        { q: "Quel pays a accueilli la CAN 2023 ?", options: ["Cameroun", "Sénégal", "Côte d'Ivoire", "Maroc"], answer: 2 }
+      ],
+      "Culture Générale": [
+        { q: "Quelle est la capitale de la France ?", options: ["Lyon", "Marseille", "Paris", "Bordeaux"], answer: 2 },
+        { q: "Quel est le plus grand océan du monde ?", options: ["Atlantique", "Indien", "Pacifique", "Arctique"], answer: 2 },
+        { q: "Combien de continents compte la Terre ?", options: ["5", "6", "7", "8"], answer: 2 },
+        { q: "Qui a peint La Joconde ?", options: ["Van Gogh", "Picasso", "Léonard de Vinci", "Monet"], answer: 2 },
+        { q: "Quel est le métal dont le symbole chimique est Au ?", options: ["Argent", "Or", "Cuivre", "Fer"], answer: 1 }
+      ]
+    };
+
+    // --- NAVIGATION ---
+    function switchView(viewName, navEl) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(`view-${viewName}`).classList.add('active');
+      
+      if (navEl) {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        navEl.classList.add('active');
+      }
+      if(viewName === 'wallet') renderWallet();
     }
 
-    function routingEngine() {
-        let params = new URLSearchParams(location.search);
-        let code = params.get("quiz");
-        
-        if (code) {
-            try {
-                currentQuiz = JSON.parse(decodeURIComponent(escape(atob(code))));
-                startTimelineEngine();
-            } catch (e) { 
-                alert("Le lien du concours semble corrompu ou incomplet."); 
-                document.getElementById("timeStatusBox").innerHTML = "<p style='text-align:center;font-weight:700;color:#64748b;'>Code concours invalide.</p>";
-                show("home");
-            }
-        } else {
-            show("adminLogin");
-        }
+    // --- GESTION DU PORTEFEUILLE ---
+    function updateBalanceUI() {
+      document.getElementById('user-balance').innerText = balance.toLocaleString();
+      document.getElementById('wallet-total').innerText = balance.toLocaleString() + " FCFA";
     }
 
-    function loginAdmin() {
-        let user = document.getElementById("adminUser").value.trim();
-        let pass = document.getElementById("adminPass").value.trim();
-        if (user === "ZakariaTV" && pass === "55250031") {
-            show('adminDashboard'); updateStats();
-        } else {
-            document.getElementById("loginMessage").innerHTML = "Identifiants Super-Admin incorrects.";
-        }
+    function renderWallet() {
+      const container = document.getElementById('tx-history');
+      container.innerHTML = transactions.map(t => `
+        <div class="tx-item">
+          <div>
+            <div>${t.type}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">${t.date}</div>
+          </div>
+          <div class="${t.isGain ? 'tx-gain' : 'tx-perte'}">${t.amount}</div>
+        </div>
+      `).join('');
     }
 
-    function getLocalSession() {
-        if(!currentQuiz) return null;
-        let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
-        return results.find(r => r.isMe === true) || null;
+    function deposit() {
+      const amount = prompt("Montant à déposer (FCFA):", "2000");
+      if (amount && !isNaN(amount)) {
+        balance += parseInt(amount);
+        transactions.unshift({ type: 'Dépôt', amount: `+${amount} FCFA`, date: "À l'instant", isGain: true });
+        updateBalanceUI();
+        renderWallet();
+      }
     }
 
-    // INTERFACE DE SÉCURITÉ OPTIMISÉE : Ne force plus le changement d'écran si l'utilisateur est sur l'inscription
-    function startTimelineEngine() {
-        clearInterval(timelineInterval);
-        if(!currentQuiz) return;
-        function loop() {
-            let now = new Date();
-            let startTime = new Date(currentQuiz.date + "T" + currentQuiz.startTime);
-            let endTime = new Date(currentQuiz.date + "T" + currentQuiz.endTime);
-            let session = getLocalSession();
-
-            if (now > endTime) {
-                clearInterval(timelineInterval); clearInterval(clock);
-                buildTop10List("top10RowsClosed"); show("closedQuiz"); return;
-            }
-            if (now < startTime) {
-                if (session) { 
-                    show("waitingRoom", true); 
-                    startLiveCountdown(startTime, "waitCountdown"); 
-                } else { 
-                    // Si l'utilisateur a ouvert le formulaire d'inscription, on ne le force pas à revenir sur l'accueil
-                    if (!document.getElementById("registerScreen").classList.contains("active")) {
-                        show("home", true); 
-                        buildHomeUI(startTime, false); 
-                    } else {
-                        startLiveCountdown(startTime, "homeCountdown");
-                    }
-                }
-                return;
-            }
-            if (now >= startTime && now <= endTime) {
-                if (session) {
-                    if (session.status === "terminé" || session.status === "disqualifié") {
-                        clearInterval(timelineInterval); buildTop10List("top10Rows"); show("endPage");
-                    } else if (session.status === "inscrit" && !document.getElementById("questionPage").classList.contains("active")) {
-                        clearInterval(timelineInterval); startQuizGameplay();
-                    }
-                } else { 
-                    if (!document.getElementById("registerScreen").classList.contains("active")) {
-                        show("home", true); 
-                        buildHomeUI(null, true); 
-                    }
-                }
-            }
-        }
-        loop(); timelineInterval = setInterval(loop, 1000);
+    // --- MODALE DE PARI ---
+    function openBetModal(cat) {
+      currentCategory = cat;
+      document.getElementById('betModal').style.display = 'flex';
     }
 
-    function buildHomeUI(targetTime, isRunning) {
-        let box = document.getElementById("timeStatusBox");
-        if (!box) return;
-        if (!isRunning) {
-            if(!document.getElementById("homeCountdown")) {
-                box.innerHTML = `
-                    <div class="card" style="text-align:center; margin-top:0; border-color: rgba(230, 57, 70, 0.2);">
-                        <span style="font-weight:700; color:#e63946; font-size:13px; display:block; margin-bottom:10px; text-transform:uppercase;">⏳ OUVERTURE DU CONCOURS DANS :</span>
-                        <div id="homeCountdown" class="bet-countdown"></div>
-                        <button style="margin-top:15px; margin-bottom:0;" onclick="show('registerScreen')">📋 S'inscrire à l'avance</button>
-                    </div>`;
-            }
-            if (targetTime) startLiveCountdown(targetTime, "homeCountdown");
-        } else {
-            box.innerHTML = `
-                <div class="card" style="text-align:center; margin-top:0; border-color: rgba(42, 157, 143, 0.2);">
-                    <span style="font-weight:700; color:#2a9d8f; font-size:13px; display:block; margin-bottom:5px;">⚡ LE CONCOURS A DÉBUTÉ !</span>
-                    <button class="green-btn" style="margin-bottom:0;" onclick="show('registerScreen')">✍️ Rejoindre et participer maintenant</button>
-                </div>`;
-        }
+    function closeBetModal() {
+      document.getElementById('betModal').style.display = 'none';
     }
 
-    function startLiveCountdown(target, elementId) {
-        let diff = target - new Date(); if(diff <= 0) return;
-        let hrs = Math.floor(diff / 3600000); let mins = Math.floor((diff % 3600000) / 60000); let secs = Math.floor((diff % 60000) / 1000);
-        let el = document.getElementById(elementId);
-        if(el) { el.innerHTML = `<div class="bet-box"><span class="num">${hrs.toString().padStart(2,'0')}</span><span class="lbl">Heures</span></div><div class="bet-box"><span class="num">${mins.toString().padStart(2,'0')}</span><span class="lbl">Min</span></div><div class="bet-box"><span class="num">${secs.toString().padStart(2,'0')}</span><span class="lbl">Sec</span></div>`; }
+    function selectBet(amount, btn) {
+      selectedBet = amount;
+      document.querySelectorAll('.bet-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('potential-win').innerText = (amount * 3).toLocaleString() + " FCFA";
     }
 
-    function submitRegistration() {
-        let nom = document.getElementById("partNom").value.trim().toLowerCase();
-        let prenom = document.getElementById("partPrenom").value.trim().toLowerCase();
-        let whatsapp = document.getElementById("partWhatsApp").value.trim();
-        
-        if (!nom || !prenom || !whatsapp) { 
-            alert("Veuillez remplir correctement tous les champs du formulaire."); 
-            return; 
-        }
+    // --- LOGIQUE DU QUIZ ---
+    function startQuiz() {
+      if (balance < selectedBet) {
+        alert("Solde insuffisant pour cette mise !");
+        return;
+      }
 
-        let globalResults = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
-        
-        let dataDuplicate = globalResults.some(r => r.whatsapp === whatsapp || (r.nom.toLowerCase() === nom && r.prenom.toLowerCase() === prenom));
-        let sessionDuplicate = getLocalSession();
+      // Déduire la mise
+      balance -= selectedBet;
+      transactions.unshift({ type: `Mise - ${currentCategory}`, amount: `-${selectedBet} FCFA`, date: "À l'instant", isGain: false });
+      updateBalanceUI();
 
-        if (dataDuplicate || sessionDuplicate) { 
-            alert("⚠️ Désolé, cette personne ou ce numéro WhatsApp est déjà inscrit à ce concours. Les participations multiples sont interdites."); 
-            show("home");
-            return; 
-        }
-
-        let newPlayer = { 
-            nom: nom, 
-            prenom: prenom, 
-            whatsapp: whatsapp, 
-            quizId: currentQuiz.id, 
-            score: 0, 
-            status: "inscrit", 
-            isMe: true, 
-            date: new Date().toLocaleString() 
-        };
-        
-        globalResults.push(newPlayer); 
-        localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(globalResults));
-        
-        alert("Votre inscription a été enregistrée avec succès. Bonne chance pour le concours !");
-        
-        startTimelineEngine();
+      closeBetModal();
+      currentQuestionIdx = 0;
+      score = 0;
+      
+      document.getElementById('quiz-cat-name').innerText = currentCategory;
+      switchView('quiz');
+      loadQuestion();
     }
 
-    function startQuizGameplay() {
-        let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
-        let myIndex = results.findIndex(r => r.quizId === currentQuiz.id && r.isMe === true);
-        if(myIndex !== -1) { results[myIndex].status = "en cours"; localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(results)); }
-        document.addEventListener("visibilitychange", triggerAntiCheat);
-        shuffledQuestions = [...currentQuiz.questions].sort(() => Math.random() - 0.5);
-        qIndex = 0; userAnswers = [];
-        show("questionPage"); showQuestion();
+    function loadQuestion() {
+      clearInterval(timerInterval);
+      const list = questionsDb[currentCategory] || questionsDb["Culture Générale"];
+      
+      if (currentQuestionIdx >= list.length) {
+        endQuiz();
+        return;
+      }
+
+      const q = list[currentQuestionIdx];
+      document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIdx + 1}/${list.length}`;
+      document.getElementById('question-text').innerText = q.q;
+
+      const container = document.getElementById('answers-container');
+      container.innerHTML = "";
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'ans-btn';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(idx, q.answer);
+        container.appendChild(btn);
+      });
+
+      startTimer();
     }
 
-    function triggerAntiCheat() {
-        if (document.hidden && !antiCheatTriggered) {
-            antiCheatTriggered = true; clearInterval(clock);
-            alert("🚨 TRICHE DÉTECTÉE : Le changement d'onglet ou d'application est strictement interdit durant le jeu. Vous êtes disqualifié.");
-            finishQuiz(true);
-        }
+    function startTimer() {
+      const timerFill = document.getElementById('timer');
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+      
+      setTimeout(() => {
+        timerFill.style.transition = 'width 15s linear';
+        timerFill.style.width = '0%';
+      }, 50);
+
+      timerInterval = setTimeout(() => {
+        // Temps écoulé
+        currentQuestionIdx++;
+        loadQuestion();
+      }, 15000);
     }
 
-    function showQuestion() {
-        clearInterval(clock); seconds = 10;
-        document.getElementById("timer").innerHTML = seconds;
-        let circle = document.getElementById("progressCircle");
-        circle.style.strokeDashoffset = 0; circle.style.transition = "stroke-dashoffset 1s linear";
+    function checkAnswer(selectedIdx, correctIdx) {
+      clearInterval(timerInterval);
+      const buttons = document.querySelectorAll('.ans-btn');
+      
+      if (selectedIdx === correctIdx) {
+        buttons[selectedIdx].classList.add('correct');
+        score++;
+      } else {
+        buttons[selectedIdx].classList.add('wrong');
+        buttons[correctIdx].classList.add('correct');
+      }
 
-        clock = setInterval(() => {
-            seconds--; document.getElementById("timer").innerHTML = seconds;
-            circle.style.strokeDashoffset = (251.2 - (seconds / 10) * 251.2);
-            if (seconds <= 0) { clearInterval(clock); nextQuestion(); }
-        }, 1000);
+      // Désactiver tous les boutons
+      buttons.forEach(b => b.style.pointerEvents = 'none');
 
-        let q = shuffledQuestions[qIndex];
-        document.getElementById("questionNumber").innerHTML = "Question " + (qIndex + 1) + " / " + shuffledQuestions.length;
-        document.getElementById("playQuestion").innerHTML = q.q;
-        document.getElementById("bar").style.width = ((qIndex + 1) / shuffledQuestions.length * 100) + "%";
-
-        let answersArray = [{ k: 'A', t: q.A }, { k: 'B', t: q.B }, { k: 'C', t: q.C }, { k: 'D', t: q.D }].sort(() => Math.random() - 0.5);
-        let containerBox = document.getElementById("playAnswers"); containerBox.innerHTML = "";
-        answersArray.forEach(item => {
-            containerBox.innerHTML += `<div class="option" onclick="selectAnswer('${item.k}', this)"><b>•</b> &nbsp;${item.t}</div>`;
-        });
+      setTimeout(() => {
+        currentQuestionIdx++;
+        loadQuestion();
+      }, 1200);
     }
 
-    function selectAnswer(letter, element) {
-        userAnswers[qIndex] = letter;
-        document.querySelectorAll(".option").forEach(e => e.classList.remove("selected"));
-        element.classList.add("selected");
+    function endQuiz() {
+      let gain = 0;
+      if (score === 5) gain = selectedBet * 3;      // x3 pour sans faute
+      else if (score === 4) gain = selectedBet * 2; // x2 pour 4 bonnes réponses
+      else if (score === 3) gain = selectedBet;     // Remboursement pour 3
+
+      if (gain > 0) {
+        balance += gain;
+        transactions.unshift({ type: `Gain Quiz (${score}/5)`, amount: `+${gain} FCFA`, date: "À l'instant", isGain: true });
+        updateBalanceUI();
+      }
+
+      document.getElementById('res-status').innerText = score >= 3 ? "Félicitations ! 🎉" : "Dommage... ❌";
+      document.getElementById('res-score').innerText = `Vous avez obtenu ${score}/5 bonnes réponses`;
+      document.getElementById('res-money').innerText = gain > 0 ? `+${gain.toLocaleString()} FCFA` : "0 FCFA";
+      document.getElementById('res-money').style.color = gain > 0 ? "var(--secondary)" : "var(--danger)";
+
+      switchView('result');
     }
 
-    function nextQuestion() {
-        clearInterval(clock);
-        if (!userAnswers[qIndex]) userAnswers[qIndex] = "";
-        qIndex++;
-        if (qIndex < shuffledQuestions.length) { showQuestion(); } else { finishQuiz(false); }
-    }
-
-    function finishQuiz(isDisqualified) {
-        document.removeEventListener("visibilitychange", triggerAntiCheat);
-        let finalScore = 0;
-        if (!isDisqualified) { shuffledQuestions.forEach((q, idx) => { if (userAnswers[idx] === q.correct) finalScore++; }); }
-        let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
-        let myIndex = results.findIndex(r => r.quizId === currentQuiz.id && r.isMe === true);
-        if(myIndex !== -1) {
-            results[myIndex].status = isDisqualified ? "disqualifié" : "terminé";
-            results[myIndex].score = finalScore;
-            localStorage.setItem("resultsList_" + currentQuiz.id, JSON.stringify(results));
-        }
-        buildTop10List("top10Rows"); show("endPage");
-    }
-
-    function buildTop10List(elementId) {
-        let box = document.getElementById(elementId); box.innerHTML = "";
-        let results = JSON.parse(localStorage.getItem("resultsList_" + currentQuiz.id)) || [];
-        let cleanList = results.filter(r => r.status === "terminé").sort((a,b) => b.score - a.score).slice(0, 10);
-        if(cleanList.length === 0) { box.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#666;'>Aucun score enregistré pour le moment.</td></tr>"; return; }
-        cleanList.forEach((r, i) => {
-            let rankClass = (i === 0) ? 'rank-1' : (i === 1) ? 'rank-2' : (i === 2) ? 'rank-3' : '';
-            box.innerHTML += `<tr><td><span class="rank-badge ${rankClass}">${i+1}</span></td><td style="text-transform:capitalize;">${r.prenom} ${r.nom[0]}.</td><td><b>${r.score} / 5</b></td></tr>`;
-        });
-    }
-
-    function updateStats() {
-        document.getElementById("c1").innerHTML = activeQuizList.length;
-        let totalUsers = 0; let totalDone = 0;
-        activeQuizList.forEach(q => {
-            let res = JSON.parse(localStorage.getItem("resultsList_" + q.id)) || [];
-            totalUsers += res.length; totalDone += res.filter(r => r.status === "terminé").length;
-        });
-        document.getElementById("c2").innerHTML = totalUsers; document.getElementById("c3").innerHTML = totalDone;
-    }
-
-    let qContainer = document.getElementById("questionsContainer"); qContainer.innerHTML = "";
-    for(let i=1; i<=5; i++) {
-        qContainer.innerHTML += `
-            <div style="background:#f8fafc; padding:15px; border-radius:10px; margin:10px 0; border:1px solid #e2e8f0;">
-                <b>Question ${i}</b>
-                <input id="q${i}" placeholder="Intitulé de la question">
-                <input id="q${i}A" placeholder="Option A"> <input id="q${i}B" placeholder="Option B">
-                <input id="q${i}C" placeholder="Option C"> <input id="q${i}D" placeholder="Option D">
-                <select id="c${i}"><option value="A">Bonne réponse : A</option><option value="B">Bonne réponse : B</option><option value="C">Bonne réponse : C</option><option value="D">Bonne réponse : D</option></select>
-            </div>`;
-    }
-
-    // MODIFICATION : Ajout du bouton "Copier le lien" dynamique après la génération
-    function generateLink() {
-        let q = {
-            id: Date.now(), title: document.getElementById("qTitle").value, date: document.getElementById("qDate").value,
-            startTime: document.getElementById("qStart").value, endTime: document.getElementById("qEnd").value, questions: []
-        };
-        for(let i=1; i<=5; i++) {
-            q.questions.push({ q: document.getElementById("q"+i).value, A: document.getElementById("q"+i+"A").value, B: document.getElementById("q"+i+"B").value, C: document.getElementById("q"+i+"C").value, D: document.getElementById("q"+i+"D").value, correct: document.getElementById("c"+i).value });
-        }
-        activeQuizList.push(q); localStorage.setItem("adminQuizzes", JSON.stringify(activeQuizList));
-        
-        let encryptedBase = btoa(unescape(encodeURIComponent(JSON.stringify(q))));
-        let fullUrl = window.location.origin + window.location.pathname + "?quiz=" + encryptedBase;
-        
-        document.getElementById("linkOutput").innerHTML = `
-            <textarea id="generatedLinkArea" style="height:80px; margin-top:10px;" readonly>${fullUrl}</textarea>
-            <button class="green-btn" style="margin-top:5px;" onclick="copyQuizLink()">📋 Copier le lien en 1 clic</button>
-            <p style="color:#2a9d8f; font-weight:bold; text-align:center;">Le concours a été activé ! Transmets ce lien à tes participants.</p>`;
-        updateStats();
-    }
-
-    // NOUVELLE FONCTIONALITÉ : Copie ultra-rapide et sécurisée
-    function copyQuizLink() {
-        let linkArea = document.getElementById("generatedLinkArea");
-        if(linkArea) {
-            linkArea.select();
-            linkArea.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(linkArea.value).then(() => {
-                alert("Le lien du concours a été copié avec succès dans votre presse-papiers !");
-            }).catch(() => {
-                alert("Copie manuelle : Sélectionnez le texte et copiez-le.");
-            });
-        }
-    }
-
-    function openResults() {
-        show('adminResultsScreen');
-        let sel = document.getElementById("quizSelector"); sel.innerHTML = '<option value="">-- Choisir le Concours --</option>';
-        activeQuizList.forEach(q => { sel.innerHTML += `<option value="${q.id}">${q.date} à ${q.startTime}</option>`; });
-    }
-
-    function loadSelectedQuizResults() {
-        let qId = document.getElementById("quizSelector").value; if(!qId) return;
-        let box = document.getElementById("participantsList"); box.innerHTML = "";
-        let records = JSON.parse(localStorage.getItem("resultsList_" + qId)) || [];
-        
-        if(records.length === 0) { box.innerHTML = "<p>Aucune inscription enregistrée.</p>"; return; }
-        records.forEach(r => {
-            let bStyle = (r.status === 'inscrit') ? 'b-inscrit' : (r.status === 'en cours') ? 'b-cours' : (r.status === 'disqualifié') ? 'b-fraud' : 'b-termine';
-            let statusLabel = (r.status === 'inscrit') ? '🟢 Inscrit' : (r.status === 'en cours') ? '🟡 En Cours' : (r.status === 'disqualifié') ? '🔴 Disqualifié (Triche)' : '🔵 Terminé';
-            let noteDisplay = (r.status === 'terminé') ? `Score: <b>${r.score} / 5</b>` : `<i>Note masquée</i>`;
-            
-            box.innerHTML += `
-                <div class="p-card">
-                    <div>
-                        <strong style="text-transform:capitalize;">👤 ${r.prenom} ${r.nom}</strong><br>
-                        <span style="color:#457b9d; font-size:13px;">📱 WA: ${r.whatsapp}</span>
-                    </div>
-                    <div style="text-align:right;">
-                        <span class="badge ${bStyle}">${statusLabel}</span><br>
-                        <small style="display:block; margin-top:4px;">${noteDisplay}</small>
-                    </div>
-                </div>`;
-        });
-    }
-
-    function clearData() {
-        if(confirm("Voulez-vous purger l'intégralité des concours et résultats ? Cette action est irréversible.")) {
-            localStorage.clear(); activeQuizList = []; updateStats(); show("adminLogin");
-        }
-    }
-
-    window.onpopstate = function () { history.pushState(null, null, location.href); };
-    history.pushState(null, null, location.href);
-    
-    routingEngine();
-</script>
+    // Initialisation
+    updateBalanceUI();
+  </script>
 </body>
 </html>
