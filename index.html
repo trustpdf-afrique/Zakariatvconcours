@@ -1,613 +1,892 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuizBet - Pariez sur vos connaissances</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>QuizBet - La Plateforme N°1 de Quiz Rémunérés</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --secondary: #10b981;
-      --bg-dark: #0f172a;
-      --card-bg: #1e293b;
-      --card-border: #334155;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent-gold: #f59e0b;
-      --danger: #ef4444;
+      --bg-main: #0B0F19;
+      --card-bg: rgba(22, 30, 47, 0.85);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --primary: #6366F1;
+      --primary-hover: #4F46E5;
+      --secondary: #10B981;
+      --accent-gold: #F59E0B;
+      --danger: #EF4444;
+      --info: #3B82F6;
+      --badge-bg: rgba(99, 102, 241, 0.15);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
+    [data-theme="light"] {
+      --bg-main: #F1F5F9;
+      --card-bg: #FFFFFF;
+      --card-border: #E2E8F0;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --badge-bg: rgba(99, 102, 241, 0.1);
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
     }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    body { background-color: var(--bg-main); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; }
 
-    /* Container global style Mobile App */
     .app-container {
-      width: 100%;
-      max-width: 480px;
-      background-color: #0B1120;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
-      overflow-x: hidden;
+      width: 100%; max-width: 480px; background-color: var(--bg-main);
+      min-height: 100vh; display: flex; flex-direction: column; position: relative;
+      box-shadow: 0 0 50px rgba(0,0,0,0.6); overflow-x: hidden; border-x: 1px solid var(--card-border);
     }
 
-    /* En-tête */
+    /* Top Bar Header */
     header {
-      background-color: var(--card-bg);
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--card-border);
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      background: var(--card-bg); backdrop-filter: blur(12px);
+      padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--card-border); position: sticky; top: 0; z-index: 50;
     }
-
-    .brand {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #fff;
-    }
-
+    .brand { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
     .brand span { color: var(--accent-gold); }
-
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .theme-toggle { background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-main); }
     .wallet-badge {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid var(--secondary);
-      color: var(--secondary);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      background: rgba(16, 185, 129, 0.12); border: 1px solid var(--secondary); color: var(--secondary);
+      padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
     }
 
-    /* Vues */
-    .view {
-      display: none;
-      padding: 20px;
-      flex: 1;
-      padding-bottom: 80px;
-    }
-
-    .view.active {
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Navigation Basse */
+    /* Bottom Navigation */
     nav {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      max-width: 480px;
-      background-color: var(--card-bg);
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 0;
-      border-top: 1px solid var(--card-border);
-      z-index: 10;
+      position: fixed; bottom: 0; width: 100%; max-width: 480px;
+      background: var(--card-bg); backdrop-filter: blur(16px);
+      display: flex; justify-content: space-around; padding: 10px 0;
+      border-top: 1px solid var(--card-border); z-index: 50;
     }
-
     .nav-item {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
+      color: var(--text-muted); text-decoration: none; font-size: 0.75rem; font-weight: 600;
+      display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; width: 20%;
+    }
+    .nav-item.active { color: var(--primary); }
+
+    /* Views */
+    .view { display: none; padding: 20px; flex: 1; padding-bottom: 90px; }
+    .view.active { display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.3s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cards & Components */
+    .premium-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 18px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+    }
+    .badge {
+      padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    }
+    .badge-easy { background: rgba(16, 185, 129, 0.2); color: var(--secondary); }
+    .badge-medium { background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); }
+    .badge-hard { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+    .badge-status { background: rgba(59, 130, 246, 0.15); color: var(--info); }
+
+    .btn {
+      width: 100%; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 0.95rem;
+      border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
+    }
+    .btn-primary { background: var(--primary); color: #FFF; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1px solid var(--card-border); }
+    .btn-success { background: var(--secondary); color: #FFF; }
+    .btn-danger { background: var(--danger); color: #FFF; }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+    .form-input {
+      background: var(--bg-main); border: 1px solid var(--card-border); color: var(--text-main);
+      padding: 14px; border-radius: 12px; font-size: 1rem; outline: none;
+    }
+    .form-input:focus { border-color: var(--primary); }
+
+    /* Circular Timer */
+    .timer-container { position: relative; width: 70px; height: 70px; margin: 0 auto; }
+    .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .timer-circle-bg { fill: none; stroke: var(--card-border); stroke-width: 6; }
+    .timer-circle {
+      fill: none; stroke: var(--accent-gold); stroke-width: 6; stroke-linecap: round;
+      stroke-dasharray: 188; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear;
+    }
+    .timer-text {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-weight: 800; font-size: 1.1rem; color: var(--text-main);
     }
 
-    .nav-item.active {
-      color: var(--primary);
-      font-weight: 600;
+    /* Answers Grid */
+    .answers-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 15px; }
+    .ans-card {
+      background: var(--bg-main); border: 1.5px solid var(--card-border); padding: 16px;
+      border-radius: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
     }
+    .ans-card.selected { border-color: var(--primary); background: var(--badge-bg); }
+    .ans-card.correct { border-color: var(--secondary); background: rgba(16, 185, 129, 0.2); color: var(--secondary); }
+    .ans-card.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); color: var(--danger); }
 
-    /* Titres et éléments d'interface */
-    h2 { font-size: 1.2rem; margin-bottom: 15px; }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    /* Toast Notification */
+    .toast-container {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 420px;
+      z-index: 999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;
     }
-
-    .cat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 15px;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
+    .toast {
+      background: var(--card-bg); border: 1px solid var(--primary); color: var(--text-main);
+      padding: 16px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-size: 0.85rem;
+      backdrop-filter: blur(10px); animation: slideDown 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     }
+    @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-    .cat-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--primary);
-    }
-
-    .cat-title { font-weight: 600; font-size: 0.95rem; }
-    .cat-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
-
-    /* Modale de Mise */
-    .bet-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .bet-content {
-      background: var(--card-bg);
-      width: 100%;
-      max-width: 400px;
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid var(--card-border);
-    }
-
-    .bet-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 15px 0;
-    }
-
-    .bet-btn {
-      background: var(--bg-dark);
-      border: 1px solid var(--card-border);
-      color: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .bet-btn.selected {
-      border-color: var(--accent-gold);
-      background: rgba(245, 158, 11, 0.1);
-      color: var(--accent-gold);
-    }
-
-    .btn-main {
-      width: 100%;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    /* Écran de Jeu (Quiz) */
-    .timer-bar {
-      width: 100%;
-      height: 6px;
-      background: var(--card-border);
-      border-radius: 3px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    .timer-fill {
-      height: 100%;
-      background: var(--accent-gold);
-      width: 100%;
-      transition: width 1s linear;
-    }
-
-    .q-card {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-      margin-bottom: 20px;
-    }
-
-    .answers { display: flex; flex-direction: column; gap: 10px; }
-
-    .ans-btn {
-      background: var(--bg-dark);
-      border: 1px solid var(--card-border);
-      color: #fff;
-      padding: 14px;
-      border-radius: 10px;
-      text-align: left;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .ans-btn.correct { background: var(--secondary); border-color: var(--secondary); }
-    .ans-btn.wrong { background: var(--danger); border-color: var(--danger); }
-
-    /* Résultat */
-    .result-card {
-      text-align: center;
-      background: var(--card-bg);
-      padding: 30px 20px;
-      border-radius: 16px;
-      border: 1px solid var(--card-border);
-    }
-
-    .result-title { font-size: 1.5rem; margin-bottom: 10px; }
-    .result-amount { font-size: 2rem; font-weight: 800; color: var(--secondary); margin: 15px 0; }
-
-    /* Portefeuille */
-    .wallet-card {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 20px;
-    }
-
-    .tx-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--card-border);
-      font-size: 0.85rem;
-    }
-
-    .tx-gain { color: var(--secondary); font-weight: 600; }
-    .tx-perte { color: var(--danger); font-weight: 600; }
+    /* Admin Styles */
+    .admin-tab-btn { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--card-border); background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+    .admin-tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .table-container { overflow-x: auto; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: left; }
+    th, td { padding: 10px; border-bottom: 1px solid var(--card-border); }
+    th { color: var(--text-muted); font-weight: 600; }
   </style>
 </head>
 <body>
+
+  <div class="toast-container" id="toastContainer"></div>
 
   <div class="app-container">
     <!-- Header -->
     <header>
       <div class="brand">Quiz<span>Bet</span></div>
-      <div class="wallet-badge">
-        <span id="user-balance">5 000</span> FCFA
+      <div class="header-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <div class="wallet-badge" onclick="switchView('wallet')">
+          💰 <span id="headerBalance">5 000</span> FCFA
+        </div>
       </div>
     </header>
 
-    <!-- VUE 1 : ACQUEIL & CATEGORIES -->
-    <section id="view-home" class="view active">
-      <h2>Catégories de Quiz</h2>
-      <div class="category-grid">
-        <div class="cat-card" onclick="openBetModal('Football')">
-          <div class="cat-title">⚽ Football</div>
-          <div class="cat-sub">5 Questions • x3 max</div>
-        </div>
-        <div class="cat-card" onclick="openBetModal('Culture Générale')">
-          <div class="cat-title">🧠 Culture Générale</div>
-          <div class="cat-sub">5 Questions • x3 max</div>
-        </div>
-        <div class="cat-card" onclick="openBetModal('Histoire')">
-          <div class="cat-title">📜 Histoire</div>
-          <div class="cat-sub">5 Questions • x3 max</div>
-        </div>
-        <div class="cat-card" onclick="openBetModal('Cinéma')">
-          <div class="cat-title">🎬 Cinéma</div>
-          <div class="cat-sub">5 Questions • x3 max</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- VUE 2 : PORTEFEUILLE -->
-    <section id="view-wallet" class="view">
-      <h2>Votre Portefeuille</h2>
-      <div class="wallet-card">
-        <div style="font-size: 0.8rem; opacity: 0.8;">Solde Total</div>
-        <div style="font-size: 2rem; font-weight: 800; margin-top: 5px;" id="wallet-total">5 000 FCFA</div>
-        <div style="display: flex; gap: 10px; margin-top: 15px;">
-          <button class="btn-main" style="background: #fff; color: #000;" onclick="deposit()">Déposer</button>
-          <button class="btn-main" style="background: rgba(255,255,255,0.2);" onclick="alert('Retrait en cours de traitement...')">Retirer</button>
-        </div>
-      </div>
-      <h3>Historique des activités</h3>
-      <div id="tx-history">
-        <!-- Rempli en JS -->
-      </div>
-    </section>
-
-    <!-- VUE 3 : CLASSEMENT -->
-    <section id="view-leaderboard" class="view">
-      <h2>Meilleurs Joueurs</h2>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <div class="cat-card" style="display: flex; justify-content: space-between;">
-          <span>🥇 Mamadou S.</span>
-          <span style="color: var(--accent-gold); font-weight: 700;">142 500 FCFA</span>
-        </div>
-        <div class="cat-card" style="display: flex; justify-content: space-between;">
-          <span>🥈 Jean-Luc K.</span>
-          <span style="color: var(--accent-gold); font-weight: 700;">98 000 FCFA</span>
-        </div>
-        <div class="cat-card" style="display: flex; justify-content: space-between;">
-          <span>🥉 Amina D.</span>
-          <span style="color: var(--accent-gold); font-weight: 700;">75 200 FCFA</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- VUE 4 : ECRAN DE QUIZ (Pendant le jeu) -->
-    <section id="view-quiz" class="view">
-      <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; color: var(--text-muted);">
-        <span id="quiz-progress">Question 1/5</span>
-        <span id="quiz-cat-name">Football</span>
-      </div>
-      <div class="timer-bar">
-        <div class="timer-fill" id="timer"></div>
-      </div>
-      <div class="q-card">
-        <h3 id="question-text" style="font-size: 1rem; font-weight: 600;">Chargement...</h3>
-      </div>
-      <div class="answers" id="answers-container">
-        <!-- Boutons de réponses injectés dynamiquement -->
-      </div>
-    </section>
-
-    <!-- VUE 5 : RESULTAT DU QUIZ -->
-    <section id="view-result" class="view">
-      <div class="result-card">
-        <div class="result-title" id="res-status">Fin du Quiz !</div>
-        <p style="color: var(--text-muted); font-size: 0.9rem;" id="res-score">Vous avez obtenu 0/5 bonnes réponses</p>
-        <div class="result-amount" id="res-money">+0 FCFA</div>
-        <button class="btn-main" onclick="switchView('home')">Retour à l'accueil</button>
-      </div>
-    </section>
-
-    <!-- MODALE SELECTION DE LA MISE -->
-    <div class="bet-modal" id="betModal">
-      <div class="bet-content">
-        <h3>Choisir votre mise</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Le montant sera prélevé de votre solde.</p>
-        <div class="bet-options">
-          <button class="bet-btn selected" onclick="selectBet(500, this)">500 FCFA</button>
-          <button class="bet-btn" onclick="selectBet(1000, this)">1 000 FCFA</button>
-          <button class="bet-btn" onclick="selectBet(2000, this)">2 000 FCFA</button>
-          <button class="bet-btn" onclick="selectBet(5000, this)">5 000 FCFA</button>
-        </div>
-        <div style="font-size: 0.8rem; margin-bottom: 15px; color: var(--accent-gold);">
-          💡 Gains potentiels (Sans-faute): <strong id="potential-win">1 500 FCFA</strong>
-        </div>
-        <button class="btn-main" onclick="startQuiz()">Valider et Jouer</button>
-        <button class="btn-main" style="background: transparent; color: var(--text-muted);" onclick="closeBetModal()">Annuler</button>
-      </div>
-    </div>
-
-    <!-- Navigation du bas -->
+    <!-- Navigation -->
     <nav>
-      <div class="nav-item active" onclick="switchView('home', this)">
-        <span>🏠</span>
-        <span>Accueil</span>
+      <div class="nav-item active" id="nav-home" onclick="switchView('home')">
+        <span>⚽</span><span>Accueil</span>
       </div>
-      <div class="nav-item" onclick="switchView('wallet', this)">
-        <span>💳</span>
-        <span>Portefeuille</span>
+      <div class="nav-item" id="nav-wallet" onclick="switchView('wallet')">
+        <span>💳</span><span>Portefeuille</span>
       </div>
-      <div class="nav-item" onclick="switchView('leaderboard', this)">
-        <span>🏆</span>
-        <span>Classement</span>
+      <div class="nav-item" id="nav-leaderboard" onclick="switchView('leaderboard')">
+        <span>🏆</span><span>Classement</span>
+      </div>
+      <div class="nav-item" id="nav-admin" onclick="switchView('admin')">
+        <span>🛡️</span><span>Admin</span>
       </div>
     </nav>
+
+    <!-- 1. VUE ACCUEIL (Style Paris Sportifs) -->
+    <section id="view-home" class="view active">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 1.2rem; font-weight: 800;">🔥 Quiz Vedettes</h2>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Misez & Gagnez</span>
+      </div>
+
+      <div id="quizList" style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- Injecté dynamiquement par JS -->
+      </div>
+    </section>
+
+    <!-- 2. VUE DÉTAILS D'UN QUIZ -->
+    <section id="view-quiz-details" class="view">
+      <button class="btn btn-secondary" onclick="switchView('home')" style="width: fit-content; padding: 8px 16px; font-size: 0.8rem;">← Retour</button>
+      <div class="premium-card" id="quizDetailsContent">
+        <!-- Contenu Détaillé du Quiz -->
+      </div>
+    </section>
+
+    <!-- 3. VUE JEU / DÉROULEMENT DU QUIZ -->
+    <section id="view-quiz-play" class="view">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span style="font-size: 0.75rem; color: var(--text-muted);" id="playProgress">Question 1/5</span>
+          <h3 id="playCatTitle" style="font-size: 1rem;">Football</h3>
+        </div>
+        <div style="text-align: right;">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Gain Potentiel</span>
+          <div style="color: var(--secondary); font-weight: 800; font-size: 0.95rem;" id="playPotentialWin">3 000 FCFA</div>
+        </div>
+      </div>
+
+      <!-- Chronomètre Circulaire -->
+      <div class="timer-container">
+        <svg class="timer-svg">
+          <circle class="timer-circle-bg" cx="35" cy="35" r="30"></circle>
+          <circle class="timer-circle" id="timerCircle" cx="35" cy="35" r="30"></circle>
+        </svg>
+        <div class="timer-text" id="timerSeconds">15</div>
+      </div>
+
+      <!-- Question -->
+      <div class="premium-card">
+        <p id="playQuestionText" style="font-size: 1rem; font-weight: 700; line-height: 1.4;">Chargement...</p>
+      </div>
+
+      <!-- Réponses -->
+      <div class="answers-grid" id="answersGrid"></div>
+    </section>
+
+    <!-- 4. VUE RÉSULTAT DU QUIZ -->
+    <section id="view-quiz-result" class="view">
+      <div class="premium-card" style="text-align: center; padding: 30px 20px;">
+        <div id="resIcon" style="font-size: 3rem; margin-bottom: 10px;">🎉</div>
+        <h2 id="resTitle" style="font-size: 1.4rem; font-weight: 800;">Félicitations !</h2>
+        <p id="resSubtitle" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Vous avez dominé ce quiz !</p>
+
+        <div style="margin: 20px 0; background: var(--bg-main); padding: 15px; border-radius: 14px; border: 1px solid var(--card-border);">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Gain Obtenu</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--secondary);" id="resAmount">+3 000 FCFA</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; font-size: 0.8rem;">
+          <div style="background: var(--bg-main); padding: 10px; border-radius: 10px;">Bonnes réponses: <strong id="resCorrect" style="color: var(--secondary);">0/0</strong></div>
+          <div style="background: var(--bg-main); padding: 10px; border-radius: 10px;">Réussite: <strong id="resPercent">0%</strong></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button class="btn btn-primary" onclick="switchView('home')">🟢 Jouer à un autre quiz</button>
+          <button class="btn btn-secondary" onclick="switchView('wallet')">🟣 Consulter Mon Portefeuille</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. VUE PORTEFEUILLE (Dépôt / Retrait / Historique) -->
+    <section id="view-wallet" class="view">
+      <h2>Mon Portefeuille</h2>
+
+      <!-- Carte Solde -->
+      <div class="premium-card" style="background: linear-gradient(135deg, #4F46E5, #6366F1); color: white;">
+        <span style="font-size: 0.8rem; opacity: 0.85;">Solde Disponible</span>
+        <div style="font-size: 2.2rem; font-weight: 800; margin: 6px 0;" id="walletBalanceDisplay">5 000 FCFA</div>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <button class="btn btn-success" style="padding: 10px;" onclick="openDepositModal()">📥 Déposer</button>
+          <button class="btn btn-secondary" style="padding: 10px; background: rgba(255,255,255,0.2); color: white;" onclick="openWithdrawModal()">📤 Retirer</button>
+        </div>
+      </div>
+
+      <!-- Historique Transactions -->
+      <h3 style="font-size: 1rem; margin-top: 10px;">Historique des Opérations</h3>
+      <div id="txHistoryList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+    </section>
+
+    <!-- MODALE DÉPÔT (Paiement Manuel) -->
+    <section id="view-deposit-modal" class="view">
+      <button class="btn btn-secondary" onclick="switchView('wallet')" style="width: fit-content; padding: 6px 12px; font-size: 0.8rem;">← Annuler</button>
+
+      <!-- Étape 1: Demande -->
+      <div id="depStep1" class="premium-card">
+        <h3>Formulaire de Dépôt</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Saisissez le montant et votre opérateur.</p>
+
+        <div class="form-group">
+          <label>Montant (FCFA)</label>
+          <input type="number" id="depAmountInput" class="form-input" placeholder="Ex: 5000" value="2000">
+        </div>
+
+        <div class="form-group">
+          <label>Moyen de Paiement</label>
+          <select id="depMethodSelect" class="form-input">
+            <option value="MTN Mobile Money">MTN Mobile Money</option>
+            <option value="Orange Money">Orange Money</option>
+            <option value="Moov Money">Moov Money</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" onclick="submitDepositRequest()">Continuer →</button>
+      </div>
+
+      <!-- Étape 2: Consignes de Paiement & Envoi du Reçu -->
+      <div id="depStep2" class="premium-card" style="display: none;">
+        <h3>Effectuer le Paiement</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Veuillez effectuer le transfert vers les coordonnées ci-dessous :</p>
+
+        <div style="background: var(--bg-main); padding: 14px; border-radius: 12px; border: 1px solid var(--accent-gold); margin-bottom: 15px;">
+          <div style="font-size: 0.85rem; color: var(--accent-gold); font-weight: 700;" id="depMethodDisplay">MTN Mobile Money</div>
+          <div style="font-size: 1.2rem; font-weight: 800; margin: 4px 0;">Numéro : <span style="color: var(--primary);">0585971941</span></div>
+          <div style="font-size: 0.85rem;">Titulaire : <strong>Administrateur</strong></div>
+        </div>
+
+        <div class="form-group">
+          <label>Numéro de Transaction / Réf.</label>
+          <input type="text" id="depTxRefInput" class="form-input" placeholder="Ex: TXN10983728">
+        </div>
+
+        <div class="form-group">
+          <label>Capture du reçu (Optionnel)</label>
+          <input type="file" id="depProofFile" class="form-input" accept="image/*">
+        </div>
+
+        <button class="btn btn-success" onclick="confirmDepositPayment()">J'ai effectué le paiement (Envoyer le reçu)</button>
+      </div>
+    </section>
+
+    <!-- MODALE RETRAIT -->
+    <section id="view-withdraw-modal" class="view">
+      <button class="btn btn-secondary" onclick="switchView('wallet')" style="width: fit-content; padding: 6px 12px; font-size: 0.8rem;">← Annuler</button>
+      <div class="premium-card">
+        <h3>Demander un Retrait</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Retirez vos gains vers votre compte Mobile Money.</p>
+
+        <div class="form-group">
+          <label>Montant à retirer (FCFA)</label>
+          <input type="number" id="withAmountInput" class="form-input" placeholder="Ex: 2000">
+        </div>
+
+        <div class="form-group">
+          <label>Numéro Mobile Money</label>
+          <input type="tel" id="withPhoneInput" class="form-input" placeholder="Ex: 0708091011">
+        </div>
+
+        <div class="form-group">
+          <label>Moyen de Paiement</label>
+          <select id="withMethodSelect" class="form-input">
+            <option value="MTN Mobile Money">MTN Mobile Money</option>
+            <option value="Orange Money">Orange Money</option>
+            <option value="Moov Money">Moov Money</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" onclick="submitWithdrawRequest()">Demander un retrait</button>
+      </div>
+    </section>
+
+    <!-- 6. VUE CLASSEMENT -->
+    <section id="view-leaderboard" class="view">
+      <h2>🏆 Classement des Joueurs</h2>
+      <div class="premium-card" style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
+          <span>🥇 Mamadou S.</span><strong style="color: var(--accent-gold);">142 500 FCFA</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
+          <span>🥈 Jean-Luc K.</span><strong style="color: var(--accent-gold);">98 000 FCFA</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span>🥉 Amina D.</span><strong style="color: var(--accent-gold);">75 200 FCFA</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. VUE TABLEAU DE BORD ADMINISTRATEUR -->
+    <section id="view-admin" class="view">
+      <h2>🛡️ Espace Administrateur</h2>
+
+      <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px;">
+        <button class="admin-tab-btn active" onclick="switchAdminTab('deposits', this)">Dépôts (<span id="adminPendingDepCount">0</span>)</button>
+        <button class="admin-tab-btn" onclick="switchAdminTab('withdrawals', this)">Retraits (<span id="adminPendingWithCount">0</span>)</button>
+        <button class="admin-tab-btn" onclick="switchAdminTab('stats', this)">Statistiques</button>
+      </div>
+
+      <!-- Admin Tab: Dépôts -->
+      <div id="adminTabDeposits" class="premium-card">
+        <h3>Dépôts en attente</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Joueur</th>
+                <th>Montant</th>
+                <th>Opérateur / Réf</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminDepositsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Admin Tab: Retraits -->
+      <div id="adminTabWithdrawals" class="premium-card" style="display: none;">
+        <h3>Retraits en attente</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Joueur</th>
+                <th>Montant</th>
+                <th>Numéro</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminWithdrawalsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Admin Tab: Stats -->
+      <div id="adminTabStats" class="premium-card" style="display: none;">
+        <h3>Vue Globale</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; font-size: 0.85rem;">
+          <div style="background: var(--bg-main); padding: 10px; border-radius: 10px;">Joueurs inscrits: <strong>1,240</strong></div>
+          <div style="background: var(--bg-main); padding: 10px; border-radius: 10px;">Mises Totales: <strong>4.5M FCFA</strong></div>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <script>
-    // --- DONNÉES DE L'APPLICATION ---
-    let balance = 5000;
-    let selectedBet = 500;
-    let currentCategory = "";
-    let currentQuestionIdx = 0;
-    let score = 0;
-    let timerInterval = null;
-    let transactions = [
-      { type: 'Gain', amount: '+1 500 FCFA', date: 'Hier', isGain: true },
-      { type: 'Mise', amount: '-500 FCFA', date: 'Hier', isGain: false }
-    ];
-
-    const questionsDb = {
-      "Football": [
-        { q: "Quel pays a remporté la Coupe du Monde 2022 ?", options: ["France", "Brésil", "Argentine", "Allemagne"], answer: 2 },
-        { q: "Quel joueur détient le plus de Ballons d'Or ?", options: ["Ronaldo", "Messi", "Zidane", "Pelé"], answer: 1 },
-        { q: "Combien de temps dure un match de football standard ?", options: ["80 min", "90 min", "100 min", "60 min"], answer: 1 },
-        { q: "Quel club a remporté la Ligue des Champions 2023 ?", options: ["Real Madrid", "Man City", "PSG", "Bayern"], answer: 1 },
-        { q: "Quel pays a accueilli la CAN 2023 ?", options: ["Cameroun", "Sénégal", "Côte d'Ivoire", "Maroc"], answer: 2 }
+    // --- ÉTAT GLOBAL DE L'APPLICATION ---
+    let state = {
+      user: { id: "USR-9921", name: "Joueur_Standard", balance: 5000 },
+      theme: "dark",
+      activeQuiz: null,
+      currentQuestionIdx: 0,
+      score: 0,
+      timer: null,
+      timerSeconds: 15,
+      pendingDeposit: null,
+      deposits: [],
+      withdrawals: [],
+      transactions: [
+        { type: "Bienvenue", amount: "+5 000 FCFA", date: "Aujourd'hui", isGain: true }
       ],
-      "Culture Générale": [
-        { q: "Quelle est la capitale de la France ?", options: ["Lyon", "Marseille", "Paris", "Bordeaux"], answer: 2 },
-        { q: "Quel est le plus grand océan du monde ?", options: ["Atlantique", "Indien", "Pacifique", "Arctique"], answer: 2 },
-        { q: "Combien de continents compte la Terre ?", options: ["5", "6", "7", "8"], answer: 2 },
-        { q: "Qui a peint La Joconde ?", options: ["Van Gogh", "Picasso", "Léonard de Vinci", "Monet"], answer: 2 },
-        { q: "Quel est le métal dont le symbole chimique est Au ?", options: ["Argent", "Or", "Cuivre", "Fer"], answer: 1 }
+      quizzes: [
+        {
+          id: "q-foot-1",
+          name: "Ligue des Champions & Stars",
+          category: "Football",
+          difficulty: "Moyen",
+          badgeClass: "badge-medium",
+          questionsCount: 5,
+          timePerQ: 15,
+          minBet: 500,
+          maxBet: 10000,
+          potentialWinMultiplier: 3,
+          playersCount: 1420,
+          popularity: "🔥 Très Populaire",
+          status: "Disponible",
+          description: "Testez vos connaissances sur la prestigieuse UEFA Champions League et les monstres sacrés du ballon d'or.",
+          questions: [
+            { q: "Quel club a remporté la Ligue des Champions 2023 ?", options: ["Real Madrid", "Manchester City", "PSG", "Inter Milan"], answer: 1 },
+            { q: "Qui est le meilleur buteur de l'histoire de la LDC ?", options: ["Lionel Messi", "Karim Benzema", "Cristiano Ronaldo", "Robert Lewandowski"], answer: 2 },
+            { q: "Quel pays a remporté la Coupe du Monde 2022 ?", options: ["France", "Argentine", "Brésil", "Croatie"], answer: 1 },
+            { q: "Quel entraîneur a réalisé le triplé avec Man City en 2023 ?", options: ["Carlo Ancelotti", "Pep Guardiola", "Jurgen Klopp", "Zinedine Zidane"], answer: 1 },
+            { q: "En quelle année le Sénégal a-t-il gagné sa 1ère CAN ?", options: ["2019", "2021", "2022", "2024"], answer: 2 }
+          ]
+        },
+        {
+          id: "q-cult-1",
+          name: "Légendes & Histoire du Monde",
+          category: "Histoire",
+          difficulty: "Difficile",
+          badgeClass: "badge-hard",
+          questionsCount: 5,
+          timePerQ: 15,
+          minBet: 1000,
+          maxBet: 20000,
+          potentialWinMultiplier: 4,
+          playersCount: 890,
+          popularity: "⚡ Tendances",
+          status: "Disponible",
+          description: "Un parcours à travers les grands événements qui ont façonné notre civilisation.",
+          questions: [
+            { q: "En quelle année a eu lieu la Révolution Française ?", options: ["1789", "1799", "1815", "1776"], answer: 0 },
+            { q: "Qui a été le premier président de la RCI ?", options: ["Felix Houphouët-Boigny", "Henri Konan Bédié", "Laurent Gbagbo", "Alassane Ouattara"], answer: 0 },
+            { q: "Quelle pyramide est la plus grande d'Égypte ?", options: ["Khéphren", "Mykérinos", "Khéops", "Zoser"], answer: 2 },
+            { q: "Quel empire était dirigé par Mansa Moussa ?", options: ["Empire du Ghana", "Empire du Mali", "Empire Songhaï", "Empire Ashanti"], answer: 1 },
+            { q: "Quelle guerre s'est terminée en 1945 ?", options: ["Seconde Guerre Mondiale", "Première Guerre Mondiale", "Guerre du Viêt Nam", "Guerre Froide"], answer: 0 }
+          ]
+        }
       ]
     };
 
-    // --- NAVIGATION ---
-    function switchView(viewName, navEl) {
+    // --- TOAST NOTIFICATIONS ---
+    function showToast(message, type = "info") {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerText = message;
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 5000);
+    }
+
+    // --- NAVIGATION & THÈME ---
+    function switchView(viewId) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById(`view-${viewName}`).classList.add('active');
-      
-      if (navEl) {
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        navEl.classList.add('active');
-      }
-      if(viewName === 'wallet') renderWallet();
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+      const target = document.getElementById(`view-${viewId}`);
+      if (target) target.classList.add('active');
+
+      const navTarget = document.getElementById(`nav-${viewId}`);
+      if (navTarget) navTarget.classList.add('active');
+
+      if (viewId === 'home') renderHomeQuizList();
+      if (viewId === 'wallet') renderWalletUI();
+      if (viewId === 'admin') renderAdminUI();
     }
 
-    // --- GESTION DU PORTEFEUILLE ---
-    function updateBalanceUI() {
-      document.getElementById('user-balance').innerText = balance.toLocaleString();
-      document.getElementById('wallet-total').innerText = balance.toLocaleString() + " FCFA";
+    function toggleTheme() {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', state.theme);
+      document.getElementById('themeBtn').innerText = state.theme === 'dark' ? '🌙' : '☀️';
     }
 
-    function renderWallet() {
-      const container = document.getElementById('tx-history');
-      container.innerHTML = transactions.map(t => `
-        <div class="tx-item">
-          <div>
-            <div>${t.type}</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">${t.date}</div>
+    function updateBalanceDisplay() {
+      document.getElementById('headerBalance').innerText = state.user.balance.toLocaleString();
+      document.getElementById('walletBalanceDisplay').innerText = state.user.balance.toLocaleString() + " FCFA";
+    }
+
+    // --- ACCUEIL & PRESENTATION QUIZ (Style Paris Sportifs) ---
+    function renderHomeQuizList() {
+      const list = document.getElementById('quizList');
+      list.innerHTML = state.quizzes.map(q => `
+        <div class="premium-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <span class="badge ${q.badgeClass}">${q.difficulty}</span>
+            <span class="badge badge-status">${q.popularity}</span>
           </div>
-          <div class="${t.isGain ? 'tx-gain' : 'tx-perte'}">${t.amount}</div>
+
+          <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">🧠 ${q.name}</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">📂 ${q.category} • ❓ ${q.questionsCount} Qs • ⏱ ${q.timePerQ}s/Q</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--bg-main); padding: 10px; border-radius: 12px; font-size: 0.8rem; margin-bottom: 14px;">
+            <div>Mise Min: <strong>${q.minBet} FCFA</strong></div>
+            <div>Gain Potentiel: <strong style="color: var(--secondary);">x${q.potentialWinMultiplier}</strong></div>
+            <div>Joueurs: <strong>👥 ${q.playersCount}</strong></div>
+            <div>Statut: <strong style="color: var(--info);">${q.status}</strong></div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="btn btn-primary" onclick="openQuizDetails('${q.id}')">🟢 JOUER NOW</button>
+            <button class="btn btn-secondary" onclick="openQuizDetails('${q.id}')">🔵 DÉTAILS</button>
+          </div>
         </div>
       `).join('');
     }
 
-    function deposit() {
-      const amount = prompt("Montant à déposer (FCFA):", "2000");
-      if (amount && !isNaN(amount)) {
-        balance += parseInt(amount);
-        transactions.unshift({ type: 'Dépôt', amount: `+${amount} FCFA`, date: "À l'instant", isGain: true });
-        updateBalanceUI();
-        renderWallet();
+    // --- ÉCRAN DÉTAILS QUIZ ---
+    function openQuizDetails(quizId) {
+      const quiz = state.quizzes.find(q => q.id === quizId);
+      if (!quiz) return;
+      state.activeQuiz = quiz;
+
+      const container = document.getElementById('quizDetailsContent');
+      container.innerHTML = `
+        <h2 style="font-size: 1.3rem; margin-bottom: 8px;">${quiz.name}</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">${quiz.description}</p>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; margin-bottom: 20px;">
+          <div>📂 <strong>Catégorie :</strong> ${quiz.category}</div>
+          <div>⭐ <strong>Niveau :</strong> ${quiz.difficulty}</div>
+          <div>❓ <strong>Nombre de questions :</strong> ${quiz.questionsCount}</div>
+          <div>⏱ <strong>Temps estimé :</strong> ~1 minute</div>
+          <div>💰 <strong>Mise minimale requise :</strong> ${quiz.minBet} FCFA</div>
+          <div>🏆 <strong>Gain maximal possible :</strong> ${(quiz.minBet * quiz.potentialWinMultiplier).toLocaleString()} FCFA</div>
+          <div>👥 <strong>Inscrits :</strong> ${quiz.playersCount} joueurs</div>
+        </div>
+
+        <div class="form-group">
+          <label>Choisissez votre Mise (FCFA)</label>
+          <input type="number" id="selectedBetInput" class="form-input" value="${quiz.minBet}" min="${quiz.minBet}" max="${quiz.maxBet}">
+        </div>
+
+        <button class="btn btn-primary" onclick="startQuizPlay()">COMMENCER LE QUIZ 🚀</button>
+      `;
+      switchView('quiz-details');
+    }
+
+    // --- DÉROULEMENT DU QUIZ ---
+    function startQuizPlay() {
+      const betInput = parseInt(document.getElementById('selectedBetInput').value);
+      if (isNaN(betInput) || betInput < state.activeQuiz.minBet) {
+        showToast("La mise est inférieure au minimum requis !", "danger");
+        return;
       }
-    }
-
-    // --- MODALE DE PARI ---
-    function openBetModal(cat) {
-      currentCategory = cat;
-      document.getElementById('betModal').style.display = 'flex';
-    }
-
-    function closeBetModal() {
-      document.getElementById('betModal').style.display = 'none';
-    }
-
-    function selectBet(amount, btn) {
-      selectedBet = amount;
-      document.querySelectorAll('.bet-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      document.getElementById('potential-win').innerText = (amount * 3).toLocaleString() + " FCFA";
-    }
-
-    // --- LOGIQUE DU QUIZ ---
-    function startQuiz() {
-      if (balance < selectedBet) {
-        alert("Solde insuffisant pour cette mise !");
+      if (state.user.balance < betInput) {
+        showToast("Solde insuffisant. Veuillez recharger votre portefeuille !", "danger");
+        switchView('wallet');
         return;
       }
 
-      // Déduire la mise
-      balance -= selectedBet;
-      transactions.unshift({ type: `Mise - ${currentCategory}`, amount: `-${selectedBet} FCFA`, date: "À l'instant", isGain: false });
-      updateBalanceUI();
+      // Déduction du solde
+      state.user.balance -= betInput;
+      state.currentBet = betInput;
+      state.transactions.unshift({ type: `Mise Quiz (${state.activeQuiz.name})`, amount: `-${betInput} FCFA`, date: "À l'instant", isGain: false });
+      updateBalanceDisplay();
 
-      closeBetModal();
-      currentQuestionIdx = 0;
-      score = 0;
-      
-      document.getElementById('quiz-cat-name').innerText = currentCategory;
-      switchView('quiz');
+      state.currentQuestionIdx = 0;
+      state.score = 0;
+
+      document.getElementById('playCatTitle').innerText = state.activeQuiz.name;
+      document.getElementById('playPotentialWin').innerText = (betInput * state.activeQuiz.potentialWinMultiplier).toLocaleString() + " FCFA";
+
+      switchView('quiz-play');
       loadQuestion();
     }
 
     function loadQuestion() {
-      clearInterval(timerInterval);
-      const list = questionsDb[currentCategory] || questionsDb["Culture Générale"];
-      
-      if (currentQuestionIdx >= list.length) {
-        endQuiz();
+      clearInterval(state.timer);
+      const quiz = state.activeQuiz;
+
+      if (state.currentQuestionIdx >= quiz.questions.length) {
+        finishQuiz();
         return;
       }
 
-      const q = list[currentQuestionIdx];
-      document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIdx + 1}/${list.length}`;
-      document.getElementById('question-text').innerText = q.q;
+      const q = quiz.questions[state.currentQuestionIdx];
+      document.getElementById('playProgress').innerText = `Question ${state.currentQuestionIdx + 1}/${quiz.questions.length}`;
+      document.getElementById('playQuestionText').innerText = q.q;
 
-      const container = document.getElementById('answers-container');
-      container.innerHTML = "";
+      const answersGrid = document.getElementById('answersGrid');
+      answersGrid.innerHTML = q.options.map((opt, idx) => `
+        <div class="ans-card" onclick="selectAnswer(${idx}, ${q.answer})">
+          <span>${opt}</span>
+          <span style="opacity: 0.5;">🔘</span>
+        </div>
+      `).join('');
 
-      q.options.forEach((opt, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'ans-btn';
-        btn.innerText = opt;
-        btn.onclick = () => checkAnswer(idx, q.answer);
-        container.appendChild(btn);
-      });
-
-      startTimer();
+      runTimer();
     }
 
-    function startTimer() {
-      const timerFill = document.getElementById('timer');
-      timerFill.style.transition = 'none';
-      timerFill.style.width = '100%';
-      
-      setTimeout(() => {
-        timerFill.style.transition = 'width 15s linear';
-        timerFill.style.width = '0%';
-      }, 50);
+    function runTimer() {
+      state.timerSeconds = 15;
+      const circle = document.getElementById('timerCircle');
+      const text = document.getElementById('timerSeconds');
 
-      timerInterval = setTimeout(() => {
-        // Temps écoulé
-        currentQuestionIdx++;
-        loadQuestion();
-      }, 15000);
+      const totalDash = 188;
+      circle.style.strokeDashoffset = 0;
+      text.innerText = state.timerSeconds;
+
+      state.timer = setInterval(() => {
+        state.timerSeconds--;
+        text.innerText = state.timerSeconds;
+        circle.style.strokeDashoffset = totalDash - (state.timerSeconds / 15) * totalDash;
+
+        if (state.timerSeconds <= 0) {
+          clearInterval(state.timer);
+          state.currentQuestionIdx++;
+          loadQuestion();
+        }
+      }, 1000);
     }
 
-    function checkAnswer(selectedIdx, correctIdx) {
-      clearInterval(timerInterval);
-      const buttons = document.querySelectorAll('.ans-btn');
-      
+    function selectAnswer(selectedIdx, correctIdx) {
+      clearInterval(state.timer);
+      const cards = document.querySelectorAll('.ans-card');
+      cards.forEach(c => c.style.pointerEvents = 'none'); // Verrouillage
+
       if (selectedIdx === correctIdx) {
-        buttons[selectedIdx].classList.add('correct');
-        score++;
+        cards[selectedIdx].classList.add('correct');
+        state.score++;
       } else {
-        buttons[selectedIdx].classList.add('wrong');
-        buttons[correctIdx].classList.add('correct');
+        cards[selectedIdx].classList.add('wrong');
+        cards[correctIdx].classList.add('correct');
       }
 
-      // Désactiver tous les boutons
-      buttons.forEach(b => b.style.pointerEvents = 'none');
-
       setTimeout(() => {
-        currentQuestionIdx++;
+        state.currentQuestionIdx++;
         loadQuestion();
       }, 1200);
     }
 
-    function endQuiz() {
-      let gain = 0;
-      if (score === 5) gain = selectedBet * 3;      // x3 pour sans faute
-      else if (score === 4) gain = selectedBet * 2; // x2 pour 4 bonnes réponses
-      else if (score === 3) gain = selectedBet;     // Remboursement pour 3
+    function finishQuiz() {
+      const quiz = state.activeQuiz;
+      const totalQ = quiz.questions.length;
+      const percent = Math.round((state.score / totalQ) * 100);
+      let winAmount = 0;
 
-      if (gain > 0) {
-        balance += gain;
-        transactions.unshift({ type: `Gain Quiz (${score}/5)`, amount: `+${gain} FCFA`, date: "À l'instant", isGain: true });
-        updateBalanceUI();
+      if (state.score === totalQ) winAmount = state.currentBet * quiz.potentialWinMultiplier;
+      else if (state.score >= 3) winAmount = state.currentBet * 1.5;
+
+      if (winAmount > 0) {
+        state.user.balance += winAmount;
+        state.transactions.unshift({ type: `Gain Quiz (${state.score}/${totalQ})`, amount: `+${winAmount} FCFA`, date: "À l'instant", isGain: true });
+        updateBalanceDisplay();
       }
 
-      document.getElementById('res-status').innerText = score >= 3 ? "Félicitations ! 🎉" : "Dommage... ❌";
-      document.getElementById('res-score').innerText = `Vous avez obtenu ${score}/5 bonnes réponses`;
-      document.getElementById('res-money').innerText = gain > 0 ? `+${gain.toLocaleString()} FCFA` : "0 FCFA";
-      document.getElementById('res-money').style.color = gain > 0 ? "var(--secondary)" : "var(--danger)";
+      document.getElementById('resTitle').innerText = winAmount > 0 ? "Félicitations !" : "Dommage !";
+      document.getElementById('resAmount').innerText = winAmount > 0 ? `+${winAmount.toLocaleString()} FCFA` : "0 FCFA";
+      document.getElementById('resCorrect').innerText = `${state.score}/${totalQ}`;
+      document.getElementById('resPercent').innerText = `${percent}%`;
 
-      switchView('result');
+      switchView('quiz-result');
     }
 
-    // Initialisation
-    updateBalanceUI();
+    // --- FLUX DE DÉPÔT MANUEL ---
+    function openDepositModal() {
+      document.getElementById('depStep1').style.display = 'block';
+      document.getElementById('depStep2').style.display = 'none';
+      switchView('deposit-modal');
+    }
+
+    function submitDepositRequest() {
+      const amount = parseInt(document.getElementById('depAmountInput').value);
+      const method = document.getElementById('depMethodSelect').value;
+
+      if (isNaN(amount) || amount < 500) {
+        showToast("Le montant minimum de dépôt est de 500 FCFA", "danger");
+        return;
+      }
+
+      state.pendingDeposit = { amount, method };
+      document.getElementById('depMethodDisplay').innerText = method;
+
+      document.getElementById('depStep1').style.display = 'none';
+      document.getElementById('depStep2').style.display = 'block';
+
+      showToast("« Votre demande de dépôt a été enregistrée avec succès. Veuillez effectuer votre paiement au numéro indiqué... »");
+    }
+
+    function confirmDepositPayment() {
+      const txRef = document.getElementById('depTxRefInput').value;
+      if (!txRef) {
+        showToast("Veuillez saisir le numéro de transaction / référence du reçu", "danger");
+        return;
+      }
+
+      const dep = {
+        id: "DEP-" + Math.floor(Math.random() * 8999 + 1000),
+        userName: state.user.name,
+        userId: state.user.id,
+        amount: state.pendingDeposit.amount,
+        method: state.pendingDeposit.method,
+        txRef: txRef,
+        date: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+        status: "EN_ATTENTE"
+      };
+
+      state.deposits.unshift(dep);
+      showToast("Reçu envoyé à l'administrateur. Validation en cours.");
+      switchView('wallet');
+    }
+
+    // --- FLUX DE RETRAIT ---
+    function openWithdrawModal() {
+      switchView('withdraw-modal');
+    }
+
+    function submitWithdrawRequest() {
+      const amount = parseInt(document.getElementById('withAmountInput').value);
+      const phone = document.getElementById('withPhoneInput').value;
+      const method = document.getElementById('withMethodSelect').value;
+
+      if (isNaN(amount) || amount > state.user.balance) {
+        showToast("Solde insuffisant pour ce retrait !", "danger");
+        return;
+      }
+      if (!phone) {
+        showToast("Veuillez renseigner un numéro de téléphone valide.", "danger");
+        return;
+      }
+
+      const req = {
+        id: "WITH-" + Math.floor(Math.random() * 8999 + 1000),
+        userName: state.user.name,
+        amount: amount,
+        phone: phone,
+        method: method,
+        status: "EN_ATTENTE"
+      };
+
+      state.withdrawals.unshift(req);
+      showToast("« Votre demande de retrait a été enregistrée. Elle sera traitée dans les meilleurs délais. »");
+      switchView('wallet');
+    }
+
+    // --- PORTEFEUILLE UI ---
+    function renderWalletUI() {
+      updateBalanceDisplay();
+      const container = document.getElementById('txHistoryList');
+      container.innerHTML = state.transactions.map(t => `
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border); font-size: 0.85rem;">
+          <div>
+            <div style="font-weight: 700;">${t.type}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">${t.date}</div>
+          </div>
+          <div style="font-weight: 800; color: ${t.isGain ? 'var(--secondary)' : 'var(--danger)'};">${t.amount}</div>
+        </div>
+      `).join('');
+    }
+
+    // --- PANNEAU ADMINISTRATEUR ---
+    function renderAdminUI() {
+      document.getElementById('adminPendingDepCount').innerText = state.deposits.filter(d => d.status === 'EN_ATTENTE').length;
+      document.getElementById('adminPendingWithCount').innerText = state.withdrawals.filter(w => w.status === 'EN_ATTENTE').length;
+
+      // Table Dépôts
+      const depTbody = document.getElementById('adminDepositsTable');
+      depTbody.innerHTML = state.deposits.map(d => `
+        <tr>
+          <td>${d.userName}</td>
+          <td><strong>${d.amount} FCFA</strong></td>
+          <td>${d.method}<br><small>${d.txRef}</small></td>
+          <td>
+            ${d.status === 'EN_ATTENTE' ? `
+              <button style="background: var(--secondary); color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;" onclick="adminApproveDeposit('${d.id}')">Valider</button>
+              <button style="background: var(--danger); color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;" onclick="adminRejectDeposit('${d.id}')">Refuser</button>
+            ` : `<span>${d.status}</span>`}
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="4">Aucun dépôt en attente</td></tr>';
+
+      // Table Retraits
+      const withTbody = document.getElementById('adminWithdrawalsTable');
+      withTbody.innerHTML = state.withdrawals.map(w => `
+        <tr>
+          <td>${w.userName}</td>
+          <td><strong>${w.amount} FCFA</strong></td>
+          <td>${w.phone}</td>
+          <td>
+            ${w.status === 'EN_ATTENTE' ? `
+              <button style="background: var(--primary); color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;" onclick="adminApproveWithdrawal('${w.id}')">Paiement Effectué</button>
+            ` : `<span>${w.status}</span>`}
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="4">Aucun retrait en attente</td></tr>';
+    }
+
+    function switchAdminTab(tab, btn) {
+      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.getElementById('adminTabDeposits').style.display = tab === 'deposits' ? 'block' : 'none';
+      document.getElementById('adminTabWithdrawals').style.display = tab === 'withdrawals' ? 'block' : 'none';
+      document.getElementById('adminTabStats').style.display = tab === 'stats' ? 'block' : 'none';
+    }
+
+    function adminApproveDeposit(depId) {
+      const dep = state.deposits.find(d => d.id === depId);
+      if (dep) {
+        dep.status = "VALIDÉ";
+        state.user.balance += dep.amount;
+        state.transactions.unshift({ type: "Dépôt Validé", amount: `+${dep.amount} FCFA`, date: "À l'instant", isGain: true });
+        showToast(`« Félicitations ! Votre dépôt de ${dep.amount} FCFA a été validé avec succès. Votre portefeuille a été crédité. »`);
+        renderAdminUI();
+        updateBalanceDisplay();
+      }
+    }
+
+    function adminRejectDeposit(depId) {
+      const dep = state.deposits.find(d => d.id === depId);
+      if (dep) {
+        dep.status = "REFUSÉ";
+        showToast("Dépôt refusé par l'administrateur.", "danger");
+        renderAdminUI();
+      }
+    }
+
+    function adminApproveWithdrawal(withId) {
+      const req = state.withdrawals.find(w => w.id === withId);
+      if (req) {
+        req.status = "PAYÉ";
+        state.user.balance -= req.amount;
+        state.transactions.unshift({ type: "Retrait Effectué", amount: `-${req.amount} FCFA`, date: "À l'instant", isGain: false });
+        showToast(`« Votre retrait de ${req.amount} FCFA a été traité avec succès. Les fonds ont été envoyés. »`);
+        renderAdminUI();
+        updateBalanceDisplay();
+      }
+    }
+
+    // --- INITIALISATION ---
+    renderHomeQuizList();
+    updateBalanceDisplay();
   </script>
 </body>
 </html>
