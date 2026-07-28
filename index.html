@@ -1,892 +1,1006 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="fr" class="h-full bg-slate-950 text-slate-100">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuizBet - La Plateforme N°1 de Quiz Rémunérés</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>ZakariaTV Concours - Plateforme Officielle</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root {
-      --bg-main: #0B0F19;
-      --card-bg: rgba(22, 30, 47, 0.85);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --text-main: #F8FAFC;
-      --text-muted: #94A3B8;
-      --primary: #6366F1;
-      --primary-hover: #4F46E5;
-      --secondary: #10B981;
-      --accent-gold: #F59E0B;
-      --danger: #EF4444;
-      --info: #3B82F6;
-      --badge-bg: rgba(99, 102, 241, 0.15);
-      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    }
-
-    [data-theme="light"] {
-      --bg-main: #F1F5F9;
-      --card-bg: #FFFFFF;
-      --card-border: #E2E8F0;
-      --text-main: #0F172A;
-      --text-muted: #64748B;
-      --badge-bg: rgba(99, 102, 241, 0.1);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
-    body { background-color: var(--bg-main); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; }
-
-    .app-container {
-      width: 100%; max-width: 480px; background-color: var(--bg-main);
-      min-height: 100vh; display: flex; flex-direction: column; position: relative;
-      box-shadow: 0 0 50px rgba(0,0,0,0.6); overflow-x: hidden; border-x: 1px solid var(--card-border);
-    }
-
-    /* Top Bar Header */
-    header {
-      background: var(--card-bg); backdrop-filter: blur(12px);
-      padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid var(--card-border); position: sticky; top: 0; z-index: 50;
-    }
-    .brand { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
-    .brand span { color: var(--accent-gold); }
-    .header-actions { display: flex; align-items: center; gap: 10px; }
-    .theme-toggle { background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-main); }
-    .wallet-badge {
-      background: rgba(16, 185, 129, 0.12); border: 1px solid var(--secondary); color: var(--secondary);
-      padding: 6px 14px; border-radius: 30px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
-    }
-
-    /* Bottom Navigation */
-    nav {
-      position: fixed; bottom: 0; width: 100%; max-width: 480px;
-      background: var(--card-bg); backdrop-filter: blur(16px);
-      display: flex; justify-content: space-around; padding: 10px 0;
-      border-top: 1px solid var(--card-border); z-index: 50;
-    }
-    .nav-item {
-      color: var(--text-muted); text-decoration: none; font-size: 0.75rem; font-weight: 600;
-      display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; width: 20%;
-    }
-    .nav-item.active { color: var(--primary); }
-
-    /* Views */
-    .view { display: none; padding: 20px; flex: 1; padding-bottom: 90px; }
-    .view.active { display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.3s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Cards & Components */
-    .premium-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 20px; padding: 18px; box-shadow: var(--shadow); position: relative; overflow: hidden;
-    }
-    .badge {
-      padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-    }
-    .badge-easy { background: rgba(16, 185, 129, 0.2); color: var(--secondary); }
-    .badge-medium { background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); }
-    .badge-hard { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-    .badge-status { background: rgba(59, 130, 246, 0.15); color: var(--info); }
-
-    .btn {
-      width: 100%; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 0.95rem;
-      border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
-    }
-    .btn-primary { background: var(--primary); color: #FFF; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-    .btn-primary:hover { background: var(--primary-hover); }
-    .btn-secondary { background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1px solid var(--card-border); }
-    .btn-success { background: var(--secondary); color: #FFF; }
-    .btn-danger { background: var(--danger); color: #FFF; }
-
-    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-    .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-    .form-input {
-      background: var(--bg-main); border: 1px solid var(--card-border); color: var(--text-main);
-      padding: 14px; border-radius: 12px; font-size: 1rem; outline: none;
-    }
-    .form-input:focus { border-color: var(--primary); }
-
-    /* Circular Timer */
-    .timer-container { position: relative; width: 70px; height: 70px; margin: 0 auto; }
-    .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-    .timer-circle-bg { fill: none; stroke: var(--card-border); stroke-width: 6; }
-    .timer-circle {
-      fill: none; stroke: var(--accent-gold); stroke-width: 6; stroke-linecap: round;
-      stroke-dasharray: 188; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear;
-    }
-    .timer-text {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      font-weight: 800; font-size: 1.1rem; color: var(--text-main);
-    }
-
-    /* Answers Grid */
-    .answers-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 15px; }
-    .ans-card {
-      background: var(--bg-main); border: 1.5px solid var(--card-border); padding: 16px;
-      border-radius: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
-    }
-    .ans-card.selected { border-color: var(--primary); background: var(--badge-bg); }
-    .ans-card.correct { border-color: var(--secondary); background: rgba(16, 185, 129, 0.2); color: var(--secondary); }
-    .ans-card.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.2); color: var(--danger); }
-
-    /* Toast Notification */
-    .toast-container {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 420px;
-      z-index: 999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;
-    }
-    .toast {
-      background: var(--card-bg); border: 1px solid var(--primary); color: var(--text-main);
-      padding: 16px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-size: 0.85rem;
-      backdrop-filter: blur(10px); animation: slideDown 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-    }
-    @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    /* Admin Styles */
-    .admin-tab-btn { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--card-border); background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; font-weight: 600; }
-    .admin-tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-    .table-container { overflow-x: auto; margin-top: 10px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: left; }
-    th, td { padding: 10px; border-bottom: 1px solid var(--card-border); }
-    th { color: var(--text-muted); font-weight: 600; }
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
   </style>
 </head>
-<body>
+<body class="min-h-full flex flex-col justify-between bg-slate-950 relative">
 
-  <div class="toast-container" id="toastContainer"></div>
-
-  <div class="app-container">
-    <!-- Header -->
-    <header>
-      <div class="brand">Quiz<span>Bet</span></div>
-      <div class="header-actions">
-        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
-        <div class="wallet-badge" onclick="switchView('wallet')">
-          💰 <span id="headerBalance">5 000</span> FCFA
-        </div>
-      </div>
-    </header>
-
-    <!-- Navigation -->
-    <nav>
-      <div class="nav-item active" id="nav-home" onclick="switchView('home')">
-        <span>⚽</span><span>Accueil</span>
-      </div>
-      <div class="nav-item" id="nav-wallet" onclick="switchView('wallet')">
-        <span>💳</span><span>Portefeuille</span>
-      </div>
-      <div class="nav-item" id="nav-leaderboard" onclick="switchView('leaderboard')">
-        <span>🏆</span><span>Classement</span>
-      </div>
-      <div class="nav-item" id="nav-admin" onclick="switchView('admin')">
-        <span>🛡️</span><span>Admin</span>
-      </div>
-    </nav>
-
-    <!-- 1. VUE ACCUEIL (Style Paris Sportifs) -->
-    <section id="view-home" class="view active">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="font-size: 1.2rem; font-weight: 800;">🔥 Quiz Vedettes</h2>
-        <span style="font-size: 0.8rem; color: var(--text-muted);">Misez & Gagnez</span>
-      </div>
-
-      <div id="quizList" style="display: flex; flex-direction: column; gap: 16px;">
-        <!-- Injecté dynamiquement par JS -->
-      </div>
-    </section>
-
-    <!-- 2. VUE DÉTAILS D'UN QUIZ -->
-    <section id="view-quiz-details" class="view">
-      <button class="btn btn-secondary" onclick="switchView('home')" style="width: fit-content; padding: 8px 16px; font-size: 0.8rem;">← Retour</button>
-      <div class="premium-card" id="quizDetailsContent">
-        <!-- Contenu Détaillé du Quiz -->
-      </div>
-    </section>
-
-    <!-- 3. VUE JEU / DÉROULEMENT DU QUIZ -->
-    <section id="view-quiz-play" class="view">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <span style="font-size: 0.75rem; color: var(--text-muted);" id="playProgress">Question 1/5</span>
-          <h3 id="playCatTitle" style="font-size: 1rem;">Football</h3>
-        </div>
-        <div style="text-align: right;">
-          <span style="font-size: 0.75rem; color: var(--text-muted);">Gain Potentiel</span>
-          <div style="color: var(--secondary); font-weight: 800; font-size: 0.95rem;" id="playPotentialWin">3 000 FCFA</div>
-        </div>
-      </div>
-
-      <!-- Chronomètre Circulaire -->
-      <div class="timer-container">
-        <svg class="timer-svg">
-          <circle class="timer-circle-bg" cx="35" cy="35" r="30"></circle>
-          <circle class="timer-circle" id="timerCircle" cx="35" cy="35" r="30"></circle>
-        </svg>
-        <div class="timer-text" id="timerSeconds">15</div>
-      </div>
-
-      <!-- Question -->
-      <div class="premium-card">
-        <p id="playQuestionText" style="font-size: 1rem; font-weight: 700; line-height: 1.4;">Chargement...</p>
-      </div>
-
-      <!-- Réponses -->
-      <div class="answers-grid" id="answersGrid"></div>
-    </section>
-
-    <!-- 4. VUE RÉSULTAT DU QUIZ -->
-    <section id="view-quiz-result" class="view">
-      <div class="premium-card" style="text-align: center; padding: 30px 20px;">
-        <div id="resIcon" style="font-size: 3rem; margin-bottom: 10px;">🎉</div>
-        <h2 id="resTitle" style="font-size: 1.4rem; font-weight: 800;">Félicitations !</h2>
-        <p id="resSubtitle" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Vous avez dominé ce quiz !</p>
-
-        <div style="margin: 20px 0; background: var(--bg-main); padding: 15px; border-radius: 14px; border: 1px solid var(--card-border);">
-          <div style="font-size: 0.8rem; color: var(--text-muted);">Gain Obtenu</div>
-          <div style="font-size: 2rem; font-weight: 800; color: var(--secondary);" id="resAmount">+3 000 FCFA</div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; font-size: 0.8rem;">
-          <div style="background: var(--bg-main); padding: 10px; border-radius: 10px;">Bonnes réponses: <strong id="resCorrect" style="color: var(--secondary);">0/0</strong></div>
-          <div style="background: var(--bg-main); padding: 10px; border-radius: 10px;">Réussite: <strong id="resPercent">0%</strong></div>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <button class="btn btn-primary" onclick="switchView('home')">🟢 Jouer à un autre quiz</button>
-          <button class="btn btn-secondary" onclick="switchView('wallet')">🟣 Consulter Mon Portefeuille</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. VUE PORTEFEUILLE (Dépôt / Retrait / Historique) -->
-    <section id="view-wallet" class="view">
-      <h2>Mon Portefeuille</h2>
-
-      <!-- Carte Solde -->
-      <div class="premium-card" style="background: linear-gradient(135deg, #4F46E5, #6366F1); color: white;">
-        <span style="font-size: 0.8rem; opacity: 0.85;">Solde Disponible</span>
-        <div style="font-size: 2.2rem; font-weight: 800; margin: 6px 0;" id="walletBalanceDisplay">5 000 FCFA</div>
-        <div style="display: flex; gap: 10px; margin-top: 15px;">
-          <button class="btn btn-success" style="padding: 10px;" onclick="openDepositModal()">📥 Déposer</button>
-          <button class="btn btn-secondary" style="padding: 10px; background: rgba(255,255,255,0.2); color: white;" onclick="openWithdrawModal()">📤 Retirer</button>
-        </div>
-      </div>
-
-      <!-- Historique Transactions -->
-      <h3 style="font-size: 1rem; margin-top: 10px;">Historique des Opérations</h3>
-      <div id="txHistoryList" style="display: flex; flex-direction: column; gap: 10px;"></div>
-    </section>
-
-    <!-- MODALE DÉPÔT (Paiement Manuel) -->
-    <section id="view-deposit-modal" class="view">
-      <button class="btn btn-secondary" onclick="switchView('wallet')" style="width: fit-content; padding: 6px 12px; font-size: 0.8rem;">← Annuler</button>
-
-      <!-- Étape 1: Demande -->
-      <div id="depStep1" class="premium-card">
-        <h3>Formulaire de Dépôt</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Saisissez le montant et votre opérateur.</p>
-
-        <div class="form-group">
-          <label>Montant (FCFA)</label>
-          <input type="number" id="depAmountInput" class="form-input" placeholder="Ex: 5000" value="2000">
-        </div>
-
-        <div class="form-group">
-          <label>Moyen de Paiement</label>
-          <select id="depMethodSelect" class="form-input">
-            <option value="MTN Mobile Money">MTN Mobile Money</option>
-            <option value="Orange Money">Orange Money</option>
-            <option value="Moov Money">Moov Money</option>
-          </select>
-        </div>
-
-        <button class="btn btn-primary" onclick="submitDepositRequest()">Continuer →</button>
-      </div>
-
-      <!-- Étape 2: Consignes de Paiement & Envoi du Reçu -->
-      <div id="depStep2" class="premium-card" style="display: none;">
-        <h3>Effectuer le Paiement</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Veuillez effectuer le transfert vers les coordonnées ci-dessous :</p>
-
-        <div style="background: var(--bg-main); padding: 14px; border-radius: 12px; border: 1px solid var(--accent-gold); margin-bottom: 15px;">
-          <div style="font-size: 0.85rem; color: var(--accent-gold); font-weight: 700;" id="depMethodDisplay">MTN Mobile Money</div>
-          <div style="font-size: 1.2rem; font-weight: 800; margin: 4px 0;">Numéro : <span style="color: var(--primary);">0585971941</span></div>
-          <div style="font-size: 0.85rem;">Titulaire : <strong>Administrateur</strong></div>
-        </div>
-
-        <div class="form-group">
-          <label>Numéro de Transaction / Réf.</label>
-          <input type="text" id="depTxRefInput" class="form-input" placeholder="Ex: TXN10983728">
-        </div>
-
-        <div class="form-group">
-          <label>Capture du reçu (Optionnel)</label>
-          <input type="file" id="depProofFile" class="form-input" accept="image/*">
-        </div>
-
-        <button class="btn btn-success" onclick="confirmDepositPayment()">J'ai effectué le paiement (Envoyer le reçu)</button>
-      </div>
-    </section>
-
-    <!-- MODALE RETRAIT -->
-    <section id="view-withdraw-modal" class="view">
-      <button class="btn btn-secondary" onclick="switchView('wallet')" style="width: fit-content; padding: 6px 12px; font-size: 0.8rem;">← Annuler</button>
-      <div class="premium-card">
-        <h3>Demander un Retrait</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Retirez vos gains vers votre compte Mobile Money.</p>
-
-        <div class="form-group">
-          <label>Montant à retirer (FCFA)</label>
-          <input type="number" id="withAmountInput" class="form-input" placeholder="Ex: 2000">
-        </div>
-
-        <div class="form-group">
-          <label>Numéro Mobile Money</label>
-          <input type="tel" id="withPhoneInput" class="form-input" placeholder="Ex: 0708091011">
-        </div>
-
-        <div class="form-group">
-          <label>Moyen de Paiement</label>
-          <select id="withMethodSelect" class="form-input">
-            <option value="MTN Mobile Money">MTN Mobile Money</option>
-            <option value="Orange Money">Orange Money</option>
-            <option value="Moov Money">Moov Money</option>
-          </select>
-        </div>
-
-        <button class="btn btn-primary" onclick="submitWithdrawRequest()">Demander un retrait</button>
-      </div>
-    </section>
-
-    <!-- 6. VUE CLASSEMENT -->
-    <section id="view-leaderboard" class="view">
-      <h2>🏆 Classement des Joueurs</h2>
-      <div class="premium-card" style="display: flex; flex-direction: column; gap: 12px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
-          <span>🥇 Mamadou S.</span><strong style="color: var(--accent-gold);">142 500 FCFA</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
-          <span>🥈 Jean-Luc K.</span><strong style="color: var(--accent-gold);">98 000 FCFA</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span>🥉 Amina D.</span><strong style="color: var(--accent-gold);">75 200 FCFA</strong>
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. VUE TABLEAU DE BORD ADMINISTRATEUR -->
-    <section id="view-admin" class="view">
-      <h2>🛡️ Espace Administrateur</h2>
-
-      <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px;">
-        <button class="admin-tab-btn active" onclick="switchAdminTab('deposits', this)">Dépôts (<span id="adminPendingDepCount">0</span>)</button>
-        <button class="admin-tab-btn" onclick="switchAdminTab('withdrawals', this)">Retraits (<span id="adminPendingWithCount">0</span>)</button>
-        <button class="admin-tab-btn" onclick="switchAdminTab('stats', this)">Statistiques</button>
-      </div>
-
-      <!-- Admin Tab: Dépôts -->
-      <div id="adminTabDeposits" class="premium-card">
-        <h3>Dépôts en attente</h3>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Joueur</th>
-                <th>Montant</th>
-                <th>Opérateur / Réf</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="adminDepositsTable"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Admin Tab: Retraits -->
-      <div id="adminTabWithdrawals" class="premium-card" style="display: none;">
-        <h3>Retraits en attente</h3>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Joueur</th>
-                <th>Montant</th>
-                <th>Numéro</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="adminWithdrawalsTable"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Admin Tab: Stats -->
-      <div id="adminTabStats" class="premium-card" style="display: none;">
-        <h3>Vue Globale</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; font-size: 0.85rem;">
-          <div style="background: var(--bg-main); padding: 10px; border-radius: 10px;">Joueurs inscrits: <strong>1,240</strong></div>
-          <div style="background: var(--bg-main); padding: 10px; border-radius: 10px;">Mises Totales: <strong>4.5M FCFA</strong></div>
-        </div>
-      </div>
-    </section>
-
+  <!-- NOTIFICATION TOAST TEMPORAIRE -->
+  <div id="toast-notification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden w-11/12 max-w-md">
+    <div class="glass border-l-4 border-amber-500 p-4 rounded-2xl shadow-2xl flex items-start gap-3 bg-slate-900/95 text-xs text-slate-200">
+      <i class="fa-solid fa-circle-check text-amber-400 text-lg mt-0.5"></i>
+      <div id="toast-message" class="leading-relaxed"></div>
+    </div>
   </div>
 
+  <!-- HEADER -->
+  <header class="glass sticky top-0 z-40 px-4 py-3 shadow-xl flex items-center justify-between border-b border-slate-800">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-amber-500/20">
+        ZTV
+      </div>
+      <div>
+        <h1 class="text-lg font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+          ZakariaTV <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">Concours</span>
+        </h1>
+      </div>
+    </div>
+
+    <div id="header-user-info" class="flex items-center space-x-2">
+      <!-- Session controls dynamically rendered -->
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow container mx-auto px-4 py-6 max-w-5xl">
+
+    <!-- LOGIN SCREEN -->
+    <section id="screen-login" class="space-y-6 max-w-md mx-auto">
+      <div class="text-center space-y-2">
+        <h2 class="text-3xl font-black text-white">Connexion</h2>
+        <p class="text-slate-400 text-xs">Espace Administrateur & Participants</p>
+      </div>
+
+      <form id="login-form" onsubmit="handleLogin(event)" class="glass p-6 rounded-2xl space-y-4 shadow-2xl">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom / Identifiant</label>
+          <input type="text" id="login-username" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="Ex: ZakariaTV ou votre Nom">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
+          <input type="password" id="login-password" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="Mot de passe">
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 font-extrabold rounded-xl text-white shadow-lg text-sm">
+          Se connecter
+        </button>
+
+        <div class="flex items-center justify-between text-xs pt-2 text-slate-400">
+          <button type="button" onclick="showForgotPasswordModal()" class="hover:text-amber-400 underline">Mot de passe oublié ?</button>
+          <button type="button" onclick="showScreen('screen-register')" class="text-amber-400 font-bold hover:underline">Créer un compte</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- REGISTER SCREEN -->
+    <section id="screen-register" class="hidden space-y-6 max-w-md mx-auto">
+      <div class="text-center space-y-2">
+        <h2 class="text-2xl font-black text-white">Création de compte Participant</h2>
+        <p class="text-slate-400 text-xs">Une seule inscription autorisée par personne</p>
+      </div>
+
+      <form id="register-form" onsubmit="handleRegister(event)" class="glass p-6 rounded-2xl space-y-4 shadow-2xl">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Nom</label>
+            <input type="text" id="reg-nom" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Prénom</label>
+            <input type="text" id="reg-prenom" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Ville</label>
+            <input type="text" id="reg-ville" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Pays</label>
+            <select id="reg-pays" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+              <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+              <option value="Sénégal">Sénégal</option>
+              <option value="Cameroun">Cameroun</option>
+              <option value="Mali">Mali</option>
+              <option value="Burkina Faso">Burkina Faso</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Contact WhatsApp</label>
+          <input type="tel" id="reg-whatsapp" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white" placeholder="+225 0102030405">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Mot de passe (4 chiffres)</label>
+          <input type="password" id="reg-pass" pattern="\d{4}" maxlength="4" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white" placeholder="Ex: 1234">
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 font-extrabold rounded-xl text-white shadow-lg text-xs">
+          Terminer l'inscription
+        </button>
+
+        <button type="button" onclick="showScreen('screen-login')" class="w-full text-center text-xs text-slate-400 hover:underline">
+          Déjà un compte ? Se connecter
+        </button>
+      </form>
+    </section>
+
+    <!-- ADMIN DASHBOARD -->
+    <section id="screen-admin-dash" class="hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 font-bold text-xl">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-white">Espace Administrateur - ZakariaTV</h2>
+            <p class="text-xs text-slate-400">Cliquez sur un compteur pour voir sa liste complète</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="openModal('reviews-modal')" class="glass px-3 py-2 rounded-xl text-xs font-bold text-amber-400 flex items-center gap-1.5 hover:bg-slate-800">
+            <i class="fa-solid fa-star text-amber-400"></i> Avis Utilisateurs
+          </button>
+          <button onclick="showScreen('screen-admin-premium')" class="bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
+            <i class="fa-solid fa-crown"></i> Gestion & Concours
+          </button>
+        </div>
+      </div>
+
+      <!-- CARDS STATISTIQUES (CLIQUABLES) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div onclick="openDataListModal('concours_crees')" class="glass p-4 rounded-2xl border-l-4 border-amber-500 cursor-pointer hover:bg-slate-800/80 transition">
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Concours Créés</span>
+          <span id="stat-created" class="text-2xl font-black text-white mt-1 block">0</span>
+        </div>
+        <div onclick="openDataListModal('concours_effectues')" class="glass p-4 rounded-2xl border-l-4 border-emerald-500 cursor-pointer hover:bg-slate-800/80 transition">
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Concours Effectués</span>
+          <span id="stat-completed" class="text-2xl font-black text-white mt-1 block">0</span>
+        </div>
+        <div onclick="openDataListModal('comptes_crees')" class="glass p-4 rounded-2xl border-l-4 border-blue-500 cursor-pointer hover:bg-slate-800/80 transition">
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Comptes & Abonnements</span>
+          <span id="stat-accounts" class="text-2xl font-black text-white mt-1 block">0</span>
+        </div>
+        <div onclick="openDataListModal('participants')" class="glass p-4 rounded-2xl border-l-4 border-purple-500 cursor-pointer hover:bg-slate-800/80 transition">
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Participants</span>
+          <span id="stat-participants" class="text-2xl font-black text-white mt-1 block">0</span>
+        </div>
+        <div onclick="openDataListModal('gagnants')" class="glass p-4 rounded-2xl border-l-4 border-yellow-500 cursor-pointer hover:bg-slate-800/80 transition">
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Gagnants</span>
+          <span id="stat-winners" class="text-2xl font-black text-white mt-1 block">0</span>
+        </div>
+        <div onclick="openDataListModal('concours_en_cours')" class="glass p-4 rounded-2xl border-l-4 border-sky-500 cursor-pointer hover:bg-slate-800/80 transition">
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Concours En Cours</span>
+          <span id="stat-active" class="text-2xl font-black text-white mt-1 block">0</span>
+        </div>
+        <div onclick="openDataListModal('concours_termines')" class="glass p-4 rounded-2xl border-l-4 border-rose-500 cursor-pointer hover:bg-slate-800/80 transition">
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Concours Terminés</span>
+          <span id="stat-finished" class="text-2xl font-black text-white mt-1 block">0</span>
+        </div>
+        <div onclick="openDataListModal('mots_de_passe_oublies')" class="glass p-4 rounded-2xl border-l-4 border-orange-500 cursor-pointer hover:bg-slate-800/80 transition">
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Mot de passe oublié</span>
+          <span id="stat-resets" class="text-2xl font-black text-orange-400 mt-1 block">0</span>
+        </div>
+      </div>
+
+      <!-- SECTION LIENS DE CONCOURS -->
+      <div class="glass p-5 rounded-2xl space-y-4">
+        <h3 class="font-bold text-white text-sm flex items-center gap-2">
+          <i class="fa-solid fa-link text-amber-400"></i> Liens Uniques des Concours Générés
+        </h3>
+        <div id="admin-links-container" class="space-y-3 max-h-72 overflow-y-auto text-xs"></div>
+      </div>
+
+      <div class="flex justify-end pt-4">
+        <button onclick="logout()" class="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl text-xs font-bold">
+          <i class="fa-solid fa-right-from-bracket mr-1"></i> Déconnexion Administrateur
+        </button>
+      </div>
+    </section>
+
+    <!-- ADMIN PREMIUM CREATION & MANAGEMENT -->
+    <section id="screen-admin-premium" class="hidden space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">
+          <i class="fa-solid fa-crown"></i> Création & Mettre en Ligne un Concours
+        </h2>
+        <button onclick="showScreen('screen-admin-dash')" class="px-3 py-1.5 glass rounded-xl text-xs font-semibold">
+          ← Retour Tableau de bord
+        </button>
+      </div>
+
+      <div class="glass p-6 rounded-2xl space-y-6 shadow-xl">
+        <form id="create-quiz-form" onsubmit="handleCreateQuiz(event)" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Catégorie</label>
+              <select id="quiz-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+                <option value="Primaire">Primaire</option>
+                <option value="Collège">Collège</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Classe</label>
+              <select id="quiz-class" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+                <option value="CE2">CE2</option>
+                <option value="CM1">CM1</option>
+                <option value="CM2">CM2</option>
+                <option value="6e">6e</option>
+                <option value="5e">5e</option>
+                <option value="4e">4e</option>
+                <option value="3e">3e</option>
+                <option value="Seconde">Seconde</option>
+                <option value="Première">Première</option>
+                <option value="Terminale">Terminale</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Titre du Concours</label>
+              <input type="text" id="quiz-title" required placeholder="Ex: Grand Concours Histoire & Géographie" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+            </div>
+          </div>
+
+          <div class="space-y-4 pt-2">
+            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider">Formulaire des 5 Questions obligatoires</h4>
+            <div id="questions-inputs-container" class="space-y-4"></div>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 font-black text-slate-950 rounded-xl shadow-lg text-xs uppercase tracking-wider">
+            Enregistrer & Générer le lien du concours
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- PARTICIPANT HOME -->
+    <section id="screen-user-home" class="hidden space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div>
+          <h2 id="user-welcome" class="text-xl font-bold text-white">Bienvenue !</h2>
+          <p class="text-xs text-slate-400">Sélectionnez un concours pour démarrer</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="requestSubscription()" class="bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 px-3 py-2 rounded-xl text-xs font-extrabold shadow-lg">
+            <i class="fa-solid fa-star mr-1"></i> Acheter un abonnement
+          </button>
+          <button onclick="showScreen('screen-contact')" class="glass px-3 py-2 rounded-xl text-xs font-semibold text-sky-400">
+            <i class="fa-solid fa-headset mr-1"></i> Contact
+          </button>
+          <button onclick="showScreen('screen-user-profile')" class="glass px-3 py-2 rounded-xl text-xs font-semibold text-amber-400">
+            <i class="fa-solid fa-user mr-1"></i> Profil
+          </button>
+          <button onclick="logout()" class="glass px-3 py-2 rounded-xl text-xs font-semibold text-red-400">
+            <i class="fa-solid fa-power-off"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="filterCategory('Tous')" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 text-slate-950">Tous</button>
+        <button onclick="filterCategory('Primaire')" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold glass text-slate-300">Primaire</button>
+        <button onclick="filterCategory('Collège')" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold glass text-slate-300">Collège</button>
+      </div>
+
+      <div id="user-quizzes-list" class="space-y-3"></div>
+    </section>
+
+    <!-- PAGE NOUS CONTACTER -->
+    <section id="screen-contact" class="hidden max-w-md mx-auto space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-headset text-sky-400"></i> Nous Contacter
+        </h2>
+        <button onclick="showScreen('screen-user-home')" class="glass px-3 py-1.5 rounded-xl text-xs">
+          ← Retour
+        </button>
+      </div>
+
+      <div class="glass p-6 rounded-2xl text-center space-y-4">
+        <div class="w-16 h-16 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-2xl mx-auto">
+          <i class="fa-brands fa-whatsapp"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Assistance & Support Client</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Pour toute question, problème technique ou finalisation d'abonnement, contactez directement l'administration sur WhatsApp.
+        </p>
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block mb-1">Numéro WhatsApp Officiel :</span>
+          <a href="https://wa.me/2250585971941" target="_blank" class="text-lg font-black text-amber-400 hover:underline">
+            05 85 97 19 41
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ INTERFACE (10s Timer + TTS + Anti-Cheat) -->
+    <section id="screen-quiz" class="hidden max-w-xl mx-auto space-y-6">
+      <div class="flex items-center justify-between glass p-4 rounded-2xl">
+        <span id="quiz-progress" class="text-xs font-bold text-slate-400">Question 1 / 5</span>
+        <div class="flex items-center gap-3">
+          <button onclick="speakCurrentQuestion()" class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center hover:bg-amber-500/30">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+          <div id="quiz-timer" class="text-xl font-black text-red-500 bg-red-500/10 px-3 py-1 rounded-xl border border-red-500/30 animate-pulse">
+            10s
+          </div>
+        </div>
+      </div>
+
+      <div class="glass p-6 rounded-2xl space-y-6">
+        <h3 id="question-text" class="text-base font-bold text-white text-center min-h-[60px] flex items-center justify-center">
+          Chargement de la question...
+        </h3>
+
+        <div id="options-container" class="grid grid-cols-1 gap-3"></div>
+      </div>
+    </section>
+
+    <!-- USER PROFILE -->
+    <section id="screen-user-profile" class="hidden max-w-md mx-auto space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold text-white">Mon Profil Participant</h2>
+        <button onclick="showScreen('screen-user-home')" class="glass px-3 py-1.5 rounded-xl text-xs">
+          ← Retour
+        </button>
+      </div>
+
+      <div class="glass p-6 rounded-2xl space-y-4">
+        <div class="space-y-2 text-xs border-b border-slate-700 pb-4">
+          <p><span class="text-slate-400">Nom :</span> <strong id="prof-nom" class="text-white"></strong></p>
+          <p><span class="text-slate-400">Prénom :</span> <strong id="prof-prenom" class="text-white"></strong></p>
+          <p><span class="text-slate-400">Ville :</span> <strong id="prof-ville" class="text-white"></strong></p>
+          <p><span class="text-slate-400">Pays :</span> <strong id="prof-pays" class="text-white"></strong></p>
+          <p><span class="text-slate-400">WhatsApp :</span> <strong id="prof-whatsapp" class="text-white"></strong></p>
+          <p><span class="text-slate-400">Statut Abonnement :</span> <span id="prof-sub-status" class="font-bold"></span></p>
+        </div>
+
+        <form onsubmit="handlePasswordChange(event)" class="space-y-3 pt-2">
+          <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider">Modifier mon mot de passe</h3>
+          <input type="password" id="change-pass-old" placeholder="Mot de passe actuel" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+          <input type="password" id="change-pass-new" pattern="\d{4}" maxlength="4" placeholder="Nouveau mot de passe (4 chiffres)" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+          <button type="submit" class="w-full py-2.5 bg-amber-500 font-bold text-slate-950 text-xs rounded-xl">
+            Enregistrer les modifications
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL LISTES DE DONNEES DETAILLES -->
+  <div id="data-list-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-2xl w-full p-6 rounded-2xl space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="data-modal-title" class="font-bold text-white text-base">Détails des données</h3>
+        <button onclick="closeModal('data-list-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+      <div id="data-modal-content" class="overflow-y-auto flex-grow space-y-2 text-xs pr-1"></div>
+    </div>
+  </div>
+
+  <!-- MODAL FORGOT PASSWORD -->
+  <div id="forgot-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-md w-full p-6 rounded-2xl space-y-4">
+      <h3 class="font-bold text-white text-base border-b border-slate-700 pb-2">Récupération de mot de passe</h3>
+      <p class="text-xs text-slate-400">Saisissez votre numéro WhatsApp enregistré.</p>
+      <input type="tel" id="forgot-wa-input" placeholder="+225 00000000" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white">
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('forgot-modal')" class="px-3 py-2 text-xs text-slate-400">Annuler</button>
+        <button onclick="submitForgotPasswordRequest()" class="px-4 py-2 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl">Envoyer la demande</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL AVIS (GESTION ET SUPPRESSION PAR ADMIN) -->
+  <div id="reviews-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-md w-full p-6 rounded-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+        <h3 class="font-bold text-white flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-star text-amber-400"></i> Gestion des Avis Utilisateurs
+        </h3>
+        <button onclick="closeModal('reviews-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+      <div id="reviews-list-container" class="space-y-3 max-h-60 overflow-y-auto text-xs"></div>
+    </div>
+  </div>
+
+  <!-- CORE JAVASCRIPT SYSTEM -->
   <script>
-    // --- ÉTAT GLOBAL DE L'APPLICATION ---
-    let state = {
-      user: { id: "USR-9921", name: "Joueur_Standard", balance: 5000 },
-      theme: "dark",
-      activeQuiz: null,
-      currentQuestionIdx: 0,
-      score: 0,
-      timer: null,
-      timerSeconds: 15,
-      pendingDeposit: null,
-      deposits: [],
-      withdrawals: [],
-      transactions: [
-        { type: "Bienvenue", amount: "+5 000 FCFA", date: "Aujourd'hui", isGain: true }
+    const DB_KEY = 'zakariatv_official_db';
+    
+    let state = JSON.parse(localStorage.getItem(DB_KEY)) || {
+      users: [],
+      quizzes: [],
+      results: [],
+      resetRequests: [],
+      reviews: [
+        { id: 1, author: 'Kouassi Jean', text: 'Plateforme très fluide pour mes révisions !', stars: 5 },
+        { id: 2, author: 'Awa Diop', text: 'Paiement reçu rapidement sur WhatsApp. Merci ZakariaTV !', stars: 5 }
       ],
-      quizzes: [
-        {
-          id: "q-foot-1",
-          name: "Ligue des Champions & Stars",
-          category: "Football",
-          difficulty: "Moyen",
-          badgeClass: "badge-medium",
-          questionsCount: 5,
-          timePerQ: 15,
-          minBet: 500,
-          maxBet: 10000,
-          potentialWinMultiplier: 3,
-          playersCount: 1420,
-          popularity: "🔥 Très Populaire",
-          status: "Disponible",
-          description: "Testez vos connaissances sur la prestigieuse UEFA Champions League et les monstres sacrés du ballon d'or.",
-          questions: [
-            { q: "Quel club a remporté la Ligue des Champions 2023 ?", options: ["Real Madrid", "Manchester City", "PSG", "Inter Milan"], answer: 1 },
-            { q: "Qui est le meilleur buteur de l'histoire de la LDC ?", options: ["Lionel Messi", "Karim Benzema", "Cristiano Ronaldo", "Robert Lewandowski"], answer: 2 },
-            { q: "Quel pays a remporté la Coupe du Monde 2022 ?", options: ["France", "Argentine", "Brésil", "Croatie"], answer: 1 },
-            { q: "Quel entraîneur a réalisé le triplé avec Man City en 2023 ?", options: ["Carlo Ancelotti", "Pep Guardiola", "Jurgen Klopp", "Zinedine Zidane"], answer: 1 },
-            { q: "En quelle année le Sénégal a-t-il gagné sa 1ère CAN ?", options: ["2019", "2021", "2022", "2024"], answer: 2 }
-          ]
-        },
-        {
-          id: "q-cult-1",
-          name: "Légendes & Histoire du Monde",
-          category: "Histoire",
-          difficulty: "Difficile",
-          badgeClass: "badge-hard",
-          questionsCount: 5,
-          timePerQ: 15,
-          minBet: 1000,
-          maxBet: 20000,
-          potentialWinMultiplier: 4,
-          playersCount: 890,
-          popularity: "⚡ Tendances",
-          status: "Disponible",
-          description: "Un parcours à travers les grands événements qui ont façonné notre civilisation.",
-          questions: [
-            { q: "En quelle année a eu lieu la Révolution Française ?", options: ["1789", "1799", "1815", "1776"], answer: 0 },
-            { q: "Qui a été le premier président de la RCI ?", options: ["Felix Houphouët-Boigny", "Henri Konan Bédié", "Laurent Gbagbo", "Alassane Ouattara"], answer: 0 },
-            { q: "Quelle pyramide est la plus grande d'Égypte ?", options: ["Khéphren", "Mykérinos", "Khéops", "Zoser"], answer: 2 },
-            { q: "Quel empire était dirigé par Mansa Moussa ?", options: ["Empire du Ghana", "Empire du Mali", "Empire Songhaï", "Empire Ashanti"], answer: 1 },
-            { q: "Quelle guerre s'est terminée en 1945 ?", options: ["Seconde Guerre Mondiale", "Première Guerre Mondiale", "Guerre du Viêt Nam", "Guerre Froide"], answer: 0 }
-          ]
-        }
-      ]
+      currentUser: null
     };
 
-    // --- TOAST NOTIFICATIONS ---
-    function showToast(message, type = "info") {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerText = message;
-      container.appendChild(toast);
-      setTimeout(() => { toast.remove(); }, 5000);
+    function saveState() {
+      localStorage.setItem(DB_KEY, JSON.stringify(state));
     }
 
-    // --- NAVIGATION & THÈME ---
-    function switchView(viewId) {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-      const target = document.getElementById(`view-${viewId}`);
-      if (target) target.classList.add('active');
-
-      const navTarget = document.getElementById(`nav-${viewId}`);
-      if (navTarget) navTarget.classList.add('active');
-
-      if (viewId === 'home') renderHomeQuizList();
-      if (viewId === 'wallet') renderWalletUI();
-      if (viewId === 'admin') renderAdminUI();
+    // TOAST NOTIFICATION ELEGANTE ET TEMPORAIRE
+    function showToast(message) {
+      const toast = document.getElementById('toast-notification');
+      document.getElementById('toast-message').innerText = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 5000);
     }
 
-    function toggleTheme() {
-      state.theme = state.theme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', state.theme);
-      document.getElementById('themeBtn').innerText = state.theme === 'dark' ? '🌙' : '☀️';
+    function showScreen(screenId) {
+      ['screen-login', 'screen-register', 'screen-admin-dash', 'screen-admin-premium', 'screen-user-home', 'screen-contact', 'screen-quiz', 'screen-user-profile'].forEach(id => {
+        document.getElementById(id)?.classList.add('hidden');
+      });
+      document.getElementById(screenId)?.classList.remove('hidden');
+
+      if (screenId === 'screen-admin-dash') renderAdminDashboard();
+      if (screenId === 'screen-admin-premium') renderAdminPremium();
+      if (screenId === 'screen-user-home') renderUserHome();
+      if (screenId === 'screen-user-profile') renderUserProfile();
     }
 
-    function updateBalanceDisplay() {
-      document.getElementById('headerBalance').innerText = state.user.balance.toLocaleString();
-      document.getElementById('walletBalanceDisplay').innerText = state.user.balance.toLocaleString() + " FCFA";
+    function openModal(id) { 
+      if (id === 'reviews-modal') renderReviewsList();
+      document.getElementById(id)?.classList.remove('hidden'); 
+    }
+    function closeModal(id) { document.getElementById(id)?.classList.add('hidden'); }
+
+    // AUTHENTICATION LOGIC
+    function handleLogin(e) {
+      e.preventDefault();
+      const userVal = document.getElementById('login-username').value.trim();
+      const passVal = document.getElementById('login-password').value.trim();
+
+      if (userVal === 'ZakariaTV' && passVal === '55250031') {
+        state.currentUser = { role: 'admin', name: 'ZakariaTV' };
+        saveState();
+        showScreen('screen-admin-dash');
+        return;
+      }
+
+      const foundUser = state.users.find(u => `${u.nom} ${u.prenom}`.toLowerCase() === userVal.toLowerCase() && u.pass === passVal);
+      if (foundUser) {
+        if (foundUser.blocked) {
+          alert('Votre compte a été temporairement bloqué par l\'administrateur.');
+          return;
+        }
+        state.currentUser = { role: 'user', ...foundUser };
+        saveState();
+        showScreen('screen-user-home');
+      } else {
+        alert('Identifiants incorrects. Veuillez réessayer.');
+      }
     }
 
-    // --- ACCUEIL & PRESENTATION QUIZ (Style Paris Sportifs) ---
-    function renderHomeQuizList() {
-      const list = document.getElementById('quizList');
-      list.innerHTML = state.quizzes.map(q => `
-        <div class="premium-card">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-            <span class="badge ${q.badgeClass}">${q.difficulty}</span>
-            <span class="badge badge-status">${q.popularity}</span>
+    function handleRegister(e) {
+      e.preventDefault();
+      const wa = document.getElementById('reg-whatsapp').value.trim();
+
+      if (state.users.some(u => u.whatsapp === wa)) {
+        alert('Ce numéro WhatsApp est déjà inscrit !');
+        return;
+      }
+
+      const newUser = {
+        nom: document.getElementById('reg-nom').value.trim(),
+        prenom: document.getElementById('reg-prenom').value.trim(),
+        ville: document.getElementById('reg-ville').value.trim(),
+        pays: document.getElementById('reg-pays').value,
+        whatsapp: wa,
+        pass: document.getElementById('reg-pass').value.trim(),
+        joinedDate: new Date().toLocaleDateString('fr-FR'),
+        subscriptionActive: false,
+        subActivationDate: null,
+        subExpirationDate: null,
+        blocked: false
+      };
+
+      state.users.push(newUser);
+      state.currentUser = { role: 'user', ...newUser };
+      saveState();
+      alert('Inscription réussie !');
+      showScreen('screen-user-home');
+    }
+
+    function logout() {
+      state.currentUser = null;
+      saveState();
+      showScreen('screen-login');
+    }
+
+    // DEMANDE D'ABONNEMENT PARTICIPANT
+    function requestSubscription() {
+      showToast("Votre demande a été enregistrée avec succès. Vous serez contacté au numéro WhatsApp que vous avez renseigné afin de finaliser votre paiement. Merci d'utiliser notre application et bonne révision !");
+    }
+
+    // ADMIN DASHBOARD
+    function renderAdminDashboard() {
+      document.getElementById('stat-created').innerText = state.quizzes.length;
+      document.getElementById('stat-completed').innerText = state.results.length;
+      document.getElementById('stat-accounts').innerText = state.users.length;
+      document.getElementById('stat-participants').innerText = new Set(state.results.map(r => r.whatsapp)).size;
+      document.getElementById('stat-winners').innerText = state.results.filter(r => r.score >= 4).length;
+      document.getElementById('stat-active').innerText = state.quizzes.filter(q => q.status === 'active').length;
+      document.getElementById('stat-finished').innerText = state.quizzes.filter(q => q.status === 'finished').length;
+      document.getElementById('stat-resets').innerText = state.resetRequests.length;
+
+      renderAdminLinks();
+    }
+
+    function renderAdminLinks() {
+      const container = document.getElementById('admin-links-container');
+      if (state.quizzes.length === 0) {
+        container.innerHTML = '<p class="text-slate-500">Aucun concours disponible.</p>';
+        return;
+      }
+
+      container.innerHTML = state.quizzes.map(q => `
+        <div class="glass-card p-3 rounded-xl flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <strong class="text-white">${q.title}</strong> (${q.category} - ${q.class})
+            <p class="text-[10px] text-amber-400 select-all font-mono mt-0.5">${q.link}</p>
           </div>
-
-          <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">🧠 ${q.name}</h3>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">📂 ${q.category} • ❓ ${q.questionsCount} Qs • ⏱ ${q.timePerQ}s/Q</p>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--bg-main); padding: 10px; border-radius: 12px; font-size: 0.8rem; margin-bottom: 14px;">
-            <div>Mise Min: <strong>${q.minBet} FCFA</strong></div>
-            <div>Gain Potentiel: <strong style="color: var(--secondary);">x${q.potentialWinMultiplier}</strong></div>
-            <div>Joueurs: <strong>👥 ${q.playersCount}</strong></div>
-            <div>Statut: <strong style="color: var(--info);">${q.status}</strong></div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button class="btn btn-primary" onclick="openQuizDetails('${q.id}')">🟢 JOUER NOW</button>
-            <button class="btn btn-secondary" onclick="openQuizDetails('${q.id}')">🔵 DÉTAILS</button>
+          <div class="flex items-center gap-1.5">
+            <button onclick="copyToClipboard('${q.link}')" class="px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg">
+              <i class="fa-solid fa-copy"></i> Copier
+            </button>
+            <button onclick="toggleQuizStatus(${q.id})" class="px-2.5 py-1 ${q.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'} rounded-lg">
+              ${q.status === 'active' ? 'En ligne' : 'Hors ligne'}
+            </button>
+            <button onclick="deleteQuiz(${q.id})" class="px-2 py-1 bg-red-600/30 text-red-400 rounded-lg">
+              <i class="fa-solid fa-trash"></i>
+            </button>
           </div>
         </div>
       `).join('');
     }
 
-    // --- ÉCRAN DÉTAILS QUIZ ---
-    function openQuizDetails(quizId) {
-      const quiz = state.quizzes.find(q => q.id === quizId);
-      if (!quiz) return;
-      state.activeQuiz = quiz;
-
-      const container = document.getElementById('quizDetailsContent');
-      container.innerHTML = `
-        <h2 style="font-size: 1.3rem; margin-bottom: 8px;">${quiz.name}</h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">${quiz.description}</p>
-
-        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; margin-bottom: 20px;">
-          <div>📂 <strong>Catégorie :</strong> ${quiz.category}</div>
-          <div>⭐ <strong>Niveau :</strong> ${quiz.difficulty}</div>
-          <div>❓ <strong>Nombre de questions :</strong> ${quiz.questionsCount}</div>
-          <div>⏱ <strong>Temps estimé :</strong> ~1 minute</div>
-          <div>💰 <strong>Mise minimale requise :</strong> ${quiz.minBet} FCFA</div>
-          <div>🏆 <strong>Gain maximal possible :</strong> ${(quiz.minBet * quiz.potentialWinMultiplier).toLocaleString()} FCFA</div>
-          <div>👥 <strong>Inscrits :</strong> ${quiz.playersCount} joueurs</div>
-        </div>
-
-        <div class="form-group">
-          <label>Choisissez votre Mise (FCFA)</label>
-          <input type="number" id="selectedBetInput" class="form-input" value="${quiz.minBet}" min="${quiz.minBet}" max="${quiz.maxBet}">
-        </div>
-
-        <button class="btn btn-primary" onclick="startQuizPlay()">COMMENCER LE QUIZ 🚀</button>
-      `;
-      switchView('quiz-details');
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+      alert('Lien copié dans le presse-papier !');
     }
 
-    // --- DÉROULEMENT DU QUIZ ---
-    function startQuizPlay() {
-      const betInput = parseInt(document.getElementById('selectedBetInput').value);
-      if (isNaN(betInput) || betInput < state.activeQuiz.minBet) {
-        showToast("La mise est inférieure au minimum requis !", "danger");
+    function toggleQuizStatus(quizId) {
+      const q = state.quizzes.find(item => item.id === quizId);
+      if (q) {
+        q.status = q.status === 'active' ? 'finished' : 'active';
+        saveState();
+        renderAdminDashboard();
+      }
+    }
+
+    function deleteQuiz(quizId) {
+      if (confirm('Supprimer définitivement ce concours ?')) {
+        state.quizzes = state.quizzes.filter(q => q.id !== quizId);
+        saveState();
+        renderAdminDashboard();
+      }
+    }
+
+    // MODAL AUTOMATIQUE - COMPTEURS & GESTION DES ABONNEMENTS / BLOCAGE
+    function openDataListModal(type) {
+      const title = document.getElementById('data-modal-title');
+      const content = document.getElementById('data-modal-content');
+      let html = '';
+
+      if (type === 'comptes_crees') {
+        title.innerText = 'Gestion des comptes, blocages & abonnements';
+        html = state.users.map((u, idx) => `
+          <div class="glass-card p-3 rounded-xl flex flex-wrap justify-between items-center gap-2">
+            <div>
+              <strong class="text-white">${u.nom} ${u.prenom}</strong> (${u.ville})
+              <p class="text-[10px] text-slate-400">WhatsApp: ${u.whatsapp} | Statut: ${u.subscriptionActive ? '<span class="text-emerald-400">Abonné</span>' : '<span class="text-slate-500">Inactif</span>'}</p>
+              ${u.subActivationDate ? `<p class="text-[9px] text-amber-400">Actif du ${u.subActivationDate} au ${u.subExpirationDate}</p>` : ''}
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="toggleUserSubscription(${idx})" class="px-2 py-1 ${u.subscriptionActive ? 'bg-orange-500/20 text-orange-400' : 'bg-emerald-500/20 text-emerald-400'} rounded text-[10px] font-bold">
+                ${u.subscriptionActive ? 'Désactiver Abo' : 'Activer Abo'}
+              </button>
+              <button onclick="toggleUserBlock(${idx})" class="px-2 py-1 ${u.blocked ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'} rounded text-[10px] font-bold">
+                ${u.blocked ? 'Débloquer' : 'Bloquer'}
+              </button>
+            </div>
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucun compte trouvé.</p>';
+      } 
+      else if (type === 'participants') {
+        title.innerText = 'Liste des participants aux concours';
+        html = state.results.map(r => `
+          <div class="glass-card p-3 rounded-xl flex justify-between items-center">
+            <div>
+              <strong class="text-white">${r.nom} ${r.prenom}</strong> (${r.ville})
+              <p class="text-[10px] text-slate-400">Score: ${r.score}/5 | WhatsApp: ${r.whatsapp}</p>
+            </div>
+            <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded">${r.quizTitle}</span>
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucun participant.</p>';
+      }
+      else if (type === 'gagnants') {
+        title.innerText = 'Liste des gagnants';
+        const winners = state.results.filter(r => r.score >= 3);
+        html = winners.map(r => `
+          <div class="glass-card p-3 rounded-xl flex justify-between items-center border-l-4 border-yellow-500">
+            <div>
+              <strong class="text-white">${r.nom} ${r.prenom}</strong> - <span class="text-yellow-400">${r.score}/5 Pts</span>
+            </div>
+            <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-[10px] font-bold">${r.badge || 'En cours de paiement'}</span>
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucun gagnant.</p>';
+      }
+      else if (type === 'mots_de_passe_oublies') {
+        title.innerText = 'Récupération mot de passe';
+        html = state.resetRequests.map((req, idx) => `
+          <div class="glass-card p-3 rounded-xl flex justify-between items-center border-l-4 border-orange-500">
+            <div>
+              <strong class="text-white">${req.nom} ${req.prenom}</strong>
+              <p class="text-[10px] text-amber-400 font-mono">WhatsApp: ${req.whatsapp}</p>
+            </div>
+            <button onclick="approvePasswordReset(${idx})" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg text-[10px]">
+              Réinitialiser à 5555
+            </button>
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucune demande.</p>';
+      }
+      else {
+        title.innerText = 'Liste des concours';
+        html = state.quizzes.map(q => `
+          <div class="glass-card p-3 rounded-xl flex justify-between items-center">
+            <div>
+              <strong class="text-white">${q.title}</strong>
+              <p class="text-[10px] text-slate-400">${q.category} - ${q.class}</p>
+            </div>
+            <span class="text-amber-400 font-mono text-[10px]">${q.createdDate}</span>
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucun concours.</p>';
+      }
+
+      content.innerHTML = html;
+      openModal('data-list-modal');
+    }
+
+    function toggleUserSubscription(index) {
+      const u = state.users[index];
+      if (!u.subscriptionActive) {
+        const now = new Date();
+        const exp = new Date();
+        exp.setDate(now.getDate() + 30); // Abonnement valide 30 jours
+
+        u.subscriptionActive = true;
+        u.subActivationDate = now.toLocaleDateString('fr-FR');
+        u.subExpirationDate = exp.toLocaleDateString('fr-FR');
+      } else {
+        u.subscriptionActive = false;
+        u.subActivationDate = null;
+        u.subExpirationDate = null;
+      }
+      saveState();
+      openDataListModal('comptes_crees');
+    }
+
+    function toggleUserBlock(index) {
+      const u = state.users[index];
+      u.blocked = !u.blocked;
+      saveState();
+      openDataListModal('comptes_crees');
+    }
+
+    function approvePasswordReset(index) {
+      const req = state.resetRequests[index];
+      const user = state.users.find(u => u.whatsapp === req.whatsapp);
+      if (user) {
+        user.pass = '5555';
+        alert(`Message envoyé à ${req.whatsapp} : Votre nouveau mot de passe provisoire est 5555.`);
+      }
+      state.resetRequests.splice(index, 1);
+      saveState();
+      closeModal('data-list-modal');
+      renderAdminDashboard();
+    }
+
+    // SUPPRESSION DES AVIS (ADMIN)
+    function renderReviewsList() {
+      const container = document.getElementById('reviews-list-container');
+      if (state.reviews.length === 0) {
+        container.innerHTML = '<p class="text-slate-500">Aucun avis répertorié.</p>';
         return;
       }
-      if (state.user.balance < betInput) {
-        showToast("Solde insuffisant. Veuillez recharger votre portefeuille !", "danger");
-        switchView('wallet');
+      container.innerHTML = state.reviews.map((rev, idx) => `
+        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-start gap-2">
+          <div>
+            <div class="flex justify-between font-bold text-amber-400"><span>${rev.author}</span> <span>${'★'.repeat(rev.stars)}</span></div>
+            <p class="text-slate-300 mt-1 text-[11px]">${rev.text}</p>
+          </div>
+          <button onclick="deleteReview(${idx})" class="text-red-400 hover:text-red-300 text-xs px-2 py-1 bg-red-500/10 rounded-lg">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function deleteReview(index) {
+      if (confirm('Supprimer cet avis ?')) {
+        state.reviews.splice(index, 1);
+        saveState();
+        renderReviewsList();
+      }
+    }
+
+    // CREATE QUIZ BUILDER
+    function renderAdminPremium() {
+      const container = document.getElementById('questions-inputs-container');
+      if (container.children.length === 0) {
+        let html = '';
+        for (let i = 1; i <= 5; i++) {
+          html += `
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-2">
+              <input type="text" id="q${i}-text" required placeholder="Saisir la Question ${i}" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="q${i}-optA" required placeholder="Option A" class="bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                <input type="text" id="q${i}-optB" required placeholder="Option B" class="bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                <input type="text" id="q${i}-optC" required placeholder="Option C" class="bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                <input type="text" id="q${i}-optD" required placeholder="Option D" class="bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+              </div>
+              <select id="q${i}-correct" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs font-bold text-amber-400">
+                <option value="A">Bonne réponse : Option A</option>
+                <option value="B">Bonne réponse : Option B</option>
+                <option value="C">Bonne réponse : Option C</option>
+                <option value="D">Bonne réponse : Option D</option>
+              </select>
+            </div>
+          `;
+        }
+        container.innerHTML = html;
+      }
+    }
+
+    function handleCreateQuiz(e) {
+      e.preventDefault();
+      const quizId = Date.now();
+      const questions = [];
+
+      for (let i = 1; i <= 5; i++) {
+        questions.push({
+          q: document.getElementById(`q${i}-text`).value,
+          opts: {
+            A: document.getElementById(`q${i}-optA`).value,
+            B: document.getElementById(`q${i}-optB`).value,
+            C: document.getElementById(`q${i}-optC`).value,
+            D: document.getElementById(`q${i}-optD`).value
+          },
+          correct: document.getElementById(`q${i}-correct`).value
+        });
+      }
+
+      const generatedLink = `${window.location.origin}${window.location.pathname}?quizId=${quizId}`;
+
+      const newQuiz = {
+        id: quizId,
+        title: document.getElementById('quiz-title').value,
+        category: document.getElementById('quiz-category').value,
+        class: document.getElementById('quiz-class').value,
+        questions: questions,
+        link: generatedLink,
+        status: 'active',
+        createdDate: new Date().toLocaleDateString('fr-FR')
+      };
+
+      state.quizzes.push(newQuiz);
+      saveState();
+      alert(`Concours créé avec succès !\nLien généré : ${generatedLink}`);
+      showScreen('screen-admin-dash');
+    }
+
+    function showForgotPasswordModal() { openModal('forgot-modal'); }
+    
+    function submitForgotPasswordRequest() {
+      const wa = document.getElementById('forgot-wa-input').value.trim();
+      const user = state.users.find(u => u.whatsapp === wa);
+      if (user) {
+        state.resetRequests.push(user);
+        saveState();
+        alert('Votre demande a été transmise à l\'administrateur.');
+        closeModal('forgot-modal');
+      } else {
+        alert('Numéro WhatsApp introuvable.');
+      }
+    }
+
+    // PARTICIPANT HOME & QUIZ ENGINE
+    let selectedCat = 'Tous';
+    let activeQuiz = null;
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let quizTimer = null;
+    let timeLeft = 10;
+
+    function filterCategory(cat) {
+      selectedCat = cat;
+      renderUserHome();
+    }
+
+    function renderUserHome() {
+      if (state.currentUser && state.currentUser.nom) {
+        document.getElementById('user-welcome').innerText = `Bonjour, ${state.currentUser.prenom} ${state.currentUser.nom} !`;
+      }
+
+      const container = document.getElementById('user-quizzes-list');
+      const filtered = state.quizzes.filter(q => (selectedCat === 'Tous' || q.category === selectedCat) && q.status === 'active');
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="glass p-6 rounded-2xl text-center text-slate-400 text-xs leading-relaxed">
+            Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard.
+          </div>
+        `;
         return;
       }
 
-      // Déduction du solde
-      state.user.balance -= betInput;
-      state.currentBet = betInput;
-      state.transactions.unshift({ type: `Mise Quiz (${state.activeQuiz.name})`, amount: `-${betInput} FCFA`, date: "À l'instant", isGain: false });
-      updateBalanceDisplay();
+      container.innerHTML = filtered.map(q => `
+        <div class="glass p-4 rounded-2xl flex items-center justify-between">
+          <div>
+            <h4 class="font-bold text-white text-sm">${q.title}</h4>
+            <span class="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">${q.category} - ${q.class}</span>
+          </div>
+          <button onclick="startQuiz(${q.id})" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 font-bold text-slate-950 rounded-xl text-xs shadow-lg">
+            Participer
+          </button>
+        </div>
+      `).join('');
+    }
 
-      state.currentQuestionIdx = 0;
-      state.score = 0;
+    // ANTI-CHEAT DETECTOR
+    window.addEventListener('blur', () => {
+      if (activeQuiz) {
+        clearInterval(quizTimer);
+        alert('TRICHE DÉTECTÉE : Vous avez quitté l\'application pendant le concours. Votre résultat est annulé.');
+        recordQuizResult('TRICHE', 0);
+        activeQuiz = null;
+        showScreen('screen-user-home');
+      }
+    });
 
-      document.getElementById('playCatTitle').innerText = state.activeQuiz.name;
-      document.getElementById('playPotentialWin').innerText = (betInput * state.activeQuiz.potentialWinMultiplier).toLocaleString() + " FCFA";
-
-      switchView('quiz-play');
+    function startQuiz(quizId) {
+      activeQuiz = state.quizzes.find(q => q.id === quizId);
+      currentQIdx = 0;
+      quizScore = 0;
+      showScreen('screen-quiz');
       loadQuestion();
     }
 
     function loadQuestion() {
-      clearInterval(state.timer);
-      const quiz = state.activeQuiz;
-
-      if (state.currentQuestionIdx >= quiz.questions.length) {
+      clearInterval(quizTimer);
+      if (currentQIdx >= activeQuiz.questions.length) {
         finishQuiz();
         return;
       }
 
-      const q = quiz.questions[state.currentQuestionIdx];
-      document.getElementById('playProgress').innerText = `Question ${state.currentQuestionIdx + 1}/${quiz.questions.length}`;
-      document.getElementById('playQuestionText').innerText = q.q;
+      const q = activeQuiz.questions[currentQIdx];
+      document.getElementById('quiz-progress').innerText = `Question ${currentQIdx + 1} / 5`;
+      document.getElementById('question-text').innerText = q.q;
 
-      const answersGrid = document.getElementById('answersGrid');
-      answersGrid.innerHTML = q.options.map((opt, idx) => `
-        <div class="ans-card" onclick="selectAnswer(${idx}, ${q.answer})">
-          <span>${opt}</span>
-          <span style="opacity: 0.5;">🔘</span>
-        </div>
+      const optsContainer = document.getElementById('options-container');
+      optsContainer.innerHTML = ['A', 'B', 'C', 'D'].map(key => `
+        <button onclick="submitAnswer('${key}')" class="w-full text-left p-3.5 bg-slate-900 hover:bg-amber-500/20 border border-slate-800 hover:border-amber-500/50 rounded-xl text-xs font-semibold text-white transition flex items-center gap-3">
+          <span class="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">${key}</span>
+          ${q.opts[key]}
+        </button>
       `).join('');
 
-      runTimer();
-    }
-
-    function runTimer() {
-      state.timerSeconds = 15;
-      const circle = document.getElementById('timerCircle');
-      const text = document.getElementById('timerSeconds');
-
-      const totalDash = 188;
-      circle.style.strokeDashoffset = 0;
-      text.innerText = state.timerSeconds;
-
-      state.timer = setInterval(() => {
-        state.timerSeconds--;
-        text.innerText = state.timerSeconds;
-        circle.style.strokeDashoffset = totalDash - (state.timerSeconds / 15) * totalDash;
-
-        if (state.timerSeconds <= 0) {
-          clearInterval(state.timer);
-          state.currentQuestionIdx++;
-          loadQuestion();
+      timeLeft = 10;
+      document.getElementById('quiz-timer').innerText = `${timeLeft}s`;
+      quizTimer = setInterval(() => {
+        timeLeft--;
+        document.getElementById('quiz-timer').innerText = `${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(quizTimer);
+          submitAnswer(null);
         }
       }, 1000);
     }
 
-    function selectAnswer(selectedIdx, correctIdx) {
-      clearInterval(state.timer);
-      const cards = document.querySelectorAll('.ans-card');
-      cards.forEach(c => c.style.pointerEvents = 'none'); // Verrouillage
-
-      if (selectedIdx === correctIdx) {
-        cards[selectedIdx].classList.add('correct');
-        state.score++;
-      } else {
-        cards[selectedIdx].classList.add('wrong');
-        cards[correctIdx].classList.add('correct');
+    function submitAnswer(selectedKey) {
+      clearInterval(quizTimer);
+      if (selectedKey === activeQuiz.questions[currentQIdx].correct) {
+        quizScore++;
       }
+      currentQIdx++;
+      loadQuestion();
+    }
 
-      setTimeout(() => {
-        state.currentQuestionIdx++;
-        loadQuestion();
-      }, 1200);
+    function speakCurrentQuestion() {
+      if (!activeQuiz) return;
+      const q = activeQuiz.questions[currentQIdx];
+      const speech = new SpeechSynthesisUtterance(`${q.q}. Option A: ${q.opts.A}. Option B: ${q.opts.B}. Option C: ${q.opts.C}. Option D: ${q.opts.D}`);
+      speech.lang = 'fr-FR';
+      window.speechSynthesis.speak(speech);
     }
 
     function finishQuiz() {
-      const quiz = state.activeQuiz;
-      const totalQ = quiz.questions.length;
-      const percent = Math.round((state.score / totalQ) * 100);
-      let winAmount = 0;
+      const isWinner = quizScore >= 3;
+      recordQuizResult(isWinner ? 'En cours de paiement' : 'Terminé', quizScore);
 
-      if (state.score === totalQ) winAmount = state.currentBet * quiz.potentialWinMultiplier;
-      else if (state.score >= 3) winAmount = state.currentBet * 1.5;
-
-      if (winAmount > 0) {
-        state.user.balance += winAmount;
-        state.transactions.unshift({ type: `Gain Quiz (${state.score}/${totalQ})`, amount: `+${winAmount} FCFA`, date: "À l'instant", isGain: true });
-        updateBalanceDisplay();
+      if (isWinner) {
+        alert(`Félicitations ! Vous faites partie des trois premiers avec ${quizScore}/5 points.\n\nVous recevrez un message WhatsApp dans un délai de 15 minutes pour votre paiement. Si vous ne recevez aucun message après ce délai, veuillez contacter le : 0799591024 ou 0585971941.`);
+      } else {
+        alert(`Merci d'avoir participé à ce concours. Votre score : ${quizScore}/5. Veuillez retourner à l'accueil.`);
       }
 
-      document.getElementById('resTitle').innerText = winAmount > 0 ? "Félicitations !" : "Dommage !";
-      document.getElementById('resAmount').innerText = winAmount > 0 ? `+${winAmount.toLocaleString()} FCFA` : "0 FCFA";
-      document.getElementById('resCorrect').innerText = `${state.score}/${totalQ}`;
-      document.getElementById('resPercent').innerText = `${percent}%`;
-
-      switchView('quiz-result');
+      activeQuiz = null;
+      showScreen('screen-user-home');
     }
 
-    // --- FLUX DE DÉPÔT MANUEL ---
-    function openDepositModal() {
-      document.getElementById('depStep1').style.display = 'block';
-      document.getElementById('depStep2').style.display = 'none';
-      switchView('deposit-modal');
+    function recordQuizResult(badgeStatus, score) {
+      if (!state.currentUser) return;
+      state.results.push({
+        nom: state.currentUser.nom,
+        prenom: state.currentUser.prenom,
+        ville: state.currentUser.ville,
+        pays: state.currentUser.pays,
+        whatsapp: state.currentUser.whatsapp,
+        score: score,
+        badge: badgeStatus,
+        quizTitle: activeQuiz ? activeQuiz.title : 'Concours'
+      });
+      saveState();
     }
 
-    function submitDepositRequest() {
-      const amount = parseInt(document.getElementById('depAmountInput').value);
-      const method = document.getElementById('depMethodSelect').value;
+    // USER PROFILE LOGIC
+    function renderUserProfile() {
+      if (!state.currentUser) return;
+      document.getElementById('prof-nom').innerText = state.currentUser.nom || '';
+      document.getElementById('prof-prenom').innerText = state.currentUser.prenom || '';
+      document.getElementById('prof-ville').innerText = state.currentUser.ville || '';
+      document.getElementById('prof-pays').innerText = state.currentUser.pays || '';
+      document.getElementById('prof-whatsapp').innerText = state.currentUser.whatsapp || '';
 
-      if (isNaN(amount) || amount < 500) {
-        showToast("Le montant minimum de dépôt est de 500 FCFA", "danger");
+      const u = state.users.find(usr => usr.whatsapp === state.currentUser.whatsapp);
+      const subElem = document.getElementById('prof-sub-status');
+      if (u && u.subscriptionActive) {
+        subElem.className = 'font-bold text-emerald-400';
+        subElem.innerText = `Actif jusqu'au ${u.subExpirationDate}`;
+      } else {
+        subElem.className = 'font-bold text-slate-400';
+        subElem.innerText = 'Inactif';
+      }
+    }
+
+    function handlePasswordChange(e) {
+      e.preventDefault();
+      const oldP = document.getElementById('change-pass-old').value;
+      const newP = document.getElementById('change-pass-new').value;
+
+      if (oldP !== state.currentUser.pass) {
+        alert('Le mot de passe actuel est incorrect.');
         return;
       }
 
-      state.pendingDeposit = { amount, method };
-      document.getElementById('depMethodDisplay').innerText = method;
+      state.currentUser.pass = newP;
+      const u = state.users.find(usr => usr.whatsapp === state.currentUser.whatsapp);
+      if (u) u.pass = newP;
 
-      document.getElementById('depStep1').style.display = 'none';
-      document.getElementById('depStep2').style.display = 'block';
-
-      showToast("« Votre demande de dépôt a été enregistrée avec succès. Veuillez effectuer votre paiement au numéro indiqué... »");
+      saveState();
+      alert('Votre mot de passe a été modifié avec succès !');
     }
 
-    function confirmDepositPayment() {
-      const txRef = document.getElementById('depTxRefInput').value;
-      if (!txRef) {
-        showToast("Veuillez saisir le numéro de transaction / référence du reçu", "danger");
-        return;
-      }
-
-      const dep = {
-        id: "DEP-" + Math.floor(Math.random() * 8999 + 1000),
-        userName: state.user.name,
-        userId: state.user.id,
-        amount: state.pendingDeposit.amount,
-        method: state.pendingDeposit.method,
-        txRef: txRef,
-        date: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-        status: "EN_ATTENTE"
-      };
-
-      state.deposits.unshift(dep);
-      showToast("Reçu envoyé à l'administrateur. Validation en cours.");
-      switchView('wallet');
-    }
-
-    // --- FLUX DE RETRAIT ---
-    function openWithdrawModal() {
-      switchView('withdraw-modal');
-    }
-
-    function submitWithdrawRequest() {
-      const amount = parseInt(document.getElementById('withAmountInput').value);
-      const phone = document.getElementById('withPhoneInput').value;
-      const method = document.getElementById('withMethodSelect').value;
-
-      if (isNaN(amount) || amount > state.user.balance) {
-        showToast("Solde insuffisant pour ce retrait !", "danger");
-        return;
-      }
-      if (!phone) {
-        showToast("Veuillez renseigner un numéro de téléphone valide.", "danger");
-        return;
-      }
-
-      const req = {
-        id: "WITH-" + Math.floor(Math.random() * 8999 + 1000),
-        userName: state.user.name,
-        amount: amount,
-        phone: phone,
-        method: method,
-        status: "EN_ATTENTE"
-      };
-
-      state.withdrawals.unshift(req);
-      showToast("« Votre demande de retrait a été enregistrée. Elle sera traitée dans les meilleurs délais. »");
-      switchView('wallet');
-    }
-
-    // --- PORTEFEUILLE UI ---
-    function renderWalletUI() {
-      updateBalanceDisplay();
-      const container = document.getElementById('txHistoryList');
-      container.innerHTML = state.transactions.map(t => `
-        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border); font-size: 0.85rem;">
-          <div>
-            <div style="font-weight: 700;">${t.type}</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">${t.date}</div>
-          </div>
-          <div style="font-weight: 800; color: ${t.isGain ? 'var(--secondary)' : 'var(--danger)'};">${t.amount}</div>
-        </div>
-      `).join('');
-    }
-
-    // --- PANNEAU ADMINISTRATEUR ---
-    function renderAdminUI() {
-      document.getElementById('adminPendingDepCount').innerText = state.deposits.filter(d => d.status === 'EN_ATTENTE').length;
-      document.getElementById('adminPendingWithCount').innerText = state.withdrawals.filter(w => w.status === 'EN_ATTENTE').length;
-
-      // Table Dépôts
-      const depTbody = document.getElementById('adminDepositsTable');
-      depTbody.innerHTML = state.deposits.map(d => `
-        <tr>
-          <td>${d.userName}</td>
-          <td><strong>${d.amount} FCFA</strong></td>
-          <td>${d.method}<br><small>${d.txRef}</small></td>
-          <td>
-            ${d.status === 'EN_ATTENTE' ? `
-              <button style="background: var(--secondary); color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;" onclick="adminApproveDeposit('${d.id}')">Valider</button>
-              <button style="background: var(--danger); color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;" onclick="adminRejectDeposit('${d.id}')">Refuser</button>
-            ` : `<span>${d.status}</span>`}
-          </td>
-        </tr>
-      `).join('') || '<tr><td colspan="4">Aucun dépôt en attente</td></tr>';
-
-      // Table Retraits
-      const withTbody = document.getElementById('adminWithdrawalsTable');
-      withTbody.innerHTML = state.withdrawals.map(w => `
-        <tr>
-          <td>${w.userName}</td>
-          <td><strong>${w.amount} FCFA</strong></td>
-          <td>${w.phone}</td>
-          <td>
-            ${w.status === 'EN_ATTENTE' ? `
-              <button style="background: var(--primary); color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;" onclick="adminApproveWithdrawal('${w.id}')">Paiement Effectué</button>
-            ` : `<span>${w.status}</span>`}
-          </td>
-        </tr>
-      `).join('') || '<tr><td colspan="4">Aucun retrait en attente</td></tr>';
-    }
-
-    function switchAdminTab(tab, btn) {
-      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      document.getElementById('adminTabDeposits').style.display = tab === 'deposits' ? 'block' : 'none';
-      document.getElementById('adminTabWithdrawals').style.display = tab === 'withdrawals' ? 'block' : 'none';
-      document.getElementById('adminTabStats').style.display = tab === 'stats' ? 'block' : 'none';
-    }
-
-    function adminApproveDeposit(depId) {
-      const dep = state.deposits.find(d => d.id === depId);
-      if (dep) {
-        dep.status = "VALIDÉ";
-        state.user.balance += dep.amount;
-        state.transactions.unshift({ type: "Dépôt Validé", amount: `+${dep.amount} FCFA`, date: "À l'instant", isGain: true });
-        showToast(`« Félicitations ! Votre dépôt de ${dep.amount} FCFA a été validé avec succès. Votre portefeuille a été crédité. »`);
-        renderAdminUI();
-        updateBalanceDisplay();
-      }
-    }
-
-    function adminRejectDeposit(depId) {
-      const dep = state.deposits.find(d => d.id === depId);
-      if (dep) {
-        dep.status = "REFUSÉ";
-        showToast("Dépôt refusé par l'administrateur.", "danger");
-        renderAdminUI();
-      }
-    }
-
-    function adminApproveWithdrawal(withId) {
-      const req = state.withdrawals.find(w => w.id === withId);
-      if (req) {
-        req.status = "PAYÉ";
-        state.user.balance -= req.amount;
-        state.transactions.unshift({ type: "Retrait Effectué", amount: `-${req.amount} FCFA`, date: "À l'instant", isGain: false });
-        showToast(`« Votre retrait de ${req.amount} FCFA a été traité avec succès. Les fonds ont été envoyés. »`);
-        renderAdminUI();
-        updateBalanceDisplay();
-      }
-    }
-
-    // --- INITIALISATION ---
-    renderHomeQuizList();
-    updateBalanceDisplay();
+    // INITIALIZATION
+    window.onload = () => {
+      showScreen('screen-login');
+    };
   </script>
 </body>
 </html>
