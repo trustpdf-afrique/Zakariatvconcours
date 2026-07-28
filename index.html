@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZakariaTV Concours - Plateforme Officielle</title>
+  <title>ZakariaTV Concours - Révisions & Concours Éducatifs</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -11,21 +11,21 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .glass { background: rgba(30, 41, 59, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-    .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .glass { background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .animate-blink { animation: blink 1.2s infinite; }
   </style>
 </head>
 <body class="min-h-full flex flex-col justify-between bg-slate-950 relative">
 
-  <!-- NOTIFICATION TOAST TEMPORAIRE -->
-  <div id="toast-notification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden w-11/12 max-w-md">
-    <div class="glass border-l-4 border-amber-500 p-4 rounded-2xl shadow-2xl flex items-start gap-3 bg-slate-900/95 text-xs text-slate-200">
-      <i class="fa-solid fa-circle-check text-amber-400 text-lg mt-0.5"></i>
-      <div id="toast-message" class="leading-relaxed"></div>
-    </div>
+  <!-- TOAST NOTIFICATION VERTE (5s) -->
+  <div id="toast-success" class="fixed top-5 right-5 z-50 hidden flex items-center gap-3 bg-emerald-600 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-emerald-400/30 transition-all duration-300">
+    <i class="fa-solid fa-circle-check text-xl"></i>
+    <span class="text-xs font-bold tracking-wide">Opération effectuée avec succès</span>
   </div>
 
-  <!-- HEADER -->
+  <!-- HEADER HEADER SYSTEM -->
   <header class="glass sticky top-0 z-40 px-4 py-3 shadow-xl flex items-center justify-between border-b border-slate-800">
     <div class="flex items-center space-x-3">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-amber-500/20">
@@ -37,125 +37,81 @@
         </h1>
       </div>
     </div>
-
-    <div id="header-user-info" class="flex items-center space-x-2">
-      <!-- Session controls dynamically rendered -->
-    </div>
   </header>
 
   <!-- MAIN CONTAINER -->
-  <main class="flex-grow container mx-auto px-4 py-6 max-w-5xl">
+  <main class="flex-grow container mx-auto px-4 py-6 max-w-4xl">
 
-    <!-- LOGIN SCREEN -->
-    <section id="screen-login" class="space-y-6 max-w-md mx-auto">
+    <!-- 1. CONNEXION ADMINISTRATEUR UNIQUE -->
+    <section id="screen-admin-login" class="space-y-6 max-w-md mx-auto">
       <div class="text-center space-y-2">
-        <h2 class="text-3xl font-black text-white">Connexion</h2>
-        <p class="text-slate-400 text-xs">Espace Administrateur & Participants</p>
+        <div class="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-2xl border border-amber-500/20 flex items-center justify-center mx-auto text-2xl font-bold">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h2 class="text-2xl font-black text-white">Espace Administration</h2>
+        <p class="text-slate-400 text-xs">Accès réservé exclusivement à l'administrateur</p>
       </div>
 
-      <form id="login-form" onsubmit="handleLogin(event)" class="glass p-6 rounded-2xl space-y-4 shadow-2xl">
+      <form onsubmit="handleAdminLogin(event)" class="glass p-6 rounded-2xl space-y-4 shadow-2xl">
         <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom / Identifiant</label>
-          <input type="text" id="login-username" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="Ex: ZakariaTV ou votre Nom">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
-          <input type="password" id="login-password" required class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition" placeholder="Mot de passe">
-        </div>
-
-        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 font-extrabold rounded-xl text-white shadow-lg text-sm">
-          Se connecter
-        </button>
-
-        <div class="flex items-center justify-between text-xs pt-2 text-slate-400">
-          <button type="button" onclick="showForgotPasswordModal()" class="hover:text-amber-400 underline">Mot de passe oublié ?</button>
-          <button type="button" onclick="showScreen('screen-register')" class="text-amber-400 font-bold hover:underline">Créer un compte</button>
-        </div>
-      </form>
-    </section>
-
-    <!-- REGISTER SCREEN -->
-    <section id="screen-register" class="hidden space-y-6 max-w-md mx-auto">
-      <div class="text-center space-y-2">
-        <h2 class="text-2xl font-black text-white">Création de compte Participant</h2>
-        <p class="text-slate-400 text-xs">Une seule inscription autorisée par personne</p>
-      </div>
-
-      <form id="register-form" onsubmit="handleRegister(event)" class="glass p-6 rounded-2xl space-y-4 shadow-2xl">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Nom</label>
-            <input type="text" id="reg-nom" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Prénom</label>
-            <input type="text" id="reg-prenom" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Ville</label>
-            <input type="text" id="reg-ville" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Pays</label>
-            <select id="reg-pays" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
-              <option value="Côte d'Ivoire">Côte d'Ivoire</option>
-              <option value="Sénégal">Sénégal</option>
-              <option value="Cameroun">Cameroun</option>
-              <option value="Mali">Mali</option>
-              <option value="Burkina Faso">Burkina Faso</option>
-              <option value="Autre">Autre</option>
-            </select>
-          </div>
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nom d'utilisateur</label>
+          <input type="text" id="admin-user" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Contact WhatsApp</label>
-          <input type="tel" id="reg-whatsapp" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white" placeholder="+225 0102030405">
+          <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Mot de passe</label>
+          <input type="password" id="admin-pass" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Mot de passe (4 chiffres)</label>
-          <input type="password" id="reg-pass" pattern="\d{4}" maxlength="4" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white" placeholder="Ex: 1234">
-        </div>
-
-        <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 font-extrabold rounded-xl text-white shadow-lg text-xs">
-          Terminer l'inscription
-        </button>
-
-        <button type="button" onclick="showScreen('screen-login')" class="w-full text-center text-xs text-slate-400 hover:underline">
-          Déjà un compte ? Se connecter
+        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 font-extrabold rounded-xl text-slate-950 text-sm shadow-lg">
+          Se connecter à l'administration
         </button>
       </form>
     </section>
 
-    <!-- ADMIN DASHBOARD -->
+    <!-- 2. TABLEAU DE BORD ADMINISTRATEUR -->
     <section id="screen-admin-dash" class="hidden space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 font-bold text-xl">
-            <i class="fa-solid fa-user-shield"></i>
-          </div>
-          <div>
-            <h2 class="text-xl font-bold text-white">Espace Administrateur - ZakariaTV</h2>
-            <p class="text-xs text-slate-400">Cliquez sur un compteur pour voir sa liste complète</p>
-          </div>
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-user-shield text-amber-500"></i> Tableau de Bord Administrateur
+          </h2>
+          <p class="text-xs text-slate-400">Gestion globale : participants, abonnements, concours & réinitialisations</p>
         </div>
 
-        <div class="flex items-center gap-2">
-          <button onclick="openModal('reviews-modal')" class="glass px-3 py-2 rounded-xl text-xs font-bold text-amber-400 flex items-center gap-1.5 hover:bg-slate-800">
-            <i class="fa-solid fa-star text-amber-400"></i> Avis Utilisateurs
+        <div class="flex flex-wrap gap-2">
+          <button onclick="openModal('pass-reset-modal')" class="glass px-3 py-2 rounded-xl text-xs font-bold text-amber-400 flex items-center gap-1.5 hover:bg-slate-800">
+            <i class="fa-solid fa-key"></i> Mots de passe oubliés (<span id="admin-reset-count">0</span>)
+          </button>
+          <button onclick="openModal('admin-sub-modal')" class="glass px-3 py-2 rounded-xl text-xs font-bold text-sky-400 flex items-center gap-1.5 hover:bg-slate-800">
+            <i class="fa-solid fa-id-card"></i> Demandes Abonnements (<span id="admin-subs-count">0</span>)
+          </button>
+          <button onclick="openModal('reviews-modal')" class="glass px-3 py-2 rounded-xl text-xs font-bold text-yellow-400 flex items-center gap-1.5 hover:bg-slate-800">
+            <i class="fa-solid fa-star"></i> Avis (<span id="admin-reviews-count">0</span>)
           </button>
           <button onclick="showScreen('screen-admin-premium')" class="bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
-            <i class="fa-solid fa-crown"></i> Gestion & Concours
+            <i class="fa-solid fa-plus-circle"></i> Créer un Concours
           </button>
         </div>
       </div>
 
-      <!-- CARDS STATISTIQUES (CLIQUABLES) -->
+      <!-- CARTE DU LIEN UNIQUE -->
+      <div class="glass p-5 rounded-2xl border-l-4 border-amber-500 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+            <i class="fa-solid fa-link text-amber-400"></i> Lien Unique des Participants
+          </h3>
+          <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded font-semibold">Lien Réutilisable</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="text" id="unique-participant-link" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-amber-400 font-mono">
+          <button onclick="copyUniqueLink()" class="px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1">
+            <i class="fa-solid fa-copy"></i> Copier
+          </button>
+        </div>
+      </div>
+
+      <!-- STATISTIQUES ENTIÈREMENT CLIQUABLES -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div onclick="openDataListModal('concours_crees')" class="glass p-4 rounded-2xl border-l-4 border-amber-500 cursor-pointer hover:bg-slate-800/80 transition">
           <span class="text-[11px] font-semibold text-slate-400 block uppercase">Concours Créés</span>
@@ -166,116 +122,208 @@
           <span id="stat-completed" class="text-2xl font-black text-white mt-1 block">0</span>
         </div>
         <div onclick="openDataListModal('comptes_crees')" class="glass p-4 rounded-2xl border-l-4 border-blue-500 cursor-pointer hover:bg-slate-800/80 transition">
-          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Comptes & Abonnements</span>
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Comptes Élèves</span>
           <span id="stat-accounts" class="text-2xl font-black text-white mt-1 block">0</span>
         </div>
         <div onclick="openDataListModal('participants')" class="glass p-4 rounded-2xl border-l-4 border-purple-500 cursor-pointer hover:bg-slate-800/80 transition">
-          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Participants</span>
+          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Participants Distincts</span>
           <span id="stat-participants" class="text-2xl font-black text-white mt-1 block">0</span>
         </div>
-        <div onclick="openDataListModal('gagnants')" class="glass p-4 rounded-2xl border-l-4 border-yellow-500 cursor-pointer hover:bg-slate-800/80 transition">
-          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Gagnants</span>
-          <span id="stat-winners" class="text-2xl font-black text-white mt-1 block">0</span>
-        </div>
-        <div onclick="openDataListModal('concours_en_cours')" class="glass p-4 rounded-2xl border-l-4 border-sky-500 cursor-pointer hover:bg-slate-800/80 transition">
-          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Concours En Cours</span>
-          <span id="stat-active" class="text-2xl font-black text-white mt-1 block">0</span>
-        </div>
-        <div onclick="openDataListModal('concours_termines')" class="glass p-4 rounded-2xl border-l-4 border-rose-500 cursor-pointer hover:bg-slate-800/80 transition">
-          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Concours Terminés</span>
-          <span id="stat-finished" class="text-2xl font-black text-white mt-1 block">0</span>
-        </div>
-        <div onclick="openDataListModal('mots_de_passe_oublies')" class="glass p-4 rounded-2xl border-l-4 border-orange-500 cursor-pointer hover:bg-slate-800/80 transition">
-          <span class="text-[11px] font-semibold text-slate-400 block uppercase">Mot de passe oublié</span>
-          <span id="stat-resets" class="text-2xl font-black text-orange-400 mt-1 block">0</span>
-        </div>
       </div>
 
-      <!-- SECTION LIENS DE CONCOURS -->
+      <!-- GESTION ET SUPPRESSION DES CONCOURS -->
       <div class="glass p-5 rounded-2xl space-y-4">
-        <h3 class="font-bold text-white text-sm flex items-center gap-2">
-          <i class="fa-solid fa-link text-amber-400"></i> Liens Uniques des Concours Générés
+        <h3 class="font-bold text-white text-sm flex items-center justify-between">
+          <span><i class="fa-solid fa-list-check text-amber-400 mr-2"></i>Liste des concours actifs</span>
         </h3>
-        <div id="admin-links-container" class="space-y-3 max-h-72 overflow-y-auto text-xs"></div>
+        <div id="admin-quiz-list" class="space-y-3 max-h-80 overflow-y-auto text-xs">
+          <!-- Rendered dynamically -->
+        </div>
       </div>
 
-      <div class="flex justify-end pt-4">
-        <button onclick="logout()" class="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl text-xs font-bold">
+      <div class="flex justify-end pt-2">
+        <button onclick="logout()" class="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl text-xs font-bold hover:bg-red-500/30 transition">
           <i class="fa-solid fa-right-from-bracket mr-1"></i> Déconnexion Administrateur
         </button>
       </div>
     </section>
 
-    <!-- ADMIN PREMIUM CREATION & MANAGEMENT -->
+    <!-- 3. CREATION DE CONCOURS (AVEC GRATUIT/ABONNEMENT ET IMAGE) -->
     <section id="screen-admin-premium" class="hidden space-y-6">
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
         <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">
-          <i class="fa-solid fa-crown"></i> Création & Mettre en Ligne un Concours
+          <i class="fa-solid fa-pen-to-square"></i> Nouveau Concours
         </h2>
-        <button onclick="showScreen('screen-admin-dash')" class="px-3 py-1.5 glass rounded-xl text-xs font-semibold">
-          ← Retour Tableau de bord
+        <button onclick="showScreen('screen-admin-dash')" class="px-3 py-1.5 glass rounded-xl text-xs font-semibold hover:bg-slate-800">
+          ← Retour
         </button>
       </div>
 
-      <div class="glass p-6 rounded-2xl space-y-6 shadow-xl">
-        <form id="create-quiz-form" onsubmit="handleCreateQuiz(event)" class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Catégorie</label>
-              <select id="quiz-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
-                <option value="Primaire">Primaire</option>
-                <option value="Collège">Collège</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Classe</label>
-              <select id="quiz-class" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
-                <option value="CE2">CE2</option>
-                <option value="CM1">CM1</option>
-                <option value="CM2">CM2</option>
-                <option value="6e">6e</option>
-                <option value="5e">5e</option>
-                <option value="4e">4e</option>
-                <option value="3e">3e</option>
-                <option value="Seconde">Seconde</option>
-                <option value="Première">Première</option>
-                <option value="Terminale">Terminale</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Titre du Concours</label>
-              <input type="text" id="quiz-title" required placeholder="Ex: Grand Concours Histoire & Géographie" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
-            </div>
+      <form id="create-quiz-form" onsubmit="handleCreateQuiz(event)" class="glass p-6 rounded-2xl space-y-4 shadow-xl">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Accès du Concours</label>
+            <select id="quiz-access" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-amber-400 font-bold">
+              <option value="free">Concours Gratuit (Accessible à tous)</option>
+              <option value="sub">Concours réservé aux abonnés</option>
+            </select>
           </div>
-
-          <div class="space-y-4 pt-2">
-            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider">Formulaire des 5 Questions obligatoires</h4>
-            <div id="questions-inputs-container" class="space-y-4"></div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Image / Banner URL (Optionnel)</label>
+            <input type="url" id="quiz-image" placeholder="https://exemple.com/image.jpg" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
           </div>
+        </div>
 
-          <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 font-black text-slate-950 rounded-xl shadow-lg text-xs uppercase tracking-wider">
-            Enregistrer & Générer le lien du concours
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Catégorie</label>
+            <select id="quiz-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+              <option value="Primaire">Primaire</option>
+              <option value="Collège">Collège</option>
+              <option value="Lycée">Lycée</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Classe</label>
+            <select id="quiz-class" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+              <option value="CE2">CE2</option>
+              <option value="CM1">CM1</option>
+              <option value="CM2">CM2</option>
+              <option value="6e">6e</option>
+              <option value="5e">5e</option>
+              <option value="4e">4e</option>
+              <option value="3e">3e</option>
+              <option value="Seconde">Seconde</option>
+              <option value="Première">Première</option>
+              <option value="Terminale">Terminale</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Titre du Concours</label>
+            <input type="text" id="quiz-title" required placeholder="Ex: Révisions de Physique 3e" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+          </div>
+        </div>
+
+        <div class="space-y-4 pt-2">
+          <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider">Configuration des 5 Questions</h4>
+          <div id="questions-inputs-container" class="space-y-4">
+            <!-- Questions 1-5 built by JS -->
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-3">
+          <button type="button" onclick="showScreen('screen-admin-dash')" class="w-1/3 py-3 glass font-bold rounded-xl text-slate-300 text-xs">
+            ← Annuler
           </button>
-        </form>
-      </div>
+          <button type="submit" class="w-2/3 py-3 bg-gradient-to-r from-amber-500 to-orange-600 font-black text-slate-950 rounded-xl text-xs uppercase tracking-wider shadow-lg">
+            Enregistrer et Publier
+          </button>
+        </div>
+      </form>
     </section>
 
-    <!-- PARTICIPANT HOME -->
-    <section id="screen-user-home" class="hidden space-y-6">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-        <div>
-          <h2 id="user-welcome" class="text-xl font-bold text-white">Bienvenue !</h2>
-          <p class="text-xs text-slate-400">Sélectionnez un concours pour démarrer</p>
+    <!-- 4. ESPACE PARTICIPANTS (LIEN UNIQUE) -->
+    <section id="screen-user-login" class="hidden space-y-6 max-w-md mx-auto">
+      <div class="text-center space-y-2">
+        <div class="w-full h-32 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-red-500/20 border border-amber-500/30 flex flex-col items-center justify-center p-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg mb-2">
+            ZTV
+          </div>
+          <h2 class="text-xl font-black text-white">ZakariaTV Concours</h2>
+          <p class="text-[11px] text-amber-400 font-semibold">Espace de Révisions & Concours Éducatifs</p>
         </div>
-        <div class="flex gap-2">
-          <button onclick="requestSubscription()" class="bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 px-3 py-2 rounded-xl text-xs font-extrabold shadow-lg">
-            <i class="fa-solid fa-star mr-1"></i> Acheter un abonnement
+      </div>
+
+      <form onsubmit="handleUserLogin(event)" class="glass p-6 rounded-2xl space-y-4 shadow-2xl">
+        <h3 class="text-sm font-bold text-white border-b border-slate-800 pb-2">Connexion Participant</h3>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Nom complet</label>
+          <input type="text" id="user-login-name" required placeholder="Ex: Kouassi Jean" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Mot de passe</label>
+          <input type="password" id="user-login-pass" required placeholder="Saisissez votre mot de passe" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 font-extrabold rounded-xl text-slate-950 text-xs shadow-lg">
+          Se connecter
+        </button>
+
+        <div class="flex items-center justify-between text-xs pt-2 text-slate-400 border-t border-slate-800">
+          <button type="button" onclick="openModal('forgot-modal')" class="hover:text-amber-400 underline">Mot de passe oublié ?</button>
+          <button type="button" onclick="showScreen('screen-user-register')" class="text-amber-400 font-bold hover:underline">Créer un compte</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- INSCRIPTION PARTICIPANT (LISTE COMPLETE PAYS) -->
+    <section id="screen-user-register" class="hidden space-y-6 max-w-md mx-auto">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-bold text-white">Création de compte Participant</h2>
+        <button onclick="showScreen('screen-user-login')" class="glass px-3 py-1.5 rounded-xl text-xs">
+          ← Retour
+        </button>
+      </div>
+
+      <form onsubmit="handleUserRegister(event)" class="glass p-6 rounded-2xl space-y-4 shadow-2xl">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Nom</label>
+            <input type="text" id="reg-nom" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Prénom</label>
+            <input type="text" id="reg-prenom" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Ville</label>
+            <input type="text" id="reg-ville" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Pays</label>
+            <select id="reg-pays" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+              <!-- All countries list loaded via JS -->
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Contact WhatsApp</label>
+          <input type="tel" id="reg-whatsapp" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white" placeholder="+225 0000000000">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Mot de passe</label>
+          <input type="password" id="reg-pass" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white" placeholder="Mot de passe">
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 font-bold text-slate-950 rounded-xl text-xs">
+          Terminer l'inscription
+        </button>
+      </form>
+    </section>
+
+    <!-- ACCUEIL DES CONCOURS PARTICIPANT -->
+    <section id="screen-user-home" class="hidden space-y-6">
+      <div class="glass p-5 rounded-2xl flex flex-wrap items-center justify-between gap-4 border-l-4 border-amber-500">
+        <div>
+          <h2 id="user-welcome" class="text-lg font-extrabold text-white">Bienvenue !</h2>
+          <!-- SUB STATUS DISPLAY -->
+          <div id="user-sub-badge" class="mt-1 text-xs"></div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button onclick="openModal('ranking-modal')" class="glass px-3 py-2 rounded-xl text-xs font-bold text-amber-400 flex items-center gap-1 hover:bg-slate-800">
+            <i class="fa-solid fa-trophy"></i> Classement Général
           </button>
-          <button onclick="showScreen('screen-contact')" class="glass px-3 py-2 rounded-xl text-xs font-semibold text-sky-400">
-            <i class="fa-solid fa-headset mr-1"></i> Contact
+          <button onclick="openModal('add-review-modal')" class="glass px-3 py-2 rounded-xl text-xs font-bold text-sky-400 flex items-center gap-1 hover:bg-slate-800">
+            <i class="fa-solid fa-star"></i> Donner mon avis
           </button>
-          <button onclick="showScreen('screen-user-profile')" class="glass px-3 py-2 rounded-xl text-xs font-semibold text-amber-400">
-            <i class="fa-solid fa-user mr-1"></i> Profil
+          <button onclick="showScreen('screen-user-profile')" class="glass px-3 py-2 rounded-xl text-xs font-semibold">
+            <i class="fa-solid fa-user text-slate-300"></i>
           </button>
           <button onclick="logout()" class="glass px-3 py-2 rounded-xl text-xs font-semibold text-red-400">
             <i class="fa-solid fa-power-off"></i>
@@ -283,53 +331,47 @@
         </div>
       </div>
 
+      <!-- Filtres -->
       <div class="flex gap-2">
         <button onclick="filterCategory('Tous')" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 text-slate-950">Tous</button>
         <button onclick="filterCategory('Primaire')" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold glass text-slate-300">Primaire</button>
         <button onclick="filterCategory('Collège')" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold glass text-slate-300">Collège</button>
+        <button onclick="filterCategory('Lycée')" class="cat-btn px-4 py-2 rounded-xl text-xs font-bold glass text-slate-300">Lycée</button>
       </div>
 
-      <div id="user-quizzes-list" class="space-y-3"></div>
-    </section>
-
-    <!-- PAGE NOUS CONTACTER -->
-    <section id="screen-contact" class="hidden max-w-md mx-auto space-y-6">
-      <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-headset text-sky-400"></i> Nous Contacter
-        </h2>
-        <button onclick="showScreen('screen-user-home')" class="glass px-3 py-1.5 rounded-xl text-xs">
-          ← Retour
-        </button>
-      </div>
-
-      <div class="glass p-6 rounded-2xl text-center space-y-4">
-        <div class="w-16 h-16 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-2xl mx-auto">
-          <i class="fa-brands fa-whatsapp"></i>
-        </div>
-        <h3 class="text-lg font-bold text-white">Assistance & Support Client</h3>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          Pour toute question, problème technique ou finalisation d'abonnement, contactez directement l'administration sur WhatsApp.
-        </p>
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-          <span class="text-xs text-slate-400 block mb-1">Numéro WhatsApp Officiel :</span>
-          <a href="https://wa.me/2250585971941" target="_blank" class="text-lg font-black text-amber-400 hover:underline">
-            05 85 97 19 41
-          </a>
-        </div>
+      <!-- LISTE DES CONCOURS -->
+      <div id="user-quizzes-list" class="space-y-4">
+        <!-- Rendered dynamically -->
       </div>
     </section>
 
-    <!-- QUIZ INTERFACE (10s Timer + TTS + Anti-Cheat) -->
+    <!-- 5. COMPTE A REBOURS AVANT CONCOURS (20 SECONDES) -->
+    <section id="screen-countdown" class="hidden max-w-md mx-auto text-center space-y-6 glass p-8 rounded-2xl shadow-2xl my-12">
+      <div class="w-16 h-16 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto text-3xl animate-bounce">
+        <i class="fa-solid fa-hourglass-half"></i>
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-xl font-black text-white">Le concours commencera dans 20 secondes.</h3>
+        <p class="text-xs text-amber-400 font-semibold">Préparez-vous ! Concentration maximale.</p>
+      </div>
+      <div id="countdown-number" class="text-6xl font-black text-amber-400 font-mono tracking-wider">
+        20
+      </div>
+      <button onclick="cancelCountdown()" class="px-4 py-2 glass rounded-xl text-xs text-slate-400 hover:text-white">
+        ← Annuler
+      </button>
+    </section>
+
+    <!-- 6. INTERFACE QUIZ (30s + AUDIO INSTANTANE) -->
     <section id="screen-quiz" class="hidden max-w-xl mx-auto space-y-6">
       <div class="flex items-center justify-between glass p-4 rounded-2xl">
         <span id="quiz-progress" class="text-xs font-bold text-slate-400">Question 1 / 5</span>
         <div class="flex items-center gap-3">
-          <button onclick="speakCurrentQuestion()" class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center hover:bg-amber-500/30">
+          <button onclick="speakCurrentQuestion()" class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center hover:bg-amber-500/30 text-lg">
             <i class="fa-solid fa-volume-high"></i>
           </button>
-          <div id="quiz-timer" class="text-xl font-black text-red-500 bg-red-500/10 px-3 py-1 rounded-xl border border-red-500/30 animate-pulse">
-            10s
+          <div id="quiz-timer" class="text-xl font-black text-red-500 bg-red-500/10 px-4 py-1.5 rounded-xl border border-red-500/30 animate-pulse">
+            30s
           </div>
         </div>
       </div>
@@ -339,33 +381,64 @@
           Chargement de la question...
         </h3>
 
-        <div id="options-container" class="grid grid-cols-1 gap-3"></div>
+        <div id="options-container" class="grid grid-cols-1 gap-3">
+          <!-- Dynamic Options -->
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center text-xs text-slate-500 px-2">
+        <span>ZakariaTV Révisions</span>
+        <button onclick="confirmQuitQuiz()" class="text-red-400 hover:underline">Quitter le concours</button>
       </div>
     </section>
 
-    <!-- USER PROFILE -->
+    <!-- 7. FIN DE CONCOURS & RÉSULTATS -->
+    <section id="screen-quiz-result" class="hidden max-w-md mx-auto text-center space-y-6 glass p-8 rounded-2xl shadow-2xl">
+      <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-2xl flex items-center justify-center mx-auto text-3xl">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+
+      <div class="space-y-3">
+        <h3 class="text-lg font-bold text-white">Merci d'avoir participé à ce concours.</h3>
+        <p class="text-xs text-slate-300 leading-relaxed">Veuillez revenir à la page précédente pour consulter vos résultats et votre classement.</p>
+      </div>
+
+      <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-1">
+        <span class="text-xs text-slate-400">Votre score obtenu :</span>
+        <div id="res-score-display" class="text-3xl font-black text-amber-400">0 / 5</div>
+      </div>
+
+      <button onclick="showScreen('screen-user-home'); openModal('ranking-modal');" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 font-extrabold rounded-xl text-slate-950 text-xs shadow-lg flex items-center justify-center gap-2">
+        <i class="fa-solid fa-trophy"></i> Voir mes résultats et mon classement
+      </button>
+
+      <button onclick="showScreen('screen-user-home')" class="w-full py-2.5 glass font-bold rounded-xl text-xs text-slate-300">
+        ← Revenir à l'accueil
+      </button>
+    </section>
+
+    <!-- PROFIL PARTICIPANT -->
     <section id="screen-user-profile" class="hidden max-w-md mx-auto space-y-6">
       <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold text-white">Mon Profil Participant</h2>
+        <h2 class="text-lg font-bold text-white">Mon Profil Participant</h2>
         <button onclick="showScreen('screen-user-home')" class="glass px-3 py-1.5 rounded-xl text-xs">
           ← Retour
         </button>
       </div>
 
       <div class="glass p-6 rounded-2xl space-y-4">
-        <div class="space-y-2 text-xs border-b border-slate-700 pb-4">
+        <div class="space-y-2 text-xs border-b border-slate-800 pb-4">
           <p><span class="text-slate-400">Nom :</span> <strong id="prof-nom" class="text-white"></strong></p>
           <p><span class="text-slate-400">Prénom :</span> <strong id="prof-prenom" class="text-white"></strong></p>
           <p><span class="text-slate-400">Ville :</span> <strong id="prof-ville" class="text-white"></strong></p>
           <p><span class="text-slate-400">Pays :</span> <strong id="prof-pays" class="text-white"></strong></p>
           <p><span class="text-slate-400">WhatsApp :</span> <strong id="prof-whatsapp" class="text-white"></strong></p>
-          <p><span class="text-slate-400">Statut Abonnement :</span> <span id="prof-sub-status" class="font-bold"></span></p>
         </div>
 
         <form onsubmit="handlePasswordChange(event)" class="space-y-3 pt-2">
           <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider">Modifier mon mot de passe</h3>
           <input type="password" id="change-pass-old" placeholder="Mot de passe actuel" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
-          <input type="password" id="change-pass-new" pattern="\d{4}" maxlength="4" placeholder="Nouveau mot de passe (4 chiffres)" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+          <input type="password" id="change-pass-new" placeholder="Nouveau mot de passe" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
           <button type="submit" class="w-full py-2.5 bg-amber-500 font-bold text-slate-950 text-xs rounded-xl">
             Enregistrer les modifications
           </button>
@@ -375,22 +448,175 @@
 
   </main>
 
-  <!-- MODAL LISTES DE DONNEES DETAILLES -->
-  <div id="data-list-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="glass max-w-2xl w-full p-6 rounded-2xl space-y-4 max-h-[85vh] flex flex-col">
+  <!-- MODALS SYSTEM -->
+
+  <!-- MODAL ACHAT ABONNEMENT -->
+  <div id="buy-sub-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-md w-full p-6 rounded-2xl space-y-5">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 id="data-modal-title" class="font-bold text-white text-base">Détails des données</h3>
-        <button onclick="closeModal('data-list-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+        <h3 class="font-bold text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-crown text-amber-400"></i> Acheter un abonnement
+        </h3>
+        <button onclick="closeModal('buy-sub-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
       </div>
-      <div id="data-modal-content" class="overflow-y-auto flex-grow space-y-2 text-xs pr-1"></div>
+
+      <p class="text-xs text-slate-300">Choisissez une formule pour débloquer l'accès complet à tous les concours :</p>
+
+      <div class="space-y-3">
+        <div onclick="requestSubscription('1 mois', 500)" class="glass p-4 rounded-xl border border-amber-500/30 hover:border-amber-500 cursor-pointer transition flex items-center justify-between">
+          <div>
+            <h4 class="font-bold text-white text-sm">Abonnement 1 Mois</h4>
+            <span class="text-xs text-slate-400">Accès illimité à tous les concours</span>
+          </div>
+          <span class="text-lg font-black text-amber-400">500 F</span>
+        </div>
+
+        <div onclick="requestSubscription('5 mois', 2500)" class="glass p-4 rounded-xl border border-amber-500/30 hover:border-amber-500 cursor-pointer transition flex items-center justify-between">
+          <div>
+            <h4 class="font-bold text-white text-sm">Abonnement 5 Mois</h4>
+            <span class="text-xs text-slate-400">Accès illimité (500 F × 5)</span>
+          </div>
+          <span class="text-lg font-black text-amber-400">2 500 F</span>
+        </div>
+      </div>
+
+      <button onclick="closeModal('buy-sub-modal')" class="w-full py-2.5 glass text-xs font-bold text-slate-300 rounded-xl">
+        ← Fermer
+      </button>
     </div>
   </div>
 
-  <!-- MODAL FORGOT PASSWORD -->
+  <!-- MODAL ADMIN GESTION DES ABONNEMENTS -->
+  <div id="admin-sub-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-xl w-full p-6 rounded-2xl space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-sm flex items-center gap-2">
+          <i class="fa-solid fa-id-card text-sky-400"></i> Demandes d'Abonnement en attente
+        </h3>
+        <button onclick="closeModal('admin-sub-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+
+      <div id="admin-subs-list" class="overflow-y-auto flex-grow space-y-2 text-xs pr-1">
+        <!-- Rendered by JS -->
+      </div>
+
+      <button onclick="closeModal('admin-sub-modal')" class="w-full py-2 glass text-xs text-slate-300 rounded-xl">
+        ← Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL ADMIN MOTS DE PASSE OUBLIES -->
+  <div id="pass-reset-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-xl w-full p-6 rounded-2xl space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-sm flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-400"></i> Demandes de réinitialisation de Mot de passe
+        </h3>
+        <button onclick="closeModal('pass-reset-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+
+      <div id="admin-reset-list" class="overflow-y-auto flex-grow space-y-2 text-xs pr-1">
+        <!-- Rendered by JS -->
+      </div>
+
+      <button onclick="closeModal('pass-reset-modal')" class="w-full py-2 glass text-xs text-slate-300 rounded-xl">
+        ← Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL CLASSEMENT GENERAL -->
+  <div id="ranking-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-lg w-full p-6 rounded-2xl space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-trophy text-amber-400"></i> Classements des Concours
+        </h3>
+        <button onclick="closeModal('ranking-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+
+      <div id="ranking-modal-content" class="overflow-y-auto flex-grow space-y-2 text-xs pr-1">
+        <!-- Loaded via JS -->
+      </div>
+
+      <button onclick="closeModal('ranking-modal')" class="w-full py-2.5 glass font-bold text-xs rounded-xl text-slate-300">
+        ← Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL AJOUTER UN AVIS -->
+  <div id="add-review-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-md w-full p-6 rounded-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-sm">Donner mon avis sur ZakariaTV</h3>
+        <button onclick="closeModal('add-review-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+
+      <form onsubmit="handleUserSubmitReview(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Note en étoiles</label>
+          <select id="review-stars" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-amber-400 font-bold">
+            <option value="5">★★★★★ (5/5) - Excellent !</option>
+            <option value="4">★★★★☆ (4/5) - Très bon</option>
+            <option value="3">★★★☆☆ (3/5) - Moyen</option>
+            <option value="2">★★☆☆☆ (2/5) - Passable</option>
+            <option value="1">★☆☆☆☆ (1/5) - À améliorer</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Votre commentaire</label>
+          <textarea id="review-comment" required rows="3" placeholder="Écrivez ce que vous pensez de cette application..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-amber-500 font-bold text-slate-950 text-xs rounded-xl">
+          Envoyer mon avis
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL AVIS ADMINISTRATEUR -->
+  <div id="reviews-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-md w-full p-6 rounded-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-sm flex items-center gap-2">
+          <i class="fa-solid fa-star text-amber-400"></i> Avis laissés par les utilisateurs
+        </h3>
+        <button onclick="closeModal('reviews-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+
+      <div id="reviews-list-container" class="space-y-3 max-h-72 overflow-y-auto text-xs">
+        <!-- Rendered by JS -->
+      </div>
+
+      <button onclick="closeModal('reviews-modal')" class="w-full py-2 glass text-xs text-slate-300 rounded-xl">
+        ← Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL DONNEES DETAILLES ADMIN -->
+  <div id="data-list-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass max-w-2xl w-full p-6 rounded-2xl space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="data-modal-title" class="font-bold text-white text-base">Données</h3>
+        <button onclick="closeModal('data-list-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+      <div id="data-modal-content" class="overflow-y-auto flex-grow space-y-2 text-xs pr-1"></div>
+      <button onclick="closeModal('data-list-modal')" class="w-full py-2 glass text-xs text-slate-300 rounded-xl">
+        ← Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL MOT DE PASSE OUBLIE PARTICIPANT -->
   <div id="forgot-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass max-w-md w-full p-6 rounded-2xl space-y-4">
-      <h3 class="font-bold text-white text-base border-b border-slate-700 pb-2">Récupération de mot de passe</h3>
-      <p class="text-xs text-slate-400">Saisissez votre numéro WhatsApp enregistré.</p>
+      <h3 class="font-bold text-white text-sm border-b border-slate-800 pb-2">Réinitialisation de mot de passe</h3>
+      <p class="text-xs text-slate-400">Saisissez votre numéro WhatsApp pour transmettre votre demande à l'administrateur :</p>
       <input type="tel" id="forgot-wa-input" placeholder="+225 00000000" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white">
       <div class="flex justify-end gap-2 pt-2">
         <button onclick="closeModal('forgot-modal')" class="px-3 py-2 text-xs text-slate-400">Annuler</button>
@@ -399,32 +625,17 @@
     </div>
   </div>
 
-  <!-- MODAL AVIS (GESTION ET SUPPRESSION PAR ADMIN) -->
-  <div id="reviews-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="glass max-w-md w-full p-6 rounded-2xl space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-700 pb-3">
-        <h3 class="font-bold text-white flex items-center gap-2 text-sm">
-          <i class="fa-solid fa-star text-amber-400"></i> Gestion des Avis Utilisateurs
-        </h3>
-        <button onclick="closeModal('reviews-modal')" class="text-slate-400 hover:text-white font-bold">✕</button>
-      </div>
-      <div id="reviews-list-container" class="space-y-3 max-h-60 overflow-y-auto text-xs"></div>
-    </div>
-  </div>
-
-  <!-- CORE JAVASCRIPT SYSTEM -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    const DB_KEY = 'zakariatv_official_db';
-    
+    const DB_KEY = 'zakariatv_v4_sub_db';
+
     let state = JSON.parse(localStorage.getItem(DB_KEY)) || {
       users: [],
       quizzes: [],
       results: [],
+      reviews: [],
       resetRequests: [],
-      reviews: [
-        { id: 1, author: 'Kouassi Jean', text: 'Plateforme très fluide pour mes révisions !', stars: 5 },
-        { id: 2, author: 'Awa Diop', text: 'Paiement reçu rapidement sur WhatsApp. Merci ZakariaTV !', stars: 5 }
-      ],
+      subscriptionsRequests: [],
       currentUser: null
     };
 
@@ -432,18 +643,53 @@
       localStorage.setItem(DB_KEY, JSON.stringify(state));
     }
 
-    // TOAST NOTIFICATION ELEGANTE ET TEMPORAIRE
-    function showToast(message) {
-      const toast = document.getElementById('toast-notification');
-      document.getElementById('toast-message').innerText = message;
+    function showSuccessToast() {
+      const toast = document.getElementById('toast-success');
       toast.classList.remove('hidden');
       setTimeout(() => {
         toast.classList.add('hidden');
       }, 5000);
     }
 
+    // LISTE DES PAYS DE MONDE
+    const ALL_COUNTRIES = [
+      "Côte d'Ivoire", "Sénégal", "Cameroun", "Mali", "Burkina Faso", "Guinée", "Bénin", "Togo", "Niger", 
+      "Gabon", "Congo", "RDC", "Tchad", "France", "Canada", "Belgique", "Suisse", "Afghanistan", "Afrique du Sud", 
+      "Albanie", "Algérie", "Allemagne", "Andorre", "Angola", "Antigua-et-Barbuda", "Arabie Saoudite", "Argentine", 
+      "Arménie", "Australie", "Autriche", "Azerbaïdjan", "Bahamas", "Bahreïn", "Bangladesh", "Barbade", "Bélize", 
+      "Bhoutan", "Biélorussie", "Birmanie", "Bolivie", "Bosnie-Herzégovine", "Botswana", "Brésil", "Brunéi", "Bulgarie", 
+      "Burundi", "Cabo Verde", "Cambodge", "Chili", "Chine", "Chypre", "Colombie", "Comores", "Corée du Nord", 
+      "Corée du Sud", "Costa Rica", "Croatie", "Cuba", "Danemark", "Djibouti", "Dominique", "Égypte", "Émirats Arabes Unis", 
+      "Équateur", "Érythrée", "Espagne", "Estonie", "Eswatini", "États-Unis", "Éthiopie", "Fidji", "Finlande", "Gambie", 
+      "Géorgie", "Ghana", "Grèce", "Grenade", "Guatemala", "Guinée-Bissau", "Guinée équatoriale", "Guyana", "Haïti", 
+      "Honduras", "Hongrie", "Inde", "Indonésie", "Irak", "Iran", "Irlande", "Islande", "Israël", "Italie", "Jamaïque", 
+      "Japon", "Jordanie", "Kazakhstan", "Kenya", "Kirghizistan", "Kiribati", "Koweït", "Laos", "Lesotho", "Lettonie", 
+      "Liban", "Libéria", "Libye", "Liechtenstein", "Lituanie", "Luxembourg", "Macédoine du Nord", "Madagascar", 
+      "Malaisie", "Malawi", "Maldives", "Maroc", "Maurice", "Mauritanie", "Mexique", "Micronésie", "Moldavie", "Monaco", 
+      "Mongolie", "Monténégro", "Mozambique", "Namibie", "Nauru", "Népal", "Nicaragua", "Nigéria", "Norvège", 
+      "Nouvelle-Zélande", "Oman", "Ouganda", "Ouzbékistan", "Pakistan", "Palaos", "Palestine", "Panama", 
+      "Papouasie-Nouvelle-Guinée", "Paraguay", "Pays-Bas", "Pérou", "Philippines", "Pologne", "Portugal", "Qatar", 
+      "République Centrafricaine", "République Dominicaine", "Roumanie", "Royaume-Uni", "Russie", "Rwanda", "Saint-Kitts-et-Nevis", 
+      "Saint-Marin", "Saint-Vincent-et-les-Grenadines", "Sainte-Lucie", "Salomon", "Salvador", "Samoa", "Sao Tomé-et-Principe", 
+      "Serbie", "Seychelles", "Sierra Leone", "Singapour", "Slovaquie", "Slovénie", "Somalie", "Soudan", "Soudan du Sud", 
+      "Sri Lanka", "Suède", "Suriname", "Syrie", "Tadjikistan", "Tanzanie", "Thaïlande", "Timor-Leste", "Tonga", 
+      "Trinité-et-Tobago", "Tunisie", "Turkménistan", "Turquie", "Tuvalu", "Ukraine", "Uruguay", "Vanuatu", "Vatican", 
+      "Vénézuéla", "Viêt Nam", "Yémen", "Zambie", "Zimbabwe"
+    ];
+
+    function populateCountrySelect() {
+      const select = document.getElementById('reg-pays');
+      if (select) {
+        select.innerHTML = ALL_COUNTRIES.map(c => `<option value="${c}">${c}</option>`).join('');
+      }
+    }
+
+    // MODE SELECTION BASED ON URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const isParticipantMode = urlParams.get('mode') === 'participant';
+
     function showScreen(screenId) {
-      ['screen-login', 'screen-register', 'screen-admin-dash', 'screen-admin-premium', 'screen-user-home', 'screen-contact', 'screen-quiz', 'screen-user-profile'].forEach(id => {
+      ['screen-admin-login', 'screen-admin-dash', 'screen-admin-premium', 'screen-user-login', 'screen-user-register', 'screen-user-home', 'screen-countdown', 'screen-quiz', 'screen-quiz-result', 'screen-user-profile'].forEach(id => {
         document.getElementById(id)?.classList.add('hidden');
       });
       document.getElementById(screenId)?.classList.remove('hidden');
@@ -454,301 +700,110 @@
       if (screenId === 'screen-user-profile') renderUserProfile();
     }
 
-    function openModal(id) { 
+    function openModal(id) {
       if (id === 'reviews-modal') renderReviewsList();
-      document.getElementById(id)?.classList.remove('hidden'); 
+      if (id === 'ranking-modal') renderRankingModal();
+      if (id === 'pass-reset-modal') renderPassResetModal();
+      if (id === 'admin-sub-modal') renderAdminSubModal();
+      document.getElementById(id)?.classList.remove('hidden');
     }
     function closeModal(id) { document.getElementById(id)?.classList.add('hidden'); }
 
-    // AUTHENTICATION LOGIC
-    function handleLogin(e) {
+    // 1. ADMIN AUTHENTICATION
+    function handleAdminLogin(e) {
       e.preventDefault();
-      const userVal = document.getElementById('login-username').value.trim();
-      const passVal = document.getElementById('login-password').value.trim();
+      const u = document.getElementById('admin-user').value.trim();
+      const p = document.getElementById('admin-pass').value.trim();
 
-      if (userVal === 'ZakariaTV' && passVal === '55250031') {
-        state.currentUser = { role: 'admin', name: 'ZakariaTV' };
+      if (u === 'ZakariaTV' && p === '55250031') {
+        state.currentUser = { role: 'admin' };
         saveState();
+        showSuccessToast();
         showScreen('screen-admin-dash');
-        return;
-      }
-
-      const foundUser = state.users.find(u => `${u.nom} ${u.prenom}`.toLowerCase() === userVal.toLowerCase() && u.pass === passVal);
-      if (foundUser) {
-        if (foundUser.blocked) {
-          alert('Votre compte a été temporairement bloqué par l\'administrateur.');
-          return;
-        }
-        state.currentUser = { role: 'user', ...foundUser };
-        saveState();
-        showScreen('screen-user-home');
       } else {
-        alert('Identifiants incorrects. Veuillez réessayer.');
+        alert('Identifiants administrateur incorrects.');
       }
     }
 
-    function handleRegister(e) {
-      e.preventDefault();
-      const wa = document.getElementById('reg-whatsapp').value.trim();
-
-      if (state.users.some(u => u.whatsapp === wa)) {
-        alert('Ce numéro WhatsApp est déjà inscrit !');
-        return;
-      }
-
-      const newUser = {
-        nom: document.getElementById('reg-nom').value.trim(),
-        prenom: document.getElementById('reg-prenom').value.trim(),
-        ville: document.getElementById('reg-ville').value.trim(),
-        pays: document.getElementById('reg-pays').value,
-        whatsapp: wa,
-        pass: document.getElementById('reg-pass').value.trim(),
-        joinedDate: new Date().toLocaleDateString('fr-FR'),
-        subscriptionActive: false,
-        subActivationDate: null,
-        subExpirationDate: null,
-        blocked: false
-      };
-
-      state.users.push(newUser);
-      state.currentUser = { role: 'user', ...newUser };
-      saveState();
-      alert('Inscription réussie !');
-      showScreen('screen-user-home');
-    }
-
-    function logout() {
-      state.currentUser = null;
-      saveState();
-      showScreen('screen-login');
-    }
-
-    // DEMANDE D'ABONNEMENT PARTICIPANT
-    function requestSubscription() {
-      showToast("Votre demande a été enregistrée avec succès. Vous serez contacté au numéro WhatsApp que vous avez renseigné afin de finaliser votre paiement. Merci d'utiliser notre application et bonne révision !");
-    }
-
-    // ADMIN DASHBOARD
     function renderAdminDashboard() {
       document.getElementById('stat-created').innerText = state.quizzes.length;
       document.getElementById('stat-completed').innerText = state.results.length;
       document.getElementById('stat-accounts').innerText = state.users.length;
       document.getElementById('stat-participants').innerText = new Set(state.results.map(r => r.whatsapp)).size;
-      document.getElementById('stat-winners').innerText = state.results.filter(r => r.score >= 4).length;
-      document.getElementById('stat-active').innerText = state.quizzes.filter(q => q.status === 'active').length;
-      document.getElementById('stat-finished').innerText = state.quizzes.filter(q => q.status === 'finished').length;
-      document.getElementById('stat-resets').innerText = state.resetRequests.length;
+      document.getElementById('admin-reviews-count').innerText = state.reviews.length;
+      document.getElementById('admin-reset-count').innerText = state.resetRequests ? state.resetRequests.length : 0;
+      document.getElementById('admin-subs-count').innerText = state.subscriptionsRequests ? state.subscriptionsRequests.length : 0;
 
-      renderAdminLinks();
-    }
+      const uniqueLink = `${window.location.origin}${window.location.pathname}?mode=participant`;
+      document.getElementById('unique-participant-link').value = uniqueLink;
 
-    function renderAdminLinks() {
-      const container = document.getElementById('admin-links-container');
+      const listContainer = document.getElementById('admin-quiz-list');
       if (state.quizzes.length === 0) {
-        container.innerHTML = '<p class="text-slate-500">Aucun concours disponible.</p>';
+        listContainer.innerHTML = '<p class="text-slate-500">Aucun concours enregistré.</p>';
         return;
       }
 
-      container.innerHTML = state.quizzes.map(q => `
+      listContainer.innerHTML = state.quizzes.map(q => `
         <div class="glass-card p-3 rounded-xl flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <strong class="text-white">${q.title}</strong> (${q.category} - ${q.class})
-            <p class="text-[10px] text-amber-400 select-all font-mono mt-0.5">${q.link}</p>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="copyToClipboard('${q.link}')" class="px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg">
-              <i class="fa-solid fa-copy"></i> Copier
-            </button>
-            <button onclick="toggleQuizStatus(${q.id})" class="px-2.5 py-1 ${q.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'} rounded-lg">
-              ${q.status === 'active' ? 'En ligne' : 'Hors ligne'}
-            </button>
-            <button onclick="deleteQuiz(${q.id})" class="px-2 py-1 bg-red-600/30 text-red-400 rounded-lg">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text);
-      alert('Lien copié dans le presse-papier !');
-    }
-
-    function toggleQuizStatus(quizId) {
-      const q = state.quizzes.find(item => item.id === quizId);
-      if (q) {
-        q.status = q.status === 'active' ? 'finished' : 'active';
-        saveState();
-        renderAdminDashboard();
-      }
-    }
-
-    function deleteQuiz(quizId) {
-      if (confirm('Supprimer définitivement ce concours ?')) {
-        state.quizzes = state.quizzes.filter(q => q.id !== quizId);
-        saveState();
-        renderAdminDashboard();
-      }
-    }
-
-    // MODAL AUTOMATIQUE - COMPTEURS & GESTION DES ABONNEMENTS / BLOCAGE
-    function openDataListModal(type) {
-      const title = document.getElementById('data-modal-title');
-      const content = document.getElementById('data-modal-content');
-      let html = '';
-
-      if (type === 'comptes_crees') {
-        title.innerText = 'Gestion des comptes, blocages & abonnements';
-        html = state.users.map((u, idx) => `
-          <div class="glass-card p-3 rounded-xl flex flex-wrap justify-between items-center gap-2">
-            <div>
-              <strong class="text-white">${u.nom} ${u.prenom}</strong> (${u.ville})
-              <p class="text-[10px] text-slate-400">WhatsApp: ${u.whatsapp} | Statut: ${u.subscriptionActive ? '<span class="text-emerald-400">Abonné</span>' : '<span class="text-slate-500">Inactif</span>'}</p>
-              ${u.subActivationDate ? `<p class="text-[9px] text-amber-400">Actif du ${u.subActivationDate} au ${u.subExpirationDate}</p>` : ''}
-            </div>
-            <div class="flex items-center gap-1.5">
-              <button onclick="toggleUserSubscription(${idx})" class="px-2 py-1 ${u.subscriptionActive ? 'bg-orange-500/20 text-orange-400' : 'bg-emerald-500/20 text-emerald-400'} rounded text-[10px] font-bold">
-                ${u.subscriptionActive ? 'Désactiver Abo' : 'Activer Abo'}
-              </button>
-              <button onclick="toggleUserBlock(${idx})" class="px-2 py-1 ${u.blocked ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'} rounded text-[10px] font-bold">
-                ${u.blocked ? 'Débloquer' : 'Bloquer'}
-              </button>
-            </div>
-          </div>
-        `).join('') || '<p class="text-slate-500">Aucun compte trouvé.</p>';
-      } 
-      else if (type === 'participants') {
-        title.innerText = 'Liste des participants aux concours';
-        html = state.results.map(r => `
-          <div class="glass-card p-3 rounded-xl flex justify-between items-center">
-            <div>
-              <strong class="text-white">${r.nom} ${r.prenom}</strong> (${r.ville})
-              <p class="text-[10px] text-slate-400">Score: ${r.score}/5 | WhatsApp: ${r.whatsapp}</p>
-            </div>
-            <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded">${r.quizTitle}</span>
-          </div>
-        `).join('') || '<p class="text-slate-500">Aucun participant.</p>';
-      }
-      else if (type === 'gagnants') {
-        title.innerText = 'Liste des gagnants';
-        const winners = state.results.filter(r => r.score >= 3);
-        html = winners.map(r => `
-          <div class="glass-card p-3 rounded-xl flex justify-between items-center border-l-4 border-yellow-500">
-            <div>
-              <strong class="text-white">${r.nom} ${r.prenom}</strong> - <span class="text-yellow-400">${r.score}/5 Pts</span>
-            </div>
-            <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-[10px] font-bold">${r.badge || 'En cours de paiement'}</span>
-          </div>
-        `).join('') || '<p class="text-slate-500">Aucun gagnant.</p>';
-      }
-      else if (type === 'mots_de_passe_oublies') {
-        title.innerText = 'Récupération mot de passe';
-        html = state.resetRequests.map((req, idx) => `
-          <div class="glass-card p-3 rounded-xl flex justify-between items-center border-l-4 border-orange-500">
-            <div>
-              <strong class="text-white">${req.nom} ${req.prenom}</strong>
-              <p class="text-[10px] text-amber-400 font-mono">WhatsApp: ${req.whatsapp}</p>
-            </div>
-            <button onclick="approvePasswordReset(${idx})" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-bold rounded-lg text-[10px]">
-              Réinitialiser à 5555
-            </button>
-          </div>
-        `).join('') || '<p class="text-slate-500">Aucune demande.</p>';
-      }
-      else {
-        title.innerText = 'Liste des concours';
-        html = state.quizzes.map(q => `
-          <div class="glass-card p-3 rounded-xl flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            ${q.image ? `<img src="${q.image}" class="w-10 h-10 rounded-lg object-cover">` : ''}
             <div>
               <strong class="text-white">${q.title}</strong>
-              <p class="text-[10px] text-slate-400">${q.category} - ${q.class}</p>
+              <div class="flex items-center gap-2 mt-0.5">
+                <span class="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">${q.category} - ${q.class}</span>
+                <span class="text-[10px] ${q.access === 'free' ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-amber-400 bg-amber-500/10 border-amber-500/20'} px-2 py-0.5 rounded border">
+                  ${q.access === 'free' ? 'Gratuit' : 'Abonnement requis'}
+                </span>
+              </div>
             </div>
-            <span class="text-amber-400 font-mono text-[10px]">${q.createdDate}</span>
           </div>
-        `).join('') || '<p class="text-slate-500">Aucun concours.</p>';
-      }
-
-      content.innerHTML = html;
-      openModal('data-list-modal');
-    }
-
-    function toggleUserSubscription(index) {
-      const u = state.users[index];
-      if (!u.subscriptionActive) {
-        const now = new Date();
-        const exp = new Date();
-        exp.setDate(now.getDate() + 30); // Abonnement valide 30 jours
-
-        u.subscriptionActive = true;
-        u.subActivationDate = now.toLocaleDateString('fr-FR');
-        u.subExpirationDate = exp.toLocaleDateString('fr-FR');
-      } else {
-        u.subscriptionActive = false;
-        u.subActivationDate = null;
-        u.subExpirationDate = null;
-      }
-      saveState();
-      openDataListModal('comptes_crees');
-    }
-
-    function toggleUserBlock(index) {
-      const u = state.users[index];
-      u.blocked = !u.blocked;
-      saveState();
-      openDataListModal('comptes_crees');
-    }
-
-    function approvePasswordReset(index) {
-      const req = state.resetRequests[index];
-      const user = state.users.find(u => u.whatsapp === req.whatsapp);
-      if (user) {
-        user.pass = '5555';
-        alert(`Message envoyé à ${req.whatsapp} : Votre nouveau mot de passe provisoire est 5555.`);
-      }
-      state.resetRequests.splice(index, 1);
-      saveState();
-      closeModal('data-list-modal');
-      renderAdminDashboard();
-    }
-
-    // SUPPRESSION DES AVIS (ADMIN)
-    function renderReviewsList() {
-      const container = document.getElementById('reviews-list-container');
-      if (state.reviews.length === 0) {
-        container.innerHTML = '<p class="text-slate-500">Aucun avis répertorié.</p>';
-        return;
-      }
-      container.innerHTML = state.reviews.map((rev, idx) => `
-        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-start gap-2">
-          <div>
-            <div class="flex justify-between font-bold text-amber-400"><span>${rev.author}</span> <span>${'★'.repeat(rev.stars)}</span></div>
-            <p class="text-slate-300 mt-1 text-[11px]">${rev.text}</p>
+          <div class="flex items-center gap-2">
+            <button onclick="toggleQuizStatus(${q.id})" class="px-2.5 py-1 ${q.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'} rounded-lg font-bold">
+              ${q.status === 'active' ? 'En ligne' : 'Hors ligne'}
+            </button>
+            <button onclick="deleteQuiz(${q.id})" class="px-2.5 py-1 bg-red-600/30 text-red-400 hover:bg-red-600/50 rounded-lg font-bold">
+              <i class="fa-solid fa-trash mr-1"></i> Supprimer
+            </button>
           </div>
-          <button onclick="deleteReview(${idx})" class="text-red-400 hover:text-red-300 text-xs px-2 py-1 bg-red-500/10 rounded-lg">
-            <i class="fa-solid fa-trash"></i>
-          </button>
         </div>
       `).join('');
     }
 
-    function deleteReview(index) {
-      if (confirm('Supprimer cet avis ?')) {
-        state.reviews.splice(index, 1);
+    function copyUniqueLink() {
+      const linkInput = document.getElementById('unique-participant-link');
+      linkInput.select();
+      navigator.clipboard.writeText(linkInput.value);
+      showSuccessToast();
+    }
+
+    function toggleQuizStatus(id) {
+      const q = state.quizzes.find(item => item.id === id);
+      if (q) {
+        q.status = q.status === 'active' ? 'offline' : 'active';
         saveState();
-        renderReviewsList();
+        showSuccessToast();
+        renderAdminDashboard();
       }
     }
 
-    // CREATE QUIZ BUILDER
+    function deleteQuiz(id) {
+      if (confirm('Voulez-vous vraiment supprimer définitivement ce concours ?')) {
+        state.quizzes = state.quizzes.filter(q => q.id !== id);
+        saveState();
+        showSuccessToast();
+        renderAdminDashboard();
+      }
+    }
+
+    // CREATE QUIZ
     function renderAdminPremium() {
       const container = document.getElementById('questions-inputs-container');
       if (container.children.length === 0) {
         let html = '';
         for (let i = 1; i <= 5; i++) {
           html += `
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-2">
-              <input type="text" id="q${i}-text" required placeholder="Saisir la Question ${i}" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white">
+            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-2">
+              <input type="text" id="q${i}-text" required placeholder="Question ${i}" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white">
               <div class="grid grid-cols-2 gap-2">
                 <input type="text" id="q${i}-optA" required placeholder="Option A" class="bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
                 <input type="text" id="q${i}-optB" required placeholder="Option B" class="bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
@@ -770,9 +825,7 @@
 
     function handleCreateQuiz(e) {
       e.preventDefault();
-      const quizId = Date.now();
       const questions = [];
-
       for (let i = 1; i <= 5; i++) {
         questions.push({
           q: document.getElementById(`q${i}-text`).value,
@@ -786,47 +839,203 @@
         });
       }
 
-      const generatedLink = `${window.location.origin}${window.location.pathname}?quizId=${quizId}`;
-
-      const newQuiz = {
-        id: quizId,
+      state.quizzes.push({
+        id: Date.now(),
         title: document.getElementById('quiz-title').value,
         category: document.getElementById('quiz-category').value,
         class: document.getElementById('quiz-class').value,
+        access: document.getElementById('quiz-access').value,
+        image: document.getElementById('quiz-image').value.trim(),
         questions: questions,
-        link: generatedLink,
-        status: 'active',
-        createdDate: new Date().toLocaleDateString('fr-FR')
-      };
+        status: 'active'
+      });
 
-      state.quizzes.push(newQuiz);
       saveState();
-      alert(`Concours créé avec succès !\nLien généré : ${generatedLink}`);
+      showSuccessToast();
       showScreen('screen-admin-dash');
     }
 
-    function showForgotPasswordModal() { openModal('forgot-modal'); }
-    
+    // PARTICIPANT AUTHENTICATION
+    function handleUserLogin(e) {
+      e.preventDefault();
+      const name = document.getElementById('user-login-name').value.trim();
+      const pass = document.getElementById('user-login-pass').value.trim();
+
+      const user = state.users.find(u => `${u.nom} ${u.prenom}`.toLowerCase() === name.toLowerCase() && u.pass === pass);
+      if (user) {
+        state.currentUser = { role: 'user', ...user };
+        saveState();
+        showSuccessToast();
+        showScreen('screen-user-home');
+      } else {
+        alert('Compte introuvable ou mot de passe incorrect.');
+      }
+    }
+
+    function handleUserRegister(e) {
+      e.preventDefault();
+      const wa = document.getElementById('reg-whatsapp').value.trim();
+
+      if (state.users.some(u => u.whatsapp === wa)) {
+        alert('Ce numéro WhatsApp est déjà enregistré.');
+        return;
+      }
+
+      const newUser = {
+        nom: document.getElementById('reg-nom').value.trim(),
+        prenom: document.getElementById('reg-prenom').value.trim(),
+        ville: document.getElementById('reg-ville').value.trim(),
+        pays: document.getElementById('reg-pays').value,
+        whatsapp: wa,
+        pass: document.getElementById('reg-pass').value.trim(),
+        subExpire: null
+      };
+
+      state.users.push(newUser);
+      state.currentUser = { role: 'user', ...newUser };
+      saveState();
+      showSuccessToast();
+      showScreen('screen-user-home');
+    }
+
+    function logout() {
+      state.currentUser = null;
+      saveState();
+      showScreen(isParticipantMode ? 'screen-user-login' : 'screen-admin-login');
+    }
+
+    // ABONNEMENT LOGIC
+    function checkUserSubActive(user) {
+      if (!user || !user.subExpire) return false;
+      return new Date(user.subExpire) > new Date();
+    }
+
+    function getSubDetails(user) {
+      if (!user || !user.subExpire) return null;
+      const expireDate = new Date(user.subExpire);
+      const now = new Date();
+      if (expireDate <= now) return null;
+
+      const diffTime = expireDate - now;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return {
+        startDate: user.subStart || 'Récemment',
+        expireDate: expireDate.toLocaleDateString('fr-FR'),
+        daysLeft: diffDays
+      };
+    }
+
+    function requestSubscription(type, price) {
+      if (!state.currentUser) return;
+      if (!state.subscriptionsRequests) state.subscriptionsRequests = [];
+
+      state.subscriptionsRequests.push({
+        id: Date.now(),
+        nom: state.currentUser.nom,
+        prenom: state.currentUser.prenom,
+        ville: state.currentUser.ville,
+        pays: state.currentUser.pays,
+        whatsapp: state.currentUser.whatsapp,
+        type: type,
+        price: price,
+        date: new Date().toLocaleDateString('fr-FR')
+      });
+
+      saveState();
+      closeModal('buy-sub-modal');
+      showSuccessToast();
+    }
+
+    // ADMIN ABONNEMENTS MANAGEMENT
+    function renderAdminSubModal() {
+      const container = document.getElementById('admin-subs-list');
+      if (!state.subscriptionsRequests || state.subscriptionsRequests.length === 0) {
+        container.innerHTML = '<p class="text-slate-500">Aucune demande d\'abonnement en attente.</p>';
+        return;
+      }
+
+      container.innerHTML = state.subscriptionsRequests.map(req => `
+        <div class="glass-card p-3 rounded-xl flex items-center justify-between gap-2 border-l-4 border-sky-400">
+          <div>
+            <strong class="text-white">${req.prenom} ${req.nom}</strong> (${req.ville}, ${req.pays})
+            <p class="text-[10px] text-amber-400 font-bold">WhatsApp: ${req.whatsapp} | Formule: ${req.type} (${req.price} F) | Date: ${req.date}</p>
+          </div>
+          <button onclick="activateSubscription('${req.whatsapp}', '${req.type}', ${req.id})" class="px-3 py-1.5 bg-emerald-500 text-slate-950 font-black rounded-lg text-xs hover:bg-emerald-400">
+            Activer l'abonnement
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function activateSubscription(whatsapp, type, reqId) {
+      const user = state.users.find(u => u.whatsapp === whatsapp);
+      if (user) {
+        const now = new Date();
+        const months = type.includes('5') ? 5 : 1;
+        const expire = new Date();
+        expire.setMonth(expire.getMonth() + months);
+
+        user.subStart = now.toLocaleDateString('fr-FR');
+        user.subExpire = expire.toISOString();
+
+        state.subscriptionsRequests = state.subscriptionsRequests.filter(r => r.id !== reqId);
+        saveState();
+        showSuccessToast();
+        renderAdminSubModal();
+        renderAdminDashboard();
+      }
+    }
+
+    // ADMIN FORGOT PASSWORD MANAGEMENT
     function submitForgotPasswordRequest() {
       const wa = document.getElementById('forgot-wa-input').value.trim();
       const user = state.users.find(u => u.whatsapp === wa);
       if (user) {
+        if (!state.resetRequests) state.resetRequests = [];
         state.resetRequests.push(user);
         saveState();
-        alert('Votre demande a été transmise à l\'administrateur.');
         closeModal('forgot-modal');
+        showSuccessToast();
       } else {
         alert('Numéro WhatsApp introuvable.');
       }
     }
 
-    // PARTICIPANT HOME & QUIZ ENGINE
+    function renderPassResetModal() {
+      const container = document.getElementById('admin-reset-list');
+      if (!state.resetRequests || state.resetRequests.length === 0) {
+        container.innerHTML = '<p class="text-slate-500">Aucune demande de réinitialisation.</p>';
+        return;
+      }
+
+      container.innerHTML = state.resetRequests.map(usr => `
+        <div class="glass-card p-3 rounded-xl flex items-center justify-between gap-2 border-l-4 border-amber-400">
+          <div>
+            <strong class="text-white">${usr.nom} ${usr.prenom}</strong> (${usr.ville}, ${usr.pays})
+            <p class="text-[10px] text-amber-400 font-bold">WhatsApp: ${usr.whatsapp}</p>
+          </div>
+          <button onclick="adminResetUserPassword('${usr.whatsapp}')" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-black rounded-lg text-xs hover:bg-amber-400">
+            Réinitialiser à 5555
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function adminResetUserPassword(whatsapp) {
+      const u = state.users.find(usr => usr.whatsapp === whatsapp);
+      if (u) {
+        u.pass = '5555';
+        state.resetRequests = state.resetRequests.filter(req => req.whatsapp !== whatsapp);
+        saveState();
+        showSuccessToast();
+        renderPassResetModal();
+        renderAdminDashboard();
+      }
+    }
+
+    // PARTICIPANT HOME & CONCOURS
     let selectedCat = 'Tous';
     let activeQuiz = null;
-    let currentQIdx = 0;
-    let quizScore = 0;
-    let quizTimer = null;
-    let timeLeft = 10;
 
     function filterCategory(cat) {
       selectedCat = cat;
@@ -836,46 +1045,104 @@
     function renderUserHome() {
       if (state.currentUser && state.currentUser.nom) {
         document.getElementById('user-welcome').innerText = `Bonjour, ${state.currentUser.prenom} ${state.currentUser.nom} !`;
+
+        const subActive = checkUserSubActive(state.currentUser);
+        const badgeElem = document.getElementById('user-sub-badge');
+        if (subActive) {
+          const subInfo = getSubDetails(state.currentUser);
+          badgeElem.innerHTML = `
+            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-lg font-bold inline-flex items-center gap-1">
+              <i class="fa-solid fa-crown"></i> Abonnement Actif | Expiration : ${subInfo.expireDate} (${subInfo.daysLeft} jours restants)
+            </span>
+          `;
+        } else {
+          badgeElem.innerHTML = `
+            <span class="bg-red-500/10 text-red-400 border border-red-500/20 px-2.5 py-1 rounded-lg font-bold inline-flex items-center gap-1">
+              <i class="fa-solid fa-lock"></i> Aucun abonnement actif
+            </span>
+          `;
+        }
       }
 
-      const container = document.getElementById('user-quizzes-list');
+      const listContainer = document.getElementById('user-quizzes-list');
       const filtered = state.quizzes.filter(q => (selectedCat === 'Tous' || q.category === selectedCat) && q.status === 'active');
 
       if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="glass p-6 rounded-2xl text-center text-slate-400 text-xs leading-relaxed">
-            Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard.
+        listContainer.innerHTML = `
+          <div class="glass p-6 rounded-2xl text-center text-slate-400 text-xs">
+            Aucun concours disponible dans ce niveau pour le moment.
           </div>
         `;
         return;
       }
 
-      container.innerHTML = filtered.map(q => `
-        <div class="glass p-4 rounded-2xl flex items-center justify-between">
-          <div>
-            <h4 class="font-bold text-white text-sm">${q.title}</h4>
-            <span class="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">${q.category} - ${q.class}</span>
+      const userSub = checkUserSubActive(state.currentUser);
+
+      listContainer.innerHTML = filtered.map(q => {
+        const isLocked = q.access === 'sub' && !userSub;
+
+        return `
+          <div class="glass p-5 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 border-l-4 ${q.access === 'free' ? 'border-emerald-500' : 'border-amber-500'}">
+            <div class="flex items-center gap-4 w-full md:w-auto">
+              ${q.image ? `<img src="${q.image}" class="w-16 h-16 rounded-xl object-cover border border-slate-700">` : ''}
+              <div>
+                <h4 class="font-bold text-white text-base">${q.title}</h4>
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-semibold">${q.category} - ${q.class}</span>
+                  <span class="text-[10px] font-extrabold ${q.access === 'free' ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-amber-400 bg-amber-500/10 border-amber-500/20'} px-2 py-0.5 rounded border">
+                    ${q.access === 'free' ? 'Gratuit' : 'Abonnement requis'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full md:w-auto text-right">
+              ${isLocked ? `
+                <button onclick="openModal('buy-sub-modal')" class="w-full md:w-auto px-5 py-2.5 bg-gradient-to-r from-red-500 to-amber-500 font-extrabold text-white rounded-xl text-xs shadow-lg animate-blink">
+                  <i class="fa-solid fa-lock mr-1"></i> Acheter un abonnement
+                </button>
+              ` : `
+                <button onclick="prepareQuizCountdown(${q.id})" class="w-full md:w-auto px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 font-extrabold text-slate-950 rounded-xl text-xs shadow-lg">
+                  Participer
+                </button>
+              `}
+            </div>
           </div>
-          <button onclick="startQuiz(${q.id})" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 font-bold text-slate-950 rounded-xl text-xs shadow-lg">
-            Participer
-          </button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    // ANTI-CHEAT DETECTOR
-    window.addEventListener('blur', () => {
-      if (activeQuiz) {
-        clearInterval(quizTimer);
-        alert('TRICHE DÉTECTÉE : Vous avez quitté l\'application pendant le concours. Votre résultat est annulé.');
-        recordQuizResult('TRICHE', 0);
-        activeQuiz = null;
-        showScreen('screen-user-home');
-      }
-    });
-
-    function startQuiz(quizId) {
+    let countdownTimer = null;
+    function prepareQuizCountdown(quizId) {
       activeQuiz = state.quizzes.find(q => q.id === quizId);
+      showScreen('screen-countdown');
+
+      let count = 20;
+      document.getElementById('countdown-number').innerText = count;
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        count--;
+        document.getElementById('countdown-number').innerText = count;
+        if (count <= 0) {
+          clearInterval(countdownTimer);
+          startQuizEngine();
+        }
+      }, 1000);
+    }
+
+    function cancelCountdown() {
+      clearInterval(countdownTimer);
+      showScreen('screen-user-home');
+    }
+
+    // 30 SECONDS QUIZ ENGINE & INSTANT TTS
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let questionTimer = null;
+    let timeLeft = 30;
+
+    function startQuizEngine() {
       currentQIdx = 0;
       quizScore = 0;
       showScreen('screen-quiz');
@@ -883,7 +1150,7 @@
     }
 
     function loadQuestion() {
-      clearInterval(quizTimer);
+      clearInterval(questionTimer);
       if (currentQIdx >= activeQuiz.questions.length) {
         finishQuiz();
         return;
@@ -901,20 +1168,21 @@
         </button>
       `).join('');
 
-      timeLeft = 10;
+      timeLeft = 30;
       document.getElementById('quiz-timer').innerText = `${timeLeft}s`;
-      quizTimer = setInterval(() => {
+
+      questionTimer = setInterval(() => {
         timeLeft--;
         document.getElementById('quiz-timer').innerText = `${timeLeft}s`;
         if (timeLeft <= 0) {
-          clearInterval(quizTimer);
+          clearInterval(questionTimer);
           submitAnswer(null);
         }
       }, 1000);
     }
 
     function submitAnswer(selectedKey) {
-      clearInterval(quizTimer);
+      clearInterval(questionTimer);
       if (selectedKey === activeQuiz.questions[currentQIdx].correct) {
         quizScore++;
       }
@@ -924,42 +1192,134 @@
 
     function speakCurrentQuestion() {
       if (!activeQuiz) return;
+      window.speechSynthesis.cancel();
       const q = activeQuiz.questions[currentQIdx];
-      const speech = new SpeechSynthesisUtterance(`${q.q}. Option A: ${q.opts.A}. Option B: ${q.opts.B}. Option C: ${q.opts.C}. Option D: ${q.opts.D}`);
+      const text = `${q.q}. Option A: ${q.opts.A}. Option B: ${q.opts.B}. Option C: ${q.opts.C}. Option D: ${q.opts.D}`;
+      const speech = new SpeechSynthesisUtterance(text);
       speech.lang = 'fr-FR';
+      speech.rate = 1.1;
       window.speechSynthesis.speak(speech);
     }
 
     function finishQuiz() {
-      const isWinner = quizScore >= 3;
-      recordQuizResult(isWinner ? 'En cours de paiement' : 'Terminé', quizScore);
-
-      if (isWinner) {
-        alert(`Félicitations ! Vous faites partie des trois premiers avec ${quizScore}/5 points.\n\nVous recevrez un message WhatsApp dans un délai de 15 minutes pour votre paiement. Si vous ne recevez aucun message après ce délai, veuillez contacter le : 0799591024 ou 0585971941.`);
-      } else {
-        alert(`Merci d'avoir participé à ce concours. Votre score : ${quizScore}/5. Veuillez retourner à l'accueil.`);
+      if (state.currentUser) {
+        state.results.push({
+          nom: state.currentUser.nom,
+          prenom: state.currentUser.prenom,
+          ville: state.currentUser.ville,
+          whatsapp: state.currentUser.whatsapp,
+          score: quizScore,
+          quizTitle: activeQuiz.title
+        });
+        saveState();
       }
 
-      activeQuiz = null;
-      showScreen('screen-user-home');
+      document.getElementById('res-score-display').innerText = `${quizScore} / 5`;
+      showSuccessToast();
+      showScreen('screen-quiz-result');
     }
 
-    function recordQuizResult(badgeStatus, score) {
-      if (!state.currentUser) return;
-      state.results.push({
-        nom: state.currentUser.nom,
-        prenom: state.currentUser.prenom,
-        ville: state.currentUser.ville,
-        pays: state.currentUser.pays,
-        whatsapp: state.currentUser.whatsapp,
-        score: score,
-        badge: badgeStatus,
-        quizTitle: activeQuiz ? activeQuiz.title : 'Concours'
+    function confirmQuitQuiz() {
+      if (confirm('Voulez-vous vraiment quitter ce concours en cours ?')) {
+        clearInterval(questionTimer);
+        showScreen('screen-user-home');
+      }
+    }
+
+    // RANKINGS & REVIEWS
+    function renderRankingModal() {
+      const container = document.getElementById('ranking-modal-content');
+      if (state.results.length === 0) {
+        container.innerHTML = '<p class="text-slate-500">Aucun résultat enregistré.</p>';
+        return;
+      }
+
+      const sorted = [...state.results].sort((a,b) => b.score - a.score);
+      container.innerHTML = sorted.map((r, idx) => `
+        <div class="glass-card p-3 rounded-xl flex items-center justify-between border-l-4 ${idx < 3 ? 'border-amber-400' : 'border-slate-700'}">
+          <div class="flex items-center gap-3">
+            <span class="font-black text-amber-400 text-sm">#${idx + 1}</span>
+            <div>
+              <strong class="text-white">${r.nom} ${r.prenom}</strong> (${r.ville})
+              <p class="text-[10px] text-slate-400">${r.quizTitle}</p>
+            </div>
+          </div>
+          <span class="font-black text-amber-400 text-sm">${r.score}/5 Pts</span>
+        </div>
+      `).join('');
+    }
+
+    function handleUserSubmitReview(e) {
+      e.preventDefault();
+      state.reviews.push({
+        author: `${state.currentUser.prenom} ${state.currentUser.nom}`,
+        stars: parseInt(document.getElementById('review-stars').value),
+        comment: document.getElementById('review-comment').value.trim()
       });
       saveState();
+      closeModal('add-review-modal');
+      showSuccessToast();
     }
 
-    // USER PROFILE LOGIC
+    function renderReviewsList() {
+      const container = document.getElementById('reviews-list-container');
+      if (state.reviews.length === 0) {
+        container.innerHTML = '<p class="text-slate-500">Aucun avis laissé pour le moment.</p>';
+        return;
+      }
+
+      container.innerHTML = state.reviews.map(rev => `
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-1">
+          <div class="flex justify-between font-bold text-amber-400">
+            <span>${rev.author}</span>
+            <span>${'★'.repeat(rev.stars)}${'☆'.repeat(5 - rev.stars)}</span>
+          </div>
+          <p class="text-slate-300 text-xs">${rev.comment}</p>
+        </div>
+      `).join('');
+    }
+
+    // MODAL STATISTIQUES CLIQUABLES ADMIN
+    function openDataListModal(type) {
+      const titleElem = document.getElementById('data-modal-title');
+      const contentElem = document.getElementById('data-modal-content');
+
+      if (type === 'concours_crees') {
+        titleElem.innerText = 'Liste des Concours Créés';
+        contentElem.innerHTML = state.quizzes.map(q => `
+          <div class="glass-card p-3 rounded-xl border-l-4 border-amber-500">
+            <strong class="text-white">${q.title}</strong> (${q.category} - ${q.class})
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucun concours.</p>';
+      } else if (type === 'concours_effectues') {
+        titleElem.innerText = 'Historique des Concours Effectués';
+        contentElem.innerHTML = state.results.map(r => `
+          <div class="glass-card p-3 rounded-xl border-l-4 border-emerald-500 flex justify-between">
+            <div><strong class="text-white">${r.nom} ${r.prenom}</strong> - ${r.quizTitle}</div>
+            <span class="font-bold text-amber-400">${r.score}/5 Pts</span>
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucun résultat.</p>';
+      } else if (type === 'comptes_crees') {
+        titleElem.innerText = 'Liste des Comptes Élèves Inscrit';
+        contentElem.innerHTML = state.users.map(u => `
+          <div class="glass-card p-3 rounded-xl border-l-4 border-blue-500">
+            <strong class="text-white">${u.nom} ${u.prenom}</strong> - ${u.ville}, ${u.pays} (WhatsApp: ${u.whatsapp})
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucun compte créé.</p>';
+      } else if (type === 'participants') {
+        titleElem.innerText = 'Liste des Participants Distincts';
+        const set = new Set(state.results.map(r => `${r.nom} ${r.prenom} (${r.whatsapp})`));
+        contentElem.innerHTML = Array.from(set).map(p => `
+          <div class="glass-card p-3 rounded-xl border-l-4 border-purple-500">
+            <strong class="text-white">${p}</strong>
+          </div>
+        `).join('') || '<p class="text-slate-500">Aucun participant.</p>';
+      }
+
+      openModal('data-list-modal');
+    }
+
+    // USER PROFILE
     function renderUserProfile() {
       if (!state.currentUser) return;
       document.getElementById('prof-nom').innerText = state.currentUser.nom || '';
@@ -967,16 +1327,6 @@
       document.getElementById('prof-ville').innerText = state.currentUser.ville || '';
       document.getElementById('prof-pays').innerText = state.currentUser.pays || '';
       document.getElementById('prof-whatsapp').innerText = state.currentUser.whatsapp || '';
-
-      const u = state.users.find(usr => usr.whatsapp === state.currentUser.whatsapp);
-      const subElem = document.getElementById('prof-sub-status');
-      if (u && u.subscriptionActive) {
-        subElem.className = 'font-bold text-emerald-400';
-        subElem.innerText = `Actif jusqu'au ${u.subExpirationDate}`;
-      } else {
-        subElem.className = 'font-bold text-slate-400';
-        subElem.innerText = 'Inactif';
-      }
     }
 
     function handlePasswordChange(e) {
@@ -985,7 +1335,7 @@
       const newP = document.getElementById('change-pass-new').value;
 
       if (oldP !== state.currentUser.pass) {
-        alert('Le mot de passe actuel est incorrect.');
+        alert('Mot de passe actuel incorrect.');
         return;
       }
 
@@ -994,12 +1344,17 @@
       if (u) u.pass = newP;
 
       saveState();
-      alert('Votre mot de passe a été modifié avec succès !');
+      showSuccessToast();
     }
 
-    // INITIALIZATION
+    // INITIALIZATION ROUTER
     window.onload = () => {
-      showScreen('screen-login');
+      populateCountrySelect();
+      if (isParticipantMode) {
+        showScreen('screen-user-login');
+      } else {
+        showScreen('screen-admin-login');
+      }
     };
   </script>
 </body>
