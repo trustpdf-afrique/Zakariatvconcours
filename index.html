@@ -459,13 +459,14 @@
 
         <!-- Tableau de Bord Admin -->
         <section id="admin-dashboard-view" class="view-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px;">
                 <button class="btn btn-back" style="margin: 0;" onclick="showView('admin-login-view')">
                     <i class="fa-solid fa-power-off"></i> Déconnexion
                 </button>
-                <button class="btn btn-primary" onclick="openCreateContestModal()">
-                    <i class="fa-solid fa-plus"></i> Créer Concours
-                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-danger" onclick="resetAllData()"><i class="fa-solid fa-rotate-left"></i> Tout réinitialiser</button>
+                    <button class="btn btn-primary" onclick="openCreateContestModal()"><i class="fa-solid fa-plus"></i> Créer Concours</button>
+                </div>
             </div>
 
             <!-- PASTILLES ULTRA-COMPACTES & DESIGN PREMIUM -->
@@ -481,7 +482,7 @@
                     <div class="stat-pill-icon" style="color:var(--success); background:rgba(16,185,129,0.15);"><i class="fa-solid fa-users"></i></div>
                     <div>
                         <div class="stat-pill-val" id="stat-users">0</div>
-                        <div class="stat-pill-lbl">Élèves</div>
+                        <div class="stat-pill-lbl">Comptes créés</div>
                     </div>
                 </div>
                 <div class="stat-pill">
@@ -516,9 +517,10 @@
 
             <!-- Boutons de Gestion Administrateur -->
             <div style="display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap;">
-                <button class="btn btn-secondary" onclick="openAdminUsersModal()"><i class="fa-solid fa-users"></i> Participants</button>
+                <button class="btn btn-secondary" onclick="openAdminUsersModal()"><i class="fa-solid fa-users"></i> Comptes créés (<span id="users-count-badge">0</span>)</button>
                 <button class="btn btn-secondary" onclick="openAdminResultsModal()"><i class="fa-solid fa-square-poll-vertical"></i> Résultats</button>
                 <button class="btn btn-secondary" onclick="openAdminResetsModal()"><i class="fa-solid fa-key"></i> Mots de passe (<span id="reset-badge-count">0</span>)</button>
+                <button class="btn btn-secondary" onclick="openAdminSubscriptionModal()"><i class="fa-solid fa-crown" style="color:var(--accent);"></i> Abonnement</button>
             </div>
 
             <!-- Liste des Concours -->
@@ -541,7 +543,7 @@
         <!-- Inscription / Connexion Élève -->
         <section id="participant-auth-view" class="view-section">
             <div class="participant-banner">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="profile-thumb">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="profile-thumb" id="auth-banner-avatar">
                 <div class="banner-info">
                     <h2 style="font-size: 1.3rem;">ZakariaTV Concours</h2>
                     <p style="color: var(--accent); font-size: 0.82rem; font-weight: 700;">Plateforme de Révision Gratuite</p>
@@ -583,6 +585,10 @@
                         <input type="tel" id="part-reg-phone" class="form-control" placeholder="+225..." required>
                     </div>
                     <div class="form-group">
+                        <label class="form-label">Lien / URL Photo de profil (Optionnel)</label>
+                        <input type="url" id="part-reg-avatar" class="form-control" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Mot de passe</label>
                         <input type="password" id="part-reg-pass" class="form-control" placeholder="••••••••" required>
                     </div>
@@ -596,7 +602,7 @@
         <!-- Tableau de Bord Élève -->
         <section id="participant-home-view" class="view-section">
             <div class="participant-banner">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="profile-thumb">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="profile-thumb" id="home-user-avatar">
                 <div class="banner-info">
                     <h2 style="font-size: 1.2rem;" id="user-display-name">Bienvenue Élève</h2>
                     <p style="color: var(--text-sub); font-size: 0.8rem;">Prêt pour votre révision du jour ?</p>
@@ -607,6 +613,25 @@
                         <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openUserResultsModal()"><i class="fa-solid fa-chart-line"></i> Résultats</button>
                         <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openReviewModal()"><i class="fa-solid fa-comment"></i> Avis</button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Top 5 des Meilleurs Élèves (Automatique) -->
+            <div class="card" style="padding: 0.8rem 1rem; border: 1px solid rgba(245, 158, 11, 0.3);">
+                <h4 style="font-size: 0.85rem; color: var(--accent); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-crown"></i> Top 5 des Meilleurs Élèves
+                </h4>
+                <div id="top-5-container" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;"></div>
+            </div>
+
+            <!-- Section Abonnement Élève -->
+            <div class="card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(15, 23, 42, 0.9)); border: 1px solid var(--accent); padding: 1rem; margin-bottom: 1.2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4 style="font-size: 0.95rem; color: var(--accent);"><i class="fa-solid fa-gem"></i> Espace Abonnement</h4>
+                        <p style="font-size: 0.78rem; color: var(--text-sub); margin-top: 2px;">Accédez aux fonctionnalités exclusives et révisions premium.</p>
+                    </div>
+                    <span style="background: var(--accent); color: #000; font-weight: 800; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px;">STATUT : GRATUIT</span>
                 </div>
             </div>
 
@@ -687,14 +712,20 @@
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-profile')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div style="text-align: center; margin-bottom: 1.2rem;">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--accent); margin-bottom: 0.5rem;">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" id="prof-modal-avatar" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--accent); margin-bottom: 0.5rem; object-fit: cover;">
                 <h3 id="prof-name">Élève</h3>
                 <span style="font-size: 0.75rem; color: var(--success); background: rgba(16,185,129,0.15); padding: 2px 8px; border-radius: 20px;">Compte Vérifié</span>
             </div>
-            <div style="background: var(--card-alt); padding: 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem;">
+            <div style="background: var(--card-alt); padding: 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; margin-bottom: 1rem;">
                 <p style="margin-bottom: 6px;"><strong>Numéro WhatsApp :</strong> <span id="prof-phone">Non renseigné</span></p>
                 <p style="margin-bottom: 6px;"><strong>Concours effectués :</strong> <span id="prof-tests-count">0</span></p>
                 <p><strong>Statut :</strong> Accessible Gratuitement</p>
+            </div>
+
+            <!-- Options Modifier Photo & Mot de passe -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn btn-secondary btn-block" onclick="updateProfileAvatar()"><i class="fa-solid fa-image"></i> Modifier ma photo de profil</button>
+                <button class="btn btn-secondary btn-block" onclick="updatePassword()"><i class="fa-solid fa-key"></i> Modifier mon mot de passe</button>
             </div>
         </div>
     </div>
@@ -735,19 +766,21 @@
         </div>
     </div>
 
-    <!-- Modale Participants (Admin) -->
+    <!-- Modale Participants / Comptes Créés (Admin) -->
     <div class="modal" id="modal-admin-users">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-users" style="color: var(--accent);"></i> Participants</h4>
+                <h4><i class="fa-solid fa-users" style="color: var(--accent);"></i> Comptes Créés</h4>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-users')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div style="overflow-x: auto;">
                 <table class="data-table">
                     <thead>
                         <tr>
+                            <th>Photo</th>
                             <th>Nom</th>
                             <th>WhatsApp</th>
+                            <th>Date Création</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -786,7 +819,19 @@
                 <h4><i class="fa-solid fa-key" style="color: var(--accent);"></i> Mots de passe oubliés</h4>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-resets')"><i class="fa-solid fa-xmark"></i></button>
             </div>
+            <p style="font-size: 0.75rem; color: var(--text-sub); margin-bottom: 0.8rem;">Valider réinitialise le mot de passe de l'élève par défaut à <strong>5555</strong>.</p>
             <div id="admin-resets-list"></div>
+        </div>
+    </div>
+
+    <!-- Modale Admin Abonnement -->
+    <div class="modal" id="modal-admin-subscription">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h4><i class="fa-solid fa-crown" style="color: var(--accent);"></i> Gestion des Abonnements</h4>
+                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-subscription')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-sub);">Section prête. Module de configuration du système d'abonnement.</p>
         </div>
     </div>
 
@@ -805,7 +850,7 @@
     <div class="modal" id="modal-review">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-star" style="color: var(--accent);"></i> Donner mon avis</h4>
+                <h4><i class="fa-solid fa-star" style="color: var(--accent);"></i> Donnez votre avis</h4>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-review')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="handleReviewSubmit(event)">
@@ -820,8 +865,11 @@
                     <label class="form-label">Votre commentaire</label>
                     <textarea class="form-control" id="review-comment" rows="3" placeholder="Application géniale !" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Envoyer mon avis</button>
+                <button type="submit" class="btn btn-primary btn-block">Publier mon avis</button>
             </form>
+
+            <h5 style="margin: 1.2rem 0 0.6rem; color: var(--accent);">Mes avis publiés</h5>
+            <div id="user-my-reviews-list"></div>
         </div>
     </div>
 
@@ -840,6 +888,8 @@
     <!-- LOGIQUE JS & SAUVEGARDE AUTOMATIQUE                                 -->
     <!-- =================================================================== -->
     <script>
+        const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80";
+
         const DB = {
             getContests: () => JSON.parse(localStorage.getItem('ztv_db_contests')) || [
                 {
@@ -924,6 +974,8 @@
             document.getElementById('stat-users').innerText = users.length;
             document.getElementById('stat-participations').innerText = results.length;
             document.getElementById('stat-resets').innerText = resets.length;
+            
+            document.getElementById('users-count-badge').innerText = users.length;
             document.getElementById('reset-badge-count').innerText = resets.length;
 
             const list = document.getElementById('admin-contest-list');
@@ -959,6 +1011,14 @@
                     </div>
                 `;
             });
+        }
+
+        function resetAllData() {
+            if (confirm("⚠️ ÊTES-VOUS SÛR ? Cela va supprimer TOUTES les données (Comptes, Concours, Résultats, Avis, Mots de passe).")) {
+                localStorage.clear();
+                alert("Toutes les données ont été réinitialisées.");
+                location.reload();
+            }
         }
 
         function toggleContestStatus(id) {
@@ -1075,11 +1135,13 @@
             const users = DB.getUsers();
             document.getElementById('admin-users-table').innerHTML = users.map(u => `
                 <tr>
+                    <td><img src="${u.avatar || DEFAULT_AVATAR}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;"></td>
                     <td><strong>${u.name}</strong></td>
                     <td>${u.phone}</td>
+                    <td><span style="font-size:0.75rem; color:var(--text-sub);">${u.createdAt || 'N/A'}</span></td>
                     <td><button class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="deleteUser('${u.name}')">Supprimer</button></td>
                 </tr>
-            `).join('') || '<tr><td colspan="3">Aucun inscrit.</td></tr>';
+            `).join('') || '<tr><td colspan="5">Aucun compte créé.</td></tr>';
             document.getElementById('modal-admin-users').classList.add('active');
         }
 
@@ -1107,11 +1169,22 @@
             const resets = DB.getResets();
             document.getElementById('admin-resets-list').innerHTML = resets.map((r, i) => `
                 <div style="background:var(--card-alt); padding:8px; border-radius:6px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem;">
-                    <div><strong>${r.name}</strong> demande une réinitialisation.</div>
-                    <button class="btn btn-success" style="padding:2px 8px; font-size:0.75rem;" onclick="clearReset(${i})">Valider</button>
+                    <div>Demande de : <strong>${r.name}</strong></div>
+                    <button class="btn btn-success" style="padding:2px 8px; font-size:0.75rem;" onclick="processResetPassword('${r.name}', ${i})">Réinitialiser (5555)</button>
                 </div>
             `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucune demande.</p>';
             document.getElementById('modal-admin-resets').classList.add('active');
+        }
+
+        function processResetPassword(userName, idx) {
+            const users = DB.getUsers();
+            const u = users.find(user => user.name === userName);
+            if (u) {
+                u.pass = "5555";
+                DB.saveUsers(users);
+            }
+            clearReset(idx);
+            alert(`Mot de passe de ${userName} réinitialisé à : 5555`);
         }
 
         function clearReset(idx) {
@@ -1120,6 +1193,10 @@
             DB.saveResets(resets);
             openAdminResetsModal();
             renderAdminDashboard();
+        }
+
+        function openAdminSubscriptionModal() {
+            document.getElementById('modal-admin-subscription').classList.add('active');
         }
 
         // --- PARTICIPANTS ---
@@ -1134,6 +1211,7 @@
             e.preventDefault();
             const name = document.getElementById('part-reg-name').value;
             const phone = document.getElementById('part-reg-phone').value;
+            const avatar = document.getElementById('part-reg-avatar').value || DEFAULT_AVATAR;
             const pass = document.getElementById('part-reg-pass').value;
 
             const users = DB.getUsers();
@@ -1142,7 +1220,8 @@
                 return;
             }
 
-            users.push({ name, phone, pass });
+            const createdAt = new Date().toLocaleDateString('fr-FR');
+            users.push({ name, phone, pass, avatar, createdAt });
             DB.saveUsers(users);
             currentUser = name;
             localStorage.setItem('ztv_session_user', currentUser);
@@ -1167,23 +1246,33 @@
         }
 
         function requestPasswordReset() {
-            const name = prompt("Votre nom d'utilisateur :");
+            const name = prompt("Entrez votre nom d'utilisateur pour demander la réinitialisation :");
             if (name) {
                 const resets = DB.getResets();
                 resets.push({ name, date: new Date().toLocaleDateString() });
                 DB.saveResets(resets);
-                alert("Demande enregistrée.");
+                alert("Votre demande a été envoyée à l'administrateur.");
             }
         }
 
         function renderParticipantHome() {
             document.getElementById('user-display-name').innerText = currentUser || "Élève";
+            
+            const users = DB.getUsers();
+            const u = users.find(item => item.name === currentUser);
+            const avatarUrl = u && u.avatar ? u.avatar : DEFAULT_AVATAR;
+
+            document.getElementById('home-user-avatar').src = avatarUrl;
+            document.getElementById('auth-banner-avatar').src = avatarUrl;
+
+            renderTop5();
+
             const list = document.getElementById('participant-contest-list');
             list.innerHTML = '';
             const activeContests = DB.getContests().filter(c => c.online);
 
             if (activeContests.length === 0) {
-                list.innerHTML = `<p style="color:var(--text-sub); font-size:0.85rem;">Aucun concours actif.</p>`;
+                list.innerHTML = `<p style="color:var(--text-sub); font-size:0.85rem;">Aucun concours actif pour le moment.</p>`;
                 return;
             }
 
@@ -1201,6 +1290,44 @@
             });
         }
 
+        function renderTop5() {
+            const results = DB.getResults();
+            const users = DB.getUsers();
+            
+            // Cumul des scores par élève
+            const scoresMap = {};
+            results.forEach(r => {
+                scoresMap[r.userName] = (scoresMap[r.userName] || 0) + r.score;
+            });
+
+            const sorted = Object.keys(scoresMap)
+                .map(name => {
+                    const u = users.find(user => user.name === name);
+                    return {
+                        name,
+                        score: scoresMap[name],
+                        avatar: u && u.avatar ? u.avatar : DEFAULT_AVATAR
+                    };
+                })
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 5);
+
+            const container = document.getElementById('top-5-container');
+            if (sorted.length === 0) {
+                container.innerHTML = `<span style="font-size:0.75rem; color:var(--text-sub);">Aucun résultat pour le moment. Soyez le premier !</span>`;
+                return;
+            }
+
+            container.innerHTML = sorted.map((item, idx) => `
+                <div style="display:flex; align-items:center; gap:6px; background:var(--card-alt); padding:4px 10px; border-radius:30px; border:1px solid var(--border); flex-shrink:0;">
+                    <span style="font-weight:800; font-size:0.75rem; color:var(--accent);">#${idx + 1}</span>
+                    <img src="${item.avatar}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">
+                    <span style="font-size:0.78rem; font-weight:700;">${item.name}</span>
+                    <span style="font-size:0.7rem; color:var(--accent); font-weight:800;">${item.score} pts</span>
+                </div>
+            `).join('');
+        }
+
         function openProfileModal() {
             const users = DB.getUsers();
             const u = users.find(item => item.name === currentUser);
@@ -1209,8 +1336,37 @@
             document.getElementById('prof-name').innerText = currentUser || "Élève";
             document.getElementById('prof-phone').innerText = u ? u.phone : "Non renseigné";
             document.getElementById('prof-tests-count').innerText = userResults.length;
+            document.getElementById('prof-modal-avatar').src = u && u.avatar ? u.avatar : DEFAULT_AVATAR;
 
             document.getElementById('modal-profile').classList.add('active');
+        }
+
+        function updateProfileAvatar() {
+            const newAvatar = prompt("Entrez l'URL de votre nouvelle photo de profil :");
+            if (newAvatar) {
+                const users = DB.getUsers();
+                const u = users.find(item => item.name === currentUser);
+                if (u) {
+                    u.avatar = newAvatar;
+                    DB.saveUsers(users);
+                    renderParticipantHome();
+                    openProfileModal();
+                    alert("Photo de profil mise à jour !");
+                }
+            }
+        }
+
+        function updatePassword() {
+            const newPass = prompt("Entrez votre nouveau mot de passe :");
+            if (newPass) {
+                const users = DB.getUsers();
+                const u = users.find(item => item.name === currentUser);
+                if (u) {
+                    u.pass = newPass;
+                    DB.saveUsers(users);
+                    alert("Mot de passe modifié avec succès !");
+                }
+            }
         }
 
         // --- TIMERS & QUIZ ---
@@ -1340,7 +1496,46 @@
             document.getElementById('modal-ranking').classList.add('active');
         }
 
-        function openReviewModal() { document.getElementById('modal-review').classList.add('active'); }
+        function openReviewModal() {
+            renderMyReviews();
+            document.getElementById('modal-review').classList.add('active');
+        }
+
+        function renderMyReviews() {
+            const reviews = DB.getReviews();
+            const myReviews = reviews.filter(r => r.name === (currentUser || "Élève"));
+            
+            const container = document.getElementById('user-my-reviews-list');
+            if (myReviews.length === 0) {
+                container.innerHTML = `<p style="font-size:0.75rem; color:var(--text-sub);">Vous n'avez pas encore publié d'avis.</p>`;
+                return;
+            }
+
+            container.innerHTML = myReviews.map((r, index) => `
+                <div style="background:var(--card-alt); padding:8px 10px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="color:var(--accent); font-size:0.75rem;">${'★'.repeat(r.stars)}</div>
+                        <div style="font-size:0.8rem; color:var(--text-main); margin-top:2px;">"${r.comment}"</div>
+                    </div>
+                    <button class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="deleteMyReview(${index})"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function deleteMyReview(idx) {
+            const reviews = DB.getReviews();
+            const userReviews = reviews.filter(r => r.name === (currentUser || "Élève"));
+            const targetReview = userReviews[idx];
+
+            if (targetReview && confirm("Supprimer cet avis ?")) {
+                const targetIndex = reviews.indexOf(targetReview);
+                if (targetIndex > -1) {
+                    reviews.splice(targetIndex, 1);
+                    DB.saveReviews(reviews);
+                    renderMyReviews();
+                }
+            }
+        }
 
         function openUserResultsModal() {
             const results = DB.getResults().filter(r => r.userName === (currentUser || "Anonyme"));
@@ -1364,13 +1559,15 @@
             e.preventDefault();
             const reviews = DB.getReviews();
             reviews.unshift({
+                id: Date.now(),
                 name: currentUser || "Élève",
                 stars: currentRating,
                 comment: document.getElementById('review-comment').value
             });
             DB.saveReviews(reviews);
+            document.getElementById('review-comment').value = '';
             alert("Merci pour votre avis !");
-            closeModal('modal-review');
+            renderMyReviews();
         }
     </script>
 </body>
