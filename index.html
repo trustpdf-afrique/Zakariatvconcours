@@ -283,4 +283,575 @@
                             </select>
                         </div>
                         <div>
-                            <label cl
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Niveau / Classe</label>
+                            <select id="admin-c-class" required class="w-full px-3 py-2 rounded-lg border text-sm"></select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Type de Concours</label>
+                            <select id="admin-c-type" required class="w-full px-3 py-2 rounded-lg border text-sm">
+                                <option value="Gratuit">Gratuit</option>
+                                <option value="Payant">Payant (Premium)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">URL Image Illustration</label>
+                            <input type="url" id="admin-c-image" placeholder="https://..." required class="w-full px-3 py-2 rounded-lg border text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Questions du concours (Coller les 5 questions ci-dessous)</label>
+                        <textarea id="admin-c-rawtext" rows="12" required class="w-full p-3 font-mono text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500" placeholder="Exemple:&#10;Quel outil utilise-t-on pour situer des événements ?&#10;A) Une carte&#10;B) Une frise chronologique&#10;C) Une boussole&#10;D) Un thermomètre&#10;Réponse : B"></textarea>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button type="button" onclick="verifyContestContent()" class="bg-slate-700 hover:bg-slate-800 text-white font-bold px-4 py-2 rounded-lg text-sm"><i class="fa-solid fa-magnifying-glass mr-1"></i> Vérifier le contenu</button>
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2 rounded-lg text-sm"><i class="fa-solid fa-paper-plane mr-1"></i> Publier le Concours</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- GESTION DES ABONNEMENTS ET MOTS DE PASSE -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Abonnements -->
+                <div class="bg-white p-6 rounded-2xl shadow border border-slate-200">
+                    <h3 class="text-lg font-bold text-indigo-950 mb-4 border-b pb-2"><i class="fa-solid fa-id-card text-indigo-600 mr-2"></i>Gestion des Abonnements</h3>
+                    <div id="admin-sub-list" class="space-y-3 max-h-80 overflow-y-auto">
+                        <!-- Injecté par JS -->
+                    </div>
+                </div>
+
+                <!-- Demandes de réinitialisation MDP -->
+                <div class="bg-white p-6 rounded-2xl shadow border border-slate-200">
+                    <h3 class="text-lg font-bold text-indigo-950 mb-4 border-b pb-2"><i class="fa-solid fa-key text-amber-600 mr-2"></i>Demandes de Réinitialisation MDP</h3>
+                    <div id="admin-reset-list" class="space-y-3 max-h-80 overflow-y-auto">
+                        <!-- Injecté par JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-indigo-950 text-indigo-300 py-6 text-center text-xs border-t border-indigo-900">
+        <p>© 2026 ZTV Concours - Plateforme éducative sécurisée. Tous droits réservés.</p>
+    </footer>
+
+    <!-- App Logic JavaScript -->
+    <script src=/**
+ * ZTV CONCOURS - APPLICATION LOGIC
+ */
+
+// --- ÉTAT GLOBAL ET BASE DE DONNÉES LOCALE (MOCK / LOCALSTORAGE) ---
+let state = {
+    currentUser: JSON.parse(localStorage.getItem('ztv_user')) || null,
+    historyStack: ['home'],
+    currentCategoryFilter: 'Tous',
+    currentClassFilter: null,
+    activeQuiz: null,
+    quizIndex: 0,
+    quizScore: 0,
+    quizTimer: null,
+    timeRemaining: 10
+};
+
+// Données par défaut initiales
+const defaultContests = [
+    {
+        id: "c-1",
+        title: "Histoire Générale & Chronologie",
+        category: "Primaire",
+        classLevel: "CM2",
+        type: "Gratuit",
+        imageUrl: "https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=400&q=80",
+        createdAt: "2026-07-30",
+        createdTime: "10:00",
+        questions: [
+            {
+                q: "Quel outil utilise-t-on pour situer des événements dans le temps sur une ligne ?",
+                options: { A: "Une carte", B: "Une frise chronologique", C: "Une boussole", D: "Un thermomètre" },
+                answer: "B"
+            },
+            {
+                q: "Comment appelle-t-on la période de temps qui correspond à 100 ans ?",
+                options: { A: "Une décennie", B: "Un millénaire", C: "Un siècle", D: "Une semaine" },
+                answer: "C"
+            },
+            {
+                q: "Parmi ces éléments, lequel permet de connaître le passé ?",
+                options: { A: "Les traces et les souvenirs", B: "La météo de demain", C: "Le prix des marchandises", D: "Les jeux vidéo" },
+                answer: "A"
+            },
+            {
+                q: "Qu'est-ce qu'une année bissextile ?",
+                options: { A: "Une année de 360 jours", B: "Une année de 366 jours", C: "Une année sans mois de février", D: "Une année de 10 mois" },
+                answer: "B"
+            },
+            {
+                q: "L'histoire étudie les faits :",
+                options: { A: "Imaginaires", B: "Futurs", C: "Passés", D: "Secrets" },
+                answer: "C"
+            }
+        ]
+    }
+];
+
+let db = {
+    users: JSON.parse(localStorage.getItem('ztv_users')) || [
+        { nom: "Admin", prenom: "ZTV", phone: "0585971941", ville: "Abidjan", pays: "Côte d'Ivoire", password: "admin", role: "admin", photo: "https://via.placeholder.com/100" }
+    ],
+    contests: JSON.parse(localStorage.getItem('ztv_contests')) || defaultContests,
+    subscriptions: JSON.parse(localStorage.getItem('ztv_subscriptions')) || [],
+    resetRequests: JSON.parse(localStorage.getItem('ztv_resets')) || [],
+    results: JSON.parse(localStorage.getItem('ztv_results')) || []
+};
+
+function saveData() {
+    localStorage.setItem('ztv_users', JSON.stringify(db.users));
+    localStorage.setItem('ztv_contests', JSON.stringify(db.contests));
+    localStorage.setItem('ztv_subscriptions', JSON.stringify(db.subscriptions));
+    localStorage.setItem('ztv_resets', JSON.stringify(db.resetRequests));
+    localStorage.setItem('ztv_results', JSON.stringify(db.results));
+}
+
+// --- NAVIGATION ET ROUTAGE ---
+function navigate(targetSectionId) {
+    const sections = ['sec-login', 'sec-register', 'sec-forgot-password', 'sec-profile', 'sec-home', 'sec-quiz', 'sec-quiz-end', 'sec-subscription', 'sec-admin'];
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+    });
+
+    const targetEl = document.getElementById('sec-' + targetSectionId);
+    if (targetEl) targetEl.classList.remove('hidden');
+
+    if (state.historyStack[state.historyStack.length - 1] !== targetSectionId) {
+        state.historyStack.push(targetSectionId);
+    }
+
+    renderHeaderNav();
+
+    if (targetSectionId === 'home') renderHomeContests();
+    if (targetSectionId === 'profile') renderProfile();
+    if (targetSectionId === 'admin') renderAdminDashboard();
+}
+
+function goBack() {
+    if (state.historyStack.length > 1) {
+        state.historyStack.pop();
+        const previous = state.historyStack[state.historyStack.length - 1];
+        navigate(previous);
+    } else {
+        navigate('home');
+    }
+}
+
+function showToast(title, message) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-title').innerText = title;
+    document.getElementById('toast-message').innerText = message;
+    toast.classList.remove('hidden');
+    setTimeout(() => { toast.classList.add('hidden'); }, 6000);
+}
+
+function renderHeaderNav() {
+    const nav = document.getElementById('nav-menu');
+    nav.innerHTML = '';
+
+    if (state.currentUser) {
+        if (state.currentUser.role === 'admin') {
+            nav.innerHTML += `<button onclick="navigate('admin')" class="text-xs bg-amber-400 text-indigo-950 font-bold px-3 py-1.5 rounded-lg">Admin</button>`;
+        }
+        nav.innerHTML += `
+            <button onclick="navigate('profile')" class="flex items-center gap-2 hover:text-amber-300">
+                <i class="fa-solid fa-user-circle text-xl"></i>
+                <span class="text-xs font-bold">${state.currentUser.prenom}</span>
+            </button>
+        `;
+    } else {
+        nav.innerHTML = `<button onclick="navigate('login')" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-1.5 rounded-lg">Connexion</button>`;
+    }
+}
+
+// --- AUTHENTIFICATION & COMPTE ---
+function handleLogin(e) {
+    e.preventDefault();
+    const phone = document.getElementById('login-phone').value.trim();
+    const pass = document.getElementById('login-password').value.trim();
+
+    const user = db.users.find(u => u.phone === phone && u.password === pass);
+    if (user) {
+        state.currentUser = user;
+        localStorage.setItem('ztv_user', JSON.stringify(user));
+        showToast("Connexion réussie", `Bienvenue ${user.prenom} !`);
+        navigate('home');
+    } else {
+        alert("Numéro WhatsApp ou mot de passe incorrect.");
+    }
+}
+
+function handleRegister(e) {
+    e.preventDefault();
+    const phone = document.getElementById('reg-phone').value.trim();
+
+    if (db.users.some(u => u.phone === phone)) {
+        alert("Ce numéro WhatsApp est déjà inscrit.");
+        return;
+    }
+
+    const newUser = {
+        nom: document.getElementById('reg-nom').value.trim(),
+        prenom: document.getElementById('reg-prenom').value.trim(),
+        ville: document.getElementById('reg-ville').value.trim(),
+        pays: document.getElementById('reg-pays').value.trim(),
+        phone: phone,
+        password: document.getElementById('reg-password').value.trim(),
+        role: "student",
+        photo: "https://via.placeholder.com/100",
+        subscriptionStatus: "INACTIF"
+    };
+
+    db.users.push(newUser);
+    saveData();
+    state.currentUser = newUser;
+    localStorage.setItem('ztv_user', JSON.stringify(newUser));
+    showToast("Inscription réussie", "Votre compte a été créé avec succès.");
+    navigate('home');
+}
+
+function handleLogout() {
+    state.currentUser = null;
+    localStorage.removeItem('ztv_user');
+    showToast("Déconnexion", "Vous avez été déconnecté.");
+    navigate('login');
+}
+
+// --- MOT DE PASSE OUBLIÉ ---
+let foundUserForReset = null;
+
+function checkForgotPasswordPhone() {
+    const phone = document.getElementById('fp-phone').value.trim();
+    foundUserForReset = db.users.find(u => u.phone === phone);
+
+    if (foundUserForReset) {
+        document.getElementById('fp-res-nom').innerText = foundUserForReset.nom;
+        document.getElementById('fp-res-prenom').innerText = foundUserForReset.prenom;
+        document.getElementById('fp-res-ville').innerText = foundUserForReset.ville;
+        document.getElementById('fp-res-pays').innerText = foundUserForReset.pays;
+        document.getElementById('fp-step-2').classList.remove('hidden');
+    } else {
+        alert("Aucun compte n'est enregistré avec ce numéro WhatsApp.");
+    }
+}
+
+function confirmResetRequest() {
+    if (foundUserForReset) {
+        db.resetRequests.push({
+            userPhone: foundUserForReset.phone,
+            nom: foundUserForReset.nom,
+            prenom: foundUserForReset.prenom,
+            date: new Date().toLocaleString()
+        });
+        saveData();
+        alert("Une demande de réinitialisation a été envoyée à l'administrateur.");
+        navigate('login');
+    }
+}
+
+// --- PROFIL PARTICIPANT ---
+function renderProfile() {
+    if (!state.currentUser) return navigate('login');
+    document.getElementById('prof-fullname').innerText = `${state.currentUser.prenom} ${state.currentUser.nom}`;
+    document.getElementById('prof-ville').innerText = state.currentUser.ville;
+    document.getElementById('prof-pays').innerText = state.currentUser.pays;
+    document.getElementById('prof-phone').innerText = state.currentUser.phone;
+    document.getElementById('prof-avatar').src = state.currentUser.photo || "https://via.placeholder.com/100";
+
+    const isSub = state.currentUser.subscriptionStatus === "ACTIF";
+    const statusEl = document.getElementById('prof-status');
+    statusEl.innerText = isSub ? "Abonnement ACTIF (Premium)" : "Abonnement INACTIF";
+    statusEl.className = isSub ? "text-xs px-2.5 py-0.5 rounded-full font-bold inline-block mt-1 bg-emerald-100 text-emerald-800" : "text-xs px-2.5 py-0.5 rounded-full font-bold inline-block mt-1 bg-slate-100 text-slate-600";
+}
+
+function handleChangePassword(e) {
+    e.preventDefault();
+    const curr = document.getElementById('pass-current').value;
+    const next = document.getElementById('pass-new').value;
+
+    if (curr !== state.currentUser.password) {
+        alert("Le mot de passe actuel est incorrect.");
+        return;
+    }
+
+    state.currentUser.password = next;
+    const idx = db.users.findIndex(u => u.phone === state.currentUser.phone);
+    if (idx !== -1) db.users[idx].password = next;
+    saveData();
+    showToast("Succès", "Votre mot de passe a été modifié.");
+    e.target.reset();
+}
+
+// --- ACCUEIL DES CONCOURS ET FILTRES ---
+function filterCategory(cat) {
+    state.currentCategoryFilter = cat;
+    state.currentClassFilter = null;
+    
+    // UI Boutons
+    document.querySelectorAll('.btn-cat').forEach(btn => {
+        if(btn.innerText.includes(cat)) {
+            btn.className = "btn-cat px-4 py-2 rounded-lg font-bold text-sm bg-indigo-600 text-white";
+        } else {
+            btn.className = "btn-cat px-4 py-2 rounded-lg font-bold text-sm bg-slate-100 text-slate-600";
+        }
+    });
+
+    const classContainer = document.getElementById('class-filters');
+    classContainer.innerHTML = '';
+
+    let classes = [];
+    if (cat === 'Primaire') classes = ['CE2', 'CM1', 'CM2'];
+    if (cat === 'Collège') classes = ['6e', '5e', '4e', '3e', 'Seconde', 'Première', 'Terminale'];
+
+    if (classes.length > 0) {
+        classContainer.classList.remove('hidden');
+        classes.forEach(c => {
+            classContainer.innerHTML += `
+                <button onclick="filterClass('${c}')" class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800 hover:bg-indigo-200">${c}</button>
+            `;
+        });
+    } else {
+        classContainer.classList.add('hidden');
+    }
+
+    renderHomeContests();
+}
+
+function filterClass(cls) {
+    state.currentClassFilter = cls;
+    renderHomeContests();
+}
+
+function renderHomeContests() {
+    const grid = document.getElementById('contests-grid');
+    const emptyMsg = document.getElementById('empty-contests-msg');
+    grid.innerHTML = '';
+
+    let filtered = db.contests.filter(c => {
+        if (state.currentCategoryFilter !== 'Tous' && c.category !== state.currentCategoryFilter) return false;
+        if (state.currentClassFilter && c.classLevel !== state.currentClassFilter) return false;
+        return true;
+    });
+
+    if (filtered.length === 0) {
+        emptyMsg.classList.remove('hidden');
+        grid.classList.add('hidden');
+    } else {
+        emptyMsg.classList.add('hidden');
+        grid.classList.remove('hidden');
+
+        filtered.forEach(c => {
+            const contestLink = `${window.location.origin}${window.location.pathname}?contest=${c.id}`;
+            grid.innerHTML += `
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <img src="${c.imageUrl}" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <div class="flex justify-between items-start gap-2 mb-2">
+                                <span class="bg-indigo-100 text-indigo-800 text-xs px-2.5 py-0.5 rounded-full font-bold">${c.category} - ${c.classLevel}</span>
+                                <span class="${c.type === 'Gratuit' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'} text-xs px-2 py-0.5 rounded-full font-bold">${c.type}</span>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900 mb-1">${c.title}</h3>
+                            <p class="text-xs text-slate-500 mb-4">Créé le ${c.createdAt} à ${c.createdTime}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0 space-y-2">
+                        <button onclick="startContest('${c.id}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg text-sm transition">Commencer le concours</button>
+                        <button onclick="copyContestLink('${contestLink}')" class="w-full bg-slate-100 text-slate-600 hover:bg-slate-200 font-semibold py-1.5 rounded-lg text-xs flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-link"></i> Copier le lien unique
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+}
+
+function copyContestLink(link) {
+    navigator.clipboard.writeText(link);
+    showToast("Lien Copié", "Le lien unique de ce concours a été copié dans le presse-papier.");
+}
+
+// --- DÉROULEMENT DU QUIZ ---
+function startContest(id) {
+    if (!state.currentUser) {
+        alert("Veuillez vous connecter pour participer au concours.");
+        return navigate('login');
+    }
+
+    const contest = db.contests.find(c => c.id === id);
+    if (!contest) return;
+
+    if (contest.type === "Payant" && state.currentUser.subscriptionStatus !== "ACTIF") {
+        alert("Ce concours est réservé aux membres Premium. Veuillez souscrire un abonnement.");
+        return navigate('subscription');
+    }
+
+    state.activeQuiz = contest;
+    state.quizIndex = 0;
+    state.quizScore = 0;
+    navigate('quiz');
+    loadQuestion();
+}
+
+function loadQuestion() {
+    clearInterval(state.quizTimer);
+    const q = state.activeQuiz.questions[state.quizIndex];
+
+    document.getElementById('quiz-progress').innerText = `Question ${state.quizIndex + 1}/5`;
+    document.getElementById('quiz-question-text').innerText = q.q;
+    document.getElementById('opt-A-text').innerText = q.options.A;
+    document.getElementById('opt-B-text').innerText = q.options.B;
+    document.getElementById('opt-C-text').innerText = q.options.C;
+    document.getElementById('opt-D-text').innerText = q.options.D;
+
+    // Timer 10 secondes
+    state.timeRemaining = 10;
+    document.getElementById('quiz-timer').innerText = state.timeRemaining;
+    state.quizTimer = setInterval(() => {
+        state.timeRemaining--;
+        document.getElementById('quiz-timer').innerText = state.timeRemaining;
+        if (state.timeRemaining <= 0) {
+            clearInterval(state.quizTimer);
+            submitAnswer(null); // Temps écoulé
+        }
+    }, 1000);
+}
+
+function submitAnswer(chosenOption) {
+    clearInterval(state.quizTimer);
+    const q = state.activeQuiz.questions[state.quizIndex];
+
+    if (chosenOption === q.answer) {
+        state.quizScore++;
+    }
+
+    state.quizIndex++;
+    if (state.quizIndex < 5) {
+        loadQuestion();
+    } else {
+        // Fin
+        db.results.push({
+            contestId: state.activeQuiz.id,
+            userNom: state.currentUser.nom,
+            userPrenom: state.currentUser.prenom,
+            userVille: state.currentUser.ville,
+            score: state.quizScore,
+            date: new Date().toISOString()
+        });
+        saveData();
+        navigate('quiz-end');
+    }
+}
+
+function speakCurrentQuestion() {
+    if ('speechSynthesis' in window) {
+        const q = state.activeQuiz.questions[state.quizIndex];
+        const text = `${q.q}. Option A: ${q.options.A}. Option B: ${q.options.B}. Option C: ${q.options.C}. Option D: ${q.options.D}.`;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'fr-FR';
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert("La synthèse vocale n'est pas supportée par votre navigateur.");
+    }
+}
+
+// --- DEMANDE D'ABONNEMENT ---
+function handleSubRequest(e) {
+    e.preventDefault();
+    const nom = document.getElementById('sub-nom').value;
+    const phone = document.getElementById('sub-phone').value;
+    const classe = document.getElementById('sub-classe').value;
+
+    const newSub = {
+        id: "sub-" + Date.now(),
+        userPhone: phone,
+        nom: nom,
+        classe: classe,
+        status: "EN_ATTENTE",
+        date: new Date().toLocaleString()
+    };
+
+    db.subscriptions.push(newSub);
+    saveData();
+
+    showToast(
+        "Demande enregistrée avec succès",
+        "Votre demande a été enregistrée avec succès. Vous serez contacté au numéro WhatsApp que vous avez renseigné afin de finaliser votre paiement. Merci d'utiliser notre application et bonne révision !"
+    );
+
+    navigate('home');
+}
+
+// --- ADMINISTRATION ET CRÉATION DE CONCOURS RAPIDE ---
+function updateAdminClassOptions() {
+    const cat = document.getElementById('admin-c-cat').value;
+    const selectClass = document.getElementById('admin-c-class');
+    selectClass.innerHTML = '';
+
+    let classes = cat === 'Primaire' ? ['CE2', 'CM1', 'CM2'] : ['6e', '5e', '4e', '3e', 'Seconde', 'Première', 'Terminale'];
+    classes.forEach(c => selectClass.innerHTML += `<option value="${c}">${c}</option>`);
+}
+
+function parseRawContestText(rawText) {
+    const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    let questions = [];
+    let currentQ = null;
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        if (line.match(/^A\)/i)) {
+            if (currentQ) currentQ.options.A = line.replace(/^A\)\s*/i, '');
+        } else if (line.match(/^B\)/i)) {
+            if (currentQ) currentQ.options.B = line.replace(/^B\)\s*/i, '');
+        } else if (line.match(/^C\)/i)) {
+            if (currentQ) currentQ.options.C = line.replace(/^C\)\s*/i, '');
+        } else if (line.match(/^D\)/i)) {
+            if (currentQ) currentQ.options.D = line.replace(/^D\)\s*/i, '');
+        } else if (line.match(/^Réponse\s*:/i)) {
+            if (currentQ) currentQ.answer = line.replace(/^Réponse\s*:\s*/i, '').toUpperCase();
+        } else {
+            // Nouvelle question
+            if (currentQ && currentQ.options.A && currentQ.options.B && currentQ.options.C && currentQ.options.D && currentQ.answer) {
+                questions.push(currentQ);
+            }
+            currentQ = { q: line, options: {} };
+        }
+    }
+    if (currentQ && currentQ.options.A && currentQ.options.B && currentQ.options.C && currentQ.options.D && currentQ.answer) {
+        questions.push(currentQ);
+    }
+
+    return questions;
+}
+
+function verifyContestContent() {
+    const rawText = document.getElementById('admin-c-rawtext').value;
+    const parsed = parseRawContestText(rawText);
+
+    if (parsed.length !== 5) {
+        alert(`Erreur: exactement 5 questions sont requises. Actuellement détectées: ${parsed.length}. Veuillez vérifier le formatage.`);
+    } else {
+        alert("Toutes les questions sont valides et prêtes à être publiées.");
+    }
+}
+
+function handleCreateContestParsed(e) {
+    e.preventDefault();
+    const rawText = document.getElementById('admin-c-rawtext').value;
+    cons>
+    </script>
+</body>
+</html>
