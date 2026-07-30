@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZTV Concours - Plateforme Éducative & Quiz</title>
+    <title>ZTV Concours - Plateforme d'Évaluation</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f3f4f6;
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
         }
         .timer-red {
             color: #ef4444;
@@ -23,1121 +21,266 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-        }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans flex flex-col justify-between">
 
-    <!-- BARRE DE NAVIGATION HEADER -->
-    <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-5 right-5 z-50 hidden max-w-md bg-slate-900 text-white p-4 rounded-xl shadow-2xl border-l-4 border-emerald-500 transition-all duration-300">
+        <div class="flex items-start gap-3">
+            <i class="fa-solid fa-circle-check text-emerald-400 text-xl mt-0.5"></i>
+            <div>
+                <h4 id="toast-title" class="font-bold text-sm">Notification</h4>
+                <p id="toast-message" class="text-xs text-slate-300 mt-1"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('view-home')">
-                <div class="bg-white text-indigo-700 font-extrabold text-2xl px-3 py-1 rounded-lg shadow">ZTV</div>
-                <span class="text-xl font-bold tracking-wide hidden sm:inline">Concours</span>
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
+                <div class="bg-amber-400 text-indigo-950 font-black px-3 py-1 rounded-lg text-xl tracking-wider">ZTV</div>
+                <span class="font-bold text-lg hidden sm:inline">Concours & Révisions</span>
             </div>
             
-            <nav id="nav-menu" class="flex items-center space-x-3">
-                <!-- Les éléments du menu seront mis à jour dynamiquement via JS -->
+            <nav id="nav-menu" class="flex items-center gap-4">
+                <!-- Injecté dynamiquement par JS -->
             </nav>
         </div>
     </header>
 
-    <!-- NOTIFICATION TOAST -->
-    <div id="toast" class="fixed top-20 right-5 z-50 hidden max-w-md bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl transition-all duration-300 transform translate-y-0">
-        <div class="flex items-center space-x-3">
-            <i class="fas fa-check-circle text-2xl"></i>
-            <span id="toast-message" class="text-sm font-medium">Notification</span>
-        </div>
-    </div>
-
-    <!-- CONTENU PRINCIPAL -->
+    <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
 
-        <!-- BOUTON RETOUR GLOBAL (Affiché si non sur la page d'accueil) -->
-        <div id="global-back-btn" class="mb-4 hidden">
-            <button onclick="goBack()" class="inline-flex items-center space-x-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-4 py-2 rounded-lg shadow transition">
-                <i class="fas fa-arrow-left"></i>
-                <span>Retour</span>
-            </button>
-        </div>
-
-        <!-- 1. CONNEXION / INSCRIPTION -->
-        <section id="view-auth" class="max-w-md mx-auto glass-card p-8 rounded-2xl shadow-xl">
-            <div class="text-center mb-6">
-                <h2 class="text-3xl font-extrabold text-indigo-700">Bienvenue sur ZTV</h2>
-                <p class="text-gray-500 text-sm mt-1">Connectez-vous pour réviser et participer aux concours</p>
-            </div>
-
-            <!-- Onglets Connexion / Inscription -->
-            <div class="flex border-b mb-6">
-                <button id="tab-login" onclick="switchAuthTab('login')" class="w-1/2 py-2 font-bold text-center text-indigo-700 border-b-2 border-indigo-700">Connexion</button>
-                <button id="tab-register" onclick="switchAuthTab('register')" class="w-1/2 py-2 font-bold text-center text-gray-500 hover:text-indigo-700">Inscription</button>
-            </div>
-
-            <!-- Formulaire Connexion -->
-            <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+        <!-- SECTION: CONNEXION -->
+        <section id="sec-login" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-200">
+            <h2 class="text-2xl font-bold text-center text-indigo-950 mb-6">Connexion Élève</h2>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold mb-1">Numéro WhatsApp</label>
-                    <input type="tel" id="login-phone" required placeholder="Ex: 0102030405" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Numéro WhatsApp</label>
+                    <input type="tel" id="login-phone" required placeholder="Ex: 0585971941" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold mb-1">Mot de passe</label>
-                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Mot de passe</label>
+                    <input type="password" id="login-password" required class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
-                <div class="flex justify-end">
-                    <button type="button" onclick="showForgotPasswordModal()" class="text-sm text-indigo-600 hover:underline font-medium">Mot de passe oublié ?</button>
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition">Se connecter</button>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg transition">Se connecter</button>
             </form>
+            <div class="mt-4 flex justify-between text-xs text-indigo-600 font-semibold">
+                <button onclick="navigate('forgot-password')">Mot de passe oublié ?</button>
+                <button onclick="navigate('register')">Créer un compte</button>
+            </div>
+        </section>
 
-            <!-- Formulaire Inscription -->
-            <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">Nom</label>
-                        <input type="text" id="reg-nom" required class="w-full px-3 py-2 border rounded-xl outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">Prénom</label>
-                        <input type="text" id="reg-prenom" required class="w-full px-3 py-2 border rounded-xl outline-none">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">Ville</label>
-                        <input type="text" id="reg-ville" required class="w-full px-3 py-2 border rounded-xl outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">Pays</label>
-                        <input type="text" id="reg-pays" required value="Côte d'Ivoire" class="w-full px-3 py-2 border rounded-xl outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Classe</label>
-                    <select id="reg-classe" required class="w-full px-3 py-2 border rounded-xl outline-none">
-                        <option value="">Sélectionner votre classe</option>
-                        <optgroup label="Primaire">
-                            <option value="CE2">CE2</option>
-                            <option value="CM1">CM1</option>
-                            <option value="CM2">CM2</option>
-                        </optgroup>
-                        <optgroup label="Collège & Lycée">
-                            <option value="6e">6e</option>
-                            <option value="5e">5e</option>
-                            <option value="4e">4e</option>
-                            <option value="3e">3e</option>
-                            <option value="Seconde">Seconde</option>
-                            <option value="Première">Première</option>
-                            <option value="Terminale">Terminale</option>
-                        </optgroup>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Numéro WhatsApp</label>
-                    <input type="tel" id="reg-phone" required placeholder="Ex: 0500000000" class="w-full px-3 py-2 border rounded-xl outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Mot de passe</label>
-                    <input type="password" id="reg-password" required placeholder="••••••••" class="w-full px-3 py-2 border rounded-xl outline-none">
-                </div>
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-lg transition">Créer mon compte</button>
+        <!-- SECTION: INSCRIPTION -->
+        <section id="sec-register" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-200 hidden">
+            <h2 class="text-2xl font-bold text-center text-indigo-950 mb-6">Création de compte</h2>
+            <form onsubmit="handleRegister(event)" class="space-y-3">
+                <input type="text" id="reg-nom" placeholder="Nom" required class="w-full px-4 py-2 rounded-lg border border-slate-300">
+                <input type="text" id="reg-prenom" placeholder="Prénom" required class="w-full px-4 py-2 rounded-lg border border-slate-300">
+                <input type="text" id="reg-ville" placeholder="Ville" required class="w-full px-4 py-2 rounded-lg border border-slate-300">
+                <input type="text" id="reg-pays" placeholder="Pays" value="Côte d'Ivoire" required class="w-full px-4 py-2 rounded-lg border border-slate-300">
+                <input type="tel" id="reg-phone" placeholder="Numéro WhatsApp" required class="w-full px-4 py-2 rounded-lg border border-slate-300">
+                <input type="password" id="reg-password" placeholder="Mot de passe" required class="w-full px-4 py-2 rounded-lg border border-slate-300">
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg transition">S'inscrire</button>
             </form>
+            <button onclick="navigate('login')" class="w-full mt-3 text-xs text-slate-500 hover:underline text-center block">Déjà un compte ? Se connecter</button>
         </section>
 
-        <!-- MODAL : MOT DE PASSE OUBLIÉ -->
-        <div id="modal-forgot-pwd" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
-            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <i class="fas fa-key text-indigo-600"></i> Mot de passe oublié
-                </h3>
-                
-                <div id="forgot-step-1">
-                    <p class="text-sm text-gray-600 mb-4">Saisissez votre numéro WhatsApp pour vérifier votre compte :</p>
-                    <input type="tel" id="forgot-phone" placeholder="Numéro WhatsApp" class="w-full px-4 py-2 border rounded-xl mb-4 outline-none">
-                    <div class="flex justify-end space-x-2">
-                        <button onclick="closeForgotPasswordModal()" class="px-4 py-2 bg-gray-200 rounded-lg text-sm font-semibold">Annuler</button>
-                        <button onclick="checkForgotPhone()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold">Vérifier</button>
-                    </div>
-                </div>
-
-                <div id="forgot-step-2" class="hidden">
-                    <p class="text-sm text-gray-600 mb-2">Compte trouvé :</p>
-                    <div class="bg-indigo-50 p-4 rounded-xl mb-4 text-sm space-y-1">
-                        <p><strong>Nom :</strong> <span id="forgot-res-nom"></span></p>
-                        <p><strong>Prénom :</strong> <span id="forgot-res-prenom"></span></p>
-                        <p><strong>Ville :</strong> <span id="forgot-res-ville"></span></p>
-                        <p><strong>Pays :</strong> <span id="forgot-res-pays"></span></p>
-                    </div>
-                    <p class="text-xs text-gray-500 mb-4">Est-ce bien votre compte ? Si oui, une demande de réinitialisation sera envoyée à l'administrateur.</p>
-                    <div class="flex justify-between">
-                        <button onclick="closeForgotPasswordModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold">Annuler</button>
-                        <button onclick="confirmForgotRequest()" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-semibold">Oui, c'est moi</button>
-                    </div>
-                </div>
+        <!-- SECTION: MOT DE PASSE OUBLIÉ -->
+        <section id="sec-forgot-password" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-200 hidden">
+            <h2 class="text-xl font-bold text-indigo-950 mb-4">Réinitialisation du mot de passe</h2>
+            <div id="fp-step-1" class="space-y-4">
+                <p class="text-xs text-slate-600">Saisissez votre numéro WhatsApp pour identifier votre compte.</p>
+                <input type="tel" id="fp-phone" placeholder="Numéro WhatsApp" class="w-full px-4 py-2 rounded-lg border border-slate-300">
+                <button onclick="checkForgotPasswordPhone()" class="w-full bg-indigo-600 text-white font-bold py-2 rounded-lg">Rechercher mon compte</button>
             </div>
-        </div>
-
-        <!-- 2. PROFIL PARTICIPANT -->
-        <section id="view-profile" class="max-w-2xl mx-auto glass-card p-6 rounded-2xl shadow-xl hidden">
-            <div class="flex items-center space-x-4 border-b pb-6 mb-6">
-                <div class="relative">
-                    <img id="profile-avatar" src="https://via.placeholder.com/100" alt="Avatar" class="w-20 h-20 rounded-full object-cover border-4 border-indigo-600">
-                </div>
-                <div>
-                    <h2 id="profile-fullname" class="text-2xl font-bold text-gray-800">Nom Prénom</h2>
-                    <p id="profile-status-badge" class="inline-block px-3 py-1 bg-gray-200 text-gray-700 text-xs font-bold rounded-full mt-1">Compte Gratuit</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div class="bg-gray-50 p-3 rounded-xl"><span class="text-xs text-gray-500 block">Ville</span><span id="profile-ville" class="font-semibold"></span></div>
-                <div class="bg-gray-50 p-3 rounded-xl"><span class="text-xs text-gray-500 block">Pays</span><span id="profile-pays" class="font-semibold"></span></div>
-                <div class="bg-gray-50 p-3 rounded-xl"><span class="text-xs text-gray-500 block">Classe</span><span id="profile-classe" class="font-semibold"></span></div>
-                <div class="bg-gray-50 p-3 rounded-xl"><span class="text-xs text-gray-500 block">WhatsApp</span><span id="profile-phone" class="font-semibold"></span></div>
-            </div>
-
-            <!-- Changement de mot de passe -->
-            <div class="border-t pt-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Modifier mon mot de passe</h3>
-                <form onsubmit="handleChangePassword(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">Mot de passe actuel</label>
-                        <input type="password" id="pwd-old" required class="w-full px-4 py-2 border rounded-xl outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">Nouveau mot de passe</label>
-                        <input type="password" id="pwd-new" required class="w-full px-4 py-2 border rounded-xl outline-none">
-                    </div>
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2 rounded-xl transition">Enregistrer</button>
-                </form>
-            </div>
-
-            <div class="mt-8 border-t pt-4 flex justify-between items-center">
-                <button onclick="requestSubscription()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-4 py-2 rounded-xl font-bold shadow hover:opacity-90">
-                    <i class="fas fa-crown mr-2"></i>Acheter un abonnement
-                </button>
-                <button onclick="logout()" class="text-red-600 hover:text-red-800 font-bold text-sm flex items-center gap-2">
-                    <i class="fas fa-sign-out-alt"></i> Se déconnecter
-                </button>
-            </div>
-        </section>
-
-        <!-- 3. ACCUEIL DES CONCOURS -->
-        <section id="view-home" class="space-y-6 hidden">
-            <!-- Bannière Abonnement -->
-            <div id="sub-banner" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
-                <div>
-                    <h2 class="text-2xl font-extrabold">Révisez et Gagniez vos Concours !</h2>
-                    <p class="text-indigo-100 text-sm mt-1">Abonnez-vous pour débloquer l'accès illimité à toutes les épreuves Premium.</p>
-                </div>
-                <button onclick="requestSubscription()" class="bg-amber-400 hover:bg-amber-500 text-indigo-950 font-extrabold px-6 py-3 rounded-xl shadow-lg whitespace-nowrap transition">
-                    <i class="fas fa-star mr-2"></i>Acheter un abonnement (30 jours)
-                </button>
-            </div>
-
-            <!-- Filtres Ordre (Tous, Primaire, Collège) -->
-            <div class="bg-white p-4 rounded-2xl shadow-md space-y-4">
-                <div class="flex border-b justify-center space-x-4 md:space-x-8">
-                    <button id="btn-cat-all" onclick="filterCategory('ALL')" class="pb-2 font-bold text-indigo-600 border-b-2 border-indigo-600">Tous</button>
-                    <button id="btn-cat-prim" onclick="filterCategory('PRIMAIRE')" class="pb-2 font-bold text-gray-500 hover:text-indigo-600">Primaire</button>
-                    <button id="btn-cat-coll" onclick="filterCategory('COLLEGE')" class="pb-2 font-bold text-gray-500 hover:text-indigo-600">Collège & Lycée</button>
-                </div>
-
-                <!-- Sous-filtres Classes (Primaire) -->
-                <div id="subfilters-primaire" class="flex flex-wrap justify-center gap-2 hidden">
-                    <button onclick="filterClass('CE2')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">CE2</button>
-                    <button onclick="filterClass('CM1')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">CM1</button>
-                    <button onclick="filterClass('CM2')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">CM2</button>
-                </div>
-
-                <!-- Sous-filtres Classes (Collège & Lycée) -->
-                <div id="subfilters-college" class="flex flex-wrap justify-center gap-2 hidden">
-                    <button onclick="filterClass('6e')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">6e</button>
-                    <button onclick="filterClass('5e')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">5e</button>
-                    <button onclick="filterClass('4e')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">4e</button>
-                    <button onclick="filterClass('3e')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">3e</button>
-                    <button onclick="filterClass('Seconde')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">Seconde</button>
-                    <button onclick="filterClass('Première')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">Première</button>
-                    <button onclick="filterClass('Terminale')" class="class-btn px-4 py-1.5 bg-gray-100 rounded-full text-sm font-semibold hover:bg-indigo-100">Terminale</button>
-                </div>
-            </div>
-
-            <!-- Liste des Concours -->
-            <div id="concours-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Généré dynamiquement par JS -->
-            </div>
-
-            <!-- Message Aucun concours -->
-            <div id="empty-concours-msg" class="hidden bg-white p-8 rounded-2xl shadow-md text-center max-w-lg mx-auto">
-                <i class="fas fa-exclamation-circle text-4xl text-amber-500 mb-3"></i>
-                <p class="text-gray-700 font-medium">Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard.</p>
-            </div>
-        </section>
-
-        <!-- 5 & 6. INTERFACE DU CONCOURS (QUIZ À 5 QUESTIONS) -->
-        <section id="view-quiz" class="max-w-3xl mx-auto glass-card p-6 md:p-8 rounded-2xl shadow-2xl hidden">
-            <!-- En-tête du Quiz -->
-            <div class="flex justify-between items-center mb-6 border-b pb-4">
-                <div>
-                    <span id="quiz-title" class="text-lg font-extrabold text-indigo-700 block">Intitulé Concours</span>
-                    <span id="quiz-progress" class="text-xs text-gray-500 font-bold">Question 1 sur 5</span>
-                </div>
-                <!-- Chronomètre Rouge -->
-                <div class="flex items-center space-x-2 bg-red-50 border border-red-200 px-4 py-2 rounded-2xl">
-                    <i class="fas fa-clock text-red-600 text-xl"></i>
-                    <span id="quiz-timer" class="text-2xl font-black timer-red">10</span>
-                    <span class="text-xs font-bold text-red-600">sec</span>
-                </div>
-            </div>
-
-            <!-- Encadré Texte de la Question + Haut-Parleur -->
-            <div class="bg-white border-2 border-indigo-100 p-6 rounded-2xl shadow-sm mb-6 relative">
-                <div class="flex justify-between items-start">
-                    <p id="quiz-question-text" class="text-xl md:text-2xl font-bold text-gray-800 leading-snug">
-                        Chargement de la question...
-                    </p>
-                    <button onclick="speakCurrentQuestion()" class="ml-3 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 p-3 rounded-full transition shadow-sm" title="Écouter la question">
-                        <i class="fas fa-volume-up text-xl"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Encadrés Réponses A, B, C, D -->
-            <div class="grid grid-cols-1 gap-4 mb-6">
-                <button onclick="selectAnswer('A')" class="option-btn border-2 border-gray-200 hover:border-indigo-600 bg-white p-4 rounded-xl text-left font-semibold text-lg text-gray-700 transition flex items-center">
-                    <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center mr-3">A</span>
-                    <span id="opt-a">Option A</span>
-                </button>
-                <button onclick="selectAnswer('B')" class="option-btn border-2 border-gray-200 hover:border-indigo-600 bg-white p-4 rounded-xl text-left font-semibold text-lg text-gray-700 transition flex items-center">
-                    <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center mr-3">B</span>
-                    <span id="opt-b">Option B</span>
-                </button>
-                <button onclick="selectAnswer('C')" class="option-btn border-2 border-gray-200 hover:border-indigo-600 bg-white p-4 rounded-xl text-left font-semibold text-lg text-gray-700 transition flex items-center">
-                    <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center mr-3">C</span>
-                    <span id="opt-c">Option C</span>
-                </button>
-                <button onclick="selectAnswer('D')" class="option-btn border-2 border-gray-200 hover:border-indigo-600 bg-white p-4 rounded-xl text-left font-semibold text-lg text-gray-700 transition flex items-center">
-                    <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center mr-3">D</span>
-                    <span id="opt-d">Option D</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- 7. FIN DU CONCOURS -->
-        <section id="view-quiz-end" class="max-w-md mx-auto glass-card p-8 rounded-2xl shadow-2xl text-center hidden">
-            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl shadow">
-                <i class="fas fa-check"></i>
-            </div>
-            <h2 class="text-2xl font-black text-gray-800 mb-2">Concours Terminé !</h2>
-            <p class="text-gray-600 font-medium mb-6">Merci d'avoir participé à ce concours. Veuillez retourner à l'accueil.</p>
-            <button onclick="showSection('view-home')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
-                Retour à l'accueil
-            </button>
-        </section>
-
-        <!-- 8 & 9. CLASSEMENTS ET RÉCOMPENSES -->
-        <section id="view-rankings" class="max-w-4xl mx-auto space-y-6 hidden">
-            <div class="bg-white p-6 rounded-2xl shadow-md">
-                <h2 class="text-2xl font-bold text-indigo-700 mb-4 flex items-center gap-2">
-                    <i class="fas fa-trophy text-amber-500"></i> Classement & Récompenses
-                </h2>
-                
-                <div id="rankings-list" class="space-y-6">
-                    <!-- Généré dynamiquement -->
-                </div>
-            </div>
-        </section>
-
-        <!-- 4 & 10. ESPACE D'ADMINISTRATION COMPLET -->
-        <section id="view-admin" class="space-y-8 hidden">
-            <div class="bg-indigo-900 text-white p-6 rounded-2xl shadow-xl flex justify-between items-center flex-wrap gap-4">
-                <div>
-                    <h2 class="text-2xl font-black">Espace d'Administration ZTV</h2>
-                    <p class="text-indigo-200 text-sm">Gestion globale, statistiques et abonnements</p>
+            <div id="fp-step-2" class="space-y-4 hidden border-t pt-4 mt-4">
+                <p class="text-sm font-semibold text-slate-700">Est-ce bien votre compte ?</p>
+                <div class="bg-slate-50 p-4 rounded-lg text-sm space-y-1">
+                    <p><strong>Nom :</strong> <span id="fp-res-nom"></span></p>
+                    <p><strong>Prénom :</strong> <span id="fp-res-prenom"></span></p>
+                    <p><strong>Ville :</strong> <span id="fp-res-ville"></span></p>
+                    <p><strong>Pays :</strong> <span id="fp-res-pays"></span></p>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="showAdminTab('stats')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold">Statistiques</button>
-                    <button onclick="showAdminTab('create-concours')" class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-xl text-sm font-bold">+ Créer Concours</button>
-                    <button onclick="showAdminTab('subs')" class="bg-amber-500 hover:bg-amber-400 text-indigo-950 px-4 py-2 rounded-xl text-sm font-bold">Abonnements</button>
-                </div>
-            </div>
-
-            <!-- ONGLET ADMIN: STATISTIQUES -->
-            <div id="admin-tab-stats" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-white p-6 rounded-2xl shadow border-l-4 border-indigo-600">
-                    <span class="text-xs text-gray-500 font-bold uppercase">Total Participants</span>
-                    <p id="stat-users-count" class="text-3xl font-black text-gray-800 mt-2">0</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border-l-4 border-green-500">
-                    <span class="text-xs text-gray-500 font-bold uppercase">Concours Actifs</span>
-                    <p id="stat-concours-count" class="text-3xl font-black text-gray-800 mt-2">0</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border-l-4 border-amber-500">
-                    <span class="text-xs text-gray-500 font-bold uppercase">Abonnements Actifs</span>
-                    <p id="stat-subs-count" class="text-3xl font-black text-gray-800 mt-2">0</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow border-l-4 border-red-500">
-                    <span class="text-xs text-gray-500 font-bold uppercase">Demandes PWD Oublié</span>
-                    <p id="stat-forgot-count" class="text-3xl font-black text-gray-800 mt-2">0</p>
-                </div>
-            </div>
-
-            <!-- ONGLET ADMIN: CRÉATION DE CONCOURS -->
-            <div id="admin-tab-create-concours" class="bg-white p-6 rounded-2xl shadow-md hidden">
-                <h3 class="text-xl font-bold mb-4 text-indigo-700">Créer un nouveau concours (5 Questions)</h3>
-                <form onsubmit="handleCreateConcours(event)" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold mb-1">Intitulé du Concours</label>
-                            <input type="text" id="admin-c-title" required placeholder="Ex: Grand Quiz d'Histoire" class="w-full px-4 py-2 border rounded-xl outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-1">Catégorie</label>
-                            <select id="admin-c-cat" onchange="updateClassOptionsAdmin()" required class="w-full px-4 py-2 border rounded-xl outline-none">
-                                <option value="PRIMAIRE">Primaire</option>
-                                <option value="COLLEGE">Collège & Lycée</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-1">Classe Concernée</label>
-                            <select id="admin-c-classe" required class="w-full px-4 py-2 border rounded-xl outline-none">
-                                <!-- Dynamique -->
-                            </select>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Formulaire pour les 5 Questions -->
-                    <div id="questions-inputs-container" class="space-y-6">
-                        <!-- Généré par JS : 5 blocs de questions -->
-                    </div>
-
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
-                        Enregistrer et Publier le Concours
-                    </button>
-                </form>
-            </div>
-
-            <!-- ONGLET ADMIN: GESTION DES ABONNEMENTS ET DEMANDES -->
-            <div id="admin-tab-subs" class="bg-white p-6 rounded-2xl shadow-md hidden space-y-6">
-                <h3 class="text-xl font-bold text-indigo-700">Demandes d'abonnements & Contacts WhatsApp</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-gray-600">
-                        <thead class="bg-gray-100 text-gray-700 uppercase font-bold text-xs">
-                            <tr>
-                                <th class="p-3">Date</th>
-                                <th class="p-3">Participant</th>
-                                <th class="p-3">Classe</th>
-                                <th class="p-3">WhatsApp</th>
-                                <th class="p-3">Statut</th>
-                                <th class="p-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-subs-table">
-                            <!-- Généré par JS -->
-                        </tbody>
-                    </table>
+                    <button onclick="confirmResetRequest()" class="flex-1 bg-emerald-600 text-white font-bold py-2 rounded-lg text-sm">Oui, c'est moi</button>
+                    <button onclick="navigate('login')" class="flex-1 bg-slate-300 text-slate-700 font-bold py-2 rounded-lg text-sm">Annuler</button>
                 </div>
             </div>
         </section>
 
-    </main>
-
-    <!-- PIED DE PAGE -->
-    <footer class="bg-gray-800 text-gray-400 text-center py-4 text-xs mt-10">
-        <p>© 2026 ZTV Concours - Tous droits réservés. Plateforme de révision et quiz.</p>
-    </footer>
-
-    <!-- LOGIQUE JAVASCRIPT COMPLET -->
-    <script>
-        /* ==========================================================================
-           1. BASE DE DONNÉES / ÉTAT DE L'APPLICATION (PERSISTENCE LOCALSTORAGE)
-           ========================================================================== */
-        const DB = {
-            users: JSON.parse(localStorage.getItem('ztv_users')) || [],
-            concours: JSON.parse(localStorage.getItem('ztv_concours')) || [],
-            results: JSON.parse(localStorage.getItem('ztv_results')) || [],
-            subscriptions: JSON.parse(localStorage.getItem('ztv_subs')) || [],
-            forgotRequests: JSON.parse(localStorage.getItem('ztv_forgot')) || [],
-            logs: JSON.parse(localStorage.getItem('ztv_logs')) || []
-        };
-
-        function saveData() {
-            localStorage.setItem('ztv_users', JSON.stringify(DB.users));
-            localStorage.setItem('ztv_concours', JSON.stringify(DB.concours));
-            localStorage.setItem('ztv_results', JSON.stringify(DB.results));
-            localStorage.setItem('ztv_subs', JSON.stringify(DB.subscriptions));
-            localStorage.setItem('ztv_forgot', JSON.stringify(DB.forgotRequests));
-            localStorage.setItem('ztv_logs', JSON.stringify(DB.logs));
-        }
-
-        let currentUser = JSON.parse(sessionStorage.getItem('ztv_current_user')) || null;
-        let activeCategoryFilter = 'ALL';
-        let activeClassFilter = 'ALL';
-        let currentQuiz = null;
-        let currentQuestionIdx = 0;
-        let quizScore = 0;
-        let quizTimerInterval = null;
-        let viewHistory = ['view-home'];
-
-        /* ==========================================================================
-           2. INITIALIZATION & NAVIGATION
-           ========================================================================== */
-        window.onload = function() {
-            seedInitialData();
-            updateNav();
-            renderConcoursList();
-            setupAdminQuestionsForm();
-            updateClassOptionsAdmin();
-        };
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = message;
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 5000);
-        }
-
-        function showSection(sectionId, pushHistory = true) {
-            const sections = ['view-auth', 'view-profile', 'view-home', 'view-quiz', 'view-quiz-end', 'view-rankings', 'view-admin'];
-            sections.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('hidden');
-            });
-
-            const target = document.getElementById(sectionId);
-            if(target) target.classList.remove('hidden');
-
-            if(pushHistory && viewHistory[viewHistory.length - 1] !== sectionId) {
-                viewHistory.push(sectionId);
-            }
-
-            // Bouton retour global
-            const backBtn = document.getElementById('global-back-btn');
-            if(sectionId !== 'view-home' && sectionId !== 'view-auth') {
-                backBtn.classList.remove('hidden');
-            } else {
-                backBtn.classList.add('hidden');
-            }
-
-            if(sectionId === 'view-admin') renderAdminDashboard();
-            if(sectionId === 'view-rankings') renderRankings();
-            if(sectionId === 'view-profile') renderProfileData();
-        }
-
-        function goBack() {
-            if(viewHistory.length > 1) {
-                viewHistory.pop();
-                const prev = viewHistory[viewHistory.length - 1];
-                showSection(prev, false);
-            } else {
-                showSection('view-home', false);
-            }
-        }
-
-        function updateNav() {
-            const nav = document.getElementById('nav-menu');
-            if(currentUser) {
-                nav.innerHTML = `
-                    <button onclick="showSection('view-home')" class="text-sm font-semibold hover:text-indigo-200">Accueil</button>
-                    <button onclick="showSection('view-rankings')" class="text-sm font-semibold hover:text-indigo-200">Classement</button>
-                    ${currentUser.isAdmin ? `<button onclick="showSection('view-admin')" class="bg-amber-400 text-indigo-950 text-xs font-bold px-3 py-1.5 rounded-lg shadow">Admin</button>` : ''}
-                    <button onclick="showSection('view-profile')" class="flex items-center space-x-2 bg-indigo-800 px-3 py-1.5 rounded-xl">
-                        <i class="fas fa-user-circle"></i>
-                        <span class="text-xs font-bold">${currentUser.prenom}</span>
-                    </button>
-                `;
-            } else {
-                nav.innerHTML = `
-                    <button onclick="showSection('view-auth')" class="bg-white text-indigo-700 font-bold px-4 py-1.5 rounded-xl text-sm shadow">Connexion</button>
-                `;
-            }
-        }
-
-        /* ==========================================================================
-           3. AUTHENTIFICATION & MOT DE PASSE OUBLIÉ
-           ========================================================================== */
-        function switchAuthTab(tab) {
-            if(tab === 'login') {
-                document.getElementById('form-login').classList.remove('hidden');
-                document.getElementById('form-register').classList.add('hidden');
-                document.getElementById('tab-login').className = 'w-1/2 py-2 font-bold text-center text-indigo-700 border-b-2 border-indigo-700';
-                document.getElementById('tab-register').className = 'w-1/2 py-2 font-bold text-center text-gray-500 hover:text-indigo-700';
-            } else {
-                document.getElementById('form-login').classList.add('hidden');
-                document.getElementById('form-register').classList.remove('hidden');
-                document.getElementById('tab-register').className = 'w-1/2 py-2 font-bold text-center text-indigo-700 border-b-2 border-indigo-700';
-                document.getElementById('tab-login').className = 'w-1/2 py-2 font-bold text-center text-gray-500 hover:text-indigo-700';
-            }
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            const phone = document.getElementById('reg-phone').value.trim();
-            if(DB.users.find(u => u.phone === phone)) {
-                alert('Ce numéro WhatsApp existe déjà. Un seul compte est autorisé par participant.');
-                return;
-            }
-
-            const newUser = {
-                id: 'USR-' + Date.now(),
-                nom: document.getElementById('reg-nom').value.trim(),
-                prenom: document.getElementById('reg-prenom').value.trim(),
-                ville: document.getElementById('reg-ville').value.trim(),
-                pays: document.getElementById('reg-pays').value.trim(),
-                classe: document.getElementById('reg-classe').value,
-                phone: phone,
-                password: document.getElementById('reg-password').value,
-                photo: 'https://via.placeholder.com/100',
-                subscribed: false,
-                subExpiration: null,
-                isAdmin: false
-            };
-
-            DB.users.push(newUser);
-            saveData();
-            currentUser = newUser;
-            sessionStorage.setItem('ztv_current_user', JSON.stringify(currentUser));
-            updateNav();
-            showToast('Compte créé avec succès !');
-            showSection('view-home');
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const phone = document.getElementById('login-phone').value.trim();
-            const pwd = document.getElementById('login-password').value;
-
-            // Compte Démo Admin
-            if(phone === '0000' && pwd === 'admin') {
-                currentUser = { id: 'ADMIN', nom: 'Admin', prenom: 'ZTV', phone: '0000', isAdmin: true };
-                sessionStorage.setItem('ztv_current_user', JSON.stringify(currentUser));
-                updateNav();
-                showSection('view-admin');
-                return;
-            }
-
-            const user = DB.users.find(u => u.phone === phone && u.password === pwd);
-            if(user) {
-                currentUser = user;
-                sessionStorage.setItem('ztv_current_user', JSON.stringify(currentUser));
-                updateNav();
-                showToast('Connexion réussie !');
-                showSection('view-home');
-            } else {
-                alert('Numéro WhatsApp ou mot de passe incorrect.');
-            }
-        }
-
-        function logout() {
-            currentUser = null;
-            sessionStorage.removeItem('ztv_current_user');
-            updateNav();
-            showSection('view-auth');
-        }
-
-        // MOT DE PASSE OUBLIÉ
-        let forgotUserTemp = null;
-        function showForgotPasswordModal() {
-            document.getElementById('forgot-step-1').classList.remove('hidden');
-            document.getElementById('forgot-step-2').classList.add('hidden');
-            document.getElementById('modal-forgot-pwd').classList.remove('hidden');
-        }
-
-        function closeForgotPasswordModal() {
-            document.getElementById('modal-forgot-pwd').classList.add('hidden');
-        }
-
-        function checkForgotPhone() {
-            const phone = document.getElementById('forgot-phone').value.trim();
-            const user = DB.users.find(u => u.phone === phone);
-            if(user) {
-                forgotUserTemp = user;
-                document.getElementById('forgot-res-nom').innerText = user.nom;
-                document.getElementById('forgot-res-prenom').innerText = user.prenom;
-                document.getElementById('forgot-res-ville').innerText = user.ville;
-                document.getElementById('forgot-res-pays').innerText = user.pays;
-                document.getElementById('forgot-step-1').classList.add('hidden');
-                document.getElementById('forgot-step-2').classList.remove('hidden');
-            } else {
-                alert('Aucun compte trouvé avec ce numéro WhatsApp.');
-            }
-        }
-
-        function confirmForgotRequest() {
-            if(forgotUserTemp) {
-                DB.forgotRequests.push({
-                    id: 'REQ-' + Date.now(),
-                    userId: forgotUserTemp.id,
-                    nom: forgotUserTemp.nom,
-                    prenom: forgotUserTemp.prenom,
-                    phone: forgotUserTemp.phone,
-                    date: new Date().toLocaleString('fr-FR')
-                });
-                saveData();
-                closeForgotPasswordModal();
-                showToast('Demande envoyée à l\'administrateur avec succès.');
-            }
-        }
-
-        /* ==========================================================================
-           4. PROFIL PARTICIPANT & MODIFICATION MDP
-           ========================================================================== */
-        function renderProfileData() {
-            if(!currentUser) return;
-            document.getElementById('profile-fullname').innerText = `${currentUser.nom} ${currentUser.prenom}`;
-            document.getElementById('profile-ville').innerText = currentUser.ville || 'Non renseigné';
-            document.getElementById('profile-pays').innerText = currentUser.pays || 'Non renseigné';
-            document.getElementById('profile-classe').innerText = currentUser.classe || 'Non renseigné';
-            document.getElementById('profile-phone').innerText = currentUser.phone;
+        <!-- SECTION: PROFIL PARTICIPANT -->
+        <section id="sec-profile" class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-200 hidden">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-indigo-950">Mon Profil Participant</h2>
+                <button onclick="goBack()" class="px-3 py-1.5 bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold"><i class="fa-solid fa-arrow-left mr-1"></i> Retour</button>
+            </div>
             
-            const badge = document.getElementById('profile-status-badge');
-            if(currentUser.subscribed) {
-                badge.className = 'inline-block px-3 py-1 bg-amber-500 text-white text-xs font-bold rounded-full mt-1';
-                badge.innerText = 'Abonné Premium';
-            } else {
-                badge.className = 'inline-block px-3 py-1 bg-gray-200 text-gray-700 text-xs font-bold rounded-full mt-1';
-                badge.innerText = 'Compte Gratuit';
-            }
-        }
+            <div class="flex items-center gap-4 mb-6 pb-6 border-b">
+                <img id="prof-avatar" src="https://via.placeholder.com/100" class="w-20 h-20 rounded-full border-2 border-indigo-600 object-cover">
+                <div>
+                    <h3 id="prof-fullname" class="text-xl font-bold text-slate-800">---</h3>
+                    <p id="prof-status" class="text-xs px-2.5 py-0.5 rounded-full font-bold inline-block mt-1">---</p>
+                </div>
+            </div>
 
-        function handleChangePassword(e) {
-            e.preventDefault();
-            const oldP = document.getElementById('pwd-old').value;
-            const newP = document.getElementById('pwd-new').value;
+            <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+                <div><span class="text-slate-500 block text-xs">Ville:</span> <strong id="prof-ville">---</strong></div>
+                <div><span class="text-slate-500 block text-xs">Pays:</span> <strong id="prof-pays">---</strong></div>
+                <div><span class="text-slate-500 block text-xs">WhatsApp:</span> <strong id="prof-phone">---</strong></div>
+            </div>
 
-            if(currentUser.password !== oldP) {
-                alert('Le mot de passe actuel est incorrect.');
-                return;
-            }
+            <div class="border-t pt-6">
+                <h4 class="font-bold text-slate-800 mb-3">Changer le mot de passe</h4>
+                <form onsubmit="handleChangePassword(event)" class="space-y-3">
+                    <input type="password" id="pass-current" placeholder="Mot de passe actuel" required class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm">
+                    <input type="password" id="pass-new" placeholder="Nouveau mot de passe" required class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm">
+                    <button type="submit" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-lg text-sm">Enregistrer</button>
+                </form>
+            </div>
 
-            currentUser.password = newP;
-            const idx = DB.users.findIndex(u => u.id === currentUser.id);
-            if(idx !== -1) DB.users[idx].password = newP;
-            
-            saveData();
-            sessionStorage.setItem('ztv_current_user', JSON.stringify(currentUser));
-            showToast('Mot de passe modifié avec succès !');
-            document.getElementById('pwd-old').value = '';
-            document.getElementById('pwd-new').value = '';
-        }
+            <button onclick="handleLogout()" class="w-full mt-6 bg-rose-100 text-rose-700 hover:bg-rose-200 font-bold py-2.5 rounded-lg text-sm transition">Se déconnecter</button>
+        </section>
 
-        /* ==========================================================================
-           5. ACCUEIL DES CONCOURS ET FILTRES
-           ========================================================================== */
-        function filterCategory(cat) {
-            activeCategoryFilter = cat;
-            activeClassFilter = 'ALL';
+        <!-- SECTION: ACCUEIL DES CONCOURS -->
+        <section id="sec-home" class="space-y-6 hidden">
+            <!-- Boutons de filtre principaux -->
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-sm border">
+                <div class="flex gap-2">
+                    <button onclick="filterCategory('Tous')" class="btn-cat px-4 py-2 rounded-lg font-bold text-sm bg-indigo-600 text-white">Tous</button>
+                    <button onclick="filterCategory('Primaire')" class="btn-cat px-4 py-2 rounded-lg font-bold text-sm bg-slate-100 text-slate-600">Primaire</button>
+                    <button onclick="filterCategory('Collège')" class="btn-cat px-4 py-2 rounded-lg font-bold text-sm bg-slate-100 text-slate-600">Collège</button>
+                </div>
+                <button onclick="navigate('subscription')" class="bg-amber-400 hover:bg-amber-500 text-indigo-950 font-bold px-4 py-2 rounded-lg text-sm shadow">
+                    <i class="fa-solid fa-crown mr-1"></i> Acheter un abonnement
+                </button>
+            </div>
 
-            document.getElementById('btn-cat-all').className = cat === 'ALL' ? 'pb-2 font-bold text-indigo-600 border-b-2 border-indigo-600' : 'pb-2 font-bold text-gray-500 hover:text-indigo-600';
-            document.getElementById('btn-cat-prim').className = cat === 'PRIMAIRE' ? 'pb-2 font-bold text-indigo-600 border-b-2 border-indigo-600' : 'pb-2 font-bold text-gray-500 hover:text-indigo-600';
-            document.getElementById('btn-cat-coll').className = cat === 'COLLEGE' ? 'pb-2 font-bold text-indigo-600 border-b-2 border-indigo-600' : 'pb-2 font-bold text-gray-500 hover:text-indigo-600';
+            <!-- Sous-filtres par Classe -->
+            <div id="class-filters" class="flex flex-wrap gap-2 hidden">
+                <!-- Injecté dynamiquement par JS -->
+            </div>
 
-            const primDiv = document.getElementById('subfilters-primaire');
-            const collDiv = document.getElementById('subfilters-college');
+            <!-- Grille des concours -->
+            <div id="contests-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cartes injectées dynamiquement -->
+            </div>
 
-            if(cat === 'PRIMAIRE') {
-                primDiv.classList.remove('hidden');
-                collDiv.classList.add('hidden');
-            } else if(cat === 'COLLEGE') {
-                collDiv.classList.remove('hidden');
-                primDiv.classList.add('hidden');
-            } else {
-                primDiv.classList.add('hidden');
-                collDiv.classList.add('hidden');
-            }
+            <!-- Message d'absence de concours -->
+            <div id="empty-contests-msg" class="hidden bg-white p-8 rounded-xl text-center shadow border border-slate-200 max-w-lg mx-auto my-12">
+                <i class="fa-solid fa-folder-open text-4xl text-slate-400 mb-3"></i>
+                <p class="text-slate-600 font-medium">Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard.</p>
+            </div>
+        </section>
 
-            renderConcoursList();
-        }
+        <!-- SECTION: JOUEUR DE CONCOURS / QUIZ -->
+        <section id="sec-quiz" class="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-200 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="goBack()" class="px-3 py-1 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+                <div class="text-right">
+                    <span id="quiz-progress" class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Question 1/5</span>
+                </div>
+            </div>
 
-        function filterClass(cls) {
-            activeClassFilter = cls;
-            renderConcoursList();
-        }
+            <!-- Chronomètre -->
+            <div class="flex justify-center items-center gap-2 mb-6">
+                <i class="fa-solid fa-stopwatch text-2xl timer-red"></i>
+                <span id="quiz-timer" class="text-3xl font-black timer-red">10</span>
+                <span class="text-xs font-bold text-slate-400">s</span>
+            </div>
 
-        function renderConcoursList() {
-            const container = document.getElementById('concours-container');
-            const emptyMsg = document.getElementById('empty-concours-msg');
-            container.innerHTML = '';
+            <!-- Intitulé Question -->
+            <div class="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-5 mb-6 text-center relative">
+                <p id="quiz-question-text" class="text-xl sm:text-2xl font-bold text-indigo-950 leading-relaxed"></p>
+                <button onclick="speakCurrentQuestion()" class="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow inline-flex items-center gap-1.5">
+                    <i class="fa-solid fa-volume-high"></i> Haut-parleur
+                </button>
+            </div>
 
-            let list = DB.concours;
+            <!-- Réponses A, B, C, D -->
+            <div class="grid grid-cols-1 gap-3 mb-6">
+                <button onclick="submitAnswer('A')" class="btn-opt text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50 font-semibold transition flex items-center gap-3">
+                    <span class="bg-slate-200 text-slate-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">A</span>
+                    <span id="opt-A-text" class="text-base text-slate-800"></span>
+                </button>
+                <button onclick="submitAnswer('B')" class="btn-opt text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50 font-semibold transition flex items-center gap-3">
+                    <span class="bg-slate-200 text-slate-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">B</span>
+                    <span id="opt-B-text" class="text-base text-slate-800"></span>
+                </button>
+                <button onclick="submitAnswer('C')" class="btn-opt text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50 font-semibold transition flex items-center gap-3">
+                    <span class="bg-slate-200 text-slate-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">C</span>
+                    <span id="opt-C-text" class="text-base text-slate-800"></span>
+                </button>
+                <button onclick="submitAnswer('D')" class="btn-opt text-left p-4 rounded-xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50 font-semibold transition flex items-center gap-3">
+                    <span class="bg-slate-200 text-slate-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">D</span>
+                    <span id="opt-D-text" class="text-base text-slate-800"></span>
+                </button>
+            </div>
+        </section>
 
-            if(activeCategoryFilter !== 'ALL') {
-                list = list.filter(c => c.category === activeCategoryFilter);
-            }
+        <!-- SECTION: FIN DU CONCOURS -->
+        <section id="sec-quiz-end" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl text-center hidden border">
+            <i class="fa-solid fa-circle-check text-5xl text-emerald-500 mb-4"></i>
+            <h3 class="text-2xl font-bold text-indigo-950 mb-2">Concours Terminé !</h3>
+            <p class="text-slate-600 text-sm mb-6">Merci d'avoir participé à ce concours. Veuillez retourner à l'accueil.</p>
+            <button onclick="navigate('home')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg">Retourner à l'accueil</button>
+        </section>
 
-            if(activeClassFilter !== 'ALL') {
-                list = list.filter(c => c.classe === activeClassFilter);
-            }
+        <!-- SECTION: ABONNEMENT -->
+        <section id="sec-subscription" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-200 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-indigo-950">Acheter un abonnement</h2>
+                <button onclick="goBack()" class="text-slate-500 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <p class="text-xs text-slate-500 mb-6">Accédez en illimité à l'ensemble des concours de révision pour 30 jours.</p>
+            <form onsubmit="handleSubRequest(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nom complet</label>
+                    <input type="text" id="sub-nom" required class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Numéro WhatsApp</label>
+                    <input type="tel" id="sub-phone" required class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Classe</label>
+                    <select id="sub-classe" required class="w-full px-4 py-2 rounded-lg border border-slate-300 text-sm">
+                        <option value="CE2">CE2</option><option value="CM1">CM1</option><option value="CM2">CM2</option>
+                        <option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option>
+                        <option value="3e">3e</option><option value="Seconde">Seconde</option><option value="Première">Première</option><option value="Terminale">Terminale</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-amber-400 hover:bg-amber-500 text-indigo-950 font-bold py-2.5 rounded-lg transition text-sm">Valider la demande</button>
+            </form>
+        </section>
 
-            if(list.length === 0) {
-                emptyMsg.classList.remove('hidden');
-                return;
-            } else {
-                emptyMsg.classList.add('hidden');
-            }
+        <!-- SECTION: TABLEAU DE BORD ADMINISTRATEUR -->
+        <section id="sec-admin" class="space-y-8 hidden">
+            <div class="flex justify-between items-center bg-indigo-950 text-white p-6 rounded-2xl shadow">
+                <div>
+                    <h2 class="text-2xl font-bold">Espace d'Administration</h2>
+                    <p class="text-xs text-indigo-300">Gestion globale des concours, abonnements & sécurité</p>
+                </div>
+                <button onclick="goBack()" class="px-4 py-2 bg-indigo-800 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold"><i class="fa-solid fa-arrow-left mr-1"></i> Retour Application</button>
+            </div>
 
-            list.forEach(c => {
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl shadow-md p-6 flex flex-col justify-between border hover:shadow-lg transition';
-                card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-full">${c.classe}</span>
-                            <span class="text-xs text-gray-400 font-semibold">${c.dateCreation}</span>
+            <!-- NOUVELLE CRÉATION DE CONCOURS (MODE COPIER-COLLER PARSER) -->
+            <div class="bg-white p-6 rounded-2xl shadow border border-slate-200">
+                <h3 class="text-lg font-bold text-indigo-950 mb-4 border-b pb-2"><i class="fa-solid fa-wand-magic-sparkles text-amber-500 mr-2"></i>Création Rapide de Concours (Texte unique)</h3>
+                <form onsubmit="handleCreateContestParsed(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Titre du concours</label>
+                            <input type="text" id="admin-c-title" required class="w-full px-3 py-2 rounded-lg border text-sm">
                         </div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">${c.title}</h3>
-                        <p class="text-xs text-gray-500 mb-4">5 Questions • 10 sec par question</p>
-                    </div>
-                    <button onclick="startQuiz('${c.id}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl shadow transition">
-                        Participer au Concours
-                    </button>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        /* ==========================================================================
-           6. DÉROULEMENT DU QUIZ (CHRONOMÈTRE 10S + SYNTHÈSE VOCALE)
-           ========================================================================== */
-        function startQuiz(concoursId) {
-            if(!currentUser) {
-                alert('Veuillez vous connecter pour participer au concours.');
-                showSection('view-auth');
-                return;
-            }
-
-            currentQuiz = DB.concours.find(c => c.id === concoursId);
-            if(!currentQuiz) return;
-
-            currentQuestionIdx = 0;
-            quizScore = 0;
-            showSection('view-quiz');
-            loadQuestion();
-        }
-
-        function loadQuestion() {
-            clearInterval(quizTimerInterval);
-
-            if(currentQuestionIdx >= currentQuiz.questions.length) {
-                endQuiz();
-                return;
-            }
-
-            const q = currentQuiz.questions[currentQuestionIdx];
-            document.getElementById('quiz-title').innerText = currentQuiz.title;
-            document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIdx + 1} sur 5`;
-            document.getElementById('quiz-question-text').innerText = q.text;
-
-            document.getElementById('opt-a').innerText = q.options.A;
-            document.getElementById('opt-b').innerText = q.options.B;
-            document.getElementById('opt-c').innerText = q.options.C;
-            document.getElementById('opt-d').innerText = q.options.D;
-
-            // Chronomètre 10 secondes
-            let timeLeft = 10;
-            document.getElementById('quiz-timer').innerText = timeLeft;
-
-            quizTimerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('quiz-timer').innerText = timeLeft;
-                if(timeLeft <= 0) {
-                    clearInterval(quizTimerInterval);
-                    nextQuestion();
-                }
-            }, 1000);
-        }
-
-        function selectAnswer(opt) {
-            clearInterval(quizTimerInterval);
-            const q = currentQuiz.questions[currentQuestionIdx];
-            if(opt === q.correctAnswer) {
-                quizScore += 20; // 5 questions = 100 points
-            }
-            nextQuestion();
-        }
-
-        function nextQuestion() {
-            currentQuestionIdx++;
-            loadQuestion();
-        }
-
-        function speakCurrentQuestion() {
-            if ('speechSynthesis' in window) {
-                const q = currentQuiz.questions[currentQuestionIdx];
-                const textToSpeak = `${q.text}. Option A: ${q.options.A}. Option B: ${q.options.B}. Option C: ${q.options.C}. Option D: ${q.options.D}.`;
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                utterance.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterance);
-            } else {
-                alert('La synthèse vocale n\'est pas supportée par votre navigateur.');
-            }
-        }
-
-        function endQuiz() {
-            // Enregistrement du résultat
-            DB.results.push({
-                id: 'RES-' + Date.now(),
-                concoursId: currentQuiz.id,
-                concoursTitle: currentQuiz.title,
-                userId: currentUser.id,
-                nom: currentUser.nom,
-                prenom: currentUser.prenom,
-                ville: currentUser.ville,
-                score: quizScore,
-                date: new Date().toLocaleString('fr-FR'),
-                rewardStatus: 'En cours de paiement'
-            });
-
-            saveData();
-            showSection('view-quiz-end');
-        }
-
-        /* ==========================================================================
-           7. CLASSEMENTS & RÉCOMPENSES
-           ========================================================================== */
-        function renderRankings() {
-            const container = document.getElementById('rankings-list');
-            container.innerHTML = '';
-
-            DB.concours.forEach(c => {
-                const concoursResults = DB.results.filter(r => r.concoursId === c.id)
-                    .sort((a, b) => b.score - a.score);
-
-                const top3 = concoursResults.slice(0, 3);
-
-                const card = document.createElement('div');
-                card.className = 'border rounded-2xl p-4 bg-gray-50 space-y-3';
-                card.innerHTML = `
-                    <div class="flex justify-between items-center border-b pb-2">
-                        <h4 class="font-bold text-indigo-800">${c.title} (${c.classe})</h4>
-                        <span class="text-xs px-2 py-1 bg-green-100 text-green-700 font-bold rounded-full">Terminé</span>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-gray-500 uppercase mb-2">Top 3 Gagnants</p>
-                        ${top3.length === 0 ? '<p class="text-xs text-gray-400">Aucun participant pour le moment.</p>' : ''}
-                        <div class="space-y-2">
-                            ${top3.map((r, idx) => `
-                                <div class="flex justify-between items-center bg-white p-3 rounded-xl shadow-sm border-l-4 ${idx === 0 ? 'border-amber-400' : idx === 1 ? 'border-gray-400' : 'border-amber-700'}">
-                                    <div>
-                                        <span class="font-bold text-sm text-gray-800">#${idx + 1} ${r.nom} ${r.prenom}</span>
-                                        <span class="text-xs text-gray-400 block">${r.ville}</span>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="font-black text-indigo-600 text-sm">${r.score} pts</span>
-                                        <span class="block text-[10px] font-bold ${r.rewardStatus === 'Déjà payé' ? 'text-green-600' : 'text-amber-600'}">${r.rewardStatus}</span>
-                                    </div>
-                                </div>
-                            `).join('')}
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Catégorie</label>
+                            <select id="admin-c-cat" onchange="updateAdminClassOptions()" required class="w-full px-3 py-2 rounded-lg border text-sm">
+                                <option value="Primaire">Primaire</option>
+                                <option value="Collège">Collège</option>
+                            </select>
                         </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        /* ==========================================================================
-           8. PROCÉDURE D'ABONNEMENT (WHATSAPP & MOBILE MONEY)
-           ========================================================================== */
-        function requestSubscription() {
-            if(!currentUser) {
-                alert('Veuillez vous connecter pour demander un abonnement.');
-                showSection('view-auth');
-                return;
-            }
-
-            const newSub = {
-                id: 'SUB-' + Date.now(),
-                userId: currentUser.id,
-                nom: `${currentUser.nom} ${currentUser.prenom}`,
-                phone: currentUser.phone,
-                classe: currentUser.classe,
-                status: 'EN_ATTENTE',
-                dateDemande: new Date().toLocaleString('fr-FR')
-            };
-
-            DB.subscriptions.push(newSub);
-            saveData();
-
-            showToast("Votre demande a été enregistrée avec succès. Vous serez contacté au numéro WhatsApp que vous avez renseigné afin de finaliser votre paiement. Merci d'utiliser notre application et bonne révision !");
-        }
-
-        /* ==========================================================================
-           9. ESPACE D'ADMINISTRATION
-           ========================================================================== */
-        function showAdminTab(tab) {
-            document.getElementById('admin-tab-stats').classList.add('hidden');
-            document.getElementById('admin-tab-create-concours').classList.add('hidden');
-            document.getElementById('admin-tab-subs').classList.add('hidden');
-
-            if(tab === 'stats') document.getElementById('admin-tab-stats').classList.remove('hidden');
-            if(tab === 'create-concours') document.getElementById('admin-tab-create-concours').classList.remove('hidden');
-            if(tab === 'subs') document.getElementById('admin-tab-subs').classList.remove('hidden');
-        }
-
-        function renderAdminDashboard() {
-            document.getElementById('stat-users-count').innerText = DB.users.length;
-            document.getElementById('stat-concours-count').innerText = DB.concours.length;
-            document.getElementById('stat-subs-count').innerText = DB.subscriptions.filter(s => s.status === 'ACTIF').length;
-            document.getElementById('stat-forgot-count').innerText = DB.forgotRequests.length;
-
-            renderAdminSubsTable();
-        }
-
-        function updateClassOptionsAdmin() {
-            const cat = document.getElementById('admin-c-cat').value;
-            const select = document.getElementById('admin-c-classe');
-            select.innerHTML = '';
-
-            const options = cat === 'PRIMAIRE' 
-                ? ['CE2', 'CM1', 'CM2'] 
-                : ['6e', '5e', '4e', '3e', 'Seconde', 'Première', 'Terminale'];
-
-            options.forEach(cls => {
-                const opt = document.createElement('option');
-                opt.value = cls;
-                opt.innerText = cls;
-                select.appendChild(opt);
-            });
-        }
-
-        function setupAdminQuestionsForm() {
-            const container = document.getElementById('questions-inputs-container');
-            container.innerHTML = '';
-
-            for(let i = 1; i <= 5; i++) {
-                const div = document.createElement('div');
-                div.className = 'p-4 border rounded-2xl bg-indigo-50/50 space-y-3';
-                div.innerHTML = `
-                    <h4 class="font-bold text-indigo-700">Question ${i}</h4>
-                    <input type="text" id="q${i}-text" required placeholder="Texte de la question ${i}" class="w-full px-3 py-2 border rounded-xl outline-none">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="q${i}-optA" required placeholder="Réponse A" class="px-3 py-1.5 border rounded-lg text-sm">
-                        <input type="text" id="q${i}-optB" required placeholder="Réponse B" class="px-3 py-1.5 border rounded-lg text-sm">
-                        <input type="text" id="q${i}-optC" required placeholder="Réponse C" class="px-3 py-1.5 border rounded-lg text-sm">
-                        <input type="text" id="q${i}-optD" required placeholder="Réponse D" class="px-3 py-1.5 border rounded-lg text-sm">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 mr-2">Bonne réponse (Masquée) :</label>
-                        <select id="q${i}-correct" class="px-3 py-1 border rounded-lg text-sm font-bold">
-                            <option value="A">Réponse A</option>
-                            <option value="B">Réponse B</option>
-                            <option value="C">Réponse C</option>
-                            <option value="D">Réponse D</option>
-                        </select>
-                    </div>
-                `;
-                container.appendChild(div);
-            }
-        }
-
-        function handleCreateConcours(e) {
-            e.preventDefault();
-            const now = new Date();
-            const questions = [];
-
-            for(let i = 1; i <= 5; i++) {
-                questions.push({
-                    id: i,
-                    text: document.getElementById(`q${i}-text`).value,
-                    options: {
-                        A: document.getElementById(`q${i}-optA`).value,
-                        B: document.getElementById(`q${i}-optB`).value,
-                        C: document.getElementById(`q${i}-optC`).value,
-                        D: document.getElementById(`q${i}-optD`).value
-                    },
-                    correctAnswer: document.getElementById(`q${i}-correct`).value
-                });
-            }
-
-            const newConcours = {
-                id: 'CNC-' + Date.now(),
-                title: document.getElementById('admin-c-title').value,
-                category: document.getElementById('admin-c-cat').value,
-                classe: document.getElementById('admin-c-classe').value,
-                dateCreation: now.toLocaleDateString('fr-FR'),
-                heureCreation: now.toLocaleTimeString('fr-FR'),
-                questions: questions
-            };
-
-            DB.concours.push(newConcours);
-            saveData();
-            showToast('Concours créé et publié avec succès !');
-            renderConcoursList();
-            showAdminTab('stats');
-        }
-
-        function renderAdminSubsTable() {
-            const tbody = document.getElementById('admin-subs-table');
-            tbody.innerHTML = '';
-
-            DB.subscriptions.forEach(s => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b hover:bg-gray-50';
-
-                const whatsappMsg = encodeURIComponent(`Bonjour ${s.nom}, nous avons bien reçu votre demande d'abonnement. Pour activer votre compte pendant un mois, merci d'effectuer le dépôt via Wave, Orange Money, MTN Mobile Money ou tout autre service Mobile Money au numéro 05 85 97 19 41, puis de nous envoyer le reçu de paiement sur WhatsApp.`);
-
-                tr.innerHTML = `
-                    <td class="p-3">${s.dateDemande}</td>
-                    <td class="p-3 font-bold">${s.nom}</td>
-                    <td class="p-3">${s.classe}</td>
-                    <td class="p-3">${s.phone}</td>
-                    <td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${s.status === 'ACTIF' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}">${s.status}</span></td>
-                    <td class="p-3 flex gap-2">
-                        <a href="https://wa.me/${s.phone}?text=${whatsappMsg}" target="_blank" class="bg-green-600 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-green-700">Contacter</a>
-                        ${s.status !== 'ACTIF' ? `<button onclick="activateSubscription('${s.id}')" class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-indigo-700">Activer</button>` : ''}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function activateSubscription(subId) {
-            const sub = DB.subscriptions.find(s => s.id === subId);
-            if(sub) {
-                sub.status = 'ACTIF';
-                sub.dateActivation = new Date().toLocaleString('fr-FR');
-                
-                // Activer aussi sur l'utilisateur
-                const user = DB.users.find(u => u.id === sub.userId || u.phone === sub.phone);
-                if(user) {
-                    user.subscribed = true;
-                }
-
-                saveData();
-                showToast('Abonnement activé pour 30 jours !');
-                renderAdminSubsTable();
-            }
-        }
-
-        /* ==========================================================================
-           10. SEED INITIAL (DONNÉES DE DÉMONSTRATION)
-           ========================================================================== */
-        function seedInitialData() {
-            if(DB.concours.length === 0) {
-                DB.concours.push({
-                    id: 'CNC-DEMO-1',
-                    title: 'Concours de Culture Générale Afrique',
-                    category: 'COLLEGE',
-                    classe: '3e',
-                    dateCreation: '30/07/2026',
-                    heureCreation: '10:00',
-                    questions: [
-                        { id: 1, text: "Quelle est la capitale de la Côte d'Ivoire ?", options: { A: "Abidjan", B: "Yamoussoukro", C: "Bouaké", D: "San-Pédro" }, correctAnswer: "B" },
-                        { id: 2, text: "Quel fleuve traverse la ville de Bamako ?", options: { A: "Congo", B: "Nil", C: "Niger", D: "Sénégal" }, correctAnswer: "C" },
-                        { id: 3, text: "En quelle année l'Afrique du Sud a-t-elle accueilli la Coupe du Monde ?", options: { A: "2006", B: "2010", C: "2014", D: "2018" }, correctAnswer: "B" },
-                        { id: 4, text: "Quel est le plus grand désert d'Afrique ?", options: { A: "Kalahari", B: "Namib", C: "Sahara", D: "Gobi" }, correctAnswer: "C" },
-                        { id: 5, text: "Qui a écrit 'L'Enfant Noir' ?", options: { A: "Camara Laye", B: "Ahmadou Kourouma", C: "Chinua Achebe", D: "Bernard Dadié" }, correctAnswer: "A" }
-                    ]
-                });
-                saveData();
-            }
-        }
-    </script>
-</body>
-</html>
+                        <div>
+                            <label cl
