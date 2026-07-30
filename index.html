@@ -3,1357 +3,523 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZTV Concours - Plateforme de Révision & Quiz</title>
+  <title>ZakariaTV Concours</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    /* ==========================================================================
-       1. VARIABLES & REINITIALISATION (THEME ZTV CONCOURS)
-       ========================================================================== */
     :root {
-      --bg-main: #F4F6F9;
-      --header-bg: #1E293B;
-      --primary: #0284C7;
-      --primary-hover: #0369A1;
-      --whatsapp: #25D366;
-      --whatsapp-hover: #1EBE5D;
-      --success: #16A34A;
-      --danger: #EF4444;
-      --warning: #F59E0B;
-      --text-dark: #0F172A;
-      --text-muted: #64748B;
-      --card-bg: #FFFFFF;
-      --border-color: #E2E8F0;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --radius: 10px;
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.8);
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --gold: #f59e0b;
+      --danger: #ef4444;
+      --success: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+      --radius: 16px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: radial-gradient(circle at top left, #1e1b4b, #0f172a); color: var(--text); min-height: 100vh; padding: 15px; }
+    .container { max-width: 1100px; margin: 0 auto; }
 
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-dark);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    /* UI Components */
+    header { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .logo-box { width: 42px; height: 42px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    
+    .btn { background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+    .btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .btn-gold { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .btn-danger { background: var(--danger); }
+    .btn-secondary { background: rgba(255,255,255,0.1); }
+    
+    .card { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+    .stat-val { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
 
-    /* ==========================================================================
-       2. EN-TÊTE ET NAVIGATION GLOBAL
-       ========================================================================== */
-    header {
-      background-color: var(--header-bg);
-      color: #FFFFFF;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    }
+    input, select { width: 100%; padding: 12px; margin: 8px 0 15px 0; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; color: white; }
+    .hidden { display: none !important; }
 
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem 1.5rem;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: #FFFFFF;
-    }
-
-    .logo span {
-      background: var(--primary);
-      color: white;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-    }
-
-    nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .nav-btn {
-      background: transparent;
-      border: none;
-      color: #CBD5E1;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-    }
-
-    .nav-btn:hover, .nav-btn.active {
-      color: #FFFFFF;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-btn.active {
-      border-bottom: 2px solid var(--primary);
-      color: #FFFFFF;
-    }
-
-    .btn-whatsapp-nav {
-      background-color: var(--whatsapp);
-      color: white !important;
-      font-weight: 700;
-    }
-    .btn-whatsapp-nav:hover {
-      background-color: var(--whatsapp-hover) !important;
-    }
-
-    /* ==========================================================================
-       3. LAYOUT CONTENU & VUES (SPA)
-       ========================================================================== */
-    main {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-      flex: 1;
-      width: 100%;
-    }
-
-    .view-section {
-      display: none;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    .view-section.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    h1, h2, h3 {
-      margin-bottom: 1rem;
-      color: var(--header-bg);
-    }
-
-    /* ==========================================================================
-       4. COMPOSANTS RÉUTILISABLES (CARDS, TABLES, FORMS, BUTTONS)
-       ========================================================================== */
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border-color);
-    }
-
-    .grid-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .stat-card {
-      background: var(--card-bg);
-      border-left: 4px solid var(--primary);
-      padding: 1.2rem;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border-top: 1px solid var(--border-color);
-      border-right: 1px solid var(--border-color);
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .stat-card h4 {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-card .value {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--header-bg);
-    }
-
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border 0.2s;
-    }
-
-    .form-control:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: 6px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: background 0.2s, transform 0.1s;
-      text-decoration: none;
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-hover); }
-
-    .btn-whatsapp { background: var(--whatsapp); color: white; }
-    .btn-whatsapp:hover { background: var(--whatsapp-hover); }
-
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-danger:hover { background: #DC2626; }
-
-    .btn-success { background: var(--success); color: white; }
-    .btn-success:hover { background: #15803D; }
-
-    .btn-secondary { background: #94A3B8; color: white; }
-    .btn-secondary:hover { background: #64748B; }
-
-    /* Tables */
-    .table-responsive {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      background: white;
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    th, td {
-      padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.9rem;
-    }
-
-    th {
-      background-color: #F8FAFC;
-      color: var(--text-muted);
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-    }
-
-    tr:hover {
-      background-color: #F8FAFC;
-    }
-
+    /* Timer & Quiz */
+    .timer { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--danger); color: var(--danger); font-size: 1.8rem; font-weight: bold; display: flex; align-items: center; justify-content: center; margin: 10px auto; animation: pulse 1s infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+    
     /* Badges */
-    .badge {
-      padding: 4px 10px;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      display: inline-block;
-    }
-
-    .badge-active { background: #DCFCE7; color: #15803D; }
-    .badge-pending { background: #FEF3C7; color: #B45309; }
-    .badge-blocked { background: #FEE2E2; color: #B91C1C; }
-
-    /* ==========================================================================
-       5. COMPOSANT TOAST NOTIFICATION (VERT EMERAUDE - 6s)
-       ========================================================================== */
-    #toast-container {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      z-index: 9999;
-    }
-
-    .toast {
-      background-color: #059669; /* Emerald Green */
-      color: white;
-      padding: 16px 22px;
-      border-radius: 8px;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-      font-size: 0.95rem;
-      max-width: 420px;
-      line-height: 1.4;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      animation: slideIn 0.4s ease forwards;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    .toast.hide {
-      animation: slideOut 0.4s ease forwards;
-    }
-
-    @keyframes slideOut {
-      from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(100%); opacity: 0; }
-    }
-
-    /* ==========================================================================
-       6. STYLES SPÉCIFIQUES AUX SECTIONS
-       ========================================================================== */
-    .filter-bar {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.2rem;
-    }
-
-    .filter-bar input, .filter-bar select {
-      flex: 1;
-      min-width: 180px;
-    }
-
-    .quiz-question-box {
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 1.2rem;
-      margin-bottom: 1.2rem;
-      background: #FAFAFA;
-    }
-
-    .quiz-option {
-      display: block;
-      padding: 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      margin-top: 8px;
-      background: white;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .quiz-option:hover {
-      background: #F1F5F9;
-    }
-
-    .quiz-option input {
-      margin-right: 10px;
-    }
-
-    .correction-box {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 0.88rem;
-    }
-    .correction-correct { background: #DCFCE7; color: #166534; border-left: 4px solid var(--success); }
-    .correction-wrong { background: #FEE2E2; color: #991B1B; border-left: 4px solid var(--danger); }
-
-    footer {
-      background: var(--header-bg);
-      color: #94A3B8;
-      text-align: center;
-      padding: 1.5rem;
-      font-size: 0.85rem;
-      margin-top: 3rem;
-    }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; display: inline-block; }
+    .badge-pending { background: rgba(245, 158, 11, 0.2); color: var(--gold); }
+    .badge-paid { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+    .badge-cheat { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
   </style>
 </head>
 <body>
 
-  <!-- ==========================================================================
-       EN-TÊTE ET NAVIGATION GLOBALE
-       ========================================================================== -->
+<div class="container">
+  
+  <!-- EN-TÊTE GLOBAL -->
   <header>
-    <div class="header-container">
-      <div class="logo">
-        ZTV CONCOURS <span>BEPC & 3ème</span>
-      </div>
-      <nav id="main-nav">
-        <button class="nav-btn active" onclick="switchView('view-accueil')">Accueil / Épreuves</button>
-        <button class="nav-btn" onclick="switchView('view-eleve')">Mon Espace & Historique</button>
-        <button class="nav-btn" onclick="switchView('view-classement')">Classements 🏆</button>
-        <button class="nav-btn" onclick="switchView('view-admin')">Administration 🔒</button>
-        <button class="nav-btn btn-whatsapp-nav" onclick="switchView('view-contact')">Contact WhatsApp</button>
-      </nav>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="logo-box">ZTV</div>
+      <h2 style="font-size: 1.2rem;">ZakariaTV Concours</h2>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <button class="btn btn-gold" onclick="alert('Note globale : 4.9/5 ★★★★★ (120 avis)')">
+        <i class="fa-solid fa-star"></i> Avis
+      </button>
+      <button class="btn btn-secondary" id="nav-btn" onclick="switchView('login-choice')">
+        <i class="fa-solid fa-user"></i> Connexion
+      </button>
     </div>
   </header>
 
-  <!-- CONTENEUR DES TOAST NOTIFICATIONS -->
-  <div id="toast-container"></div>
+  <!-- SELECTION RÔLE / CONNEXION -->
+  <div id="view-login-choice" class="card" style="max-width: 450px; margin: 40px auto; text-align:center;">
+    <h3 style="margin-bottom:20px;">Bienvenue sur ZakariaTV</h3>
+    <button class="btn" style="width:100%; margin-bottom:12px;" onclick="switchView('register')">Créer un compte Participant</button>
+    <button class="btn btn-secondary" style="width:100%; margin-bottom:12px;" onclick="switchView('login-participant')">Connexion Participant</button>
+    <hr style="border-color:var(--border); margin:15px 0;">
+    <button class="btn btn-gold" style="width:100%;" onclick="switchView('login-admin')"><i class="fa-solid fa-lock"></i> Espace Administrateur</button>
+  </div>
 
-  <!-- ==========================================================================
-       CONTENU PRINCIPAL - SINGLE PAGE APPLICATION
-       ========================================================================== -->
-  <main>
+  <!-- INSCRIPTION PARTICIPANT -->
+  <div id="view-register" class="card hidden" style="max-width: 450px; margin: 0 auto;">
+    <h3>Créer un compte</h3>
+    <input type="text" id="reg-nom" placeholder="Nom">
+    <input type="text" id="reg-prenom" placeholder="Prénom">
+    <input type="text" id="reg-ville" placeholder="Ville">
+    <select id="reg-pays">
+      <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+      <option value="Sénégal">Sénégal</option>
+      <option value="Mali">Mali</option>
+      <option value="Burkina Faso">Burkina Faso</option>
+      <option value="Cameroun">Cameroun</option>
+    </select>
+    <input type="tel" id="reg-whatsapp" placeholder="Contact WhatsApp">
+    <input type="password" id="reg-pass" maxlength="4" placeholder="Mot de passe (4 chiffres)">
+    <button class="btn" style="width:100%;" onclick="handleRegister()">Terminer</button>
+  </div>
 
-    <!-- SECTION 1 : ACCUEIL & LISTE DES CONCOURS POUR ÉLÈVES -->
-    <section id="view-accueil" class="view-section active">
-      <div class="card" style="background: linear-gradient(135deg, #1E293B, #0284C7); color: white;">
-        <h2>Bienvenue sur ZTV Concours ! 🎓</h2>
-        <p>Préparez votre examen du BEPC avec nos quiz interactifs et mesurez-vous aux meilleurs élèves de Côte d'Ivoire.</p>
-        <div style="margin-top: 1rem;">
-          <button class="btn btn-whatsapp" onclick="demanderAbonnementModal()">🔑 S'abonner / Réactiver mon compte</button>
-        </div>
+  <!-- CONNEXION PARTICIPANT -->
+  <div id="view-login-participant" class="card hidden" style="max-width: 450px; margin: 0 auto;">
+    <h3>Connexion Participant</h3>
+    <input type="text" id="login-p-nom" placeholder="Nom complet (Nom Prénom)">
+    <input type="password" id="login-p-pass" placeholder="Mot de passe">
+    <button class="btn" style="width:100%; margin-bottom:10px;" onclick="handleLoginParticipant()">Se connecter</button>
+    <p style="text-align:center;"><a href="#" style="color:var(--text-muted);" onclick="switchView('forgot-pass')">Mot de passe oublié ?</a></p>
+  </div>
+
+  <!-- MOT DE PASSE OUBLIÉ -->
+  <div id="view-forgot-pass" class="card hidden" style="max-width: 450px; margin: 0 auto;">
+    <h3>Récupération de compte</h3>
+    <input type="tel" id="forgot-phone" placeholder="Numéro WhatsApp">
+    <button class="btn" style="width:100%;" onclick="checkForgotPhone()">Vérifier</button>
+    
+    <div id="forgot-confirm" class="hidden" style="margin-top:15px; border-top:1px solid var(--border); padding-top:15px;">
+      <p id="forgot-user-info"></p>
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button class="btn" style="flex:1;" onclick="sendResetRequest()">Oui, c'est moi</button>
+        <button class="btn btn-danger" style="flex:1;" onclick="switchView('login-participant')">Annuler</button>
       </div>
-
-      <div class="card">
-        <h3>Concours & Épreuves Disponibles</h3>
-        <div id="public-concours-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1rem;">
-          <!-- Dynamique via JS -->
-        </div>
-      </div>
-
-      <!-- Zone de passage de Quiz (masquée par défaut) -->
-      <div id="quiz-runner-container" class="card" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h2 id="quiz-title">Titre du Concours</h2>
-          <button class="btn btn-secondary" onclick="fermerQuiz()">Fermer</button>
-        </div>
-        <form id="quiz-form" onsubmit="soumettreQuiz(event)">
-          <div id="quiz-questions-body"></div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Valider et envoyer mes réponses</button>
-        </form>
-      </div>
-
-      <!-- Resultat du Quiz -->
-      <div id="quiz-result-container" class="card" style="display: none;">
-        <!-- Dynamique -->
-      </div>
-    </section>
-
-    <!-- SECTION 2 : ESPACE PARTICIPANT & HISTORIQUE -->
-    <section id="view-eleve" class="view-section">
-      <div class="card">
-        <h2>Mon Espace & Historique Personnel</h2>
-        <p class="text-muted">Consultez l'historique de vos participations, vos notes et vos rangs obtenus.</p>
-        
-        <div class="form-group" style="max-width: 400px; margin-top: 1rem;">
-          <label for="eleve-search-phone">Entrez votre numéro WhatsApp pour voir vos résultats :</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="text" id="eleve-search-phone" class="form-control" placeholder="Ex: 0585971941">
-            <button class="btn btn-primary" onclick="chargerHistoriqueEleve()">Rechercher</button>
-          </div>
-        </div>
-
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Concours</th>
-                <th>Date & Heure</th>
-                <th>Note / Score</th>
-                <th>Rang obtenu</th>
-              </tr>
-            </thead>
-            <tbody id="eleve-history-tbody">
-              <tr><td colspan="4" style="text-align:center;">Veuillez saisir votre numéro WhatsApp ci-dessus.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 3 : CLASSEMENTS (GÉNÉRAL ET PAR CONCOURS) -->
-    <section id="view-classement" class="view-section">
-      <div class="card">
-        <h2>Tableau des Classements 🏆</h2>
-        <div class="form-group" style="max-width: 400px;">
-          <label for="classement-filter">Sélectionner le type de classement :</label>
-          <select id="classement-filter" class="form-control" onchange="afficherClassement()">
-            <option value="GENERAL">Classement Général (Cumul global)</option>
-            <!-- Concours spécifiques insérés via JS -->
-          </select>
-        </div>
-
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Rang</th>
-                <th>Nom & Prénom</th>
-                <th>Niveau</th>
-                <th>Ville / Pays</th>
-                <th>Score Total</th>
-              </tr>
-            </thead>
-            <tbody id="classement-tbody">
-              <!-- Dynamique via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 4 : ADMINISTRATION (CONNEXION & DASHBOARD) -->
-    <section id="view-admin" class="view-section">
-      <!-- Formulaire de Connexion Admin -->
-      <div id="admin-login-card" class="card" style="max-width: 450px; margin: 3rem auto;">
-        <h2>Espace Administration 🔒</h2>
-        <form onsubmit="authentifierAdmin(event)">
-          <div class="form-group">
-            <label>Identifiant Admin :</label>
-            <input type="text" id="admin-user" class="form-control" required placeholder="admin">
-          </div>
-          <div class="form-group">
-            <label>Mot de passe :</label>
-            <input type="password" id="admin-pass" class="form-control" required placeholder="admin123">
-          </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%;">Se Connecter</button>
-        </form>
-      </div>
-
-      <!-- Panneau de Contrôle Admin (Masqué par défaut) -->
-      <div id="admin-dashboard" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h2>Tableau de Bord Administrateur</h2>
-          <button class="btn btn-secondary" onclick="deconnexionAdmin()">Déconnexion</button>
-        </div>
-
-        <!-- Cartes Statistiques Synoptiques -->
-        <div class="grid-stats">
-          <div class="stat-card">
-            <h4>Comptes Créés</h4>
-            <div class="value" id="stat-comptes">0</div>
-          </div>
-          <div class="stat-card" style="border-left-color: var(--success);">
-            <h4>Abonnements Actifs</h4>
-            <div class="value" id="stat-abos">0</div>
-          </div>
-          <div class="stat-card" style="border-left-color: var(--warning);">
-            <h4>Concours Créés</h4>
-            <div class="value" id="stat-concours">0</div>
-          </div>
-          <div class="stat-card" style="border-left-color: #8B5CF6;">
-            <h4>Concours Effectués</h4>
-            <div class="value" id="stat-participations">0</div>
-          </div>
-        </div>
-
-        <!-- Recherche Globale & Filtres Multicritères -->
-        <div class="card">
-          <h3>Gestion des Participants & Abonnements</h3>
-          <div class="filter-bar">
-            <input type="text" id="admin-search-text" class="form-control" placeholder="Recherche par Nom, Prénom ou WhatsApp..." oninput="filtrerParticipantsAdmin()">
-            <select id="admin-filter-status" class="form-control" onchange="filtrerParticipantsAdmin()">
-              <option value="TOUS">Tous les statuts</option>
-              <option value="ACTIF">Abonnements Actifs</option>
-              <option value="EN_ATTENTE">En attente de paiement</option>
-              <option value="BLOQUE">Bloqués / Expirés</option>
-            </select>
-          </div>
-
-          <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Participant</th>
-                  <th>WhatsApp</th>
-                  <th>Ville / Pays</th>
-                  <th>Statut Abo</th>
-                  <th>Expiration</th>
-                  <th>Actions Admin</th>
-                </tr>
-              </thead>
-              <tbody id="admin-participants-tbody">
-                <!-- Dynamique JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Création & Gestion des Concours -->
-        <div class="card">
-          <h3>Module de Création de Concours</h3>
-          <form onsubmit="creerConcoursAdmin(event)">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-              <div class="form-group">
-                <label>Titre du concours :</label>
-                <input type="text" id="cnc-titre" class="form-control" required placeholder="Ex: Grand Quiz Histoire BEPC">
-              </div>
-              <div class="form-group">
-                <label>Catégorie :</label>
-                <select id="cnc-categorie" class="form-control">
-                  <option value="Histoire">Histoire</option>
-                  <option value="Géographie">Géographie</option>
-                  <option value="Sciences">Sciences</option>
-                  <option value="Culture Générale">Culture Générale</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Niveau / Classe :</label>
-                <input type="text" id="cnc-classe" class="form-control" value="3ème" required>
-              </div>
-            </div>
-
-            <div class="form-group" style="margin-top: 0.5rem;">
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                <input type="checkbox" id="cnc-afficher-explications" checked style="width: 18px; height: 18px;">
-                Afficher les bonnes réponses et leurs explications pédagogiques aux élèves après le concours.
-              </label>
-            </div>
-
-            <button type="submit" class="btn btn-primary">➕ Créer le concours</button>
-          </form>
-        </div>
-
-        <!-- Module d'Exportation & Stats Démographiques -->
-        <div class="card">
-          <h3>Statistiques Démographiques & Exportation</h3>
-          <p class="text-muted" style="margin-bottom: 1rem;">Exporter les registres ou imprimer les statistiques d'activité.</p>
-          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <button class="btn btn-success" onclick="exporterExcelCSV()">📥 Exporter les participants (CSV/Excel)</button>
-            <button class="btn btn-secondary" onclick="imprimerStatistiquesPDF()">🖨️ Imprimer Rapport PDF</button>
-          </div>
-        </div>
-
-        <!-- Gestion des Avis & Moderation -->
-        <div class="card">
-          <h3>Modération des Avis Utilisateurs</h3>
-          <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Auteur</th>
-                  <th>Commentaire / Avis</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="admin-avis-tbody">
-                <!-- JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Journal d'Activité Horodaté (Audit Log) -->
-        <div class="card">
-          <h3>Journal d'Activité Horodaté (Audit Log)</h3>
-          <div class="table-responsive">
-            <table style="font-size: 0.85rem;">
-              <thead>
-                <tr>
-                  <th>Date & Heure</th>
-                  <th>Action Administrateur</th>
-                  <th>Détails & Cible</th>
-                </tr>
-              </thead>
-              <tbody id="admin-logs-tbody">
-                <!-- JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 5 : PAGE DE CONTACT WHATSAPP -->
-    <section id="view-contact" class="view-section">
-      <div class="card" style="text-align: center; max-width: 600px; margin: 2rem auto;">
-        <h2>Support & Contact Officiel 📱</h2>
-        <p style="margin: 1rem 0; color: var(--text-muted);">Une question, un problème d'accès ou une demande de paiement d'abonnement ? Contactez l'équipe administrative via WhatsApp.</p>
-        
-        <div style="background: #F8FAFC; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
-          <h3 style="color: var(--whatsapp);">Numéro Direct : +225 05 85 97 19 41</h3>
-          <p style="font-size: 0.9rem; margin-top: 5px;">Paiements acceptés : Wave / Orange Money / MTN Mobile Money</p>
-        </div>
-
-        <a href="https://wa.me/2250585971941" target="_blank" class="btn btn-whatsapp" style="padding: 14px 28px; font-size: 1.1rem;">
-          💬 Discuter sur WhatsApp maintenant
-        </a>
-      </div>
-    </section>
-
-    <!-- SECTION 6 : CGU & POLITIQUE DE CONFIDENTIALITÉ -->
-    <section id="view-cgu" class="view-section">
-      <div class="card">
-        <h2>Conditions Générales d'Utilisation & Confidentialité</h2>
-        <h4 style="margin-top: 1rem;">1. Règles d'Utilisation et Anti-Triche</h4>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-          L'application ZTV Concours est destinée à la révision académique des élèves. Toute tentative de tricherie, d'utilisation de robots ou d'usurpation d'identité entraînera le blocage immédiat et définitif du compte par l'administration.
-        </p>
-        <h4>2. Confidentialité des Données</h4>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">
-          Les informations collectées (Nom, Prénom, Numéro WhatsApp, Ville) sont strictement réservées à la gestion des abonnements et au classement académique des concours. Elles ne seront en aucun cas cédées à des tiers.
-        </p>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2026 ZTV CONCOURS / ZAKARIA TV. Tous droits réservés.</p>
-    <p style="margin-top: 5px;">
-      <a href="#" onclick="switchView('view-cgu')" style="color: #94A3B8; text-decoration: underline;">CGU & Politique de Confidentialité</a>
-    </p>
-  </footer>
-
-  <!-- ==========================================================================
-       MODAL DE DEMANDE D'ABONNEMENT (ÉLÈVE)
-       ========================================================================== -->
-  <div id="modal-abonnement" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9000; justify-content:center; align-items:center;">
-    <div class="card" style="width: 90%; max-width: 450px;">
-      <h3>Souscrire à un Abonnement ZTV</h3>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Entrez vos informations pour enregistrer votre demande.</p>
-      <form onsubmit="enregistrerDemandeAbonnement(event)">
-        <div class="form-group">
-          <label>Nom :</label>
-          <input type="text" id="sub-nom" class="form-control" required placeholder="Kouassi">
-        </div>
-        <div class="form-group">
-          <label>Prénom :</label>
-          <input type="text" id="sub-prenom" class="form-control" required placeholder="Jean">
-        </div>
-        <div class="form-group">
-          <label>Numéro WhatsApp :</label>
-          <input type="text" id="sub-phone" class="form-control" required placeholder="0585971941">
-        </div>
-        <div class="form-group">
-          <label>Ville :</label>
-          <input type="text" id="sub-ville" class="form-control" value="Abidjan" required>
-        </div>
-        <div class="form-group">
-          <label>Classe / Niveau :</label>
-          <input type="text" id="sub-niveau" class="form-control" value="3ème" required>
-        </div>
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-          <button type="button" class="btn btn-secondary" onclick="fermerModalAbonnement()">Annuler</button>
-          <button type="submit" class="btn btn-whatsapp">Envoyer la demande</button>
-        </div>
-      </form>
     </div>
   </div>
 
-  <!-- ==========================================================================
-       LOGIQUE JAVASCRIPT VANILLA & PERSISTANCE LOCALSTORAGE
-       ========================================================================== -->
-  <script>
-    /* --------------------------------------------------------------------------
-       1. INITIALISATION DES DONNÉES ET SÉCURITÉ (XSS)
-       -------------------------------------------------------------------------- */
-    function securiserTexte(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
+  <!-- CONNEXION ADMIN -->
+  <div id="view-login-admin" class="card hidden" style="max-width: 400px; margin: 0 auto;">
+    <h3>Connexion Admin</h3>
+    <input type="text" id="admin-user" placeholder="Nom d'utilisateur">
+    <input type="password" id="admin-pass" placeholder="Mot de passe">
+    <button class="btn btn-gold" style="width:100%;" onclick="handleLoginAdmin()">Accéder au Dashboard</button>
+  </div>
 
-    // Données par défaut si le LocalStorage est vide
-    const initialData = {
-      utilisateurs: [
-        { id: "usr_101", nom: "Kouassi", prenom: "Jean", whatsapp: "0585971941", pays: "Côte d'Ivoire", ville: "Abidjan", niveau: "3ème", abonnement: { statut: "ACTIF", dateActivation: "2026-07-01", dateExpiration: "2026-08-31" } },
-        { id: "usr_102", nom: "Diallo", prenom: "Awa", whatsapp: "0708091011", pays: "Côte d'Ivoire", ville: "Bouaké", niveau: "3ème", abonnement: { statut: "EN_ATTENTE", dateActivation: null, dateExpiration: null } }
-      ],
-      concours: [
-        {
-          id: "cnc_01",
-          titre: "Grand Quiz Histoire BEPC",
-          categorie: "Histoire",
-          classe: "3ème",
-          afficherExplications: true,
-          questions: [
-            {
-              id: "q1",
-              question: "Quelle est l'année de l'indépendance de la Côte d'Ivoire ?",
-              options: ["1958", "1960", "1975", "1980"],
-              reponseCorrecte: 1, // index 1 = 1960
-              explication: "La Côte d'Ivoire a proclamé son indépendance le 7 août 1960."
-            },
-            {
-              id: "q2",
-              question: "Qui a été le premier président de la République de Côte d'Ivoire ?",
-              options: ["Félix Houphouët-Boigny", "Henri Konan Bédié", "Laurent Gbagbo"],
-              reponseCorrecte: 0,
-              explication: "Félix Houphouët-Boigny a présidé le pays de 1960 à 1993."
-            }
-          ]
-        }
-      ],
-      participations: [
-        { id: "prt_501", userId: "usr_101", concoursId: "cnc_01", score: 2, total: 2, dateParticipation: "2026-07-28 14:30" }
-      ],
-      avis: [
-        { id: "av_1", auteur: "Jean Kouassi", texte: "Superbe application pour réviser le BEPC !" }
-      ],
-      journalLogs: [
-        { id: 1722260000, dateHeure: "29/07/2026 14:00", action: "Création Système", details: "Initialisation des données de démo ZTV" }
-      ]
-    };
+  <!-- DASHBOARD ADMIN -->
+  <div id="view-admin-dashboard" class="hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3>Tableau de bord Administrateur</h3>
+      <button class="btn btn-gold" onclick="switchView('admin-premium')"><i class="fa-solid fa-crown"></i> Espace Premium</button>
+    </div>
 
-    // Chargement ou création du Store
-    function getStore() {
-      const stored = localStorage.getItem('ZTV_APP_DATA');
-      if (!stored) {
-        localStorage.setItem('ZTV_APP_DATA', JSON.stringify(initialData));
-        return initialData;
-      }
-      return JSON.parse(stored);
-    }
+    <div class="grid-4">
+      <div class="card"><span style="color:var(--text-muted)">Total Concours Créés</span><div class="stat-val">12</div></div>
+      <div class="card"><span style="color:var(--text-muted)">Concours Effectués</span><div class="stat-val">10</div></div>
+      <div class="card"><span style="color:var(--text-muted)">Comptes Créés</span><div class="stat-val" id="stat-accounts">0</div></div>
+      <div class="card"><span style="color:var(--text-muted)">Demandes MDP Oublié</span><div class="stat-val" style="color:var(--gold);" id="stat-requests">0</div></div>
+      <div class="card"><span style="color:var(--text-muted)">Total Participants</span><div class="stat-val" id="stat-participants">0</div></div>
+      <div class="card"><span style="color:var(--text-muted)">Nombre de Gagnants</span><div class="stat-val" style="color:var(--success);">3</div></div>
+      <div class="card"><span style="color:var(--text-muted)">Concours en cours</span><div class="stat-val" style="color:#3b82f6;">1</div></div>
+      <div class="card"><span style="color:var(--text-muted)">Concours terminés</span><div class="stat-val">9</div></div>
+    </div>
 
-    function saveStore(data) {
-      localStorage.setItem('ZTV_APP_DATA', JSON.stringify(data));
-    }
+    <!-- Demandes MDP Oublié -->
+    <div class="card">
+      <h4>Demandes de réinitialisation MDP</h4>
+      <div id="admin-reset-list" style="margin-top:10px;"></div>
+    </div>
+  </div>
 
-    function ajouterLog(action, details) {
-      const db = getStore();
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('fr-FR') + ' ' + now.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
-      db.journalLogs.unshift({
-        id: Date.now(),
-        dateHeure: dateStr,
-        action: securiserTexte(action),
-        details: securiserTexte(details)
-      });
-      saveStore(db);
-    }
+  <!-- ESPACE PREMIUM ADMIN -->
+  <div id="view-admin-premium" class="hidden">
+    <button class="btn btn-secondary" onclick="switchView('admin-dashboard')" style="margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+    <div class="card">
+      <h3>Espace Premium Administrateur</h3>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
+        <button class="btn" onclick="alert('Formulaire de création activé')">1. Créer un concours</button>
+        <button class="btn" onclick="alert('3 Meilleurs Résultats : 1. Kouassi A. (5/5) | 2. Koné M. (5/5) | 3. Yao B. (4/5)')">2. Voir Top 3 Résultats</button>
+        <button class="btn" onclick="alert('Affichage de la liste globale des participants')">3. Voir tous les participants</button>
+        <button class="btn" onclick="alert('Concours mis en ligne avec succès !')">4. Mettre en ligne</button>
+        <button class="btn" onclick="showAllAccounts()">5. Voir tous les comptes</button>
+      </div>
+      <div id="accounts-display-list"></div>
+    </div>
+  </div>
 
-    /* --------------------------------------------------------------------------
-       2. GESTION DES VUES (SPA ROUTER SIMPLIFIÉ)
-       -------------------------------------------------------------------------- */
-    function switchView(viewId) {
-      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  <!-- ACCUEIL DES CONCOURS (PARTICIPANT) -->
+  <div id="view-home-concours" class="hidden">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 id="user-welcome">Bienvenue</h3>
+        <button class="btn btn-secondary" onclick="switchView('participant-profile')"><i class="fa-solid fa-user-gear"></i> Mon Profil</button>
+      </div>
       
-      const targetSec = document.getElementById(viewId);
-      if (targetSec) targetSec.classList.add('active');
+      <div style="display:flex; gap:10px; margin:20px 0;">
+        <button class="btn" onclick="filterCategory('all')">Tous</button>
+        <button class="btn btn-secondary" onclick="filterCategory('primaire')">Primaire</button>
+        <button class="btn btn-secondary" onclick="filterCategory('college')">Collège</button>
+      </div>
 
-      // Refresh data on switch
-      if (viewId === 'view-accueil') chargerConcoursPublics();
-      if (viewId === 'view-classement') afficherClassement();
-      if (viewId === 'view-admin') chargerDashboardAdmin();
+      <div id="sub-levels" class="hidden" style="margin-bottom:15px;"></div>
+
+      <div id="concours-list-container">
+        <!-- Message par défaut si rien n'est sélectionné/disponible -->
+        <p style="color:var(--text-muted); text-align:center; padding:20px;">
+          Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFIL PARTICIPANT -->
+  <div id="view-participant-profile" class="card hidden" style="max-width: 500px; margin: 0 auto;">
+    <button class="btn btn-secondary" onclick="switchView('home-concours')" style="margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+    <h3>Mon Profil</h3>
+    <div id="profile-info" style="margin:15px 0; line-height:1.8;"></div>
+    
+    <hr style="border-color:var(--border); margin:15px 0;">
+    <h4>Changer le mot de passe</h4>
+    <input type="password" id="old-pass" placeholder="Mot de passe actuel">
+    <input type="password" id="new-pass" placeholder="Nouveau mot de passe (4 chiffres)">
+    <button class="btn" onclick="changePassword()">Enregistrer</button>
+    <button class="btn btn-danger" style="width:100%; margin-top:15px;" onclick="logout()">Déconnexion</button>
+  </div>
+
+  <!-- ECRAN DU QUIZ -->
+  <div id="view-quiz" class="card hidden" style="max-width:600px; margin:0 auto; text-align:center;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge badge-pending" id="quiz-level-tag">Niveau 3e</span>
+      <button class="btn btn-secondary" style="padding:5px 10px;" onclick="speakQuestion()"><i class="fa-solid fa-volume-high"></i> Écouter</button>
+    </div>
+
+    <div class="timer" id="quiz-timer">10</div>
+
+    <h3 id="quiz-question-text" style="margin:15px 0;">Chargement de la question...</h3>
+
+    <div class="options-grid" id="quiz-options"></div>
+  </div>
+
+  <!-- ECRAN CLASSEMENT & RECOMPENSES -->
+  <div id="view-results" class="card hidden" style="max-width:600px; margin:0 auto; text-align:center;">
+    <h3>Fin du Concours</h3>
+    <p style="margin:10px 0; color:var(--text-muted);">Merci d'avoir participé à ce concours. Veuillez retourner à l'accueil.</p>
+    
+    <div id="reward-banner" class="hidden" style="background:rgba(16, 185, 129, 0.1); border:1px solid var(--success); padding:15px; border-radius:12px; margin:15px 0; text-align:left;">
+      <h4 style="color:var(--success);">Félicitations ! Vous faites partie des trois premiers.</h4>
+      <p style="font-size:0.85rem; margin-top:5px;">Votre récompense est affichée ci-dessous. Vous recevrez un message WhatsApp dans un délai de 15 minutes pour votre paiement. Si vous ne recevez aucun message après ce délai, veuillez contacter le : <strong>0799591024</strong> ou <strong>0585971941</strong>.</p>
+      <div style="margin-top:10px;">Statut : <span class="badge badge-pending" id="reward-badge">En cours de paiement</span></div>
+    </div>
+
+    <button class="btn" onclick="switchView('home-concours')">Retourner à l'accueil</button>
+  </div>
+
+</div>
+
+<script>
+  /* STATE STORAGE (LOCALSTORAGE) */
+  let db = JSON.parse(localStorage.getItem('ztv_db')) || {
+    users: [],
+    resetRequests: [],
+    currentUser: null,
+    cheated: false
+  };
+
+  function saveData() { localStorage.setItem('ztv_db', JSON.stringify(db)); updateStats(); }
+
+  /* ROUTER INTERFACE */
+  function switchView(viewName) {
+    document.querySelectorAll('.container > div[id^="view-"]').forEach(div => div.classList.add('hidden'));
+    document.getElementById(`view-${viewName}`).classList.remove('hidden');
+  }
+
+  /* LOGIQUE D'INSCRIPTION & CONNEXION */
+  function handleRegister() {
+    const nom = document.getElementById('reg-nom').value.trim();
+    const prenom = document.getElementById('reg-prenom').value.trim();
+    const ville = document.getElementById('reg-ville').value.trim();
+    const pays = document.getElementById('reg-pays').value;
+    const whatsapp = document.getElementById('reg-whatsapp').value.trim();
+    const pass = document.getElementById('reg-pass').value.trim();
+
+    if(!nom || !prenom || !whatsapp || pass.length !== 4) {
+      alert("Veuillez remplir tous les champs correctement (Mot de passe à 4 chiffres).");
+      return;
     }
 
-    /* --------------------------------------------------------------------------
-       3. TOAST NOTIFICATIONS (VERT EMERAUDE - 6 SECONDES)
-       -------------------------------------------------------------------------- */
-    function showEmeraldToast(message) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerHTML = `
-        <span style="font-size: 1.2rem;">✅</span>
-        <div>${message}</div>
+    if(db.users.find(u => u.whatsapp === whatsapp)) {
+      alert("Un compte existe déjà avec ce numéro WhatsApp.");
+      return;
+    }
+
+    const newUser = { nom, prenom, ville, pays, whatsapp, pass };
+    db.users.push(newUser);
+    db.currentUser = newUser;
+    saveData();
+    
+    alert("Compte créé avec succès !");
+    openHome();
+  }
+
+  function handleLoginParticipant() {
+    const nomComplet = document.getElementById('login-p-nom').value.trim().toLowerCase();
+    const pass = document.getElementById('login-p-pass').value.trim();
+
+    const user = db.users.find(u => `${u.nom} ${u.prenom}`.toLowerCase() === nomComplet && u.pass === pass);
+    if(user) {
+      db.currentUser = user;
+      saveData();
+      openHome();
+    } else {
+      alert("Informations incorrectes !");
+    }
+  }
+
+  function openHome() {
+    document.getElementById('user-welcome').textContent = `Bonjour, ${db.currentUser.prenom}`;
+    document.getElementById('nav-btn').innerHTML = `<i class="fa-solid fa-user"></i> ${db.currentUser.prenom}`;
+    switchView('home-concours');
+  }
+
+  function logout() {
+    db.currentUser = null;
+    saveData();
+    location.reload();
+  }
+
+  /* REPERTOIRE CATEGORIES/CLASSES */
+  function filterCategory(cat) {
+    const subDiv = document.getElementById('sub-levels');
+    subDiv.classList.remove('hidden');
+    
+    if(cat === 'primaire') {
+      subDiv.innerHTML = `
+        <button class="btn btn-secondary" onclick="startDemoQuiz('CE2')">CE2</button>
+        <button class="btn btn-secondary" onclick="startDemoQuiz('CM1')">CM1</button>
+        <button class="btn btn-secondary" onclick="startDemoQuiz('CM2')">CM2</button>
       `;
-      container.appendChild(toast);
+    } else if(cat === 'college') {
+      subDiv.innerHTML = `
+        <button class="btn btn-secondary" onclick="startDemoQuiz('6e')">6e</button>
+        <button class="btn btn-secondary" onclick="startDemoQuiz('5e')">5e</button>
+        <button class="btn btn-secondary" onclick="startDemoQuiz('4e')">4e</button>
+        <button class="btn btn-secondary" onclick="startDemoQuiz('3e')">3e</button>
+        <button class="btn btn-secondary" onclick="startDemoQuiz('Seconde')">Seconde</button>
+        <button class="btn btn-secondary" onclick="startDemoQuiz('Première')">Première</button>
+        <button class="btn btn-secondary" onclick="startDemoQuiz('Terminale')">Terminale</button>
+      `;
+    } else {
+      subDiv.classList.add('hidden');
+    }
+  }
 
-      setTimeout(() => {
-        toast.classList.add('hide');
-        setTimeout(() => toast.remove(), 400);
-      }, 6000);
+  /* MOTEUR DE QUIZ & CHRONOMÈTRE */
+  let currentQuestion = 0;
+  let timerInterval;
+  let score = 0;
+
+  const demoQuestions = [
+    { q: "Quelle est la capitale politique de la Côte d'Ivoire ?", options: ["Abidjan", "Yamoussoukro", "Bouaké", "San-Pédro"], ans: 1 },
+    { q: "Combien font 7 x 8 ?", options: ["54", "56", "64", "48"], ans: 1 },
+    { q: "Quel est le plus grand fleuve d'Afrique ?", options: ["Le Niger", "Le Congo", "Le Nil", "Le Zambèze"], ans: 2 }
+  ];
+
+  function startDemoQuiz(level) {
+    db.cheated = false;
+    currentQuestion = 0;
+    score = 0;
+    document.getElementById('quiz-level-tag').textContent = `Niveau ${level}`;
+    switchView('quiz');
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    if(currentQuestion >= demoQuestions.length) {
+      endQuiz();
+      return;
+    }
+    
+    const qData = demoQuestions[currentQuestion];
+    document.getElementById('quiz-question-text').textContent = qData.q;
+    
+    const optionsContainer = document.getElementById('quiz-options');
+    optionsContainer.innerHTML = '';
+    
+    qData.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-secondary';
+      btn.style.textAlign = 'left';
+      btn.textContent = `${String.fromCharCode(65 + idx)}) ${opt}`;
+      btn.onclick = () => { if(idx === qData.ans) score++; nextQuestion(); };
+      optionsContainer.appendChild(btn);
+    });
+
+    startTimer();
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    let time = 10;
+    const timerDisplay = document.getElementById('quiz-timer');
+    timerDisplay.textContent = time;
+
+    timerInterval = setInterval(() => {
+      time--;
+      timerDisplay.textContent = time;
+      if(time <= 0) {
+        clearInterval(timerInterval);
+        nextQuestion();
+      }
+    }, 1000);
+  }
+
+  function nextQuestion() {
+    clearInterval(timerInterval);
+    currentQuestion++;
+    loadQuestion();
+  }
+
+  function speakQuestion() {
+    const text = document.getElementById('quiz-question-text').textContent;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'fr-FR';
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function endQuiz() {
+    switchView('results');
+    if(!db.cheated) {
+      document.getElementById('reward-banner').classList.remove('hidden');
+    }
+  }
+
+  /* PROTECTION ANTI-TRICHE */
+  document.addEventListener("visibilitychange", function() {
+    if (document.hidden && !document.getElementById('view-quiz').classList.contains('hidden')) {
+      db.cheated = true;
+      clearInterval(timerInterval);
+      alert("TRICHE DÉTECTÉE ! Vous avez quitté le concours. Votre résultat est annulé.");
+      switchView('results');
+      document.getElementById('reward-banner').classList.add('hidden');
+    }
+  });
+
+  /* GESTION COMPTE ADMIN */
+  function handleLoginAdmin() {
+    const user = document.getElementById('admin-user').value.trim();
+    const pass = document.getElementById('admin-pass').value.trim();
+
+    if(user === "ZakariaTV" && pass === "55250031") {
+      switchView('admin-dashboard');
+      updateAdminResetList();
+    } else {
+      alert("Identifiants Administrateur incorrects !");
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('stat-accounts').textContent = db.users.length;
+    document.getElementById('stat-participants').textContent = db.users.length;
+    document.getElementById('stat-requests').textContent = db.resetRequests.length;
+  }
+
+  /* RECUPERATION MOT DE PASSE */
+  function checkForgotPhone() {
+    const phone = document.getElementById('forgot-phone').value.trim();
+    const user = db.users.find(u => u.whatsapp === phone);
+    
+    if(user) {
+      document.getElementById('forgot-user-info').innerHTML = `<strong>Compte trouvé :</strong><br>${user.nom} ${user.prenom} (${user.ville}, ${user.pays})`;
+      document.getElementById('forgot-confirm').classList.remove('hidden');
+    } else {
+      alert("Aucun compte associé à ce numéro.");
+    }
+  }
+
+  function sendResetRequest() {
+    const phone = document.getElementById('forgot-phone').value.trim();
+    const user = db.users.find(u => u.whatsapp === phone);
+    
+    if(!db.resetRequests.find(r => r.whatsapp === phone)) {
+      db.resetRequests.push(user);
+      saveData();
+    }
+    alert("Demande envoyée à l'administrateur !");
+    switchView('login-participant');
+  }
+
+  function updateAdminResetList() {
+    const container = document.getElementById('admin-reset-list');
+    container.innerHTML = '';
+    
+    if(db.resetRequests.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-muted)">Aucune demande en attente.</p>';
+      return;
     }
 
-    /* --------------------------------------------------------------------------
-       4. LOGIQUE ÉLÈVE & CONCOURS
-       -------------------------------------------------------------------------- */
-    let currentActiveQuiz = null;
-
-    function chargerConcoursPublics() {
-      const db = getStore();
-      const container = document.getElementById('public-concours-list');
-      container.innerHTML = '';
-
-      db.concours.forEach(c => {
-        const card = document.createElement('div');
-        card.style.border = '1px solid var(--border-color)';
-        card.style.borderRadius = '8px';
-        card.style.padding = '1.2rem';
-        card.style.background = '#FFFFFF';
-
-        card.innerHTML = `
-          <span class="badge badge-active">${securiserTexte(c.categorie)}</span>
-          <h4 style="margin: 10px 0 5px 0;">${securiserTexte(c.titre)}</h4>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Niveau : ${securiserTexte(c.classe)} | ${c.questions.length} Questions</p>
-          <button class="btn btn-primary" style="width: 100%;" onclick="demarrerQuiz('${c.id}')">Lancer l'épreuve 📝</button>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function demarrerQuiz(concoursId) {
-      const db = getStore();
-      const c = db.concours.find(x => x.id === concoursId);
-      if (!c) return;
-
-      currentActiveQuiz = c;
-      document.getElementById('quiz-title').innerText = c.titre;
-      
-      const body = document.getElementById('quiz-questions-body');
-      body.innerHTML = `
-        <div class="form-group">
-          <label>Saisissez votre numéro WhatsApp pour enregistrer votre note :</label>
-          <input type="text" id="quiz-user-phone" class="form-control" required placeholder="Ex: 0585971941">
+    db.resetRequests.forEach((req, idx) => {
+      const div = document.createElement('div');
+      div.style.cssText = "display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding:10px 0;";
+      div.innerHTML = `
+        <div>
+          <strong>${req.nom} ${req.prenom}</strong> (${req.ville}, ${req.pays})<br>
+          <small style="color:var(--text-muted)">WhatsApp: ${req.whatsapp}</small>
         </div>
-        <hr style="margin: 1rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        <button class="btn btn-gold" onclick="resetUserPassword('${req.whatsapp}', ${idx})">Réinitialiser (5555)</button>
       `;
+      container.appendChild(div);
+    });
+  }
 
-      c.questions.forEach((q, qIndex) => {
-        const qBox = document.createElement('div');
-        qBox.className = 'quiz-question-box';
-        
-        let optionsHtml = '';
-        q.options.forEach((opt, optIdx) => {
-          optionsHtml += `
-            <label class="quiz-option">
-              <input type="radio" name="q_${qIndex}" value="${optIdx}" required>
-              ${securiserTexte(opt)}
-            </label>
-          `;
-        });
-
-        qBox.innerHTML = `
-          <strong>Question ${qIndex + 1} : ${securiserTexte(q.question)}</strong>
-          <div style="margin-top: 8px;">${optionsHtml}</div>
-        `;
-        body.appendChild(qBox);
-      });
-
-      document.getElementById('quiz-runner-container').style.display = 'block';
-      document.getElementById('quiz-result-container').style.display = 'none';
-      window.scrollTo({ top: document.getElementById('quiz-runner-container').offsetTop - 80, behavior: 'smooth' });
-    }
-
-    function fermerQuiz() {
-      document.getElementById('quiz-runner-container').style.display = 'none';
-    }
-
-    function soumettreQuiz(e) {
-      e.preventDefault();
-      const phone = document.getElementById('quiz-user-phone').value.trim();
-      const db = getStore();
-
-      // Vérification utilisateur
-      let user = db.utilisateurs.find(u => u.whatsapp === phone);
-      if (!user) {
-        alert("Ce numéro WhatsApp n'est pas encore inscrit. Veuillez cliquer sur 'S'abonner' d'abord.");
-        return;
-      }
-
-      if (user.abonnement.statut !== 'ACTIF') {
-        alert("Votre abonnement est en attente ou expiré. Contactez l'admin WhatsApp pour l'activer.");
-        return;
-      }
-
-      // Calcul des points
-      let score = 0;
-      const total = currentActiveQuiz.questions.length;
-      let correctionDetailsHtml = '';
-
-      currentActiveQuiz.questions.forEach((q, idx) => {
-        const selectedOption = document.querySelector(`input[name="q_${idx}"]:checked`);
-        const repVal = selectedOption ? parseInt(selectedOption.value) : -1;
-        const estCorrect = repVal === q.reponseCorrecte;
-        
-        if (estCorrect) score++;
-
-        if (currentActiveQuiz.afficherExplications) {
-          correctionDetailsHtml += `
-            <div class="correction-box ${estCorrect ? 'correction-correct' : 'correction-wrong'}">
-              <strong>Question ${idx + 1} : ${securiserTexte(q.question)}</strong><br>
-              Votre réponse : ${repVal >= 0 ? securiserTexte(q.options[repVal]) : 'Aucune'} ${estCorrect ? '✅' : '❌'}<br>
-              ${!estCorrect ? `Réponse correcte : <strong>${securiserTexte(q.options[q.reponseCorrecte])}</strong><br>` : ''}
-              <em>Explication : ${securiserTexte(q.explication)}</em>
-            </div>
-          `;
-        }
-      });
-
-      // Enregistrement participation
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('fr-FR') + ' ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
-      db.participations.push({
-        id: "prt_" + Date.now(),
-        userId: user.id,
-        concoursId: currentActiveQuiz.id,
-        score: score,
-        total: total,
-        dateParticipation: dateStr
-      });
-      saveStore(db);
-
-      // Affichage Résultat
-      fermerQuiz();
-      const resContainer = document.getElementById('quiz-result-container');
-      resContainer.style.display = 'block';
-      resContainer.innerHTML = `
-        <h2>Résultat du Concours 🎯</h2>
-        <h3 style="color: var(--primary);">Note : ${score} / ${total}</h3>
-        <p style="margin-bottom: 1rem;">Bravo ${securiserTexte(user.prenom)} ${securiserTexte(user.nom)} ! Votre participation a été enregistrée.</p>
-        ${currentActiveQuiz.afficherExplications ? `<h4>Correction détaillée :</h4>${correctionDetailsHtml}` : `<p class="text-muted"><em>L'administrateur a masqué les explications pour ce concours.</em></p>`}
-      `;
-    }
-
-    function chargerHistoriqueEleve() {
-      const phone = document.getElementById('eleve-search-phone').value.trim();
-      const db = getStore();
-      const tbody = document.getElementById('eleve-history-tbody');
-      tbody.innerHTML = '';
-
-      const user = db.utilisateurs.find(u => u.whatsapp === phone);
-      if (!user) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--danger);">Aucun élève trouvé avec le numéro ${securiserTexte(phone)}.</td></tr>`;
-        return;
-      }
-
-      const mesParticipations = db.participations.filter(p => p.userId === user.id);
-      if (mesParticipations.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Aucun concours effectué pour le moment.</td></tr>`;
-        return;
-      }
-
-      mesParticipations.forEach(p => {
-        const cnc = db.concours.find(c => c.id === p.concoursId);
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${cnc ? securiserTexte(cnc.titre) : 'Concours'}</strong></td>
-          <td>${p.dateParticipation}</td>
-          <td><span class="badge badge-active">${p.score} / ${p.total}</span></td>
-          <td>🥇 Rang 1er</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    /* --------------------------------------------------------------------------
-       5. LOGIQUE DES CLASSEMENTS
-       -------------------------------------------------------------------------- */
-    function afficherClassement() {
-      const db = getStore();
-      const selectFilter = document.getElementById('classement-filter');
-      const tbody = document.getElementById('classement-tbody');
-      tbody.innerHTML = '';
-
-      // Populate select options for specific contests once
-      if (selectFilter.options.length <= 1) {
-        db.concours.forEach(c => {
-          const opt = document.createElement('option');
-          opt.value = c.id;
-          opt.innerText = c.titre;
-          selectFilter.appendChild(opt);
-        });
-      }
-
-      const valFilter = selectFilter.value;
-
-      // Agrégation des scores
-      let rankingMap = [];
-
-      db.utilisateurs.forEach(u => {
-        let totalPoints = 0;
-        let pList = db.participations.filter(p => p.userId === u.id);
-
-        if (valFilter !== 'GENERAL') {
-          pList = pList.filter(p => p.concoursId === valFilter);
-        }
-
-        pList.forEach(p => totalPoints += p.score);
-
-        if (pList.length > 0 || valFilter === 'GENERAL') {
-          rankingMap.push({
-            nomComplet: `${u.prenom} ${u.nom}`,
-            niveau: u.niveau,
-            localisation: `${u.ville}, ${u.pays}`,
-            score: totalPoints
-          });
-        }
-      });
-
-      // Tri décroissant par score
-      rankingMap.sort((a, b) => b.score - a.score);
-
-      rankingMap.forEach((item, index) => {
-        let medal = `${index + 1}`;
-        if (index === 0) medal = '🥇 1er';
-        if (index === 1) medal = '🥈 2ème';
-        if (index === 2) medal = '🥉 3ème';
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${medal}</strong></td>
-          <td>${securiserTexte(item.nomComplet)}</td>
-          <td>${securiserTexte(item.niveau)}</td>
-          <td>${securiserTexte(item.localisation)}</td>
-          <td><span class="badge badge-active">${item.score} pts</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    /* --------------------------------------------------------------------------
-       6. WORKFLOW ABONNEMENT (ÉLÈVE -> ADMIN)
-       -------------------------------------------------------------------------- */
-    function demanderAbonnementModal() {
-      document.getElementById('modal-abonnement').style.display = 'flex';
-    }
-
-    function fermerModalAbonnement() {
-      document.getElementById('modal-abonnement').style.display = 'none';
-    }
-
-    function enregistrerDemandeAbonnement(e) {
-      e.preventDefault();
-      const nom = document.getElementById('sub-nom').value.trim();
-      const prenom = document.getElementById('sub-prenom').value.trim();
-      const phone = document.getElementById('sub-phone').value.trim();
-      const ville = document.getElementById('sub-ville').value.trim();
-      const niveau = document.getElementById('sub-niveau').value.trim();
-
-      const db = getStore();
+  function resetUserPassword(whatsapp, idx) {
+    const user = db.users.find(u => u.whatsapp === whatsapp);
+    if(user) {
+      user.pass = "5555";
+      db.resetRequests.splice(idx, 1);
+      saveData();
+      updateAdminResetList();
       
-      // Existe déjà ?
-      let user = db.utilisateurs.find(u => u.whatsapp === phone);
-      if (!user) {
-        user = {
-          id: "usr_" + Date.now(),
-          nom: nom,
-          prenom: prenom,
-          whatsapp: phone,
-          pays: "Côte d'Ivoire",
-          ville: ville,
-          niveau: niveau,
-          abonnement: { statut: "EN_ATTENTE", dateActivation: null, dateExpiration: null }
-        };
-        db.utilisateurs.push(user);
-      } else {
-        user.abonnement.statut = "EN_ATTENTE";
-      }
-
-      saveStore(db);
-      ajouterLog("Demande Abonnement", `Nouvelle demande de ${prenom} ${nom} (#${phone})`);
-      fermerModalAbonnement();
-
-      // TOAST NOTIFICATION EXACTEMENT CONFORME AU CAHIER DES CHARGES
-      showEmeraldToast(
-        "Votre demande a été enregistrée avec succès. Vous serez contacté au numéro WhatsApp que vous avez renseigné afin de finaliser votre paiement. Merci d'utiliser notre application et bonne révision !"
-      );
+      const msg = encodeURIComponent("Votre demande de réinitialisation a été acceptée. Votre nouveau mot de passe provisoire est 5555. Veuillez vous connecter puis modifier ce mot de passe depuis votre profil.");
+      window.open(`https://wa.me/${whatsapp}?text=${msg}`, '_blank');
     }
+  }
 
-    /* --------------------------------------------------------------------------
-       7. ESPACE ADMINISTRATION & GESTION
-       -------------------------------------------------------------------------- */
-    function authentifierAdmin(e) {
-      e.preventDefault();
-      const u = document.getElementById('admin-user').value.trim();
-      const p = document.getElementById('admin-pass').value.trim();
+  function showAllAccounts() {
+    const container = document.getElementById('accounts-display-list');
+    container.innerHTML = '<h4 style="margin-top:15px;">Comptes Utilisateurs</h4>';
+    db.users.forEach(u => {
+      container.innerHTML += `<div style="padding:5px 0; border-bottom:1px solid var(--border); font-size:0.9rem;">${u.nom} ${u.prenom} | ${u.ville}, ${u.pays} | WhatsApp: ${u.whatsapp}</div>`;
+    });
+  }
 
-      if (u === 'admin' && p === 'admin123') {
-        document.getElementById('admin-login-card').style.display = 'none';
-        document.getElementById('admin-dashboard').style.display = 'block';
-        chargerDashboardAdmin();
-        ajouterLog("Connexion Admin", "L'administrateur s'est connecté");
-      } else {
-        alert("Identifiants incorrects (Essayer: admin / admin123)");
-      }
-    }
-
-    function deconnexionAdmin() {
-      document.getElementById('admin-login-card').style.display = 'block';
-      document.getElementById('admin-dashboard').style.display = 'none';
-    }
-
-    function chargerDashboardAdmin() {
-      const db = getStore();
-
-      // Stats Cards
-      document.getElementById('stat-comptes').innerText = db.utilisateurs.length;
-      document.getElementById('stat-abos').innerText = db.utilisateurs.filter(u => u.abonnement.statut === 'ACTIF').length;
-      document.getElementById('stat-concours').innerText = db.concours.length;
-      document.getElementById('stat-participations').innerText = db.participations.length;
-
-      filtrerParticipantsAdmin();
-      chargerAvisAdmin();
-      chargerLogsAdmin();
-    }
-
-    function filtrerParticipantsAdmin() {
-      const db = getStore();
-      const query = document.getElementById('admin-search-text').value.toLowerCase();
-      const statusFilter = document.getElementById('admin-filter-status').value;
-      const tbody = document.getElementById('admin-participants-tbody');
-      tbody.innerHTML = '';
-
-      const list = db.utilisateurs.filter(u => {
-        const matchesText = u.nom.toLowerCase().includes(query) || u.prenom.toLowerCase().includes(query) || u.whatsapp.includes(query);
-        const matchesStatus = (statusFilter === 'TOUS') || (u.abonnement.statut === statusFilter);
-        return matchesText && matchesStatus;
-      });
-
-      list.forEach(u => {
-        const tr = document.createElement('tr');
-
-        let badgeClass = 'badge-pending';
-        if (u.abonnement.statut === 'ACTIF') badgeClass = 'badge-active';
-        if (u.abonnement.statut === 'BLOQUE') badgeClass = 'badge-blocked';
-
-        tr.innerHTML = `
-          <td><strong>${securiserTexte(u.prenom)} ${securiserTexte(u.nom)}</strong> (${securiserTexte(u.niveau)})</td>
-          <td>${securiserTexte(u.whatsapp)}</td>
-          <td>${securiserTexte(u.ville)}, ${securiserTexte(u.pays)}</td>
-          <td><span class="badge ${badgeClass}">${u.abonnement.statut}</span></td>
-          <td>${u.abonnement.dateExpiration || '-'}</td>
-          <td>
-            ${u.abonnement.statut !== 'ACTIF' ? `<button class="btn btn-success" style="padding: 4px 8px; font-size: 0.8rem;" onclick="changerStatutAbo('${u.id}', 'ACTIF')">Activer</button>` : ''}
-            ${u.abonnement.statut !== 'BLOQUE' ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" onclick="changerStatutAbo('${u.id}', 'BLOQUE')">Bloquer</button>` : ''}
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function changerStatutAbo(userId, nouveauStatut) {
-      const db = getStore();
-      const user = db.utilisateurs.find(u => u.id === userId);
-      if (!user) return;
-
-      user.abonnement.statut = nouveauStatut;
-      if (nouveauStatut === 'ACTIF') {
-        const now = new Date();
-        const exp = new Date();
-        exp.setDate(now.getDate() + 30);
-        user.abonnement.dateActivation = now.toISOString().split('T')[0];
-        user.abonnement.dateExpiration = exp.toISOString().split('T')[0];
-      }
-
-      saveStore(db);
-      ajouterLog("Modification Abonnement", `Statut de ${user.whatsapp} changé en ${nouveauStatut}`);
-      chargerDashboardAdmin();
-    }
-
-    function creerConcoursAdmin(e) {
-      e.preventDefault();
-      const titre = document.getElementById('cnc-titre').value.trim();
-      const categorie = document.getElementById('cnc-categorie').value;
-      const classe = document.getElementById('cnc-classe').value.trim();
-      const affExplications = document.getElementById('cnc-afficher-explications').checked;
-
-      const db = getStore();
-      db.concours.push({
-        id: "cnc_" + Date.now(),
-        titre: titre,
-        categorie: categorie,
-        classe: classe,
-        afficherExplications: affExplications,
-        questions: [
-          {
-            id: "q1",
-            question: "Question exemple 1 ?",
-            options: ["Option A", "Option B", "Option C"],
-            reponseCorrecte: 0,
-            explication: "Explication de la réponse A."
-          }
-        ]
-      });
-
-      saveStore(db);
-      ajouterLog("Création Concours", `Nouveau concours : ${titre}`);
-      alert("Concours créé avec succès !");
-      document.getElementById('cnc-titre').value = '';
-      chargerDashboardAdmin();
-    }
-
-    function chargerAvisAdmin() {
-      const db = getStore();
-      const tbody = document.getElementById('admin-avis-tbody');
-      tbody.innerHTML = '';
-
-      db.avis.forEach(av => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${securiserTexte(av.auteur)}</strong></td>
-          <td>${securiserTexte(av.texte)}</td>
-          <td><button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" onclick="supprimerAvis('${av.id}')">Supprimer</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function supprimerAvis(id) {
-      const db = getStore();
-      db.avis = db.avis.filter(a => a.id !== id);
-      saveStore(db);
-      ajouterLog("Modération Avis", `Suppression de l'avis ID ${id}`);
-      chargerAvisAdmin();
-    }
-
-    function chargerLogsAdmin() {
-      const db = getStore();
-      const tbody = document.getElementById('admin-logs-tbody');
-      tbody.innerHTML = '';
-
-      db.journalLogs.forEach(log => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${log.dateHeure}</td>
-          <td><strong>${log.action}</strong></td>
-          <td>${log.details}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function exporterExcelCSV() {
-      const db = getStore();
-      let csvContent = "data:text/csv;charset=utf-8,ID,Nom,Prenom,WhatsApp,Ville,StatutAbo\n";
-      db.utilisateurs.forEach(u => {
-        csvContent += `${u.id},${u.nom},${u.prenom},${u.whatsapp},${u.ville},${u.abonnement.statut}\n`;
-      });
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "participants_ZTV_concours.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function imprimerStatistiquesPDF() {
-      window.print();
-    }
-
-    /* Initialisation globale au chargement */
-    window.onload = function() {
-      chargerConcoursPublics();
-    };
-  </script>
+  // Initialisation
+  updateStats();
+</script>
 </body>
 </html>
