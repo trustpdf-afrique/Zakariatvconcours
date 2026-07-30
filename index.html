@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZakariaTV Concours - Plateforme Premium</title>
-    <!-- Google Fonts & FontAwesome Icons -->
+    <title>ZakariaTV - Plateforme de Concours & Révisions</title>
+    <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -12,7 +12,7 @@
         :root {
             --bg-dark: #090C1A;
             --card-bg: #1E293B;
-            --card-alt: #1F2937;
+            --card-alt: #0F172A;
             --accent: #F59E0B;
             --accent-hover: #D97706;
             --text-main: #FFFFFF;
@@ -37,16 +37,11 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
-            padding-top: 80px;
             padding-bottom: 40px;
         }
 
-        /* --- Header / Navigation Top --- */
+        /* --- Header / Navigation --- */
         .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
             height: 70px;
             background-color: rgba(9, 12, 26, 0.95);
             backdrop-filter: blur(10px);
@@ -54,7 +49,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
+            position: sticky;
+            top: 0;
             z-index: 1000;
         }
 
@@ -65,7 +62,7 @@
             text-decoration: none;
             color: var(--text-main);
             font-weight: 800;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
         }
 
         .logo-icon {
@@ -81,38 +78,11 @@
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
-        .badge-concours {
-            background-color: var(--card-bg);
-            border: 1.5px solid var(--accent);
-            color: var(--text-main);
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        /* Mode Switcher Toggle (Pour la démo) */
-        .portal-switch {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-sub);
-            padding: 6px 12px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-        .portal-switch:hover {
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-
-        /* --- Layout Structures --- */
+        /* --- Layout & Utilities --- */
         .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
+            max-width: 1000px;
+            margin: 1.5rem auto 0;
+            padding: 0 1rem;
         }
 
         .view-section {
@@ -120,60 +90,72 @@
         }
         .view-section.active {
             display: block;
-            animation: fadeIn 0.4s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Global Components --- */
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 2rem;
+            padding: 1.75rem;
             box-shadow: var(--shadow);
             margin-bottom: 1.5rem;
         }
 
-        .card-accent-border {
-            border: 2px solid var(--accent);
-        }
-
+        /* Boutons Modernes avec Flèche/Retour */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 14px 24px;
+            gap: 8px;
+            padding: 12px 22px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             border: none;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             text-decoration: none;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--accent), #D97706);
             color: #000000;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
         }
 
         .btn-secondary {
-            background-color: var(--card-bg);
+            background-color: var(--card-alt);
             color: var(--text-main);
             border: 1px solid var(--border);
         }
         .btn-secondary:hover {
+            border-color: var(--text-sub);
             background-color: var(--border);
+        }
+
+        .btn-back {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-sub);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .btn-back:hover {
+            color: var(--text-main);
+            border-color: var(--accent);
+            background-color: rgba(245, 158, 11, 0.1);
         }
 
         .btn-danger {
@@ -186,187 +168,166 @@
             color: #fff;
         }
 
-        .btn-block {
-            width: 100%;
+        .btn-audio {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            font-size: 1.1rem;
+        }
+        .btn-audio:hover {
+            background-color: var(--accent);
+            color: #000;
         }
 
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
+        .btn-block { width: 100%; }
 
+        .form-group { margin-bottom: 1.25rem; }
         .form-label {
             display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.8rem;
+            font-weight: 700;
             color: var(--text-sub);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-
         .form-control {
             width: 100%;
-            padding: 14px 18px;
-            background-color: #0F172A;
+            padding: 12px 16px;
+            background-color: var(--card-alt);
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             color: var(--text-main);
             font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.3s;
         }
-        .form-control:focus {
-            border-color: var(--accent);
-        }
+        .form-control:focus { border-color: var(--accent); }
 
-        select.form-control {
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F59E0B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.2em;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-        .badge-gray { background: #334155; color: #CBD5E1; }
-        .badge-orange { background: rgba(245, 158, 11, 0.2); color: var(--accent); border: 1px solid var(--accent); }
-        .badge-green { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-
-        /* --- Section 2: Banner Welcome --- */
-        .welcome-banner {
-            background: linear-gradient(135deg, #451A03 0%, #1E1B4B 100%);
+        /* --- Banner Pro Participant --- */
+        .participant-banner {
+            background: linear-gradient(135deg, #1E1B4B 0%, #311042 50%, #451A03 100%);
             border: 1px solid var(--accent);
-            text-align: center;
-            padding: 2.5rem 1.5rem;
-        }
-        .welcome-banner .logo-large {
-            width: 65px;
-            height: 65px;
-            font-size: 1.8rem;
-            margin: 0 auto 1rem;
-        }
-
-        /* --- Section 6: Quick Actions & Stats Grid --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-card {
-            background-color: var(--card-bg);
             border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
+            padding: 2rem 1.5rem;
+            text-align: center;
             position: relative;
             overflow: hidden;
-        }
-        .stat-card.c1 { border-left: 5px solid #3B82F6; }
-        .stat-card.c2 { border-left: 5px solid var(--success); }
-        .stat-card.c3 { border-left: 5px solid var(--accent); }
-        .stat-card.c4 { border-left: 5px solid #8B5CF6; }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-        }
-        .stat-title {
-            color: var(--text-sub);
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .actions-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 1.5rem;
         }
-        .action-group {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
+        .banner-img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
         }
 
-        /* --- Contest Cards Grid --- */
+        /* --- Grid & Cards Concours --- */
         .contest-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
         }
-
         .contest-card {
             background: var(--card-bg);
             border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .contest-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background-color: #0F172A;
-        }
-        .contest-body {
             padding: 1.25rem;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-        }
-        .contest-tags {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 10px;
+            justify-content: space-between;
         }
         .contest-title {
             font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin: 0.5rem 0 1rem;
         }
 
-        /* Filter Pills */
-        .filter-container {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 1.5rem;
-            overflow-x: auto;
-            padding-bottom: 6px;
+        /* --- Interface du Quiz & Chrono --- */
+        .timer-box {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-align: center;
+            background: var(--card-alt);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius-md);
+            padding: 10px 20px;
+            width: fit-content;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
         }
-        .filter-btn {
-            background-color: var(--card-bg);
+
+        .option-btn {
+            background-color: var(--card-alt);
             border: 1px solid var(--border);
-            color: var(--text-sub);
-            padding: 8px 18px;
-            border-radius: 50px;
-            cursor: pointer;
+            color: var(--text-main);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
             font-weight: 600;
-            font-size: 0.85rem;
-            white-space: nowrap;
+            cursor: pointer;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .filter-btn.active {
-            background-color: var(--accent);
-            color: #000;
+        .option-btn:hover {
             border-color: var(--accent);
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+        .option-btn.selected {
+            border-color: var(--accent);
+            background-color: rgba(245, 158, 11, 0.2);
         }
 
-        /* Utility Copy Bar */
-        .copy-box {
+        /* --- Modales (Avis, Classement, Résultats) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 500px;
+            padding: 1.75rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .stars-rating {
             display: flex;
             gap: 10px;
-            background: #0F172A;
-            padding: 8px 8px 8px 16px;
+            font-size: 1.5rem;
+            color: var(--text-sub);
+            cursor: pointer;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+        .stars-rating .fa-star.active { color: var(--accent); }
+
+        .copy-box {
+            display: flex;
+            gap: 8px;
+            background: var(--card-alt);
+            padding: 8px 12px;
             border-radius: var(--radius-md);
             border: 1px solid var(--border);
             align-items: center;
@@ -378,445 +339,786 @@
             width: 100%;
             outline: none;
             font-family: monospace;
+            font-size: 0.85rem;
         }
 
-        /* Responsiveness */
-        @media (max-width: 768px) {
-            .navbar { padding: 0 1rem; }
-            .actions-bar { flex-direction: column; align-items: stretch; }
-            .action-group { flex-direction: column; }
-            .btn { width: 100%; }
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--card-alt);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+        .ranking-rank {
+            font-weight: 800;
+            color: var(--accent);
+            width: 30px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Barre supérieure commune -->
+    <!-- Barre supérieure de navigation -->
     <nav class="navbar">
         <a href="#" class="brand-logo">
             <div class="logo-icon">ZTV</div>
             <span>ZakariaTV</span>
-            <span class="badge-concours">Concours</span>
         </a>
-        <button class="portal-switch" onclick="togglePortalMode()">
-            <i class="fa-solid fa-arrows-rotate">
-            </i> <span id="portal-switch-label">Basculer Mode Participant</span>
-        </button>
+        <div id="nav-actions">
+            <!-- Injecté dynamiquement selon la page -->
+        </div>
     </nav>
 
     <div class="container">
 
         <!-- =================================================================== -->
-        <!-- VIEW 1: CONNEXION ADMIN                                            -->
+        <!-- 1. APPLICATION PRINCIPALE : ADMINISTRATION UNIQUEMENT               -->
         <!-- =================================================================== -->
-        <section id="admin-login-view" class="view-section">
-            <div style="max-width: 450px; margin: 2rem auto;">
-                <div style="text-align: center; margin-bottom: 1.5rem;">
-                    <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--accent);"></i>
-                    <h2 style="margin-top: 1rem;">Espace Administration</h2>
-                    <p style="color: var(--text-sub); font-size: 0.9rem;">Accès réservé exclusivement à l'administrateur.</p>
-                </div>
-                
-                <div class="card">
+        
+        <!-- Login Administration -->
+        <section id="admin-login-view" class="view-section active">
+            <div style="max-width: 400px; margin: 2rem auto;">
+                <div class="card" style="text-align: center;">
+                    <i class="fa-solid fa-user-shield" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                    <h2>Administration</h2>
+                    <p style="color: var(--text-sub); font-size: 0.85rem; margin-top: 4px; margin-bottom: 1.5rem;">Espace réservé au gestionnaire de la plateforme.</p>
+                    
                     <form onsubmit="handleAdminLogin(event)">
                         <div class="form-group">
-                            <label class="form-label">Nom d'utilisateur</label>
-                            <input type="text" class="form-control" placeholder="Entrez votre identifiant" required>
+                            <label class="form-label">Identifiant</label>
+                            <input type="text" id="admin-user" class="form-control" placeholder="admin" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Mot de passe</label>
-                            <input type="password" class="form-control" placeholder="••••••••" required>
+                            <input type="password" id="admin-pass" class="form-control" placeholder="••••••••" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
-                            Se connecter à l'administration
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Se connecter <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </form>
                 </div>
             </div>
         </section>
 
-        <!-- =================================================================== -->
-        <!-- VIEW 2: DASHBOARD ADMIN                                            -->
-        <!-- =================================================================== -->
+        <!-- Dashboard Administration -->
         <section id="admin-dashboard-view" class="view-section">
-            <div style="margin-bottom: 2rem;">
-                <h2><i class="fa-solid fa-user-shield" style="color: var(--accent);"></i> Tableau de Bord Administrateur</h2>
-                <p style="color: var(--text-sub);">Gestion globale : participants, abonnements, concours et réinitialisations.</p>
-            </div>
+            <button class="btn btn-back" onclick="showView('admin-login-view')">
+                <i class="fa-solid fa-arrow-left"></i> Déconnexion Admin
+            </button>
 
-            <!-- Action rapide -->
-            <div class="actions-bar">
-                <div class="action-group">
-                    <button class="btn btn-secondary"><i class="fa-solid fa-key"></i> Mot de passe oubliés (0)</button>
-                    <button class="btn btn-secondary"><i class="fa-solid fa-credit-card"></i> Demandes Abonnements (0)</button>
-                    <button class="btn btn-secondary"><i class="fa-solid fa-star"></i> Avis (3)</button>
-                </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2>Tableau de bord Administrateur</h2>
                 <button class="btn btn-primary" onclick="showView('admin-create-view')">
                     <i class="fa-solid fa-plus"></i> Créer un Concours
                 </button>
             </div>
 
-            <!-- Carte Lien unique -->
-            <div class="card card-accent-border">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h3 style="font-size: 1.1rem;"><i class="fa-solid fa-link" style="color: var(--accent);"></i> Lien Unique des Participants</h3>
-                    <span class="badge badge-orange">Lien Réutilisable</span>
+            <!-- Bloc du Lien Unique des Participants -->
+            <div class="card" style="border: 2px solid var(--accent);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <h3><i class="fa-solid fa-link" style="color: var(--accent);"></i> Lien Unique des Participants</h3>
+                    <span style="font-size: 0.75rem; background: rgba(245,158,11,0.2); color: var(--accent); padding: 2px 8px; border-radius: 20px; font-weight:700;">URL PERMANENT</span>
                 </div>
+                <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 12px;">
+                    Partagez ce lien unique à vos élèves. Tous les concours créés, modifiés ou supprimés s'y mettent à jour automatiquement.
+                </p>
                 <div class="copy-box">
-                    <input type="text" value="https://zakariatv.app/concours/direct-link" id="admin-share-link" readonly>
-                    <button class="btn btn-primary" style="padding: 8px 16px;" onclick="copyLink()">Copier</button>
+                    <input type="text" value="" id="unique-share-link" readonly>
+                    <button class="btn btn-primary" style="padding: 6px 16px; font-size: 0.8rem;" onclick="copyUniqueLink()">
+                        <i class="fa-solid fa-copy"></i> Copier
+                    </button>
                 </div>
             </div>
 
-            <!-- Cartes Statistiques -->
-            <div class="stats-grid">
-                <div class="stat-card c1">
-                    <div class="stat-number">1</div>
-                    <div class="stat-title">Concours créés</div>
-                </div>
-                <div class="stat-card c2">
-                    <div class="stat-number">4</div>
-                    <div class="stat-title">Concours effectués</div>
-                </div>
-                <div class="stat-card c3">
-                    <div class="stat-number">3</div>
-                    <div class="stat-title">Comptes élèves</div>
-                </div>
-                <div class="stat-card c4">
-                    <div class="stat-number">2</div>
-                    <div class="stat-title">Participants distincts</div>
-                </div>
-            </div>
-
-            <!-- Liste des Concours Actifs -->
-            <div class="card">
-                <h3 style="margin-bottom: 1.25rem;">Liste des concours actifs</h3>
-                <div class="contest-grid">
-                    <div class="contest-card">
-                        <img src="https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=500&q=80" class="contest-img" alt="Histoire">
-                        <div class="contest-body">
-                            <div class="contest-tags">
-                                <span class="badge badge-gray">Primaire</span>
-                                <span class="badge badge-gray">CE2</span>
-                                <span class="badge badge-green">Gratuit</span>
-                            </div>
-                            <div class="contest-title">Histoire – Le temps et l'espace social</div>
-                            <div style="display: flex; gap: 8px; margin-top: auto;">
-                                <button class="btn btn-secondary" style="flex: 1; padding: 8px;"><i class="fa-solid fa-globe"></i> En ligne</button>
-                                <button class="btn btn-danger" style="padding: 8px 12px;"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
+            <!-- Gestion des Avis & Concours -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>Concours Actuels (<span id="admin-contest-count">0</span>)</h3>
+                    </div>
+                    <div id="admin-contest-list" class="contest-grid">
+                        <!-- Liste des concours injectée ici -->
                     </div>
                 </div>
-            </div>
 
-            <!-- Bouton Déconnexion -->
-            <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn btn-danger" onclick="showView('admin-login-view')">
-                    <i class="fa-solid fa-right-from-bracket"></i> Déconnexion Administrateur
-                </button>
+                <div class="card">
+                    <h3><i class="fa-solid fa-star" style="color: var(--accent);"></i> Avis reçus des participants</h3>
+                    <div id="admin-reviews-list" style="margin-top: 1rem; max-height: 250px; overflow-y: auto;">
+                        <!-- Avis reçus injectés ici -->
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- =================================================================== -->
-        <!-- VIEW 3: FORMULAIRE CRÉATION DE CONCOURS                            -->
-        <!-- =================================================================== -->
+        <!-- Formulaire de Création de Concours -->
         <section id="admin-create-view" class="view-section">
+            <button class="btn btn-back" onclick="showView('admin-dashboard-view')">
+                <i class="fa-solid fa-arrow-left"></i> Retour au Tableau de bord
+            </button>
+
             <div class="card">
-                <h2 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-pen-to-square" style="color: var(--accent);"></i> Créer un Concours</h2>
+                <h2 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-pen-to-square" style="color: var(--accent);"></i> Nouveau Concours (Gratuit)</h2>
                 
                 <form onsubmit="handleCreateContest(event)">
                     <div class="form-group">
-                        <label class="form-label">Accès du concours</label>
-                        <select class="form-control">
-                            <option>Concours Gratuit (Accessible à tous)</option>
-                            <option>Concours réservé aux abonnés</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Image / Banner URL (Optionnel)</label>
-                        <input type="url" class="form-control" placeholder="https://exemple.com/image.jpg">
+                        <label class="form-label">Titre du Concours</label>
+                        <input type="text" id="create-title" class="form-control" placeholder="Ex: Révisions Histoire-Géo 3ème" required>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
-                            <label class="form-label">Catégorie</label>
-                            <select class="form-control">
+                            <label class="form-label">Catégorie / Niveau</label>
+                            <select id="create-category" class="form-control">
                                 <option>Primaire</option>
                                 <option>Collège</option>
                                 <option>Lycée</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Classe</label>
-                            <select class="form-control">
-                                <option>CE1</option><option>CE2</option><option>CM1</option><option>CM2</option>
-                                <option>6e</option><option>5e</option><option>4e</option><option>3e</option>
-                                <option>2nde</option><option>1ère</option><option>Terminale</option>
-                            </select>
+                            <label class="form-label">Image illustrative (URL)</label>
+                            <input type="url" id="create-image" class="form-control" placeholder="https://..." value="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Titre du concours</label>
-                        <input type="text" class="form-control" placeholder="Ex: Révisions de Mathématiques CE2" required>
+                    <h3 style="margin: 1.5rem 0 1rem; color: var(--accent);">Questionnaire (5 Questions / 15s par question)</h3>
+                    <div id="questions-builder">
+                        <!-- 5 Questions générées automatiquement par JS -->
                     </div>
 
-                    <!-- Configuration des 5 questions -->
-                    <h3 style="margin: 2rem 0 1rem; color: var(--accent);">CONFIGURATION DES 5 QUESTIONS</h3>
-                    
-                    <!-- Repeat Questions Bloc -->
-                    <div id="questions-container">
-                        <!-- Questions JS Rendered or Manual -->
-                    </div>
-
-                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                        <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="showView('admin-dashboard-view')">Annuler</button>
-                        <button type="submit" class="btn btn-primary" style="flex: 2;">ENREGISTRER ET PUBLIER</button>
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button type="button" class="btn btn-secondary" style="flex:1;" onclick="showView('admin-dashboard-view')">
+                            <i class="fa-solid fa-xmark"></i> Annuler
+                        </button>
+                        <button type="submit" class="btn btn-primary" style="flex:2;">
+                            <i class="fa-solid fa-check"></i> Publier sur le Lien Unique
+                        </button>
                     </div>
                 </form>
             </div>
         </section>
 
+
         <!-- =================================================================== -->
-        <!-- VIEW 4: CONNEXION PARTICIPANT                                      -->
+        <!-- 2. PORTAIL PARTICIPANT (ACCESSIBLE VIA LIEN UNIQUE / EN-TÊTE)      -->
         <!-- =================================================================== -->
-        <section id="user-login-view" class="view-section">
-            <!-- Carte de bienvenue -->
-            <div class="card welcome-banner">
-                <div class="logo-icon logo-large">ZTV</div>
-                <h1>ZakariaTV Concours</h1>
-                <p style="color: var(--text-sub); margin-top: 5px;">Espace de Révisions & Concours Éducatifs</p>
+
+        <!-- Inscription / Connexion Participant -->
+        <section id="participant-auth-view" class="view-section">
+            <div class="participant-banner">
+                <h1 style="font-size: 1.8rem;">ZakariaTV Concours</h1>
+                <p style="color: var(--text-sub); font-size: 0.9rem;">Espace d'entraînement & Révisions entièrement gratuit</p>
             </div>
 
-            <!-- Formulaire Connexion -->
             <div class="card" style="max-width: 450px; margin: 0 auto;">
-                <h2 style="text-align: center; margin-bottom: 1.5rem;">Connexion Participant</h2>
-                <form onsubmit="handleUserLogin(event)">
+                <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary btn-block" id="tab-login-btn" onclick="switchAuthTab('login')">Se connecter</button>
+                    <button class="btn btn-secondary btn-block" id="tab-register-btn" onclick="switchAuthTab('register')">S'inscrire</button>
+                </div>
+
+                <!-- Form Connexion -->
+                <form id="participant-login-form" onsubmit="handleParticipantLogin(event)">
                     <div class="form-group">
-                        <label class="form-label">Nom complet</label>
-                        <input type="text" class="form-control" placeholder="Votre nom et prénom" required>
+                        <label class="form-label">Nom d'utilisateur</label>
+                        <input type="text" id="part-login-name" class="form-control" placeholder="Entrez votre nom" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Mot de passe</label>
                         <input type="password" class="form-control" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">Se connecter</button>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+                        Accéder aux Concours <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="#" style="color: var(--text-sub); font-size: 0.8rem; text-decoration: none;" onclick="alert('Demande transmise à l\'administration pour réinitialisation.')">Mot de passe oublié ?</a>
+                    </div>
                 </form>
 
-                <div style="display: flex; justify-content: space-between; margin-top: 1.5rem; font-size: 0.85rem;">
-                    <a href="#" style="color: var(--text-sub); text-decoration: none;" onclick="alert('Une demande de réinitialisation a été envoyée à l\'administrateur.')">Mot de passe oublié ?</a>
-                    <a href="#" style="color: var(--accent); font-weight: 700; text-decoration: none;" onclick="showView('user-register-view')">Créer un compte</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================================================================== -->
-        <!-- VIEW 5: INSCRIPTION PARTICIPANT                                   -->
-        <!-- =================================================================== -->
-        <section id="user-register-view" class="view-section">
-            <div class="card" style="max-width: 500px; margin: 0 auto;">
-                <h2 style="text-align: center; margin-bottom: 1.5rem;">Création de Compte</h2>
-                <form onsubmit="handleUserRegister(event)">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label class="form-label">Nom</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Prénom</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label class="form-label">Ville</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Pays</label>
-                            <input type="text" class="form-control" required>
-                        </div>
+                <!-- Form Inscription -->
+                <form id="participant-register-form" onsubmit="handleParticipantRegister(event)" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Nom & Prénom</label>
+                        <input type="text" id="part-reg-name" class="form-control" placeholder="Ex: Jean Kouassi" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Numéro WhatsApp</label>
-                        <input type="tel" class="form-control" placeholder="+225 ..." required>
+                        <input type="tel" class="form-control" placeholder="+225..." required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Mot de passe</label>
-                        <input type="password" class="form-control" required>
+                        <input type="password" class="form-control" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">S'inscrire et se connecter</button>
-                    <button type="button" class="btn btn-secondary btn-block" style="margin-top: 0.5rem;" onclick="showView('user-login-view')">Retour à la connexion</button>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+                        Créer mon compte <i class="fa-solid fa-check"></i>
+                    </button>
                 </form>
             </div>
         </section>
 
-        <!-- =================================================================== -->
-        <!-- VIEW 6: DASHBOARD PARTICIPANT                                     -->
-        <!-- =================================================================== -->
-        <section id="user-dashboard-view" class="view-section">
-            <!-- Carte Bienvenue & Statut -->
-            <div class="card card-accent-border">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                    <div>
-                        <h2>Bonjour, <span id="user-display-name">Élève</span> !</h2>
-                        <span class="badge badge-gray" style="margin-top: 5px;">Aucun abonnement actif</span>
-                    </div>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button class="btn btn-secondary" style="padding: 10px 16px;"><i class="fa-solid fa-trophy"></i> Classement</button>
-                        <button class="btn btn-secondary" style="padding: 10px 16px;"><i class="fa-solid fa-comment"></i> Avis</button>
-                        <button class="btn btn-secondary" style="padding: 10px 16px;" onclick="showView('user-profile-view')"><i class="fa-solid fa-user"></i> Mon Profil</button>
-                        <button class="btn btn-danger" style="padding: 10px 16px;" onclick="showView('user-login-view')"><i class="fa-solid fa-power-off"></i></button>
-                    </div>
+        <!-- Accueil & Liste des Concours Participants -->
+        <section id="participant-home-view" class="view-section">
+            <!-- En-tête Pro -->
+            <div class="participant-banner">
+                <h1 style="font-size: 1.8rem; margin-bottom: 4px;">ZakariaTV Concours</h1>
+                <p style="color: var(--accent); font-weight: 700; font-size: 0.95rem;">Révisez gratuitement et mesurez votre niveau !</p>
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80" alt="Bannière" class="banner-img">
+                
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+                    <button class="btn btn-secondary" onclick="openRankingModal()"><i class="fa-solid fa-trophy" style="color: var(--accent);"></i> Classement Général</button>
+                    <button class="btn btn-secondary" onclick="openReviewModal()"><i class="fa-solid fa-comment-dots"></i> Donner mon avis</button>
+                    <button class="btn btn-secondary" onclick="openUserResultsModal()"><i class="fa-solid fa-chart-line"></i> Voir mes résultats</button>
                 </div>
             </div>
 
-            <!-- Filtres -->
-            <div class="filter-container">
-                <button class="filter-btn active">Tous</button>
-                <button class="filter-btn">Primaire</button>
-                <button class="filter-btn">Collège</button>
-                <button class="filter-btn">Lycée</button>
+            <!-- Titre Section & Concours -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3>Concours Disponibles</h3>
+                <button class="btn btn-back" style="margin: 0;" onclick="showView('participant-auth-view')">
+                    <i class="fa-solid fa-power-off"></i> Quitter
+                </button>
             </div>
 
-            <!-- Liste des Concours -->
-            <h3 style="margin-bottom: 1rem;">Concours disponibles</h3>
-            <div class="contest-grid">
-                <div class="contest-card">
-                    <img src="https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=500&q=80" class="contest-img" alt="Histoire">
-                    <div class="contest-body">
-                        <div class="contest-tags">
-                            <span class="badge badge-gray">Primaire</span>
-                            <span class="badge badge-gray">CE2</span>
-                            <span class="badge badge-green">Gratuit</span>
-                        </div>
-                        <div class="contest-title">Histoire – Le temps et l'espace social</div>
-                        <button class="btn btn-primary btn-block" style="margin-top: auto;" onclick="alert('Démarrage du concours !')">Participer</button>
-                    </div>
-                </div>
+            <div id="participant-contest-list" class="contest-grid">
+                <!-- Cartes des concours injectées dynamiquement -->
             </div>
         </section>
 
-        <!-- =================================================================== -->
-        <!-- VIEW 7: PROFIL PARTICIPANT                                         -->
-        <!-- =================================================================== -->
-        <section id="user-profile-view" class="view-section">
-            <div class="card" style="max-width: 600px; margin: 0 auto;">
-                <h2 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-id-card" style="color: var(--accent);"></i> Mon Profil</h2>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                    <div><span class="form-label">Nom</span><strong>Kouassi</strong></div>
-                    <div><span class="form-label">Prénom</span><strong>Jean</strong></div>
-                    <div><span class="form-label">Ville</span><strong>Abidjan</strong></div>
-                    <div><span class="form-label">Pays</span><strong>Côte d'Ivoire</strong></div>
-                    <div style="grid-column: span 2;"><span class="form-label">WhatsApp</span><strong>+225 07 00 00 00 00</strong></div>
+        <!-- Attente / Compte à Rebours (20s) -->
+        <section id="participant-waiting-view" class="view-section">
+            <div class="card" style="text-align: center; max-width: 500px; margin: 3rem auto;">
+                <i class="fa-solid fa-stopwatch" style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                <h2>Préparation au Concours</h2>
+                <p style="color: var(--text-sub); margin: 0.75rem 0 1.5rem;">
+                    Le concours commencera dans <strong>20 secondes</strong>. Préparez-vous !
+                </p>
+                <div class="timer-box" id="wait-countdown">20</div>
+                <button class="btn btn-secondary" onclick="cancelWaiting()">
+                    <i class="fa-solid fa-xmark"></i> Annuler et retourner à la liste
+                </button>
+            </div>
+        </section>
+
+        <!-- Interface du Quiz (15s / Question) -->
+        <section id="participant-quiz-view" class="view-section">
+            <button class="btn btn-back" onclick="confirmExitQuiz()">
+                <i class="fa-solid fa-arrow-left"></i> Abandonner le concours
+            </button>
+
+            <div class="card" style="max-width: 650px; margin: 0 auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span style="color: var(--text-sub); font-weight: 700;" id="quiz-progress">Question 1 / 5</span>
+                    
+                    <!-- Bouton Haut-Parleur Instantané -->
+                    <button class="btn btn-audio" onclick="playAudioQuestion()" title="Ecouter la question">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
                 </div>
 
-                <hr style="border: none; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+                <!-- Chronomètre hyper visible -->
+                <div class="timer-box" id="question-timer">15</div>
 
-                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Modifier mon mot de passe</h3>
-                <form onsubmit="event.preventDefault(); alert('Mot de passe mis à jour !');">
-                    <div class="form-group">
-                        <label class="form-label">Mot de passe actuel</label>
-                        <input type="password" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Nouveau mot de passe</label>
-                        <input type="password" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Enregistrer les modifications</button>
-                </form>
-                
-                <button class="btn btn-secondary btn-block" style="margin-top: 1rem;" onclick="showView('user-dashboard-view')">Retour au tableau de bord</button>
+                <h2 id="quiz-question-text" style="font-size: 1.25rem; margin-bottom: 1.5rem; text-align: center;">
+                    Intitulé de la question ici...
+                </h2>
+
+                <div id="quiz-options-container">
+                    <!-- Options de réponse injectées dynamiquement -->
+                </div>
+
+                <button class="btn btn-primary btn-block" style="margin-top: 1rem;" onclick="submitAnswer()">
+                    Valider la réponse <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Écran de Fin de Concours -->
+        <section id="participant-finish-view" class="view-section">
+            <div class="card" style="text-align: center; max-width: 550px; margin: 2rem auto;">
+                <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--success); margin-bottom: 1rem;"></i>
+                <h2>Concours Terminé !</h2>
+                <p style="color: var(--text-sub); margin: 1rem 0 1.5rem; line-height: 1.6;">
+                    Merci d'avoir participé à ce concours. Veuillez revenir à la page précédente pour consulter vos résultats et votre classement.
+                </p>
+                <button class="btn btn-primary btn-block" onclick="showView('participant-home-view')">
+                    <i class="fa-solid fa-arrow-left"></i> Revenir à la page précédente
+                </button>
             </div>
         </section>
 
     </div>
 
-    <!-- Script JavaScript Dynamique -->
-    <script>
-        // Génération automatique des 5 champs de question pour le formulaire Admin
-        const questionsContainer = document.getElementById('questions-container');
-        for (let i = 1; i <= 5; i++) {
-            questionsContainer.innerHTML += `
-                <div class="card" style="background: #0F172A; margin-bottom: 1rem;">
-                    <h4 style="color: var(--accent); margin-bottom: 1rem;">Question ${i}</h4>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Intitulé de la question ${i}" required>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                        <input type="text" class="form-control" placeholder="Option A" required>
-                        <input type="text" class="form-control" placeholder="Option B" required>
-                        <input type="text" class="form-control" placeholder="Option C" required>
-                        <input type="text" class="form-control" placeholder="Option D" required>
-                    </div>
-                    <div class="form-group" style="margin-top: 0.75rem;">
-                        <label class="form-label">Bonne réponse :</label>
-                        <select class="form-control">
-                            <option>Option A</option>
-                            <option>Option B</option>
-                            <option>Option C</option>
-                            <option>Option D</option>
-                        </select>
-                    </div>
+    <!-- =================================================================== -->
+    <!-- MODALES SYSTEME (CLASSEMENT, AVIS, RESULTATS)                       -->
+    <!-- =================================================================== -->
+
+    <!-- Modale Classement -->
+    <div class="modal" id="modal-ranking">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3><i class="fa-solid fa-trophy" style="color: var(--accent);"></i> Classement Général</h3>
+                <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="closeModal('modal-ranking')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="ranking-list">
+                <div class="ranking-item">
+                    <span class="ranking-rank">#1</span>
+                    <span style="flex:1; font-weight: 700;">Kouassi Jean</span>
+                    <span style="color: var(--accent); font-weight: 800;">5/5 pts</span>
                 </div>
-            `;
+                <div class="ranking-item">
+                    <span class="ranking-rank">#2</span>
+                    <span style="flex:1; font-weight: 700;">Awa Diop</span>
+                    <span style="color: var(--accent); font-weight: 800;">4/5 pts</span>
+                </div>
+            </div>
+            <button class="btn btn-secondary btn-block" style="margin-top: 1rem;" onclick="closeModal('modal-ranking')">
+                <i class="fa-solid fa-arrow-left"></i> Fermer
+            </button>
+        </div>
+    </div>
+
+    <!-- Modale Avis -->
+    <div class="modal" id="modal-review">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3><i class="fa-solid fa-star" style="color: var(--accent);"></i> Donner mon avis</h3>
+                <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="closeModal('modal-review')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleReviewSubmit(event)">
+                <div class="stars-rating" id="star-rating-box">
+                    <i class="fa-solid fa-star active" onclick="setRating(1)"></i>
+                    <i class="fa-solid fa-star active" onclick="setRating(2)"></i>
+                    <i class="fa-solid fa-star active" onclick="setRating(3)"></i>
+                    <i class="fa-solid fa-star active" onclick="setRating(4)"></i>
+                    <i class="fa-solid fa-star active" onclick="setRating(5)"></i>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Votre commentaire</label>
+                    <textarea class="form-control" id="review-comment" rows="3" placeholder="L'application m'aide beaucoup à réviser..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    Envoyer mon avis <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modale Résultats Utilisateur -->
+    <div class="modal" id="modal-results">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3><i class="fa-solid fa-chart-line" style="color: var(--accent);"></i> Mes Résultats & Score</h3>
+                <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="closeModal('modal-results')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="user-results-content" style="text-align: center; padding: 1rem 0;">
+                <p style="color: var(--text-sub);">Dernier score obtenu :</p>
+                <div style="font-size: 3rem; font-weight: 800; color: var(--accent); margin: 0.5rem 0;" id="user-last-score">-- / 5</div>
+                <p style="color: var(--success); font-weight: 700;" id="user-rank-status">Consultez le classement pour voir votre position !</p>
+            </div>
+            <button class="btn btn-secondary btn-block" style="margin-top: 1rem;" onclick="closeModal('modal-results')">
+                <i class="fa-solid fa-arrow-left"></i> Fermer
+            </button>
+        </div>
+    </div>
+
+    <!-- Script de Fonctionnement global (JS Autonome) -->
+    <script>
+        // --- BASE DE DONNÉES LOCALSTORAGE ET ÉTAT GLOBAL ---
+        let state = {
+            contests: JSON.parse(localStorage.getItem('ztv_contests')) || [
+                {
+                    id: 1,
+                    title: "Révisions Histoire – CE2",
+                    category: "Primaire",
+                    image: "https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=500&q=80",
+                    questions: [
+                        { q: "Quelle est la capitale de la Côte d'Ivoire ?", options: ["Abidjan", "Yamoussoukro", "Bouaké", "San-Pedro"], answer: 1 },
+                        { q: "Le fleuve Bandama se trouve en :", options: ["Côte d'Ivoire", "Sénégal", "Mali", "Ghana"], answer: 0 },
+                        { q: "Combien de saisons compte le climat tropical ?", options: ["2", "4", "1", "3"], answer: 0 },
+                        { q: "Quelle est la monnaie de la Côte d'Ivoire ?", options: ["Dollar", "Euro", "Franc CFA", "Naira"], answer: 2 },
+                        { q: "Le monument de l'union se trouve à :", options: ["Abidjan", "Yamoussoukro", "Man", "Korhogo"], answer: 0 }
+                    ]
+                }
+            ],
+            reviews: JSON.parse(localStorage.getItem('ztv_reviews')) || [
+                { name: "Jean K.", stars: 5, comment: "Super application de révision !" }
+            ],
+            currentUser: localStorage.getItem('ztv_user') || null,
+            lastScore: localStorage.getItem('ztv_last_score') || null,
+            currentQuiz: null,
+            currentQuestionIdx: 0,
+            selectedOption: null,
+            score: 0,
+            timerInterval: null,
+            currentRating: 5
+        };
+
+        function saveState() {
+            localStorage.setItem('ztv_contests', JSON.stringify(state.contests));
+            localStorage.setItem('ztv_reviews', JSON.stringify(state.reviews));
         }
 
-        // Navigation et Contrôle des Vues (SPA)
+        // --- GESTION DES VUES ET NAVIGATION ---
         function showView(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             const target = document.getElementById(viewId);
             if (target) target.classList.add('active');
+
+            // Render dynamique selon la vue
+            if (viewId === 'admin-dashboard-view') renderAdminDashboard();
+            if (viewId === 'participant-home-view') renderParticipantHome();
         }
 
-        let currentMode = 'user'; // 'user' ou 'admin'
-        function togglePortalMode() {
-            const label = document.getElementById('portal-switch-label');
-            if (currentMode === 'user') {
-                currentMode = 'admin';
-                label.innerText = "Basculer Mode Participant";
-                showView('admin-login-view');
+        // Détection automatique du mode d'accès
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initialisation du lien unique dans l'administration
+            const uniqueUrl = window.location.origin + window.location.pathname + '?portal=participant';
+            document.getElementById('unique-share-link').value = uniqueUrl;
+
+            // Constats d'URL : Est-ce le lien unique participant ?
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('portal') === 'participant') {
+                // Règle 3: Le lien ne doit JAMAIS ouvrir l'administration
+                document.getElementById('nav-actions').innerHTML = `
+                    <button class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem;" onclick="openRankingModal()">
+                        <i class="fa-solid fa-trophy" style="color: var(--accent);"></i> Classement
+                    </button>
+                `;
+                showView('participant-auth-view');
             } else {
-                currentMode = 'user';
-                label.innerText = "Basculer Mode Admin";
-                showView('user-login-view');
+                // Application principale (Réservée à l'administrateur)
+                document.getElementById('nav-actions').innerHTML = `
+                    <span style="font-size: 0.8rem; color: var(--text-sub); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;">
+                        <i class="fa-solid fa-lock" style="color: var(--accent);"></i> Accès Admin
+                    </span>
+                `;
+                showView('admin-login-view');
+            }
+
+            renderQuestionsBuilder();
+        });
+
+        // --- GESTION DU LIEN UNIQUE ---
+        function copyUniqueLink() {
+            const copyText = document.getElementById("unique-share-link");
+            copyText.select();
+            document.execCommand("copy");
+            alert("Lien unique des participants copié !");
+        }
+
+        // --- ADMINISTRATION ---
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+            if (u === 'admin' && p === 'admin') {
+                showView('admin-dashboard-view');
+            } else {
+                alert('Identifiants administrateur incorrects. (Utiliser admin / admin)');
             }
         }
 
-        // Action Handlers
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            showView('admin-dashboard-view');
+        function renderAdminDashboard() {
+            document.getElementById('admin-contest-count').innerText = state.contests.length;
+            const list = document.getElementById('admin-contest-list');
+            list.innerHTML = '';
+
+            state.contests.forEach(c => {
+                list.innerHTML += `
+                    <div class="contest-card">
+                        <img src="${c.image}" alt="${c.title}" style="width:100%; height:120px; object-fit:cover; border-radius:12px; margin-bottom:10px;">
+                        <span style="font-size:0.75rem; color:var(--accent); font-weight:700;">${c.category}</span>
+                        <div class="contest-title">${c.title}</div>
+                        <button class="btn btn-danger btn-block" onclick="deleteContest(${c.id})">
+                            <i class="fa-solid fa-trash"></i> Supprimer définitivement
+                        </button>
+                    </div>
+                `;
+            });
+
+            // Affichage des avis dans l'administration
+            const rList = document.getElementById('admin-reviews-list');
+            rList.innerHTML = '';
+            state.reviews.forEach(r => {
+                rList.innerHTML += `
+                    <div style="background: var(--card-alt); padding: 10px; border-radius: 8px; margin-bottom: 8px; border:1px solid var(--border);">
+                        <div style="display:flex; justify-between; color:var(--accent);">
+                            <strong>${r.name}</strong>
+                            <span style="margin-left:auto;">${'★'.repeat(r.stars)}</span>
+                        </div>
+                        <p style="font-size:0.85rem; color:var(--text-sub); margin-top:4px;">"${r.comment}"</p>
+                    </div>
+                `;
+            });
         }
 
-        function handleUserLogin(e) {
-            e.preventDefault();
-            showView('user-dashboard-view');
-        }
-
-        function handleUserRegister(e) {
-            e.preventDefault();
-            showView('user-dashboard-view');
+        function renderQuestionsBuilder() {
+            const container = document.getElementById('questions-builder');
+            container.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                container.innerHTML += `
+                    <div style="background: var(--card-alt); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid var(--border);">
+                        <h4 style="color: var(--accent); margin-bottom: 0.5rem;">Question ${i}</h4>
+                        <input type="text" id="q${i}-text" class="form-control" placeholder="Intitulé de la question ${i}" style="margin-bottom:0.5rem;" required>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+                            <input type="text" id="q${i}-o0" class="form-control" placeholder="Option A" required>
+                            <input type="text" id="q${i}-o1" class="form-control" placeholder="Option B" required>
+                            <input type="text" id="q${i}-o2" class="form-control" placeholder="Option C" required>
+                            <input type="text" id="q${i}-o3" class="form-control" placeholder="Option D" required>
+                        </div>
+                        <select id="q${i}-ans" class="form-control" style="margin-top:0.5rem;">
+                            <option value="0">Bonne réponse : Option A</option>
+                            <option value="1">Bonne réponse : Option B</option>
+                            <option value="2">Bonne réponse : Option C</option>
+                            <option value="3">Bonne réponse : Option D</option>
+                        </select>
+                    </div>
+                `;
+            }
         }
 
         function handleCreateContest(e) {
             e.preventDefault();
-            alert("Concours créé et publié immédiatement !");
+            const newContest = {
+                id: Date.now(),
+                title: document.getElementById('create-title').value,
+                category: document.getElementById('create-category').value,
+                image: document.getElementById('create-image').value || "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80",
+                questions: []
+            };
+
+            for (let i = 1; i <= 5; i++) {
+                newContest.questions.push({
+                    q: document.getElementById(`q${i}-text`).value,
+                    options: [
+                        document.getElementById(`q${i}-o0`).value,
+                        document.getElementById(`q${i}-o1`).value,
+                        document.getElementById(`q${i}-o2`).value,
+                        document.getElementById(`q${i}-o3`).value
+                    ],
+                    answer: parseInt(document.getElementById(`q${i}-ans`).value)
+                });
+            }
+
+            state.contests.push(newContest);
+            saveState();
+            alert("Concours créé et publié automatiquement sur le lien unique !");
             showView('admin-dashboard-view');
         }
 
-        function copyLink() {
-            const linkInput = document.getElementById('admin-share-link');
-            linkInput.select();
-            document.execCommand('copy');
-            alert('Lien copié dans le presse-papier !');
+        function deleteContest(id) {
+            if (confirm("Voulez-vous vraiment supprimer définitivement ce concours ?")) {
+                state.contests = state.contests.filter(c => c.id !== id);
+                saveState();
+                renderAdminDashboard();
+            }
         }
 
-        // Afficher l'écran participant par défaut au chargement
-        showView('user-login-view');
+        // --- PARTICIPANTS & AUTHENTIFICATION ---
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('participant-login-form').style.display = 'block';
+                document.getElementById('participant-register-form').style.display = 'none';
+                document.getElementById('tab-login-btn').className = 'btn btn-primary btn-block';
+                document.getElementById('tab-register-btn').className = 'btn btn-secondary btn-block';
+            } else {
+                document.getElementById('participant-login-form').style.display = 'none';
+                document.getElementById('participant-register-form').style.display = 'block';
+                document.getElementById('tab-login-btn').className = 'btn btn-secondary btn-block';
+                document.getElementById('tab-register-btn').className = 'btn btn-primary btn-block';
+            }
+        }
+
+        function handleParticipantLogin(e) {
+            e.preventDefault();
+            state.currentUser = document.getElementById('part-login-name').value;
+            localStorage.setItem('ztv_user', state.currentUser);
+            showView('participant-home-view');
+        }
+
+        function handleParticipantRegister(e) {
+            e.preventDefault();
+            state.currentUser = document.getElementById('part-reg-name').value;
+            localStorage.setItem('ztv_user', state.currentUser);
+            showView('participant-home-view');
+        }
+
+        function renderParticipantHome() {
+            const list = document.getElementById('participant-contest-list');
+            list.innerHTML = '';
+            
+            if (state.contests.length === 0) {
+                list.innerHTML = `<p style="color:var(--text-sub);">Aucun concours disponible pour le moment.</p>`;
+                return;
+            }
+
+            state.contests.forEach(c => {
+                list.innerHTML += `
+                    <div class="contest-card">
+                        <img src="${c.image}" alt="${c.title}" style="width:100%; height:140px; object-fit:cover; border-radius:12px; margin-bottom:10px;">
+                        <span style="font-size:0.75rem; color:var(--accent); font-weight:700;">${c.category} • GRATUIT</span>
+                        <div class="contest-title">${c.title}</div>
+                        <button class="btn btn-primary btn-block" onclick="startWaitingCountdown(${c.id})">
+                            Participer <i class="fa-solid fa-play"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // --- COMPTE À REBOURS ET DEROULEMENT DU QUIZ ---
+        function startWaitingCountdown(contestId) {
+            state.currentQuiz = state.contests.find(c => c.id === contestId);
+            showView('participant-waiting-view');
+            
+            let timeLeft = 20;
+            const timerEl = document.getElementById('wait-countdown');
+            timerEl.innerText = timeLeft;
+
+            clearInterval(state.timerInterval);
+            state.timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(state.timerInterval);
+                    launchQuiz();
+                }
+            }, 1000);
+        }
+
+        function cancelWaiting() {
+            clearInterval(state.timerInterval);
+            showView('participant-home-view');
+        }
+
+        function launchQuiz() {
+            state.currentQuestionIdx = 0;
+            state.score = 0;
+            showView('participant-quiz-view');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            clearInterval(state.timerInterval);
+            state.selectedOption = null;
+
+            const qData = state.currentQuiz.questions[state.currentQuestionIdx];
+            document.getElementById('quiz-progress').innerText = `Question ${state.currentQuestionIdx + 1} / 5`;
+            document.getElementById('quiz-question-text').innerText = qData.q;
+
+            // Options de réponses
+            const optionsBox = document.getElementById('quiz-options-container');
+            optionsBox.innerHTML = '';
+            qData.options.forEach((opt, idx) => {
+                optionsBox.innerHTML += `
+                    <button class="option-btn" id="opt-${idx}" onclick="selectOption(${idx})">
+                        <span>${opt}</span>
+                        <i class="fa-regular fa-circle"></i>
+                    </button>
+                `;
+            });
+
+            // Temps par question : 15 secondes
+            let timeLeft = 15;
+            const timerEl = document.getElementById('question-timer');
+            timerEl.innerText = timeLeft;
+
+            state.timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(state.timerInterval);
+                    submitAnswer(); // Passage automatique en fin de temps
+                }
+            }, 1000);
+        }
+
+        function selectOption(idx) {
+            state.selectedOption = idx;
+            document.querySelectorAll('.option-btn').forEach((btn, i) => {
+                if (i === idx) {
+                    btn.classList.add('selected');
+                    btn.querySelector('i').className = 'fa-solid fa-circle-check';
+                } else {
+                    btn.classList.remove('selected');
+                    btn.querySelector('i').className = 'fa-regular fa-circle';
+                }
+            });
+        }
+
+        function submitAnswer() {
+            clearInterval(state.timerInterval);
+            
+            // Vérification de la réponse
+            const qData = state.currentQuiz.questions[state.currentQuestionIdx];
+            if (state.selectedOption === qData.answer) {
+                state.score++;
+            }
+
+            state.currentQuestionIdx++;
+            if (state.currentQuestionIdx < 5) {
+                loadQuestion();
+            } else {
+                // Fin du concours
+                localStorage.setItem('ztv_last_score', state.score);
+                state.lastScore = state.score;
+                showView('participant-finish-view');
+            }
+        }
+
+        function confirmExitQuiz() {
+            if (confirm("Voulez-vous quitter le concours en cours ? Votre progression sera perdue.")) {
+                clearInterval(state.timerInterval);
+                showView('participant-home-view');
+            }
+        }
+
+        // --- AUDIO / LECTURE INSTANTANÉE ---
+        function playAudioQuestion() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stoppe toute lecture en cours immédiatement
+                const text = document.getElementById('quiz-question-text').innerText;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("La synthèse vocale n'est pas supportée sur ce navigateur.");
+            }
+        }
+
+        // --- GESTION DES MODALES ---
+        function openRankingModal() { document.getElementById('modal-ranking').classList.add('active'); }
+        function openReviewModal() { document.getElementById('modal-review').classList.add('active'); }
+        function openUserResultsModal() {
+            document.getElementById('user-last-score').innerText = (state.lastScore !== null ? state.lastScore : '--') + " / 5";
+            document.getElementById('modal-results').classList.add('active');
+        }
+        function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
+
+        // Système d'étoiles pour les avis
+        function setRating(r) {
+            state.currentRating = r;
+            const stars = document.querySelectorAll('#star-rating-box .fa-star');
+            stars.forEach((s, idx) => {
+                if (idx < r) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+        }
+
+        function handleReviewSubmit(e) {
+            e.preventDefault();
+            const comment = document.getElementById('review-comment').value;
+            state.reviews.unshift({
+                name: state.currentUser || "Élève Participant",
+                stars: state.currentRating,
+                comment: comment
+            });
+            saveState();
+            alert("Merci pour votre avis !");
+            closeModal('modal-review');
+        }
     </script>
 </body>
 </html>
