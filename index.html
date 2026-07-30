@@ -3,2014 +3,1164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZakariaTV - Plateforme de Concours & Révisions</title>
-    <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>ZTV Concours - Plateforme Éducative Ivoirienne</title>
     <style>
         :root {
-            --bg-dark: #090C1A;
-            --card-bg: #1E293B;
-            --card-alt: #0F172A;
-            --accent: #F59E0B;
-            --accent-hover: #D97706;
-            --text-main: #FFFFFF;
-            --text-sub: #94A3B8;
-            --border: #334155;
-            --danger: #EF4444;
-            --success: #10B981;
-            --info: #3B82F6;
-            --radius-lg: 16px;
-            --radius-md: 10px;
-            --radius-sm: 6px;
-            --shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.4);
+            --orange-ci: #FF8200;
+            --white-ci: #FFFFFF;
+            --green-ci: #009A44;
+            --bg-light: #F4F6F8;
+            --text-dark: #2C3E50;
+            --gray-border: #E0E0E0;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            padding-bottom: 30px;
         }
 
-        /* --- Header / Navigation --- */
-        .navbar {
-            height: 60px;
-            background-color: rgba(9, 12, 26, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
+        /* Header Navigation */
+        header {
+            background-color: var(--orange-ci);
+            color: var(--white-ci);
+            padding: 1rem 2rem;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 0 1.25rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .brand-logo {
+        header .logo-container {
             display: flex;
             align-items: center;
+            gap: 12px;
+        }
+
+        header img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--white-ci);
+            object-fit: cover;
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        nav {
+            display: flex;
             gap: 10px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 800;
-            font-size: 1.1rem;
-        }
-
-        .logo-icon {
-            background: linear-gradient(135deg, var(--accent), #B45309);
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            color: #000;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
-        }
-
-        /* --- Layout & Utilities --- */
-        .container {
-            max-width: 950px;
-            margin: 1.2rem auto 0;
-            padding: 0 0.8rem;
-        }
-
-        .view-section {
-            display: none;
-        }
-        .view-section.active {
-            display: block;
-            animation: fadeIn 0.25s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.25rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
         }
 
         .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.1s;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 6px;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.82rem;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s ease;
-            text-decoration: none;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), #D97706);
-            color: #000000;
-            box-shadow: 0 3px 12px rgba(245, 158, 11, 0.25);
-        }
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.35);
+        .btn:active {
+            transform: scale(0.98);
         }
 
-        .btn-secondary {
-            background-color: var(--card-alt);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-        }
-        .btn-secondary:hover {
-            border-color: var(--accent);
-            background-color: rgba(245, 158, 11, 0.05);
-        }
-        .btn-secondary.active {
-            border-color: var(--accent);
-            background-color: var(--accent);
-            color: #000;
+        .btn-green {
+            background-color: var(--green-ci);
+            color: var(--white-ci);
         }
 
-        .btn-back {
-            background-color: rgba(255, 255, 255, 0.04);
-            color: var(--text-sub);
-            border: 1px solid var(--border);
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            margin-bottom: 0.8rem;
-        }
-        .btn-back:hover {
-            color: var(--text-main);
-            border-color: var(--accent);
+        .btn-green:hover {
+            background-color: #007a36;
         }
 
-        .btn-danger {
-            background-color: rgba(239, 68, 68, 0.12);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-        .btn-danger:hover {
-            background-color: var(--danger);
-            color: #fff;
+        .btn-orange {
+            background-color: var(--orange-ci);
+            color: var(--white-ci);
         }
 
-        .btn-success {
-            background-color: rgba(16, 185, 129, 0.12);
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
-        .btn-success:hover {
-            background-color: var(--success);
-            color: #fff;
+        .btn-white {
+            background-color: var(--white-ci);
+            color: var(--orange-ci);
+            border: 1px solid var(--orange-ci);
         }
 
-        .btn-audio {
-            background-color: rgba(245, 158, 11, 0.15);
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            border-radius: 50%;
-            width: 42px;
-            height: 42px;
-            padding: 0;
-            font-size: 1.1rem;
+        .btn-white:hover {
+            background-color: #fff5eb;
         }
 
-        .btn-block { width: 100%; }
-
-        .form-group { margin-bottom: 1rem; }
-        .form-label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-sub);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-        .form-control {
+        /* Container & Cards */
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
             width: 100%;
-            padding: 10px 14px;
-            background-color: var(--card-alt);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            color: var(--text-main);
-            font-size: 0.9rem;
-            outline: none;
         }
-        .form-control:focus { border-color: var(--accent); }
 
-        /* --- Banner & Profile --- */
-        .participant-banner {
-            background: linear-gradient(135deg, #1E1B4B 0%, #311042 50%, #451A03 100%);
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            border-radius: var(--radius-lg);
-            padding: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            margin-bottom: 1.2rem;
-            position: relative;
+        .card {
+            background: var(--white-ci);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--green-ci);
+            margin-bottom: 1.5rem;
         }
-        .profile-thumb {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent);
-            box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
-            flex-shrink: 0;
-        }
-        .banner-info { flex: 1; }
 
-        /* --- Stats Pills --- */
-        .stats-pills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 0.75rem;
+        .hidden {
+            display: none !important;
+        }
+
+        /* Forms */
+        .form-group {
             margin-bottom: 1.2rem;
         }
-        .stat-pill {
-            background: linear-gradient(145deg, var(--card-bg), var(--card-alt));
-            border: 1px solid var(--border);
-            border-radius: 50px;
-            padding: 8px 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        .stat-pill:hover { transform: translateY(-2px); border-color: var(--accent); }
-        .stat-pill-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-        }
-        .stat-pill-val { font-size: 1.1rem; font-weight: 800; color: var(--text-main); line-height: 1; }
-        .stat-pill-lbl { font-size: 0.68rem; color: var(--text-sub); font-weight: 600; text-transform: uppercase; }
 
-        /* --- Grid & Badges --- */
-        .contest-grid {
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gray-border);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-row {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
-        .contest-card {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            padding: 1rem;
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Quiz View */
+        .quiz-header {
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
-        }
-        .contest-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin: 0.4rem 0 0.8rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-border);
         }
 
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
+        .timer-badge {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-        .badge-online { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid var(--success); }
-        .badge-offline { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
-        .badge-free { background: rgba(59, 130, 246, 0.2); color: var(--info); border: 1px solid var(--info); }
-        .badge-paid { background: rgba(245, 158, 11, 0.2); color: var(--accent); border: 1px solid var(--accent); }
-
-        /* --- Quiz & Red Timer --- */
-        .timer-box-red {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #FFFFFF;
-            text-align: center;
-            background: linear-gradient(135deg, #EF4444, #991B1B);
-            border: 2px solid #F87171;
-            border-radius: var(--radius-md);
-            padding: 8px 24px;
-            width: fit-content;
-            margin: 0 auto 1.2rem;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             animation: pulse 1s infinite alternate;
         }
 
         @keyframes pulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.04); }
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
         }
 
-        .option-box {
-            background-color: var(--card-alt);
-            border: 2px solid var(--border);
-            color: var(--text-main);
-            padding: 14px 18px;
-            border-radius: var(--radius-md);
-            width: 100%;
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid var(--gray-border);
+            padding: 1rem;
+            border-radius: 8px;
             text-align: left;
+            cursor: pointer;
             font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-bottom: 0.8rem;
+            font-weight: 600;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .option-box:hover { border-color: var(--accent); background-color: rgba(245, 158, 11, 0.08); }
-        .option-box.selected { border-color: var(--accent); background-color: rgba(245, 158, 11, 0.22); }
-
-        /* --- Modals --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 600px;
-            padding: 1.25rem;
-            max-height: 90vh;
-            overflow-y: auto;
         }
 
-        .stars-rating {
-            display: flex;
-            gap: 8px;
-            font-size: 1.4rem;
-            color: var(--text-sub);
-            cursor: pointer;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-        .stars-rating .fa-star.active { color: var(--accent); }
-
-        .copy-box {
-            display: flex;
-            gap: 8px;
-            background: var(--card-alt);
-            padding: 6px 10px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            align-items: center;
-        }
-        .copy-box input {
-            background: none;
-            border: none;
-            color: var(--text-main);
-            width: 100%;
-            outline: none;
-            font-family: monospace;
-            font-size: 0.8rem;
+        .option-btn:hover {
+            border-color: var(--orange-ci);
+            background: #fff9f5;
         }
 
-        .data-table {
+        /* Tables & Badges */
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 0.8rem;
-            font-size: 0.82rem;
+            margin-top: 1rem;
         }
-        .data-table th, .data-table td {
-            padding: 8px 10px;
-            border-bottom: 1px solid var(--border);
+
+        th, td {
+            padding: 12px;
             text-align: left;
+            border-bottom: 1px solid var(--gray-border);
         }
-        .data-table th { color: var(--text-sub); font-size: 0.7rem; text-transform: uppercase; }
 
-        .toast-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--accent);
-            color: var(--text-main);
-            padding: 14px 20px;
-            border-radius: var(--radius-md);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            display: none;
-            z-index: 3000;
-            max-width: 350px;
+        th {
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
             font-size: 0.85rem;
-            line-height: 1.4;
+            font-weight: 600;
         }
 
-        .filter-bar {
+        .badge-orange { background-color: #ffe6d0; color: var(--orange-ci); }
+        .badge-green { background-color: #d4edda; color: var(--green-ci); }
+
+        /* Creator Profile */
+        .creator-card {
+            text-align: center;
+        }
+
+        .creator-images {
             display: flex;
-            gap: 8px;
-            margin-bottom: 0.8rem;
-            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 1.5rem 0;
+        }
+
+        .creator-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 4px solid var(--orange-ci);
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .app-logo-large {
+            width: 130px;
+            height: 130px;
+            border-radius: 20px;
+            border: 4px solid var(--green-ci);
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* Participant Dashboard Dynamic Circle */
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange-ci), var(--green-ci));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem auto;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        .score-circle .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .score-circle .label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Toast Notification Container */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background-color: var(--green-ci);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Barre supérieure de navigation -->
-    <nav class="navbar">
-        <a href="#" class="brand-logo">
-            <div class="logo-icon">ZTV</div>
-            <span>ZakariaTV</span>
-        </a>
-        <div id="nav-actions"></div>
-    </nav>
+    <!-- Notification Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" alt="ZTV Logo">
+            <h1>ZTV Concours</h1>
+        </div>
+        <nav id="nav-links">
+            <button class="btn btn-white" onclick="showSection('section-top5')">🏆 Top 5 Éleves</button>
+            <button class="btn btn-white" onclick="showSection('section-creator')">👨‍💻 Créateur</button>
+            <div id="auth-buttons" style="display: inline-flex; gap: 8px;">
+                <button class="btn btn-green" onclick="showSection('section-login')">Connexion</button>
+                <button class="btn btn-white" onclick="showSection('section-register')">Inscription</button>
+            </div>
+            <div id="user-buttons" class="hidden" style="display: inline-flex; gap: 8px;">
+                <button class="btn btn-white" id="btn-dashboard" onclick="showDashboard()">Mes Concours</button>
+                <button class="btn btn-white" id="btn-admin-panel" onclick="showSection('section-admin')" style="display:none;">Admin</button>
+                <button class="btn btn-orange" onclick="logout()">Déconnexion</button>
+            </div>
+        </nav>
+    </header>
 
     <div class="container">
 
-        <!-- =================================================================== -->
-        <!-- 1. ADMINISTRATION                                                   -->
-        <!-- =================================================================== -->
-        
-        <!-- Connexion Admin -->
-        <section id="admin-login-view" class="view-section active">
-            <div style="max-width: 380px; margin: 2rem auto;">
-                <div class="card" style="text-align: center;">
-                    <i class="fa-solid fa-user-shield" style="font-size: 2.2rem; color: var(--accent); margin-bottom: 0.8rem;"></i>
-                    <h3>Espace Administration</h3>
-                    <p style="color: var(--text-sub); font-size: 0.8rem; margin-top: 4px; margin-bottom: 1.2rem;">Gestion complète ZakariaTV</p>
-                    
-                    <form onsubmit="handleAdminLogin(event)">
-                        <div class="form-group">
-                            <label class="form-label">Identifiant</label>
-                            <input type="text" id="admin-user" class="form-control" placeholder="admin" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Mot de passe</label>
-                            <input type="password" id="admin-pass" class="form-control" placeholder="••••••••" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">
-                            Se connecter <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- Tableau de Bord Admin -->
-        <section id="admin-dashboard-view" class="view-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px;">
-                <button class="btn btn-back" style="margin: 0;" onclick="showView('admin-login-view')">
-                    <i class="fa-solid fa-power-off"></i> Déconnexion
-                </button>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn btn-danger" onclick="resetAllData()"><i class="fa-solid fa-rotate-left"></i> Tout réinitialiser</button>
-                    <button class="btn btn-primary" onclick="openCreateContestModal()"><i class="fa-solid fa-plus"></i> Créer Concours</button>
-                </div>
-            </div>
-
-            <!-- PASTILLES STATISTIQUES -->
-            <div class="stats-pills-grid">
-                <div class="stat-pill">
-                    <div class="stat-pill-icon"><i class="fa-solid fa-trophy"></i></div>
-                    <div>
-                        <div class="stat-pill-val" id="stat-contests">0</div>
-                        <div class="stat-pill-lbl">Concours</div>
-                    </div>
-                </div>
-                <div class="stat-pill">
-                    <div class="stat-pill-icon" style="color:var(--success); background:rgba(16,185,129,0.15);"><i class="fa-solid fa-users"></i></div>
-                    <div>
-                        <div class="stat-pill-val" id="stat-users">0</div>
-                        <div class="stat-pill-lbl">Comptes créés</div>
-                    </div>
-                </div>
-                <div class="stat-pill">
-                    <div class="stat-pill-icon" style="color:var(--info); background:rgba(59,130,246,0.15);"><i class="fa-solid fa-chart-simple"></i></div>
-                    <div>
-                        <div class="stat-pill-val" id="stat-participations">0</div>
-                        <div class="stat-pill-lbl">Tests joués</div>
-                    </div>
-                </div>
-                <div class="stat-pill">
-                    <div class="stat-pill-icon" style="color:#8B5CF6; background:rgba(139,92,246,0.15);"><i class="fa-solid fa-key"></i></div>
-                    <div>
-                        <div class="stat-pill-val" id="stat-resets">0</div>
-                        <div class="stat-pill-lbl">Mdp Oubliés</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lien Unique Compact -->
-            <div class="card" style="border: 1px solid var(--accent); padding: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <h4 style="font-size: 0.9rem;"><i class="fa-solid fa-link" style="color: var(--accent);"></i> Lien Unique d'Accès Élèves</h4>
-                    <span style="font-size: 0.7rem; background: rgba(245,158,11,0.2); color: var(--accent); padding: 2px 8px; border-radius: 20px; font-weight:700;">ACCÈS UNIQUE</span>
-                </div>
-                <div class="copy-box">
-                    <input type="text" value="" id="unique-share-link" readonly>
-                    <button class="btn btn-primary" style="padding: 4px 12px; font-size: 0.75rem;" onclick="copyUniqueLink()">
-                        <i class="fa-solid fa-copy"></i> Copier
-                    </button>
-                </div>
-            </div>
-
-            <!-- Boutons de Gestion Administrateur -->
-            <div style="display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap;">
-                <button class="btn btn-secondary" onclick="openAdminUsersModal()"><i class="fa-solid fa-users"></i> Comptes créés (<span id="users-count-badge">0</span>)</button>
-                <button class="btn btn-secondary" onclick="openAdminResultsModal()"><i class="fa-solid fa-square-poll-vertical"></i> Résultats</button>
-                <button class="btn btn-secondary" onclick="openAdminResetsModal()"><i class="fa-solid fa-key"></i> Mots de passe (<span id="reset-badge-count">0</span>)</button>
-                <button class="btn btn-secondary" onclick="openAdminSubscriptionModal()"><i class="fa-solid fa-crown" style="color:var(--accent);"></i> Abonnements (<span id="sub-badge-count">0</span>)</button>
-            </div>
-
-            <!-- Liste des Concours Administrateur -->
-            <div class="card">
-                <h4 style="margin-bottom: 0.8rem;">Concours configurés</h4>
-                <div id="admin-contest-list" class="contest-grid"></div>
-            </div>
-
-            <!-- Avis Utilisateurs -->
-            <div class="card">
-                <h4 style="font-size:0.9rem;"><i class="fa-solid fa-star" style="color: var(--accent);"></i> Avis & Retours Élèves</h4>
-                <div id="admin-reviews-list" style="margin-top: 0.6rem; max-height: 200px; overflow-y: auto;"></div>
-            </div>
-        </section>
-
-        <!-- =================================================================== -->
-        <!-- 2. PORTAIL PARTICIPANT                                              -->
-        <!-- =================================================================== -->
-
-        <!-- Inscription / Connexion Élève -->
-        <section id="participant-auth-view" class="view-section">
-            <div class="participant-banner">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="profile-thumb" id="auth-banner-avatar">
-                <div class="banner-info">
-                    <h2 style="font-size: 1.3rem;">ZakariaTV Concours</h2>
-                    <p style="color: var(--accent); font-size: 0.82rem; font-weight: 700;">Plateforme de Révision & Concours</p>
-                </div>
-            </div>
-
-            <div class="card" style="max-width: 420px; margin: 0 auto;">
-                <div style="display: flex; gap: 8px; margin-bottom: 1.2rem;">
-                    <button class="btn btn-primary btn-block" id="tab-login-btn" onclick="switchAuthTab('login')">Se connecter</button>
-                    <button class="btn btn-secondary btn-block" id="tab-register-btn" onclick="switchAuthTab('register')">S'inscrire</button>
-                </div>
-
-                <!-- Connexion -->
-                <form id="participant-login-form" onsubmit="handleParticipantLogin(event)">
+        <!-- SECTION: Inscription Participant -->
+        <section id="section-register" class="card">
+            <h2>Création de compte Participant</h2>
+            <p style="margin-bottom: 1.5rem; color: #666;">Inscrivez-vous pour participer aux concours et réviser vos cours.</p>
+            <form id="form-register" onsubmit="handleRegister(event)">
+                <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Numéro WhatsApp</label>
-                        <input type="tel" id="part-login-phone" class="form-control" placeholder="+225..." required>
+                        <label>Nom *</label>
+                        <input type="text" id="reg-nom" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Mot de passe</label>
-                        <input type="password" id="part-login-pass" class="form-control" placeholder="••••••••" required>
+                        <label>Prénom *</label>
+                        <input type="text" id="reg-prenom" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        Accéder aux Concours <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                    <div style="text-align: center; margin-top: 0.8rem;">
-                        <a href="#" style="color: var(--text-sub); font-size: 0.78rem; text-decoration: none;" onclick="openForgotPasswordModal()">Mot de passe oublié ?</a>
-                    </div>
-                </form>
-
-                <!-- Inscription -->
-                <form id="participant-register-form" onsubmit="handleParticipantRegister(event)" style="display: none;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <div class="form-group">
-                            <label class="form-label">Nom</label>
-                            <input type="text" id="part-reg-lastname" class="form-control" placeholder="Kouassi" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Prénom</label>
-                            <input type="text" id="part-reg-firstname" class="form-control" placeholder="Jean" required>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <div class="form-group">
-                            <label class="form-label">Ville</label>
-                            <input type="text" id="part-reg-city" class="form-control" placeholder="Abidjan" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Pays</label>
-                            <input type="text" id="part-reg-country" class="form-control" placeholder="Côte d'Ivoire" required>
-                        </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pays *</label>
+                        <input type="text" id="reg-pays" value="Côte d'Ivoire" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Numéro WhatsApp</label>
-                        <input type="tel" id="part-reg-phone" class="form-control" placeholder="+225..." required>
+                        <label>Ville *</label>
+                        <input type="text" id="reg-ville" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nom de l'établissement scolaire *</label>
+                        <input type="text" id="reg-ecole" placeholder="Ex: Lycée Moderne de Bangolo" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Lien / URL Photo de profil (Optionnel)</label>
-                        <input type="url" id="part-reg-avatar" class="form-control" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Mot de passe</label>
-                        <input type="password" id="part-reg-pass" class="form-control" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        Créer mon compte <i class="fa-solid fa-check"></i>
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- Tableau de Bord Élève -->
-        <section id="participant-home-view" class="view-section">
-            <div class="participant-banner">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="profile-thumb" id="home-user-avatar">
-                <div class="banner-info">
-                    <h2 style="font-size: 1.2rem;" id="user-display-name">Bienvenue Élève</h2>
-                    <p style="color: var(--text-sub); font-size: 0.8rem;">Prêt pour votre révision du jour ?</p>
-                    
-                    <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
-                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openProfileModal()"><i class="fa-solid fa-user-gear" style="color:var(--accent);"></i> Mon Profil</button>
-                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openRankingModal()"><i class="fa-solid fa-trophy" style="color:var(--accent);"></i> Classement</button>
-                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openUserResultsModal()"><i class="fa-solid fa-chart-line"></i> Résultats</button>
-                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openReviewModal()"><i class="fa-solid fa-comment"></i> Avis</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Top 5 des Meilleurs Élèves -->
-            <div class="card" style="padding: 0.8rem 1rem; border: 1px solid rgba(245, 158, 11, 0.3);">
-                <h4 style="font-size: 0.85rem; color: var(--accent); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-crown"></i> Top 5 des Meilleurs Élèves
-                </h4>
-                <div id="top-5-container" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;"></div>
-            </div>
-
-            <!-- Section Abonnement Élève -->
-            <div class="card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(15, 23, 42, 0.9)); border: 1px solid var(--accent); padding: 1rem; margin-bottom: 1.2rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                    <div>
-                        <h4 style="font-size: 0.95rem; color: var(--accent);"><i class="fa-solid fa-gem"></i> Espace Abonnement</h4>
-                        <p style="font-size: 0.78rem; color: var(--text-sub); margin-top: 2px;">Accédez aux concours Premium et révisions illimitées.</p>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span id="user-sub-status-badge" style="background: var(--card-alt); border:1px solid var(--border); color: #FFF; font-weight: 800; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px;">STATUT : GRATUIT</span>
-                        <button class="btn btn-primary" style="padding:4px 12px; font-size:0.75rem;" onclick="openBuySubscriptionModal()"><i class="fa-solid fa-crown"></i> Acheter un abonnement</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Interface de Filtrage Concours par Catégorie et Niveau -->
-            <div class="card" style="padding: 0.8rem 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                    <h4 style="font-size: 1rem;">Concours disponibles</h4>
-                    <button class="btn btn-back" style="margin:0; padding:4px 10px; font-size:0.75rem;" onclick="showView('participant-auth-view')">
-                        <i class="fa-solid fa-power-off"></i> Déconnexion
-                    </button>
-                </div>
-
-                <!-- Boutons Catégories -->
-                <div class="filter-bar">
-                    <button class="btn btn-secondary active" id="filter-cat-all" onclick="setCategoryFilter('Tous')">Tous</button>
-                    <button class="btn btn-secondary" id="filter-cat-primaire" onclick="setCategoryFilter('Primaire')">Primaire</button>
-                    <button class="btn btn-secondary" id="filter-cat-college" onclick="setCategoryFilter('Collège')">Collège</button>
-                </div>
-
-                <!-- Boutons Niveaux Dynamiques -->
-                <div class="filter-bar" id="subcategories-filter-bar" style="display: none;"></div>
-            </div>
-
-            <div id="participant-contest-list" class="contest-grid"></div>
-        </section>
-
-        <!-- Attente 20s -->
-        <section id="participant-waiting-view" class="view-section">
-            <div class="card" style="text-align: center; max-width: 420px; margin: 2rem auto;">
-                <i class="fa-solid fa-stopwatch" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 0.8rem;"></i>
-                <h3>Préparation au test</h3>
-                <p style="color: var(--text-sub); font-size: 0.85rem; margin: 0.5rem 0 1rem;">
-                    Début dans <strong>20 secondes</strong>. Soyez prêt !
-                </p>
-                <div class="timer-box-red" id="wait-countdown">20</div>
-                <button class="btn btn-secondary btn-block" onclick="cancelWaiting()">
-                    <i class="fa-solid fa-xmark"></i> Annuler
-                </button>
-            </div>
-        </section>
-
-        <!-- Quiz (10s par Question avec Design Rouge & Bouton Lecture Vocale) -->
-        <section id="participant-quiz-view" class="view-section">
-            <button class="btn btn-back" onclick="confirmExitQuiz()">
-                <i class="fa-solid fa-arrow-left"></i> Quitter
-            </button>
-
-            <div class="card" style="max-width: 650px; margin: 0 auto; text-align: center;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                    <span style="color: var(--text-sub); font-weight: 700; font-size: 0.85rem;" id="quiz-progress">Question 1 / 10</span>
-                    <button class="btn btn-audio" onclick="playAudioQuestion()" title="Écouter la question et les réponses">
-                        <i class="fa-solid fa-volume-high"></i>
-                    </button>
-                </div>
-
-                <!-- Chronomètre rouge 10s -->
-                <div class="timer-box-red" id="question-timer">10</div>
-
-                <h2 id="quiz-question-text" style="font-size: 1.25rem; margin-bottom: 1.5rem; line-height: 1.4; color: var(--text-main);"></h2>
-                
-                <div id="quiz-options-container" style="margin-bottom: 1rem;"></div>
-
-                <button class="btn btn-primary btn-block" style="padding: 12px; font-size: 0.95rem;" onclick="submitAnswer()">
-                    Valider ma réponse <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-        </section>
-
-        <!-- Fin de Concours -->
-        <section id="participant-finish-view" class="view-section">
-            <div class="card" style="text-align: center; max-width: 480px; margin: 2rem auto;">
-                <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--success); margin-bottom: 1rem;"></i>
-                <h2>Concours Terminé !</h2>
-                <p style="color: var(--text-sub); font-size: 0.95rem; margin: 1rem 0 1.5rem; line-height: 1.5;">
-                    «« Merci d'avoir participé à ce concours. Veuillez retourner à l'accueil. »»
-                </p>
-                <div style="background: var(--card-alt); padding: 1rem; border-radius: 10px; margin-bottom: 1.2rem; border: 1px solid var(--border);">
-                    <p style="font-size: 0.9rem; color: var(--text-sub);">Votre Score Final :</p>
-                    <h1 style="color: var(--accent); font-size: 2.2rem; font-weight: 800;" id="finish-score-display">0 / 10</h1>
-                </div>
-                <button class="btn btn-primary btn-block" onclick="showView('participant-home-view')">
-                    <i class="fa-solid fa-house"></i> Retour à l'accueil
-                </button>
-            </div>
-        </section>
-
-    </div>
-
-    <!-- =================================================================== -->
-    <!-- MODALES                                                            -->
-    <!-- =================================================================== -->
-
-    <!-- Modale Mot de passe oublié -->
-    <div class="modal" id="modal-forgot-password">
-        <div class="modal-content" style="max-width: 400px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3><i class="fa-solid fa-key" style="color: var(--accent);"></i> Mot de passe oublié</h3>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-forgot-password')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div id="forgot-step-1">
-                <div class="form-group">
-                    <label class="form-label">Saisissez votre numéro WhatsApp</label>
-                    <input type="tel" id="forgot-phone-input" class="form-control" placeholder="+225..." required>
-                </div>
-                <button class="btn btn-primary btn-block" onclick="verifyForgotPhone()">Rechercher mon compte</button>
-            </div>
-
-            <div id="forgot-step-2" style="display: none; text-align: center;">
-                <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 0.8rem;">Est-ce bien votre compte ?</p>
-                <div style="background: var(--card-alt); padding: 12px; border-radius: 10px; border: 1px solid var(--border); text-align: left; font-size: 0.85rem; margin-bottom: 1rem;">
-                    <p><strong>Nom :</strong> <span id="forgot-found-lastname"></span></p>
-                    <p><strong>Prénom :</strong> <span id="forgot-found-firstname"></span></p>
-                    <p><strong>Ville :</strong> <span id="forgot-found-city"></span></p>
-                    <p><strong>Pays :</strong> <span id="forgot-found-country"></span></p>
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn btn-success btn-block" onclick="confirmResetRequest()">Oui, c'est moi</button>
-                    <button class="btn btn-secondary btn-block" onclick="closeModal('modal-forgot-password')">Annuler</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modale Profil Élève -->
-    <div class="modal" id="modal-profile">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3><i class="fa-solid fa-user" style="color: var(--accent);"></i> Mon Profil Participant</h3>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-profile')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div style="text-align: center; margin-bottom: 1.2rem;">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" id="prof-modal-avatar" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--accent); margin-bottom: 0.5rem; object-fit: cover;">
-                <h3 id="prof-name">Élève</h3>
-                <span id="prof-sub-badge" style="font-size: 0.75rem; color: var(--success); background: rgba(16,185,129,0.15); padding: 2px 8px; border-radius: 20px;">Statut : Gratuit</span>
-            </div>
-            
-            <div style="background: var(--card-alt); padding: 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; margin-bottom: 1rem;">
-                <p style="margin-bottom: 6px;"><strong>Nom :</strong> <span id="prof-lastname"></span></p>
-                <p style="margin-bottom: 6px;"><strong>Prénom :</strong> <span id="prof-firstname"></span></p>
-                <p style="margin-bottom: 6px;"><strong>Ville :</strong> <span id="prof-city"></span></p>
-                <p style="margin-bottom: 6px;"><strong>Pays :</strong> <span id="prof-country"></span></p>
-                <p style="margin-bottom: 6px;"><strong>Numéro WhatsApp :</strong> <span id="prof-phone"></span></p>
-            </div>
-
-            <!-- Formulaire Modification du Mot de passe -->
-            <div class="card" style="background: var(--card-alt); padding: 1rem;">
-                <h4 style="font-size: 0.85rem; margin-bottom: 0.8rem; color: var(--accent);"><i class="fa-solid fa-lock"></i> Modifier mon mot de passe</h4>
-                <form onsubmit="handleChangePassword(event)">
-                    <div class="form-group">
-                        <label class="form-label">Mot de passe actuel</label>
-                        <input type="password" id="pass-curr" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Nouveau mot de passe</label>
-                        <input type="password" id="pass-new" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Confirmation du nouveau mot de passe</label>
-                        <input type="password" id="pass-conf" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
-                </form>
-            </div>
-
-            <button class="btn btn-danger btn-block" style="margin-top: 1rem;" onclick="logoutUser()"><i class="fa-solid fa-power-off"></i> Se déconnecter</button>
-        </div>
-    </div>
-
-    <!-- Modale Demande d'Abonnement -->
-    <div class="modal" id="modal-buy-subscription">
-        <div class="modal-content" style="max-width: 420px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3><i class="fa-solid fa-gem" style="color: var(--accent);"></i> Souscrire un Abonnement</h3>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-buy-subscription')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form onsubmit="handleSubscriptionRequest(event)">
-                <div class="form-group">
-                    <label class="form-label">Nom & Prénom</label>
-                    <input type="text" id="sub-req-name" class="form-control" required readonly>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Numéro WhatsApp</label>
-                    <input type="tel" id="sub-req-phone" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Classe / Niveau</label>
-                    <select id="sub-req-class" class="form-control" required>
-                        <option value="CE2">CE2</option>
-                        <option value="CM1">CM1</option>
-                        <option value="CM2">CM2</option>
-                        <option value="6e">6e</option>
-                        <option value="5e">5e</option>
-                        <option value="4e">4e</option>
-                        <option value="3e">3e</option>
-                        <option value="Seconde">Seconde</option>
-                        <option value="Première">Première</option>
-                        <option value="Terminale">Terminale</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Valider ma demande d'abonnement</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modale Édition / Création de Concours (Nouveau Système Copier-Coller 10 Questions) -->
-    <div class="modal" id="modal-edit-contest">
-        <div class="modal-content" style="max-width: 650px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4 id="modal-contest-title">Créer un Concours (Analyse Automatique)</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-edit-contest')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form onsubmit="handleSaveContest(event)">
-                <input type="hidden" id="edit-contest-id">
-                <div class="form-group">
-                    <label class="form-label">Titre du Concours</label>
-                    <input type="text" id="edit-title" class="form-control" placeholder="Ex: Histoire – La Révolution" required>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                    <div class="form-group">
-                        <label class="form-label">Catégorie</label>
-                        <select id="edit-category" class="form-control" onchange="updateLevelOptions()">
-                            <option value="Primaire">Primaire</option>
-                            <option value="Collège">Collège</option>
+                        <label>Classe *</label>
+                        <select id="reg-classe" required>
+                            <option value="">Sélectionner votre classe</option>
+                            <option value="CE2">CE2</option>
+                            <option value="CM1">CM1</option>
+                            <option value="CM2">CM2</option>
+                            <option value="6e">6e</option>
+                            <option value="5e">5e</option>
+                            <option value="4e">4e</option>
+                            <option value="3e">3e</option>
+                            <option value="Seconde">Seconde</option>
+                            <option value="Première">Première</option>
+                            <option value="Terminale">Terminale</option>
                         </select>
                     </div>
+                </div>
+                <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Niveau</label>
-                        <select id="edit-level" class="form-control"></select>
+                        <label>Numéro WhatsApp *</label>
+                        <input type="tel" id="reg-whatsapp" placeholder="+225 0700000000" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe *</label>
+                        <input type="password" id="reg-password" required>
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                <div class="form-group">
+                    <label>URL Photo de profil (Optionnel)</label>
+                    <input type="url" id="reg-photo" placeholder="https://exemple.com/photo.jpg">
+                </div>
+                <button type="submit" class="btn btn-green" style="width: 100%;">S'inscrire</button>
+            </form>
+        </section>
+
+        <!-- SECTION: Connexion (Participant + Admin) -->
+        <section id="section-login" class="card hidden">
+            <h2>Connexion à la plateforme</h2>
+            <br>
+            <form id="form-login" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Identifiant / WhatsApp / Nom d'utilisateur</label>
+                    <input type="text" id="login-id" required>
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-green" style="width: 100%;">Se connecter</button>
+            </form>
+        </section>
+
+        <!-- SECTION: Tableau de Bord Personnel du Participant -->
+        <section id="section-dashboard" class="card hidden">
+            <h2 id="dash-welcome">Mon Tableau de Bord</h2>
+            <p id="dash-info-user" style="color: #666; margin-top: 5px;"></p>
+
+            <div class="score-circle">
+                <span class="number" id="dash-total-points">0</span>
+                <span class="label">Total Points Obtenus</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+                <h3>Mes Concours Effectués (<span id="dash-count-concours">0</span>)</h3>
+                <button class="btn btn-orange" onclick="showSection('section-list-concours')">Accéder aux concours disponibles</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Concours</th>
+                        <th>Classe</th>
+                        <th>Date</th>
+                        <th>Note (/10)</th>
+                        <th>Classement</th>
+                    </tr>
+                </thead>
+                <tbody id="dash-table-results">
+                    <!-- Rempli dynamiquement -->
+                </tbody>
+            </table>
+
+            <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-border);">
+            <h3>Laisser un Avis / Suggestion</h3>
+            <form id="form-avis" onsubmit="handleSaveAvis(event)" style="margin-top: 1rem;">
+                <div class="form-group">
+                    <textarea id="avis-text" rows="3" placeholder="Donnez votre avis sur l'application..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-green">Envoyer mon avis</button>
+            </form>
+        </section>
+
+        <!-- SECTION: Liste des Concours Disponibles -->
+        <section id="section-list-concours" class="card hidden">
+            <h2>Concours Éducatifs Disponibles</h2>
+            <p style="margin-bottom: 1rem; color: #666;">Sélectionnez un concours correspondant à votre classe pour réviser.</p>
+            <div id="container-concours-cards">
+                <!-- Rempli dynamiquement -->
+            </div>
+        </section>
+
+        <!-- SECTION: Interface de Quiz (Questions) -->
+        <section id="section-quiz" class="card hidden">
+            <div class="quiz-header">
+                <div>
+                    <h2 id="quiz-title">Titre du Concours</h2>
+                    <span id="quiz-classe-badge" class="badge badge-orange">Classe: 3e</span>
+                    <span id="quiz-date-badge" class="badge badge-green">Date: --/--/----</span>
+                </div>
+                <div class="timer-badge">
+                    ⏱️ <span id="timer-display">30</span>s
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <h3 id="quiz-question-num">Question 1/10</h3>
+                <button class="btn btn-white" onclick="readVoiceCurrentQuestion()">🔊 Réécouter (Vocal)</button>
+            </div>
+
+            <p id="quiz-question-text" style="font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0;"></p>
+
+            <div class="options-grid" id="quiz-options-container">
+                <!-- Boutons d'options générés dynamiquement -->
+            </div>
+        </section>
+
+        <!-- SECTION: Top 5 des Meilleurs Élèves -->
+        <section id="section-top5" class="card hidden">
+            <h2>🏆 Top 5 des Meilleurs Élèves</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Classement général basé sur le total des points et la moyenne des concours.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pos.</th>
+                        <th>Nom & Prénom</th>
+                        <th>Établissement</th>
+                        <th>Ville</th>
+                        <th>Classe</th>
+                        <th>Concours</th>
+                        <th>Total Points</th>
+                        <th>Moyenne</th>
+                    </tr>
+                </thead>
+                <tbody id="top5-table-body">
+                    <!-- Rempli dynamiquement -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SECTION: Présentation du Créateur -->
+        <section id="section-creator" class="card creator-card hidden">
+            <h2>Créateur de l'application</h2>
+            
+            <div class="creator-images">
+                <img src="https://i.postimg.cc/Ss5J8Kwk/file-000000009dc8724699d54da957936110.png" alt="Photo Niampa Zakaria" class="creator-img">
+                <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" alt="Logo ZTV" class="app-logo-large">
+            </div>
+
+            <h1 style="color: var(--orange-ci); margin-bottom: 0.5rem;">Niampa Zakaria</h1>
+            <p style="font-size: 1.1rem; font-weight: 600;">Élève en classe de 3e | Lycée Moderne de Bangolo</p>
+            <p style="color: #666; margin-top: 0.2rem;">Âgé de 15 ans</p>
+            
+            <div style="margin: 1.5rem 0; background: #fff5eb; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--orange-ci);">
+                <p>Créateur de contenus sur les phénomènes mystérieux.</p>
+                <p>Connu sous le nom de : <strong>ZakariaTV (ZTV)</strong></p>
+                <p>Compte TikTok : <strong>zakaria tv</strong></p>
+            </div>
+
+            <p style="font-style: italic; color: var(--green-ci); font-weight: 600;">
+                "Une plateforme éducative aux couleurs de la Côte d'Ivoire conçue pour encourager l'excellence académique des élèves."
+            </p>
+        </section>
+
+        <!-- SECTION: Panneau Administrateur -->
+        <section id="section-admin" class="card hidden">
+            <h2>Panneau d'Administration (ZakariaTV)</h2>
+            <br>
+            <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+                <button class="btn btn-green" onclick="showAdminTab('create-concours')">Créer un Concours</button>
+                <button class="btn btn-white" onclick="showAdminTab('view-avis')">Consulter les Avis</button>
+                <button class="btn btn-white" onclick="showAdminTab('view-stats')">Statistiques & Historique</button>
+            </div>
+
+            <!-- Admin Sub-Tab: Créer Concours -->
+            <div id="admin-tab-create-concours">
+                <h3>Nouveau Concours</h3>
+                <form id="form-create-concours" onsubmit="handleCreateConcours(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Titre du Concours *</label>
+                            <input type="text" id="admin-c-title" placeholder="Ex: Evaluation de Histoire-Géo" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Classe Concernée *</label>
+                            <select id="admin-c-classe" required>
+                                <option value="CE2">CE2</option>
+                                <option value="CM1">CM1</option>
+                                <option value="CM2">CM2</option>
+                                <option value="6e">6e</option>
+                                <option value="5e">5e</option>
+                                <option value="4e">4e</option>
+                                <option value="3e" selected>3e</option>
+                                <option value="Seconde">Seconde</option>
+                                <option value="Première">Première</option>
+                                <option value="Terminale">Terminale</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 1rem 0 0.5rem 0;">Question 1 (Exemple simple)</h4>
                     <div class="form-group">
-                        <label class="form-label">Type du Concours</label>
-                        <select id="edit-type" class="form-control">
-                            <option value="Gratuit">Gratuit</option>
-                            <option value="Payant">Payant</option>
+                        <label>Question :</label>
+                        <input type="text" id="admin-q1-text" value="Quelle est la capitale politique de la Côte d'Ivoire ?" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Option A :</label><input type="text" id="admin-q1-a" value="Abidjan" required></div>
+                        <div class="form-group"><label>Option B :</label><input type="text" id="admin-q1-b" value="Yamoussoukro" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Option C :</label><input type="text" id="admin-q1-c" value="Bouaké" required></div>
+                        <div class="form-group"><label>Option D :</label><input type="text" id="admin-q1-d" value="San-Pedro" required></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Réponse Correcte :</label>
+                        <select id="admin-q1-correct">
+                            <option value="A">A</option>
+                            <option value="B" selected>B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Lien de l'image (URL)</label>
-                        <input type="url" id="edit-image" class="form-control" required>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <label class="form-label" style="margin: 0;">Questions du concours (Coller les 10 questions ici)</label>
-                        <button type="button" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.7rem;" onclick="verifyQuestionsText()"><i class="fa-solid fa-magnifying-glass"></i> Vérifier le contenu</button>
-                    </div>
-                    <textarea id="edit-questions-raw" class="form-control" rows="12" style="font-family: monospace; font-size: 0.82rem;" placeholder="Question 1...
-A) Réponse A
-B) Réponse B
-C) Réponse C
-D) Réponse D
-Réponse : B
-
-Question 2...
-..."></textarea>
-                </div>
-
-                <div id="parse-feedback" style="margin-bottom: 0.8rem; font-size: 0.8rem;"></div>
-
-                <button type="submit" class="btn btn-primary btn-block">Enregistrer et Publier le Concours</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modale Participants / Comptes Créés (Admin) -->
-    <div class="modal" id="modal-admin-users">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-users" style="color: var(--accent);"></i> Liste des Participants</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-users')"><i class="fa-solid fa-xmark"></i></button>
+                    <button type="submit" class="btn btn-green">✅ Enregistrer le Concours</button>
+                </form>
             </div>
-            <div style="overflow-x: auto;">
-                <table class="data-table">
+
+            <!-- Admin Sub-Tab: Avis des participants -->
+            <div id="admin-tab-view-avis" class="hidden">
+                <h3>Avis des Participants</h3>
+                <table>
                     <thead>
                         <tr>
-                            <th>Photo</th>
-                            <th>Nom & Prénom</th>
-                            <th>Ville/Pays</th>
-                            <th>WhatsApp</th>
-                            <th>Action</th>
+                            <th>Date</th>
+                            <th>Participant</th>
+                            <th>Avis / Message</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-users-table"></tbody>
+                    <tbody id="admin-avis-table">
+                        <!-- Rempli dynamiquement -->
+                    </tbody>
                 </table>
             </div>
-        </div>
-    </div>
 
-    <!-- Modale Résultats Globaux (Admin) -->
-    <div class="modal" id="modal-admin-results">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-square-poll-vertical" style="color: var(--accent);"></i> Résultats Globaux</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-results')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div style="overflow-x: auto;">
-                <table class="data-table">
+            <!-- Admin Sub-Tab: Statistiques -->
+            <div id="admin-tab-view-stats" class="hidden">
+                <h3>Historique Global & Résultats</h3>
+                <table>
                     <thead>
                         <tr>
                             <th>Participant</th>
                             <th>Concours</th>
-                            <th>Score</th>
+                            <th>Classe Concours</th>
+                            <th>Date Concours</th>
+                            <th>Note /10</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-results-table"></tbody>
+                    <tbody id="admin-stats-table">
+                        <!-- Rempli dynamiquement -->
+                    </tbody>
                 </table>
             </div>
-        </div>
+        </section>
+
     </div>
 
-    <!-- Modale Demandes Mdp (Admin) -->
-    <div class="modal" id="modal-admin-resets">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-key" style="color: var(--accent);"></i> Demandes de Réinitialisation</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-resets')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <p style="font-size: 0.75rem; color: var(--text-sub); margin-bottom: 0.8rem;">Cliquer sur Réinitialiser réinitialise le mot de passe de l'élève par défaut à <strong>5555</strong>.</p>
-            <div id="admin-resets-list"></div>
-        </div>
-    </div>
-
-    <!-- Modale Gestion des Abonnements & Paiements (Admin) -->
-    <div class="modal" id="modal-admin-subscription">
-        <div class="modal-content" style="max-width: 650px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-crown" style="color: var(--accent);"></i> Gestion des Abonnements & Paiements</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-subscription')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div style="overflow-x: auto;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Participant</th>
-                            <th>WhatsApp</th>
-                            <th>Classe</th>
-                            <th>Statut</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-subscriptions-table"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modale Classement -->
-    <div class="modal" id="modal-ranking">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-trophy" style="color: var(--accent);"></i> Classement Général</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-ranking')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="ranking-list"></div>
-        </div>
-    </div>
-
-    <!-- Modale Avis -->
-    <div class="modal" id="modal-review">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-star" style="color: var(--accent);"></i> Donnez votre avis</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-review')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form onsubmit="handleReviewSubmit(event)">
-                <div class="stars-rating" id="star-rating-box">
-                    <i class="fa-solid fa-star active" onclick="setRating(1)"></i>
-                    <i class="fa-solid fa-star active" onclick="setRating(2)"></i>
-                    <i class="fa-solid fa-star active" onclick="setRating(3)"></i>
-                    <i class="fa-solid fa-star active" onclick="setRating(4)"></i>
-                    <i class="fa-solid fa-star active" onclick="setRating(5)"></i>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Votre commentaire</label>
-                    <textarea class="form-control" id="review-comment" rows="3" placeholder="Application excellente !" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Publier mon avis</button>
-            </form>
-
-            <h5 style="margin: 1.2rem 0 0.6rem; color: var(--accent);">Mes avis publiés</h5>
-            <div id="user-my-reviews-list"></div>
-        </div>
-    </div>
-
-    <!-- Modale Historique Élève -->
-    <div class="modal" id="modal-results">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-chart-line" style="color: var(--accent);"></i> Mes Résultats</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-results')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="user-results-history"></div>
-        </div>
-    </div>
-
-    <!-- Notification Toast -->
-    <div class="toast-notification" id="app-toast"></div>
-
-    <!-- =================================================================== -->
-    <!-- LOGIQUE JS COMPLÈTE ET SÉCURISÉE                                    -->
-    <!-- =================================================================== -->
+    <!-- Application JavaScript Logic -->
     <script>
-        const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80";
-
-        // Base de Données LocalStorage
-        const DB = {
-            getContests: () => JSON.parse(localStorage.getItem('ztv_db_contests')) || [
-                {
-                    id: 1,
-                    title: "Histoire - Le Temps et la Société",
-                    category: "Collège",
-                    level: "3e",
-                    type: "Gratuit",
-                    createdAt: "2026-07-30",
-                    createdTime: "10:00",
-                    online: true,
-                    image: "https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=500&q=80",
-                    questions: Array(10).fill({
-                        q: "Quelle est la capitale politique de la Côte d'Ivoire ?",
-                        options: ["Abidjan", "Yamoussoukro", "Bouaké", "San-Pedro"],
-                        answer: 1
-                    })
-                }
-            ],
-            saveContests: (data) => localStorage.setItem('ztv_db_contests', JSON.stringify(data)),
-            
-            getUsers: () => JSON.parse(localStorage.getItem('ztv_db_users')) || [],
-            saveUsers: (data) => localStorage.setItem('ztv_db_users', JSON.stringify(data)),
-            
-            getResults: () => JSON.parse(localStorage.getItem('ztv_db_results')) || [],
-            saveResults: (data) => localStorage.setItem('ztv_db_results', JSON.stringify(data)),
-            
-            getReviews: () => JSON.parse(localStorage.getItem('ztv_db_reviews')) || [],
-            saveReviews: (data) => localStorage.setItem('ztv_db_reviews', JSON.stringify(data)),
-
-            getResets: () => JSON.parse(localStorage.getItem('ztv_db_resets')) || [],
-            saveResets: (data) => localStorage.setItem('ztv_db_resets', JSON.stringify(data)),
-
-            getSubscriptions: () => JSON.parse(localStorage.getItem('ztv_db_subscriptions')) || [],
-            saveSubscriptions: (data) => localStorage.setItem('ztv_db_subscriptions', JSON.stringify(data))
+        // --- BASE DE DONNÉES & ÉTAT GLOBAL (Sauvegardé dans localStorage) ---
+        let appState = {
+            currentUser: null,
+            users: [],
+            concoursList: [],
+            participations: [],
+            avis: []
         };
 
+        // État de la session de quiz en cours
         let currentQuiz = null;
-        let currentQuestionIdx = 0;
-        let selectedOption = null;
-        let score = 0;
+        let currentQuestionIndex = 0;
+        let quizScore = 0;
         let timerInterval = null;
-        let currentRating = 5;
-        let currentUserPhone = localStorage.getItem('ztv_session_user_phone') || null;
+        let timeLeft = 30;
 
-        // Filtres
-        let selectedCategoryFilter = "Tous";
-        let selectedLevelFilter = "Tous";
-
+        // --- INITIALISATION ---
         window.addEventListener('DOMContentLoaded', () => {
-            const uniqueUrl = window.location.origin + window.location.pathname + '?portal=participant';
-            document.getElementById('unique-share-link').value = uniqueUrl;
-
-            updateLevelOptions();
-
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('portal') === 'participant') {
-                showView('participant-auth-view');
-            } else {
-                showView('admin-login-view');
-            }
+            loadState();
+            checkAutoLogin();
         });
 
-        function showToast(message) {
-            const toast = document.getElementById('app-toast');
-            toast.innerHTML = message;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 6000);
+        function saveState() {
+            localStorage.setItem('ztv_app_state', JSON.stringify(appState));
         }
 
-        function showView(viewId) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            const target = document.getElementById(viewId);
-            if (target) target.classList.add('active');
-
-            if (viewId === 'admin-dashboard-view') renderAdminDashboard();
-            if (viewId === 'participant-home-view') renderParticipantHome();
-        }
-
-        function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
-
-        // --- AUTHENTIFICATION & COMPTE PARTICIPANT ---
-        function switchAuthTab(tab) {
-            document.getElementById('participant-login-form').style.display = tab === 'login' ? 'block' : 'none';
-            document.getElementById('participant-register-form').style.display = tab === 'register' ? 'block' : 'none';
-            document.getElementById('tab-login-btn').className = tab === 'login' ? 'btn btn-primary btn-block' : 'btn btn-secondary btn-block';
-            document.getElementById('tab-register-btn').className = tab === 'register' ? 'btn btn-primary btn-block' : 'btn btn-secondary btn-block';
-        }
-
-        function handleParticipantRegister(e) {
-            e.preventDefault();
-            const lastname = document.getElementById('part-reg-lastname').value.trim();
-            const firstname = document.getElementById('part-reg-firstname').value.trim();
-            const city = document.getElementById('part-reg-city').value.trim();
-            const country = document.getElementById('part-reg-country').value.trim();
-            const phone = document.getElementById('part-reg-phone').value.trim();
-            const avatar = document.getElementById('part-reg-avatar').value || DEFAULT_AVATAR;
-            const pass = document.getElementById('part-reg-pass').value;
-
-            const users = DB.getUsers();
-            if (users.find(u => u.phone === phone)) {
-                alert("Un compte existe déjà avec ce numéro WhatsApp.");
-                return;
-            }
-
-            const newUser = {
-                lastname, firstname, name: `${firstname} ${lastname}`, city, country, phone, pass, avatar,
-                subscription: { active: false, expiresAt: null }
-            };
-
-            users.push(newUser);
-            DB.saveUsers(users);
-            currentUserPhone = phone;
-            localStorage.setItem('ztv_session_user_phone', phone);
-            showView('participant-home-view');
-        }
-
-        function handleParticipantLogin(e) {
-            e.preventDefault();
-            const phone = document.getElementById('part-login-phone').value.trim();
-            const pass = document.getElementById('part-login-pass').value;
-
-            const users = DB.getUsers();
-            const user = users.find(u => u.phone === phone && u.pass === pass);
-
-            if (user) {
-                currentUserPhone = phone;
-                localStorage.setItem('ztv_session_user_phone', phone);
-                showView('participant-home-view');
+        function loadState() {
+            const saved = localStorage.getItem('ztv_app_state');
+            if (saved) {
+                appState = JSON.parse(saved);
             } else {
-                alert("Numéro WhatsApp ou mot de passe incorrect.");
-            }
-        }
-
-        function logoutUser() {
-            closeModal('modal-profile');
-            currentUserPhone = null;
-            localStorage.removeItem('ztv_session_user_phone');
-            showView('participant-auth-view');
-        }
-
-        // --- MOT DE PASSE OUBLIÉ ---
-        let foundUserForReset = null;
-
-        function openForgotPasswordModal() {
-            document.getElementById('forgot-step-1').style.display = 'block';
-            document.getElementById('forgot-step-2').style.display = 'none';
-            document.getElementById('forgot-phone-input').value = '';
-            document.getElementById('modal-forgot-password').classList.add('active');
-        }
-
-        function verifyForgotPhone() {
-            const phone = document.getElementById('forgot-phone-input').value.trim();
-            const users = DB.getUsers();
-            foundUserForReset = users.find(u => u.phone === phone);
-
-            if (foundUserForReset) {
-                document.getElementById('forgot-found-lastname').innerText = foundUserForReset.lastname || '';
-                document.getElementById('forgot-found-firstname').innerText = foundUserForReset.firstname || foundUserForReset.name;
-                document.getElementById('forgot-found-city').innerText = foundUserForReset.city || 'N/A';
-                document.getElementById('forgot-found-country').innerText = foundUserForReset.country || 'N/A';
-                
-                document.getElementById('forgot-step-1').style.display = 'none';
-                document.getElementById('forgot-step-2').style.display = 'block';
-            } else {
-                alert("Aucun compte trouvé avec ce numéro WhatsApp.");
-            }
-        }
-
-        function confirmResetRequest() {
-            if (foundUserForReset) {
-                const resets = DB.getResets();
-                resets.push({
-                    phone: foundUserForReset.phone,
-                    name: `${foundUserForReset.firstname || ''} ${foundUserForReset.lastname || ''}`,
-                    date: new Date().toLocaleDateString('fr-FR')
-                });
-                DB.saveResets(resets);
-                alert("Votre demande de réinitialisation a été envoyée à l'administrateur.");
-                closeModal('modal-forgot-password');
-            }
-        }
-
-        // --- MODIFICATION MOT DE PASSE EN PROFIL ---
-        function handleChangePassword(e) {
-            e.preventDefault();
-            const curr = document.getElementById('pass-curr').value;
-            const newP = document.getElementById('pass-new').value;
-            const conf = document.getElementById('pass-conf').value;
-
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone);
-
-            if (u) {
-                if (u.pass !== curr) {
-                    alert("Mot de passe actuel incorrect.");
-                    return;
-                }
-                if (newP !== conf) {
-                    alert("Le nouveau mot de passe et sa confirmation ne correspondent pas.");
-                    return;
-                }
-
-                u.pass = newP;
-                DB.saveUsers(users);
-                alert("Mot de passe modifié avec succès !");
-                closeModal('modal-profile');
-            }
-        }
-
-        // --- ACCUEIL CONCOURS & FILTRES ---
-        function setCategoryFilter(cat) {
-            selectedCategoryFilter = cat;
-            selectedLevelFilter = "Tous";
-
-            document.getElementById('filter-cat-all').className = cat === 'Tous' ? 'btn btn-secondary active' : 'btn btn-secondary';
-            document.getElementById('filter-cat-primaire').className = cat === 'Primaire' ? 'btn btn-secondary active' : 'btn btn-secondary';
-            document.getElementById('filter-cat-college').className = cat === 'Collège' ? 'btn btn-secondary active' : 'btn btn-secondary';
-
-            const subBar = document.getElementById('subcategories-filter-bar');
-            subBar.innerHTML = '';
-
-            if (cat === 'Primaire') {
-                subBar.style.display = 'flex';
-                ['Tous', 'CE2', 'CM1', 'CM2'].forEach(lvl => {
-                    subBar.innerHTML += `<button class="btn btn-secondary ${selectedLevelFilter === lvl ? 'active' : ''}" onclick="setLevelFilter('${lvl}')">${lvl}</button>`;
-                });
-            } else if (cat === 'Collège') {
-                subBar.style.display = 'flex';
-                ['Tous', '6e', '5e', '4e', '3e', 'Seconde', 'Première', 'Terminale'].forEach(lvl => {
-                    subBar.innerHTML += `<button class="btn btn-secondary ${selectedLevelFilter === lvl ? 'active' : ''}" onclick="setLevelFilter('${lvl}')">${lvl}</button>`;
-                });
-            } else {
-                subBar.style.display = 'none';
-            }
-
-            renderParticipantHome();
-        }
-
-        function setLevelFilter(lvl) {
-            selectedLevelFilter = lvl;
-            const subBar = document.getElementById('subcategories-filter-bar');
-            subBar.querySelectorAll('button').forEach(btn => {
-                btn.className = btn.innerText === lvl ? 'btn btn-secondary active' : 'btn btn-secondary';
-            });
-            renderParticipantHome();
-        }
-
-        function renderParticipantHome() {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève", phone: "", avatar: DEFAULT_AVATAR };
-            
-            document.getElementById('user-display-name').innerText = u.name;
-            document.getElementById('home-user-avatar').src = u.avatar || DEFAULT_AVATAR;
-
-            // Statut Abonnement
-            const isSubActive = checkUserSubscription(u);
-            const statusBadge = document.getElementById('user-sub-status-badge');
-            statusBadge.innerText = isSubActive ? "STATUT : PREMIUM ACTIF" : "STATUT : GRATUIT";
-            statusBadge.style.background = isSubActive ? "var(--accent)" : "var(--card-alt)";
-            statusBadge.style.color = isSubActive ? "#000" : "#FFF";
-
-            renderTop5();
-
-            const list = document.getElementById('participant-contest-list');
-            list.innerHTML = '';
-            
-            let contests = DB.getContests().filter(c => c.online);
-
-            if (selectedCategoryFilter !== 'Tous') {
-                contests = contests.filter(c => c.category === selectedCategoryFilter);
-            }
-            if (selectedLevelFilter !== 'Tous') {
-                contests = contests.filter(c => c.level === selectedLevelFilter);
-            }
-
-            if (contests.length === 0) {
-                list.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 2rem; background: var(--card-bg); border-radius:10px; border:1px solid var(--border);">
-                    <p style="color:var(--text-sub); font-size:0.9rem;">«« Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard. »»</p>
-                </div>`;
-                return;
-            }
-
-            contests.forEach(c => {
-                const isPaid = c.type === 'Payant';
-                list.innerHTML += `
-                    <div class="contest-card">
-                        <img src="${c.image}" alt="${c.title}" style="width:100%; height:120px; object-fit:cover; border-radius:10px; margin-bottom:8px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-size:0.7rem; color:var(--accent); font-weight:700;">${c.category} • ${c.level || ''}</span>
-                            <span class="badge ${isPaid ? 'badge-paid' : 'badge-free'}">${c.type}</span>
-                        </div>
-                        <div class="contest-title">${c.title}</div>
-                        <button class="btn btn-primary btn-block" onclick="startWaitingCountdown(${c.id})">
-                            Participer <i class="fa-solid fa-play"></i>
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        function checkUserSubscription(user) {
-            if (!user || !user.subscription || !user.subscription.active) return false;
-            if (new Date(user.subscription.expiresAt) < new Date()) {
-                user.subscription.active = false;
-                DB.saveUsers(DB.getUsers());
-                return false;
-            }
-            return true;
-        }
-
-        // --- SYSTEME DE CRÉATION DE CONCOURS PAR ANALYSE AUTOMATIQUE (10 QUESTIONS) ---
-        function updateLevelOptions() {
-            const cat = document.getElementById('edit-category').value;
-            const lvlSelect = document.getElementById('edit-level');
-            lvlSelect.innerHTML = '';
-
-            if (cat === 'Primaire') {
-                ['CE2', 'CM1', 'CM2'].forEach(l => lvlSelect.innerHTML += `<option value="${l}">${l}</option>`);
-            } else {
-                ['6e', '5e', '4e', '3e', 'Seconde', 'Première', 'Terminale'].forEach(l => lvlSelect.innerHTML += `<option value="${l}">${l}</option>`);
-            }
-        }
-
-        function verifyQuestionsText() {
-            const rawText = document.getElementById('edit-questions-raw').value.trim();
-            const feedback = document.getElementById('parse-feedback');
-
-            const parseResult = parseRawQuestions(rawText);
-            if (parseResult.success) {
-                feedback.innerHTML = `<span style="color:var(--success); font-weight:700;">«« Toutes les questions sont valides et prêtes à être publiées. »» (${parseResult.questions.length} questions détectées)</span>`;
-            } else {
-                feedback.innerHTML = `<span style="color:var(--danger); font-weight:700;">Erreur : ${parseResult.error}</span>`;
-            }
-        }
-
-        function parseRawQuestions(text) {
-            if (!text) return { success: false, error: "Le champ des questions est vide." };
-
-            const blocks = text.split(/\n\s*\n/).filter(b => b.trim().length > 0);
-            if (blocks.length !== 10) {
-                return { success: false, error: `Exactement 10 questions requises. Vous en avez fourni ${blocks.length}.` };
-            }
-
-            const questions = [];
-
-            for (let i = 0; i < blocks.length; i++) {
-                const lines = blocks[i].split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                if (lines.length < 6) {
-                    return { success: false, error: `Question ${i + 1} incomplete. Format requis : Intitulé, A), B), C), D) et Réponse : X.` };
-                }
-
-                const qText = lines[0];
-                let optA = "", optB = "", optC = "", optD = "", answer = -1;
-
-                lines.forEach(line => {
-                    if (line.startsWith("A)")) optA = line.replace("A)", "").trim();
-                    if (line.startsWith("B)")) optB = line.replace("B)", "").trim();
-                    if (line.startsWith("C)")) optC = line.replace("C)", "").trim();
-                    if (line.startsWith("D)")) optD = line.replace("D)", "").trim();
-                    if (line.toLowerCase().includes("réponse") || line.toLowerCase().includes("reponse")) {
-                        const ansChar = line.split(":")[1]?.trim().toUpperCase();
-                        if (ansChar === "A") answer = 0;
-                        if (ansChar === "B") answer = 1;
-                        if (ansChar === "C") answer = 2;
-                        if (ansChar === "D") answer = 3;
+                // Données de démonstration par défaut
+                appState.concoursList = [
+                    {
+                        id: 'c1',
+                        title: 'Concours Révision Générale Histoire & Géo',
+                        classe: '3e',
+                        date: new Date().toLocaleDateString('fr-FR'),
+                        questions: [
+                            {
+                                text: "Quelle est la capitale politique et administrative de la Côte d'Ivoire ?",
+                                options: { A: "Abidjan", B: "Yamoussoukro", C: "Bouaké", D: "Korhogo" },
+                                correct: "B"
+                            },
+                            {
+                                text: "En quelle année la Côte d'Ivoire a-t-elle obtenu son indépendance ?",
+                                options: { A: "1958", B: "1960", C: "1962", D: "1975" },
+                                correct: "B"
+                            }
+                        ]
                     }
-                });
-
-                if (!optA || !optB || !optC || !optD || answer === -1) {
-                    return { success: false, error: `Erreur à la Question ${i + 1}. Vérifiez les options A, B, C, D et le champ Réponse : X.` };
-                }
-
-                questions.push({ q: qText, options: [optA, optB, optC, optD], answer });
+                ];
+                saveState();
             }
-
-            return { success: true, questions };
         }
 
-        function handleSaveContest(e) {
-            e.preventDefault();
-            const rawText = document.getElementById('edit-questions-raw').value.trim();
-            const parseResult = parseRawQuestions(rawText);
+        // --- NOTIFICATION TOAST ---
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `✅ ${message}`;
+            container.appendChild(toast);
 
-            if (!parseResult.success) {
-                alert("Erreur de validation des questions :\n" + parseResult.error);
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.4s ease-out forwards';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // --- GESTION NAVIGATION & VUES ---
+        function showSection(sectionId) {
+            // Arrêter la voix si active
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            clearInterval(timerInterval);
+
+            const sections = ['section-register', 'section-login', 'section-dashboard', 'section-list-concours', 'section-quiz', 'section-top5', 'section-creator', 'section-admin'];
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            if (sectionId === 'section-top5') renderTop5();
+            if (sectionId === 'section-list-concours') renderConcoursList();
+        }
+
+        // --- GESTION CONNEXION AUTOMATIQUE & AUTH ---
+        function checkAutoLogin() {
+            const savedUser = localStorage.getItem('ztv_logged_user');
+            if (savedUser) {
+                appState.currentUser = JSON.parse(savedUser);
+                updateAuthUI();
+                showDashboard();
+            } else {
+                showSection('section-login');
+            }
+        }
+
+        function updateAuthUI() {
+            const authBtns = document.getElementById('auth-buttons');
+            const userBtns = document.getElementById('user-buttons');
+            const adminBtn = document.getElementById('btn-admin-panel');
+
+            if (appState.currentUser) {
+                authBtns.classList.add('hidden');
+                userBtns.classList.remove('hidden');
+                if (appState.currentUser.isAdmin) {
+                    adminBtn.style.display = 'inline-block';
+                } else {
+                    adminBtn.style.display = 'none';
+                }
+            } else {
+                authBtns.classList.remove('hidden');
+                userBtns.classList.add('hidden');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const newUser = {
+                id: 'u_' + Date.now(),
+                nom: document.getElementById('reg-nom').value.trim(),
+                prenom: document.getElementById('reg-prenom').value.trim(),
+                pays: document.getElementById('reg-pays').value.trim(),
+                ville: document.getElementById('reg-ville').value.trim(),
+                ecole: document.getElementById('reg-ecole').value.trim(),
+                classe: document.getElementById('reg-classe').value,
+                whatsapp: document.getElementById('reg-whatsapp').value.trim(),
+                password: document.getElementById('reg-password').value,
+                photo: document.getElementById('reg-photo').value.trim() || 'https://i.postimg.cc/Ss5J8Kwk/file-000000009dc8724699d54da957936110.png',
+                isAdmin: false
+            };
+
+            appState.users.push(newUser);
+            appState.currentUser = newUser;
+            localStorage.setItem('ztv_logged_user', JSON.stringify(newUser));
+            saveState();
+
+            showToast("Compte créé avec succès.");
+            updateAuthUI();
+            showDashboard();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('login-id').value.trim();
+            const passInput = document.getElementById('login-password').value.trim();
+
+            // Identifiants Administrateur
+            if (idInput === 'ZakariaTV' && passInput === '55250031') {
+                const adminUser = { nom: 'ZakariaTV', prenom: 'Admin', isAdmin: true };
+                appState.currentUser = adminUser;
+                localStorage.setItem('ztv_logged_user', JSON.stringify(adminUser));
+                showToast("Connexion administrateur réussie.");
+                updateAuthUI();
+                showSection('section-admin');
                 return;
             }
 
-            const id = document.getElementById('edit-contest-id').value;
-            const contests = DB.getContests();
-            const now = new Date();
-
-            const contestData = {
-                id: id ? parseInt(id) : Date.now(),
-                title: document.getElementById('edit-title').value,
-                category: document.getElementById('edit-category').value,
-                level: document.getElementById('edit-level').value,
-                type: document.getElementById('edit-type').value,
-                createdAt: now.toISOString().split('T')[0],
-                createdTime: now.toTimeString().split(' ')[0].substring(0, 5),
-                image: document.getElementById('edit-image').value,
-                online: true,
-                questions: parseResult.questions
-            };
-
-            if (id) {
-                const idx = contests.findIndex(c => c.id == id);
-                if (idx !== -1) contests[idx] = contestData;
+            // Participant standard
+            const user = appState.users.find(u => (u.whatsapp === idInput || u.nom === idInput) && u.password === passInput);
+            if (user) {
+                appState.currentUser = user;
+                localStorage.setItem('ztv_logged_user', JSON.stringify(user));
+                showToast("Connexion réussie.");
+                updateAuthUI();
+                showDashboard();
             } else {
-                contests.push(contestData);
+                alert("Identifiants incorrects. Veuillez réessayer.");
+            }
+        }
+
+        function logout() {
+            appState.currentUser = null;
+            localStorage.removeItem('ztv_logged_user');
+            updateAuthUI();
+            showToast("Déconnexion réussie.");
+            showSection('section-login');
+        }
+
+        // --- DASHBOARD PARTICIPANT ---
+        function showDashboard() {
+            if (!appState.currentUser) return showSection('section-login');
+            if (appState.currentUser.isAdmin) return showSection('section-admin');
+
+            showSection('section-dashboard');
+
+            document.getElementById('dash-welcome').innerText = `Bienvenue, ${appState.currentUser.prenom} ${appState.currentUser.nom}`;
+            document.getElementById('dash-info-user').innerText = `Établissement : ${appState.currentUser.ecole} | Classe : ${appState.currentUser.classe} | Ville : ${appState.currentUser.ville}`;
+
+            // Calculs résultats
+            const myResults = appState.participations.filter(p => p.userId === appState.currentUser.id);
+            document.getElementById('dash-count-concours').innerText = myResults.length;
+
+            let totalPoints = 0;
+            const tableBody = document.getElementById('dash-table-results');
+            tableBody.innerHTML = '';
+
+            myResults.forEach(res => {
+                totalPoints += res.note;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${res.concoursTitle}</strong></td>
+                    <td><span class="badge badge-orange">${res.concoursClasse}</span></td>
+                    <td>${res.date}</td>
+                    <td><strong>${res.note}/10</strong></td>
+                    <td>${res.rang || 'N/A'}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById('dash-total-points').innerText = totalPoints;
+        }
+
+        // --- CONCOURS & QUIZ ---
+        function renderConcoursList() {
+            const container = document.getElementById('container-concours-cards');
+            container.innerHTML = '';
+
+            if (appState.concoursList.length === 0) {
+                container.innerHTML = '<p>Aucun concours disponible pour le moment.</p>';
+                return;
             }
 
-            DB.saveContests(contests);
-            closeModal('modal-edit-contest');
-            renderAdminDashboard();
-            alert("Concours enregistré et publié avec succès !");
+            appState.concoursList.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.borderTop = '4px solid var(--orange-ci)';
+                card.innerHTML = `
+                    <h3>${c.title}</h3>
+                    <p style="margin: 0.5rem 0;">
+                        <span class="badge badge-orange">Classe : ${c.classe}</span>
+                        <span class="badge badge-green">Date : ${c.date}</span>
+                    </p>
+                    <button class="btn btn-green" onclick="startQuiz('${c.id}')">Démarrer le Concours</button>
+                `;
+                container.appendChild(card);
+            });
         }
 
-        // --- DEROULEMENT DU QUIZ (10 SECONDES + LECTURE VOCALE COMPLÈTE) ---
-        function startWaitingCountdown(id) {
-            currentQuiz = DB.getContests().find(c => c.id === id);
-            
-            if (currentQuiz.type === 'Payant') {
-                const users = DB.getUsers();
-                const u = users.find(item => item.phone === currentUserPhone);
-                if (!checkUserSubscription(u)) {
-                    alert("Ce concours est Payant. Veuillez souscrire à un abonnement Premium pour y accéder.");
-                    openBuySubscriptionModal();
-                    return;
-                }
-            }
+        function startQuiz(concoursId) {
+            currentQuiz = appState.concoursList.find(c => c.id === concoursId);
+            if (!currentQuiz) return;
 
-            showView('participant-waiting-view');
+            currentQuestionIndex = 0;
+            quizScore = 0;
 
-            let timeLeft = 20;
-            const timerEl = document.getElementById('wait-countdown');
-            timerEl.innerText = timeLeft;
+            document.getElementById('quiz-title').innerText = currentQuiz.title;
+            document.getElementById('quiz-classe-badge').innerText = `Classe : ${currentQuiz.classe}`;
+            document.getElementById('quiz-date-badge').innerText = `Date : ${currentQuiz.date}`;
 
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.innerText = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    launchQuiz();
-                }
-            }, 1000);
-        }
-
-        function cancelWaiting() {
-            clearInterval(timerInterval);
-            showView('participant-home-view');
-        }
-
-        function launchQuiz() {
-            currentQuestionIdx = 0;
-            score = 0;
-            showView('participant-quiz-view');
+            showSection('section-quiz');
             loadQuestion();
         }
 
         function loadQuestion() {
             clearInterval(timerInterval);
-            selectedOption = null;
+            const question = currentQuiz.questions[currentQuestionIndex];
+            
+            document.getElementById('quiz-question-num').innerText = `Question ${currentQuestionIndex + 1}/${currentQuiz.questions.length}`;
+            document.getElementById('quiz-question-text').innerText = question.text;
 
-            const totalQ = currentQuiz.questions.length;
-            const qData = currentQuiz.questions[currentQuestionIdx];
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
 
-            document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIdx + 1} / ${totalQ}`;
-            document.getElementById('quiz-question-text').innerText = qData.q;
-
-            const optionsBox = document.getElementById('quiz-options-container');
-            optionsBox.innerHTML = '';
-            const labels = ['A', 'B', 'C', 'D'];
-
-            qData.options.forEach((opt, idx) => {
-                optionsBox.innerHTML += `
-                    <div class="option-box" id="opt-${idx}" onclick="selectOption(${idx})">
-                        <span><strong>${labels[idx]})</strong> ${opt}</span>
-                        <i class="fa-regular fa-circle"></i>
-                    </div>
-                `;
+            ['A', 'B', 'C', 'D'].forEach(key => {
+                if (question.options[key]) {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = `${key}) ${question.options[key]}`;
+                    btn.onclick = () => submitAnswer(key);
+                    optionsContainer.appendChild(btn);
+                }
             });
 
-            // Chronomètre rouge de 10 secondes
-            let timeLeft = 10;
-            const timerEl = document.getElementById('question-timer');
-            timerEl.innerText = timeLeft;
-
+            // Recommencer Chronomètre 30s
+            timeLeft = 30;
+            document.getElementById('timer-display').innerText = timeLeft;
             timerInterval = setInterval(() => {
                 timeLeft--;
-                timerEl.innerText = timeLeft;
+                document.getElementById('timer-display').innerText = timeLeft;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    submitAnswer();
+                    submitAnswer(null); // Temps écoulé
                 }
             }, 1000);
+
+            // Lecture Vocale Automatique
+            readVoiceCurrentQuestion();
         }
 
-        function selectOption(idx) {
-            selectedOption = idx;
-            document.querySelectorAll('.option-box').forEach((btn, i) => {
-                btn.className = i === idx ? 'option-box selected' : 'option-box';
-                btn.querySelector('i').className = i === idx ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle';
-            });
+        function readVoiceCurrentQuestion() {
+            if (!('speechSynthesis' in window)) return;
+
+            window.speechSynthesis.cancel(); // Arrêter toute lecture précédente
+            const q = currentQuiz.questions[currentQuestionIndex];
+            
+            let speechText = `Question : ${q.text}. `;
+            if (q.options.A) speechText += `Option A : ${q.options.A}. `;
+            if (q.options.B) speechText += `Option B : ${q.options.B}. `;
+            if (q.options.C) speechText += `Option C : ${q.options.C}. `;
+            if (q.options.D) speechText += `Option D : ${q.options.D}. `;
+
+            const utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'fr-FR';
+            utterance.rate = 1.0;
+            window.speechSynthesis.speak(utterance);
         }
 
-        function submitAnswer() {
+        function submitAnswer(selectedKey) {
             clearInterval(timerInterval);
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 
-            const qData = currentQuiz.questions[currentQuestionIdx];
-            if (selectedOption === qData.answer) score++;
+            const q = currentQuiz.questions[currentQuestionIndex];
+            if (selectedKey === q.correct) {
+                quizScore += 1;
+            }
 
-            currentQuestionIdx++;
-            if (currentQuestionIdx < currentQuiz.questions.length) {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
                 loadQuestion();
             } else {
-                const results = DB.getResults();
-                const users = DB.getUsers();
-                const u = users.find(item => item.phone === currentUserPhone) || { name: "Anonyme" };
-
-                results.unshift({
-                    userName: u.name,
-                    userPhone: currentUserPhone,
-                    contestTitle: currentQuiz.title,
-                    score: score,
-                    maxScore: currentQuiz.questions.length,
-                    date: new Date().toLocaleDateString('fr-FR')
-                });
-                DB.saveResults(results);
-
-                document.getElementById('finish-score-display').innerText = `${score} / ${currentQuiz.questions.length}`;
-                showView('participant-finish-view');
+                finishQuiz();
             }
         }
 
-        function playAudioQuestion() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const qData = currentQuiz.questions[currentQuestionIdx];
-                const labels = ['Réponse A', 'Réponse B', 'Réponse C', 'Réponse D'];
-                
-                let textToRead = qData.q + ". ";
-                qData.options.forEach((opt, idx) => {
-                    textToRead += `${labels[idx]} : ${opt}. `;
-                });
+        function finishQuiz() {
+            // Note toujours ramenée sur 10
+            const finalNoteSur10 = Math.round((quizScore / currentQuiz.questions.length) * 10);
 
-                const utterance = new SpeechSynthesisUtterance(textToRead);
-                utterance.lang = 'fr-FR';
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        function confirmExitQuiz() {
-            if (confirm("Voulez-vous vraiment quitter le concours ?")) {
-                clearInterval(timerInterval);
-                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-                showView('participant-home-view');
-            }
-        }
-
-        // --- ABONNEMENT PARTICIPANT (PROCÉDURE COMPLÈTE) ---
-        function openBuySubscriptionModal() {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone);
-            if (u) {
-                document.getElementById('sub-req-name').value = u.name;
-                document.getElementById('sub-req-phone').value = u.phone;
-            }
-            document.getElementById('modal-buy-subscription').classList.add('active');
-        }
-
-        function handleSubscriptionRequest(e) {
-            e.preventDefault();
-            const name = document.getElementById('sub-req-name').value;
-            const phone = document.getElementById('sub-req-phone').value;
-            const userClass = document.getElementById('sub-req-class').value;
-
-            const subs = DB.getSubscriptions();
-            const now = new Date();
-
-            subs.push({
-                id: Date.now(),
-                name, phone, class: userClass,
-                status: 'EN_ATTENTE',
-                date: now.toLocaleDateString('fr-FR'),
-                time: now.toTimeString().split(' ')[0].substring(0, 5)
-            });
-
-            DB.saveSubscriptions(subs);
-            closeModal('modal-buy-subscription');
-
-            showToast(`«« Votre demande a été enregistrée avec succès. Vous serez contacté au numéro WhatsApp que vous avez renseigné afin de finaliser votre paiement. Merci d'utiliser notre application et bonne révision ! »»`);
-        }
-
-        // --- ADMINISTRATION COMPLÈTE ---
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            if (document.getElementById('admin-user').value === 'admin' && document.getElementById('admin-pass').value === 'admin') {
-                showView('admin-dashboard-view');
-            } else {
-                alert("Identifiants administration incorrects.");
-            }
-        }
-
-        function renderAdminDashboard() {
-            const contests = DB.getContests();
-            const users = DB.getUsers();
-            const results = DB.getResults();
-            const resets = DB.getResets();
-            const subs = DB.getSubscriptions();
-
-            document.getElementById('stat-contests').innerText = contests.length;
-            document.getElementById('stat-users').innerText = users.length;
-            document.getElementById('stat-participations').innerText = results.length;
-            document.getElementById('stat-resets').innerText = resets.length;
-            
-            document.getElementById('users-count-badge').innerText = users.length;
-            document.getElementById('reset-badge-count').innerText = resets.length;
-            document.getElementById('sub-badge-count').innerText = subs.filter(s => s.status === 'EN_ATTENTE').length;
-
-            const list = document.getElementById('admin-contest-list');
-            list.innerHTML = '';
-            contests.forEach(c => {
-                const participantsCount = results.filter(r => r.contestTitle === c.title).length;
-                list.innerHTML += `
-                    <div class="contest-card">
-                        <img src="${c.image}" alt="${c.title}" style="width:100%; height:110px; object-fit:cover; border-radius:10px; margin-bottom:8px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-size:0.7rem; color:var(--accent); font-weight:700;">${c.category} (${c.level || ''})</span>
-                            <span class="badge ${c.online ? 'badge-online' : 'badge-offline'}">${c.online ? 'En ligne' : 'Masqué'}</span>
-                        </div>
-                        <div class="contest-title">${c.title}</div>
-                        <div style="font-size:0.75rem; color:var(--text-sub); margin-bottom:6px;">
-                            Participants : <strong>${participantsCount}</strong>
-                        </div>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px;">
-                            <button class="btn btn-secondary" style="padding:4px;" onclick="toggleContestStatus(${c.id})">${c.online ? 'Masquer' : 'Publier'}</button>
-                            <button class="btn btn-danger" style="padding:4px;" onclick="deleteContest(${c.id})"><i class="fa-solid fa-trash"></i> Supprimer</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function openCreateContestModal() {
-            document.getElementById('edit-contest-id').value = '';
-            document.getElementById('edit-title').value = '';
-            document.getElementById('edit-image').value = 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80';
-            document.getElementById('edit-questions-raw').value = '';
-            document.getElementById('parse-feedback').innerHTML = '';
-            updateLevelOptions();
-            document.getElementById('modal-edit-contest').classList.add('active');
-        }
-
-        function toggleContestStatus(id) {
-            const contests = DB.getContests();
-            const c = contests.find(item => item.id === id);
-            if (c) {
-                c.online = !c.online;
-                DB.saveContests(contests);
-                renderAdminDashboard();
-            }
-        }
-
-        function deleteContest(id) {
-            if (confirm("Voulez-vous supprimer ce concours ?")) {
-                DB.saveContests(DB.getContests().filter(c => c.id !== id));
-                renderAdminDashboard();
-            }
-        }
-
-        function openAdminUsersModal() {
-            const users = DB.getUsers();
-            document.getElementById('admin-users-table').innerHTML = users.map(u => `
-                <tr>
-                    <td><img src="${u.avatar || DEFAULT_AVATAR}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;"></td>
-                    <td><strong>${u.name}</strong></td>
-                    <td>${u.city || ''} (${u.country || ''})</td>
-                    <td>${u.phone}</td>
-                    <td><button class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="deleteUser('${u.phone}')">Supprimer</button></td>
-                </tr>
-            `).join('') || '<tr><td colspan="5">Aucun participant inscrit.</td></tr>';
-            document.getElementById('modal-admin-users').classList.add('active');
-        }
-
-        function deleteUser(phone) {
-            if (confirm("Supprimer ce participant ?")) {
-                DB.saveUsers(DB.getUsers().filter(u => u.phone !== phone));
-                openAdminUsersModal();
-                renderAdminDashboard();
-            }
-        }
-
-        function openAdminResultsModal() {
-            const results = DB.getResults();
-            document.getElementById('admin-results-table').innerHTML = results.map(r => `
-                <tr>
-                    <td><strong>${r.userName}</strong></td>
-                    <td>${r.contestTitle}</td>
-                    <td><strong style="color:var(--accent);">${r.score} / ${r.maxScore || 10}</strong></td>
-                </tr>
-            `).join('') || '<tr><td colspan="3">Aucun résultat.</td></tr>';
-            document.getElementById('modal-admin-results').classList.add('active');
-        }
-
-        function openAdminResetsModal() {
-            const resets = DB.getResets();
-            document.getElementById('admin-resets-list').innerHTML = resets.map((r, i) => `
-                <div style="background:var(--card-alt); padding:8px; border-radius:6px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem;">
-                    <div>Demande de : <strong>${r.name}</strong> (${r.phone})</div>
-                    <button class="btn btn-success" style="padding:2px 8px; font-size:0.75rem;" onclick="processResetPassword('${r.phone}', ${i})">Réinitialiser (5555)</button>
-                </div>
-            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucune demande de réinitialisation.</p>';
-            document.getElementById('modal-admin-resets').classList.add('active');
-        }
-
-        function processResetPassword(phone, idx) {
-            const users = DB.getUsers();
-            const u = users.find(user => user.phone === phone);
-            if (u) {
-                u.pass = "5555";
-                DB.saveUsers(users);
-            }
-            const resets = DB.getResets();
-            resets.splice(idx, 1);
-            DB.saveResets(resets);
-            openAdminResetsModal();
-            renderAdminDashboard();
-            alert(`Mot de passe réinitialisé à : 5555`);
-        }
-
-        function openAdminSubscriptionModal() {
-            const subs = DB.getSubscriptions();
-            document.getElementById('admin-subscriptions-table').innerHTML = subs.map((s, i) => {
-                const messageWA = encodeURIComponent(`Bonjour ${s.name}, nous avons bien reçu votre demande d'abonnement. Pour activer votre compte pendant un mois, merci d'effectuer le dépôt via Wave, Orange Money, MTN Mobile Money ou tout autre service Mobile Money au numéro 05 85 97 19 41, puis de nous envoyer le reçu de paiement sur WhatsApp.`);
-                return `
-                <tr>
-                    <td><strong>${s.name}</strong></td>
-                    <td>${s.phone}</td>
-                    <td>${s.class}</td>
-                    <td><span class="badge ${s.status === 'ACTIF' ? 'badge-online' : 'badge-offline'}">${s.status}</span></td>
-                    <td style="display:flex; gap:4px;">
-                        <a class="btn btn-secondary" style="padding:2px 6px; font-size:0.7rem; background:#25D366; color:#000;" href="https://wa.me/${s.phone.replace(/[^0-9]/g,'')}?text=${messageWA}" target="_blank"><i class="fa-brands fa-whatsapp"></i> Contacter</a>
-                        ${s.status === 'EN_ATTENTE' ? `<button class="btn btn-success" style="padding:2px 6px; font-size:0.7rem;" onclick="activateSubscription(${i})">Activer</button>` : ''}
-                    </td>
-                </tr>
-            `}).join('') || '<tr><td colspan="5">Aucune demande d\'abonnement.</td></tr>';
-            document.getElementById('modal-admin-subscription').classList.add('active');
-        }
-
-        function activateSubscription(subIdx) {
-            const subs = DB.getSubscriptions();
-            const sub = subs[subIdx];
-            if (!sub) return;
-
-            sub.status = 'ACTIF';
-            DB.saveSubscriptions(subs);
-
-            const users = DB.getUsers();
-            const u = users.find(user => user.phone === sub.phone);
-            if (u) {
-                const expiry = new Date();
-                expiry.setDate(expiry.getDate() + 30);
-                u.subscription = { active: true, expiresAt: expiry.toISOString() };
-                DB.saveUsers(users);
+            if (appState.currentUser && !appState.currentUser.isAdmin) {
+                const participation = {
+                    id: 'p_' + Date.now(),
+                    userId: appState.currentUser.id,
+                    userName: `${appState.currentUser.nom} ${appState.currentUser.prenom}`,
+                    userSchool: appState.currentUser.ecole,
+                    userVille: appState.currentUser.ville,
+                    userClasse: appState.currentUser.classe,
+                    concoursTitle: currentQuiz.title,
+                    concoursClasse: currentQuiz.classe,
+                    date: new Date().toLocaleDateString('fr-FR'),
+                    note: finalNoteSur10
+                };
+                appState.participations.push(participation);
+                saveState();
             }
 
-            openAdminSubscriptionModal();
-            alert(`Abonnement activé pour 30 jours pour ${sub.name}.`);
+            showToast(`Concours terminé ! Votre note : ${finalNoteSur10}/10`);
+            showDashboard();
         }
 
-        function resetAllData() {
-            if (confirm("⚠️ Réinitialiser toutes les données de l'application ?")) {
-                localStorage.clear();
-                alert("Données réinitialisées.");
-                location.reload();
-            }
-        }
-
-        function copyUniqueLink() {
-            const copyText = document.getElementById("unique-share-link");
-            copyText.select();
-            document.execCommand("copy");
-            alert("Lien unique copié !");
-        }
-
-        // --- AUTRES MODALES PARTICIPANT ---
-        function openProfileModal() {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone);
-            if (!u) return;
-
-            document.getElementById('prof-lastname').innerText = u.lastname || '';
-            document.getElementById('prof-firstname').innerText = u.firstname || u.name;
-            document.getElementById('prof-city').innerText = u.city || 'Non renseignée';
-            document.getElementById('prof-country').innerText = u.country || 'Non renseigné';
-            document.getElementById('prof-phone').innerText = u.phone;
-            document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
-
-            const isSub = checkUserSubscription(u);
-            const badge = document.getElementById('prof-sub-badge');
-            badge.innerText = isSub ? 'Statut : Premium Actif' : 'Statut : Gratuit';
-            badge.style.background = isSub ? 'rgba(245, 158, 11, 0.2)' : 'rgba(16,185,129,0.15)';
-            badge.style.color = isSub ? 'var(--accent)' : 'var(--success)';
-
-            document.getElementById('modal-profile').classList.add('active');
-        }
-
+        // --- TOP 5 DES MEILLEURS ÉLÈVES ---
         function renderTop5() {
-            const results = DB.getResults();
-            const users = DB.getUsers();
-            
-            const scoresMap = {};
-            results.forEach(r => {
-                const key = r.userPhone || r.userName;
-                scoresMap[key] = (scoresMap[key] || 0) + r.score;
+            const tbody = document.getElementById('top5-table-body');
+            tbody.innerHTML = '';
+
+            // Agrégation des résultats par élève
+            const studentStats = {};
+
+            appState.participations.forEach(p => {
+                if (!studentStats[p.userId]) {
+                    studentStats[p.userId] = {
+                        nom: p.userName,
+                        ecole: p.userSchool,
+                        ville: p.userVille,
+                        classe: p.userClasse,
+                        totalPoints: 0,
+                        concoursCount: 0
+                    };
+                }
+                studentStats[p.userId].totalPoints += p.note;
+                studentStats[p.userId].concoursCount += 1;
             });
 
-            const sorted = Object.keys(scoresMap)
-                .map(key => {
-                    const u = users.find(user => user.phone === key || user.name === key);
-                    return {
-                        name: u ? u.name : key,
-                        score: scoresMap[key],
-                        avatar: u && u.avatar ? u.avatar : DEFAULT_AVATAR
-                    };
-                })
-                .sort((a, b) => b.score - a.score)
+            // Conversion en tableau et tri
+            const sortedStudents = Object.values(studentStats)
+                .map(s => ({
+                    ...s,
+                    moyenne: (s.totalPoints / s.concoursCount).toFixed(1)
+                }))
+                .sort((a, b) => b.totalPoints - a.totalPoints || b.moyenne - a.moyenne)
                 .slice(0, 5);
 
-            const container = document.getElementById('top-5-container');
-            if (sorted.length === 0) {
-                container.innerHTML = `<span style="font-size:0.75rem; color:var(--text-sub);">Aucun classement actuellement.</span>`;
-                return;
-            }
-
-            container.innerHTML = sorted.map((item, idx) => `
-                <div style="display:flex; align-items:center; gap:6px; background:var(--card-alt); padding:4px 10px; border-radius:30px; border:1px solid var(--border); flex-shrink:0;">
-                    <span style="font-weight:800; font-size:0.75rem; color:var(--accent);">#${idx + 1}</span>
-                    <img src="${item.avatar}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">
-                    <span style="font-size:0.78rem; font-weight:700;">${item.name}</span>
-                    <span style="font-size:0.7rem; color:var(--accent); font-weight:800;">${item.score} pts</span>
-                </div>
-            `).join('');
-        }
-
-        function openRankingModal() {
-            const results = DB.getResults();
-            const sorted = [...results].sort((a, b) => b.score - a.score);
-
-            document.getElementById('ranking-list').innerHTML = sorted.map((r, i) => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:var(--card-alt); border-radius:10px; margin-bottom:6px; border:1px solid var(--border);">
-                    <span style="font-weight:800; color:var(--accent); width:28px;">#${i + 1}</span>
-                    <span style="flex:1; font-weight: 700; font-size: 0.85rem;">${r.userName}</span>
-                    <span style="color: var(--accent); font-weight: 800; font-size: 0.85rem;">${r.score} pts</span>
-                </div>
-            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucun classement disponible.</p>';
-
-            document.getElementById('modal-ranking').classList.add('active');
-        }
-
-        function openReviewModal() {
-            renderMyReviews();
-            document.getElementById('modal-review').classList.add('active');
-        }
-
-        function renderMyReviews() {
-            const reviews = DB.getReviews();
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève" };
-
-            const myReviews = reviews.filter(r => r.phone === currentUserPhone || r.name === u.name);
-            const container = document.getElementById('user-my-reviews-list');
-
-            if (myReviews.length === 0) {
-                container.innerHTML = `<p style="font-size:0.75rem; color:var(--text-sub);">Vous n'avez pas encore publié d'avis.</p>`;
-                return;
-            }
-
-            container.innerHTML = myReviews.map((r, index) => `
-                <div style="background:var(--card-alt); padding:8px 10px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <div style="color:var(--accent); font-size:0.75rem;">${'★'.repeat(r.stars)}</div>
-                        <div style="font-size:0.8rem; color:var(--text-main); margin-top:2px;">"${r.comment}"</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function openUserResultsModal() {
-            const results = DB.getResults().filter(r => r.userPhone === currentUserPhone);
-            document.getElementById('user-results-history').innerHTML = results.map(r => `
-                <div style="background:var(--card-alt); padding:8px 12px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); font-size:0.85rem;">
-                    <div style="font-weight:700;">${r.contestTitle}</div>
-                    <div style="color:var(--accent); font-weight:800; font-size:0.95rem; margin-top:2px;">Score : ${r.score} / ${r.maxScore || 10}</div>
-                </div>
-            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucun résultat disponible.</p>';
-            document.getElementById('modal-results').classList.add('active');
-        }
-
-        function setRating(r) {
-            currentRating = r;
-            document.querySelectorAll('#star-rating-box .fa-star').forEach((s, idx) => {
-                s.className = idx < r ? 'fa-solid fa-star active' : 'fa-solid fa-star';
+            sortedStudents.forEach((s, idx) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>#${idx + 1}</strong></td>
+                    <td>${s.nom}</td>
+                    <td>${s.ecole}</td>
+                    <td>${s.ville}</td>
+                    <td><span class="badge badge-orange">${s.classe}</span></td>
+                    <td>${s.concoursCount}</td>
+                    <td><strong>${s.totalPoints} pts</strong></td>
+                    <td><strong>${s.moyenne}/10</strong></td>
+                `;
+                tbody.appendChild(row);
             });
+
+            if (sortedStudents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Aucun résultat enregistré.</td></tr>';
+            }
         }
 
-        function handleReviewSubmit(e) {
+        // --- AVIS ---
+        function handleSaveAvis(e) {
             e.preventDefault();
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève" };
+            const text = document.getElementById('avis-text').value.trim();
+            if (!text) return;
 
-            const reviews = DB.getReviews();
-            reviews.unshift({
-                id: Date.now(),
-                name: u.name,
-                phone: currentUserPhone,
-                stars: currentRating,
-                comment: document.getElementById('review-comment').value
+            appState.avis.push({
+                date: new Date().toLocaleDateString('fr-FR'),
+                userName: appState.currentUser ? `${appState.currentUser.nom} ${appState.currentUser.prenom}` : 'Anonyme',
+                message: text
             });
-            DB.saveReviews(reviews);
-            document.getElementById('review-comment').value = '';
-            alert("Merci pour votre avis !");
-            renderMyReviews();
+
+            saveState();
+            document.getElementById('avis-text').value = '';
+            showToast("Informations mises à jour.");
+        }
+
+        // --- ADMINISTRATION ---
+        function showAdminTab(tabName) {
+            document.getElementById('admin-tab-create-concours').classList.add('hidden');
+            document.getElementById('admin-tab-view-avis').classList.add('hidden');
+            document.getElementById('admin-tab-view-stats').classList.add('hidden');
+
+            if (tabName === 'create-concours') {
+                document.getElementById('admin-tab-create-concours').classList.remove('hidden');
+            } else if (tabName === 'view-avis') {
+                document.getElementById('admin-tab-view-avis').classList.remove('hidden');
+                renderAdminAvis();
+            } else if (tabName === 'view-stats') {
+                document.getElementById('admin-tab-view-stats').classList.remove('hidden');
+                renderAdminStats();
+            }
+        }
+
+        function handleCreateConcours(e) {
+            e.preventDefault();
+            const title = document.getElementById('admin-c-title').value.trim();
+            const classe = document.getElementById('admin-c-classe').value;
+
+            const newConcours = {
+                id: 'c_' + Date.now(),
+                title: title,
+                classe: classe,
+                date: new Date().toLocaleDateString('fr-FR'),
+                questions: [
+                    {
+                        text: document.getElementById('admin-q1-text').value.trim(),
+                        options: {
+                            A: document.getElementById('admin-q1-a').value.trim(),
+                            B: document.getElementById('admin-q1-b').value.trim(),
+                            C: document.getElementById('admin-q1-c').value.trim(),
+                            D: document.getElementById('admin-q1-d').value.trim()
+                        },
+                        correct: document.getElementById('admin-q1-correct').value
+                    }
+                ]
+            };
+
+            appState.concoursList.push(newConcours);
+            saveState();
+            showToast("Concours enregistré.");
+            document.getElementById('form-create-concours').reset();
+        }
+
+        function renderAdminAvis() {
+            const tbody = document.getElementById('admin-avis-table');
+            tbody.innerHTML = '';
+            appState.avis.forEach(a => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${a.date}</td><td>${a.userName}</td><td>${a.message}</td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderAdminStats() {
+            const tbody = document.getElementById('admin-stats-table');
+            tbody.innerHTML = '';
+            appState.participations.forEach(p => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${p.userName} (${p.userClasse})</td>
+                    <td>${p.concoursTitle}</td>
+                    <td><span class="badge badge-orange">${p.concoursClasse}</span></td>
+                    <td>${p.date}</td>
+                    <td><strong>${p.note}/10</strong></td>
+                `;
+                tbody.appendChild(row);
+            });
         }
     </script>
 </body>
