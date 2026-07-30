@@ -3,28 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZakariaTV - Plateforme de Concours & Révisions</title>
+    <title>ZakariaTV - Plateforme Educative & Concours</title>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-dark: #090C1A;
-            --card-bg: #1E293B;
-            --card-alt: #0F172A;
-            --accent: #F59E0B;
-            --accent-hover: #D97706;
+            /* Palette aux couleurs de la Côte d'Ivoire */
+            --civ-orange: #FF8200;
+            --civ-orange-hover: #E07000;
+            --civ-white: #FFFFFF;
+            --civ-green: #009A44;
+            --civ-green-hover: #007D37;
+            
+            --bg-dark: #0A0D18;
+            --card-bg: #161D2F;
+            --card-alt: #0F1524;
             --text-main: #FFFFFF;
             --text-sub: #94A3B8;
-            --border: #334155;
+            --border: #26334D;
             --danger: #EF4444;
-            --success: #10B981;
             --info: #3B82F6;
+            
             --radius-lg: 16px;
             --radius-md: 10px;
             --radius-sm: 6px;
-            --shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.4);
+            --shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
         * {
@@ -38,15 +43,15 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
-            padding-bottom: 30px;
+            padding-bottom: 40px;
         }
 
         /* --- Header / Navigation --- */
         .navbar {
-            height: 60px;
-            background-color: rgba(9, 12, 26, 0.95);
+            height: 65px;
+            background-color: rgba(10, 13, 24, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 2px solid var(--civ-orange);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -63,24 +68,55 @@
             text-decoration: none;
             color: var(--text-main);
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
         }
 
-        .logo-icon {
-            background: linear-gradient(135deg, var(--accent), #B45309);
-            width: 34px;
-            height: 34px;
+        .logo-img {
+            width: 38px;
+            height: 38px;
             border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid var(--civ-orange);
+            box-shadow: 0 0 10px rgba(255, 130, 0, 0.4);
+        }
+
+        /* --- Toast Notification Vert Moderne (Haut Droite) --- */
+        .toast-container {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast-green {
+            background: linear-gradient(135deg, var(--civ-green), #005F28);
+            color: var(--civ-white);
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(0, 154, 68, 0.4);
+            border-left: 5px solid var(--civ-white);
+            font-weight: 700;
+            font-size: 0.88rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            color: #000;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+            gap: 10px;
+            animation: slideInRight 0.3s ease forwards, fadeOut 0.4s ease 3.6s forwards;
         }
 
-        /* --- Layout & Utilities --- */
+        @keyframes slideInRight {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+
+        /* --- Layout & Base --- */
         .container {
             max-width: 950px;
             margin: 1.2rem auto 0;
@@ -109,6 +145,7 @@
             margin-bottom: 1.2rem;
         }
 
+        /* Buttons CIV Theme */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -124,14 +161,24 @@
             text-decoration: none;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), #D97706);
-            color: #000000;
-            box-shadow: 0 3px 12px rgba(245, 158, 11, 0.25);
+        .btn-orange {
+            background: linear-gradient(135deg, var(--civ-orange), var(--civ-orange-hover));
+            color: #000;
+            box-shadow: 0 3px 12px rgba(255, 130, 0, 0.3);
         }
-        .btn-primary:hover {
+        .btn-orange:hover {
             transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.35);
+            box-shadow: 0 5px 15px rgba(255, 130, 0, 0.45);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--civ-green), var(--civ-green-hover));
+            color: var(--civ-white);
+            box-shadow: 0 3px 12px rgba(0, 154, 68, 0.3);
+        }
+        .btn-green:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 154, 68, 0.45);
         }
 
         .btn-secondary {
@@ -140,12 +187,12 @@
             border: 1px solid var(--border);
         }
         .btn-secondary:hover {
-            border-color: var(--accent);
-            background-color: rgba(245, 158, 11, 0.05);
+            border-color: var(--civ-orange);
+            background-color: rgba(255, 130, 0, 0.08);
         }
         .btn-secondary.active {
-            border-color: var(--accent);
-            background-color: var(--accent);
+            border-color: var(--civ-orange);
+            background-color: var(--civ-orange);
             color: #000;
         }
 
@@ -160,7 +207,7 @@
         }
         .btn-back:hover {
             color: var(--text-main);
-            border-color: var(--accent);
+            border-color: var(--civ-orange);
         }
 
         .btn-danger {
@@ -173,25 +220,15 @@
             color: #fff;
         }
 
-        .btn-success {
-            background-color: rgba(16, 185, 129, 0.12);
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
-        .btn-success:hover {
-            background-color: var(--success);
-            color: #fff;
-        }
-
         .btn-audio {
-            background-color: rgba(245, 158, 11, 0.15);
-            color: var(--accent);
-            border: 1px solid var(--accent);
+            background-color: rgba(255, 130, 0, 0.15);
+            color: var(--civ-orange);
+            border: 1px solid var(--civ-orange);
             border-radius: 50%;
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             padding: 0;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
         }
 
         .btn-block { width: 100%; }
@@ -215,12 +252,12 @@
             font-size: 0.9rem;
             outline: none;
         }
-        .form-control:focus { border-color: var(--accent); }
+        .form-control:focus { border-color: var(--civ-orange); }
 
-        /* --- Banner & Profile --- */
+        /* --- Banner & Profiles --- */
         .participant-banner {
-            background: linear-gradient(135deg, #1E1B4B 0%, #311042 50%, #451A03 100%);
-            border: 1px solid rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, #004D22 0%, #0F1524 50%, #804100 100%);
+            border: 1px solid var(--civ-orange);
             border-radius: var(--radius-lg);
             padding: 1.2rem;
             display: flex;
@@ -230,17 +267,16 @@
             position: relative;
         }
         .profile-thumb {
-            width: 70px;
-            height: 70px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--accent);
-            box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+            border: 3px solid var(--civ-orange);
+            box-shadow: 0 0 12px rgba(255, 130, 0, 0.5);
             flex-shrink: 0;
         }
-        .banner-info { flex: 1; }
 
-        /* --- Stats Pills --- */
+        /* --- Stat Pills --- */
         .stats-pills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -256,15 +292,13 @@
             align-items: center;
             gap: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
         }
-        .stat-pill:hover { transform: translateY(-2px); border-color: var(--accent); }
         .stat-pill-icon {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--accent);
+            background: rgba(255, 130, 0, 0.15);
+            color: var(--civ-orange);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -273,7 +307,7 @@
         .stat-pill-val { font-size: 1.1rem; font-weight: 800; color: var(--text-main); line-height: 1; }
         .stat-pill-lbl { font-size: 0.68rem; color: var(--text-sub); font-weight: 600; text-transform: uppercase; }
 
-        /* --- Grid & Badges --- */
+        /* --- Contests & Badges --- */
         .contest-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -298,15 +332,16 @@
             display: inline-block;
             padding: 2px 8px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             font-weight: 700;
         }
-        .badge-online { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid var(--success); }
+        .badge-online { background: rgba(0, 154, 68, 0.2); color: #00FF66; border: 1px solid var(--civ-green); }
         .badge-offline { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
         .badge-free { background: rgba(59, 130, 246, 0.2); color: var(--info); border: 1px solid var(--info); }
-        .badge-paid { background: rgba(245, 158, 11, 0.2); color: var(--accent); border: 1px solid var(--accent); }
+        .badge-paid { background: rgba(255, 130, 0, 0.2); color: var(--civ-orange); border: 1px solid var(--civ-orange); }
+        .badge-class { background: rgba(255, 255, 255, 0.1); color: var(--civ-white); border: 1px solid var(--border); }
 
-        /* --- Quiz & Red Timer --- */
+        /* --- Chronomètre 30s Rouge --- */
         .timer-box-red {
             font-size: 2.2rem;
             font-weight: 900;
@@ -318,13 +353,37 @@
             padding: 8px 24px;
             width: fit-content;
             margin: 0 auto 1.2rem;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
             animation: pulse 1s infinite alternate;
         }
 
         @keyframes pulse {
             from { transform: scale(1); }
             to { transform: scale(1.04); }
+        }
+
+        /* --- Grand Cercle des Points --- */
+        .circle-points-container {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--civ-orange), var(--civ-green));
+            padding: 5px;
+            margin: 1rem auto;
+            box-shadow: 0 0 25px rgba(255, 130, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .circle-points-inner {
+            width: 100%;
+            height: 100%;
+            background: var(--card-alt);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .option-box {
@@ -344,16 +403,16 @@
             align-items: center;
             justify-content: space-between;
         }
-        .option-box:hover { border-color: var(--accent); background-color: rgba(245, 158, 11, 0.08); }
-        .option-box.selected { border-color: var(--accent); background-color: rgba(245, 158, 11, 0.22); }
+        .option-box:hover { border-color: var(--civ-orange); background-color: rgba(255, 130, 0, 0.08); }
+        .option-box.selected { border-color: var(--civ-orange); background-color: rgba(255, 130, 0, 0.22); }
 
-        /* --- Modals --- */
+        /* --- Modals & Tables --- */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -365,40 +424,10 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             padding: 1.25rem;
             max-height: 90vh;
             overflow-y: auto;
-        }
-
-        .stars-rating {
-            display: flex;
-            gap: 8px;
-            font-size: 1.4rem;
-            color: var(--text-sub);
-            cursor: pointer;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-        .stars-rating .fa-star.active { color: var(--accent); }
-
-        .copy-box {
-            display: flex;
-            gap: 8px;
-            background: var(--card-alt);
-            padding: 6px 10px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            align-items: center;
-        }
-        .copy-box input {
-            background: none;
-            border: none;
-            color: var(--text-main);
-            width: 100%;
-            outline: none;
-            font-family: monospace;
-            font-size: 0.8rem;
         }
 
         .data-table {
@@ -408,28 +437,11 @@
             font-size: 0.82rem;
         }
         .data-table th, .data-table td {
-            padding: 8px 10px;
+            padding: 9px 10px;
             border-bottom: 1px solid var(--border);
             text-align: left;
         }
-        .data-table th { color: var(--text-sub); font-size: 0.7rem; text-transform: uppercase; }
-
-        .toast-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--accent);
-            color: var(--text-main);
-            padding: 14px 20px;
-            border-radius: var(--radius-md);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            display: none;
-            z-index: 3000;
-            max-width: 350px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
+        .data-table th { color: var(--civ-orange); font-size: 0.7rem; text-transform: uppercase; }
 
         .filter-bar {
             display: flex;
@@ -441,13 +453,20 @@
 </head>
 <body>
 
+    <!-- Container Toast Notifications Vertes -->
+    <div class="toast-container" id="toast-container"></div>
+
     <!-- Barre supérieure de navigation -->
     <nav class="navbar">
         <a href="#" class="brand-logo">
-            <div class="logo-icon">ZTV</div>
+            <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" alt="ZTV Logo" class="logo-img">
             <span>ZakariaTV</span>
         </a>
-        <div id="nav-actions"></div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.75rem;" onclick="openCreatorModal()">
+                <i class="fa-solid fa-user-astronaut" style="color:var(--civ-orange);"></i> Créateur de l'application
+            </button>
+        </div>
     </nav>
 
     <div class="container">
@@ -456,24 +475,24 @@
         <!-- 1. ADMINISTRATION                                                   -->
         <!-- =================================================================== -->
         
-        <!-- Connexion Admin -->
+        <!-- Connexion Admin (Identifiants : ZakariaTV / 55250031) -->
         <section id="admin-login-view" class="view-section active">
             <div style="max-width: 380px; margin: 2rem auto;">
                 <div class="card" style="text-align: center;">
-                    <i class="fa-solid fa-user-shield" style="font-size: 2.2rem; color: var(--accent); margin-bottom: 0.8rem;"></i>
+                    <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" style="width:70px; height:70px; border-radius:12px; margin-bottom:0.8rem; border:2px solid var(--civ-orange);">
                     <h3>Espace Administration</h3>
-                    <p style="color: var(--text-sub); font-size: 0.8rem; margin-top: 4px; margin-bottom: 1.2rem;">Gestion complète ZakariaTV</p>
+                    <p style="color: var(--text-sub); font-size: 0.8rem; margin-top: 4px; margin-bottom: 1.2rem;">Plateforme Éducative ZakariaTV</p>
                     
                     <form onsubmit="handleAdminLogin(event)">
                         <div class="form-group">
                             <label class="form-label">Identifiant</label>
-                            <input type="text" id="admin-user" class="form-control" placeholder="admin" required>
+                            <input type="text" id="admin-user" class="form-control" placeholder="ZakariaTV" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Mot de passe</label>
                             <input type="password" id="admin-pass" class="form-control" placeholder="••••••••" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">
+                        <button type="submit" class="btn btn-orange btn-block">
                             Se connecter <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </form>
@@ -489,7 +508,7 @@
                 </button>
                 <div style="display: flex; gap: 8px;">
                     <button class="btn btn-danger" onclick="resetAllData()"><i class="fa-solid fa-rotate-left"></i> Tout réinitialiser</button>
-                    <button class="btn btn-primary" onclick="openCreateContestModal()"><i class="fa-solid fa-plus"></i> Créer Concours</button>
+                    <button class="btn btn-green" onclick="openCreateContestModal()"><i class="fa-solid fa-plus"></i> Créer Concours</button>
                 </div>
             </div>
 
@@ -503,7 +522,7 @@
                     </div>
                 </div>
                 <div class="stat-pill">
-                    <div class="stat-pill-icon" style="color:var(--success); background:rgba(16,185,129,0.15);"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-pill-icon" style="color:var(--civ-green); background:rgba(0,154,68,0.15);"><i class="fa-solid fa-users"></i></div>
                     <div>
                         <div class="stat-pill-val" id="stat-users">0</div>
                         <div class="stat-pill-lbl">Comptes créés</div>
@@ -525,15 +544,15 @@
                 </div>
             </div>
 
-            <!-- Lien Unique Compact -->
-            <div class="card" style="border: 1px solid var(--accent); padding: 1rem;">
+            <!-- Lien Unique d'Accès Élèves -->
+            <div class="card" style="border: 1px solid var(--civ-orange); padding: 1rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <h4 style="font-size: 0.9rem;"><i class="fa-solid fa-link" style="color: var(--accent);"></i> Lien Unique d'Accès Élèves</h4>
-                    <span style="font-size: 0.7rem; background: rgba(245,158,11,0.2); color: var(--accent); padding: 2px 8px; border-radius: 20px; font-weight:700;">ACCÈS UNIQUE</span>
+                    <h4 style="font-size: 0.9rem;"><i class="fa-solid fa-link" style="color: var(--civ-orange);"></i> Lien Unique d'Accès Élèves</h4>
+                    <span style="font-size: 0.7rem; background: rgba(255,130,0,0.2); color: var(--civ-orange); padding: 2px 8px; border-radius: 20px; font-weight:700;">ACCÈS UNIQUE</span>
                 </div>
-                <div class="copy-box">
-                    <input type="text" value="" id="unique-share-link" readonly>
-                    <button class="btn btn-primary" style="padding: 4px 12px; font-size: 0.75rem;" onclick="copyUniqueLink()">
+                <div style="display: flex; gap: 8px; background: var(--card-alt); padding: 6px 10px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                    <input type="text" value="" id="unique-share-link" readonly style="background:none; border:none; color:var(--text-main); width:100%; outline:none; font-family:monospace; font-size:0.8rem;">
+                    <button class="btn btn-orange" style="padding: 4px 12px; font-size: 0.75rem;" onclick="copyUniqueLink()">
                         <i class="fa-solid fa-copy"></i> Copier
                     </button>
                 </div>
@@ -542,9 +561,9 @@
             <!-- Boutons de Gestion Administrateur -->
             <div style="display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap;">
                 <button class="btn btn-secondary" onclick="openAdminUsersModal()"><i class="fa-solid fa-users"></i> Comptes créés (<span id="users-count-badge">0</span>)</button>
-                <button class="btn btn-secondary" onclick="openAdminResultsModal()"><i class="fa-solid fa-square-poll-vertical"></i> Résultats</button>
+                <button class="btn btn-secondary" onclick="openAdminResultsModal()"><i class="fa-solid fa-square-poll-vertical"></i> Résultats & Statistiques</button>
                 <button class="btn btn-secondary" onclick="openAdminResetsModal()"><i class="fa-solid fa-key"></i> Mots de passe (<span id="reset-badge-count">0</span>)</button>
-                <button class="btn btn-secondary" onclick="openAdminSubscriptionModal()"><i class="fa-solid fa-crown" style="color:var(--accent);"></i> Abonnements (<span id="sub-badge-count">0</span>)</button>
+                <button class="btn btn-secondary" onclick="openAdminSubscriptionModal()"><i class="fa-solid fa-crown" style="color:var(--civ-orange);"></i> Abonnements (<span id="sub-badge-count">0</span>)</button>
             </div>
 
             <!-- Liste des Concours Administrateur -->
@@ -553,10 +572,10 @@
                 <div id="admin-contest-list" class="contest-grid"></div>
             </div>
 
-            <!-- Avis Utilisateurs -->
+            <!-- Avis Utilisateurs Admin (Avec Date & Nom) -->
             <div class="card">
-                <h4 style="font-size:0.9rem;"><i class="fa-solid fa-star" style="color: var(--accent);"></i> Avis & Retours Élèves</h4>
-                <div id="admin-reviews-list" style="margin-top: 0.6rem; max-height: 200px; overflow-y: auto;"></div>
+                <h4 style="font-size:0.9rem;"><i class="fa-solid fa-star" style="color: var(--civ-orange);"></i> Tous les Avis & Retours Élèves</h4>
+                <div id="admin-reviews-list" style="margin-top: 0.6rem; max-height: 220px; overflow-y: auto;"></div>
             </div>
         </section>
 
@@ -567,16 +586,16 @@
         <!-- Inscription / Connexion Élève -->
         <section id="participant-auth-view" class="view-section">
             <div class="participant-banner">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="profile-thumb" id="auth-banner-avatar">
-                <div class="banner-info">
+                <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" alt="ZTV Logo" class="profile-thumb">
+                <div>
                     <h2 style="font-size: 1.3rem;">ZakariaTV Concours</h2>
-                    <p style="color: var(--accent); font-size: 0.82rem; font-weight: 700;">Plateforme de Révision & Concours</p>
+                    <p style="color: var(--civ-orange); font-size: 0.82rem; font-weight: 700;">Plateforme éducative aux couleurs de la Côte d'Ivoire</p>
                 </div>
             </div>
 
-            <div class="card" style="max-width: 420px; margin: 0 auto;">
+            <div class="card" style="max-width: 440px; margin: 0 auto;">
                 <div style="display: flex; gap: 8px; margin-bottom: 1.2rem;">
-                    <button class="btn btn-primary btn-block" id="tab-login-btn" onclick="switchAuthTab('login')">Se connecter</button>
+                    <button class="btn btn-orange btn-block" id="tab-login-btn" onclick="switchAuthTab('login')">Se connecter</button>
                     <button class="btn btn-secondary btn-block" id="tab-register-btn" onclick="switchAuthTab('register')">S'inscrire</button>
                 </div>
 
@@ -590,7 +609,7 @@
                         <label class="form-label">Mot de passe</label>
                         <input type="password" id="part-login-pass" class="form-control" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">
+                    <button type="submit" class="btn btn-green btn-block">
                         Accéder aux Concours <i class="fa-solid fa-arrow-right"></i>
                     </button>
                     <div style="text-align: center; margin-top: 0.8rem;">
@@ -598,7 +617,7 @@
                     </div>
                 </form>
 
-                <!-- Inscription -->
+                <!-- Inscription avec Champ Établissement Scolaire et Classe -->
                 <form id="participant-register-form" onsubmit="handleParticipantRegister(event)" style="display: none;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                         <div class="form-group">
@@ -617,8 +636,27 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Pays</label>
-                            <input type="text" id="part-reg-country" class="form-control" placeholder="Côte d'Ivoire" required>
+                            <input type="text" id="part-reg-country" class="form-control" value="Côte d'Ivoire" required>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Établissement Scolaire</label>
+                        <input type="text" id="part-reg-school" class="form-control" placeholder="Ex: Lycée Moderne de Bangolo" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Classe Scolaire</label>
+                        <select id="part-reg-class" class="form-control" required>
+                            <option value="CE2">CE2</option>
+                            <option value="CM1">CM1</option>
+                            <option value="CM2">CM2</option>
+                            <option value="6e">6e</option>
+                            <option value="5e">5e</option>
+                            <option value="4e">4e</option>
+                            <option value="3e" selected>3e</option>
+                            <option value="Seconde">Seconde</option>
+                            <option value="Première">Première</option>
+                            <option value="Terminale">Terminale</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Numéro WhatsApp</label>
@@ -632,7 +670,7 @@
                         <label class="form-label">Mot de passe</label>
                         <input type="password" id="part-reg-pass" class="form-control" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">
+                    <button type="submit" class="btn btn-green btn-block">
                         Créer mon compte <i class="fa-solid fa-check"></i>
                     </button>
                 </form>
@@ -643,58 +681,48 @@
         <section id="participant-home-view" class="view-section">
             <div class="participant-banner">
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar" class="profile-thumb" id="home-user-avatar">
-                <div class="banner-info">
+                <div style="flex:1;">
                     <h2 style="font-size: 1.2rem;" id="user-display-name">Bienvenue Élève</h2>
-                    <p style="color: var(--text-sub); font-size: 0.8rem;">Prêt pour votre révision du jour ?</p>
+                    <p style="color: var(--text-sub); font-size: 0.8rem;" id="user-display-details">Établissement - Classe</p>
                     
                     <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
-                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openProfileModal()"><i class="fa-solid fa-user-gear" style="color:var(--accent);"></i> Mon Profil</button>
-                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openRankingModal()"><i class="fa-solid fa-trophy" style="color:var(--accent);"></i> Classement</button>
-                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openUserResultsModal()"><i class="fa-solid fa-chart-line"></i> Résultats</button>
+                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openProfileModal()"><i class="fa-solid fa-user-gear" style="color:var(--civ-orange);"></i> Mon Profil</button>
+                        <button class="btn btn-orange" style="padding:4px 10px; font-size:0.75rem;" onclick="openTop5Modal()"><i class="fa-solid fa-trophy"></i> Top 5 des meilleurs élèves</button>
+                        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openMyContestsModal()"><i class="fa-solid fa-chart-line" style="color:var(--civ-green);"></i> Mes concours</button>
                         <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openReviewModal()"><i class="fa-solid fa-comment"></i> Avis</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Top 5 des Meilleurs Élèves -->
-            <div class="card" style="padding: 0.8rem 1rem; border: 1px solid rgba(245, 158, 11, 0.3);">
-                <h4 style="font-size: 0.85rem; color: var(--accent); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-crown"></i> Top 5 des Meilleurs Élèves
-                </h4>
-                <div id="top-5-container" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;"></div>
-            </div>
-
-            <!-- Section Abonnement Élève -->
-            <div class="card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(15, 23, 42, 0.9)); border: 1px solid var(--accent); padding: 1rem; margin-bottom: 1.2rem;">
+            <!-- Espace Abonnement -->
+            <div class="card" style="background: linear-gradient(135deg, rgba(255, 130, 0, 0.1), rgba(0, 154, 68, 0.1)); border: 1px solid var(--civ-orange); padding: 1rem; margin-bottom: 1.2rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                     <div>
-                        <h4 style="font-size: 0.95rem; color: var(--accent);"><i class="fa-solid fa-gem"></i> Espace Abonnement</h4>
+                        <h4 style="font-size: 0.95rem; color: var(--civ-orange);"><i class="fa-solid fa-gem"></i> Espace Abonnement</h4>
                         <p style="font-size: 0.78rem; color: var(--text-sub); margin-top: 2px;">Accédez aux concours Premium et révisions illimitées.</p>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <span id="user-sub-status-badge" style="background: var(--card-alt); border:1px solid var(--border); color: #FFF; font-weight: 800; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px;">STATUT : GRATUIT</span>
-                        <button class="btn btn-primary" style="padding:4px 12px; font-size:0.75rem;" onclick="openBuySubscriptionModal()"><i class="fa-solid fa-crown"></i> Acheter un abonnement</button>
+                        <button class="btn btn-green" style="padding:4px 12px; font-size:0.75rem;" onclick="openBuySubscriptionModal()"><i class="fa-solid fa-crown"></i> Acheter un abonnement</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Interface de Filtrage Concours par Catégorie et Niveau -->
+            <!-- Filtrage Concours -->
             <div class="card" style="padding: 0.8rem 1rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
                     <h4 style="font-size: 1rem;">Concours disponibles</h4>
-                    <button class="btn btn-back" style="margin:0; padding:4px 10px; font-size:0.75rem;" onclick="showView('participant-auth-view')">
+                    <button class="btn btn-back" style="margin:0; padding:4px 10px; font-size:0.75rem;" onclick="logoutUser()">
                         <i class="fa-solid fa-power-off"></i> Déconnexion
                     </button>
                 </div>
 
-                <!-- Boutons Catégories -->
                 <div class="filter-bar">
                     <button class="btn btn-secondary active" id="filter-cat-all" onclick="setCategoryFilter('Tous')">Tous</button>
                     <button class="btn btn-secondary" id="filter-cat-primaire" onclick="setCategoryFilter('Primaire')">Primaire</button>
                     <button class="btn btn-secondary" id="filter-cat-college" onclick="setCategoryFilter('Collège')">Collège</button>
                 </div>
 
-                <!-- Boutons Niveaux Dynamiques -->
                 <div class="filter-bar" id="subcategories-filter-bar" style="display: none;"></div>
             </div>
 
@@ -704,7 +732,7 @@
         <!-- Attente 20s -->
         <section id="participant-waiting-view" class="view-section">
             <div class="card" style="text-align: center; max-width: 420px; margin: 2rem auto;">
-                <i class="fa-solid fa-stopwatch" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 0.8rem;"></i>
+                <i class="fa-solid fa-stopwatch" style="font-size: 2.5rem; color: var(--civ-orange); margin-bottom: 0.8rem;"></i>
                 <h3>Préparation au test</h3>
                 <p style="color: var(--text-sub); font-size: 0.85rem; margin: 0.5rem 0 1rem;">
                     Début dans <strong>20 secondes</strong>. Soyez prêt !
@@ -716,7 +744,7 @@
             </div>
         </section>
 
-        <!-- Quiz (10s par Question avec Design Rouge & Bouton Lecture Vocale) -->
+        <!-- Quiz avec Chronomètre 30s & Lecture Vocale Continue -->
         <section id="participant-quiz-view" class="view-section">
             <button class="btn btn-back" onclick="confirmExitQuiz()">
                 <i class="fa-solid fa-arrow-left"></i> Quitter
@@ -725,19 +753,19 @@
             <div class="card" style="max-width: 650px; margin: 0 auto; text-align: center;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
                     <span style="color: var(--text-sub); font-weight: 700; font-size: 0.85rem;" id="quiz-progress">Question 1 / 10</span>
-                    <button class="btn btn-audio" onclick="playAudioQuestion()" title="Écouter la question et les réponses">
+                    <button class="btn btn-audio" onclick="playAudioQuestion()" title="Écouter automatiquement la question puis les réponses A, B, C, D">
                         <i class="fa-solid fa-volume-high"></i>
                     </button>
                 </div>
 
-                <!-- Chronomètre rouge 10s -->
-                <div class="timer-box-red" id="question-timer">10</div>
+                <!-- Chronomètre rouge 30s -->
+                <div class="timer-box-red" id="question-timer">30</div>
 
                 <h2 id="quiz-question-text" style="font-size: 1.25rem; margin-bottom: 1.5rem; line-height: 1.4; color: var(--text-main);"></h2>
                 
                 <div id="quiz-options-container" style="margin-bottom: 1rem;"></div>
 
-                <button class="btn btn-primary btn-block" style="padding: 12px; font-size: 0.95rem;" onclick="submitAnswer()">
+                <button class="btn btn-green btn-block" style="padding: 12px; font-size: 0.95rem;" onclick="submitAnswer()">
                     Valider ma réponse <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
@@ -746,16 +774,17 @@
         <!-- Fin de Concours -->
         <section id="participant-finish-view" class="view-section">
             <div class="card" style="text-align: center; max-width: 480px; margin: 2rem auto;">
-                <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--success); margin-bottom: 1rem;"></i>
+                <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--civ-green); margin-bottom: 1rem;"></i>
                 <h2>Concours Terminé !</h2>
-                <p style="color: var(--text-sub); font-size: 0.95rem; margin: 1rem 0 1.5rem; line-height: 1.5;">
-                    «« Merci d'avoir participé à ce concours. Veuillez retourner à l'accueil. »»
+                <p style="color: var(--text-sub); font-size: 0.95rem; margin: 0.8rem 0 1.2rem; line-height: 1.5;">
+                    Merci d'avoir participé à ce concours.
                 </p>
                 <div style="background: var(--card-alt); padding: 1rem; border-radius: 10px; margin-bottom: 1.2rem; border: 1px solid var(--border);">
-                    <p style="font-size: 0.9rem; color: var(--text-sub);">Votre Score Final :</p>
-                    <h1 style="color: var(--accent); font-size: 2.2rem; font-weight: 800;" id="finish-score-display">0 / 10</h1>
+                    <p style="font-size: 0.85rem; color: var(--text-sub);">Votre Note Finale :</p>
+                    <h1 style="color: var(--civ-orange); font-size: 2.5rem; font-weight: 800;" id="finish-score-display">0 / 10</h1>
+                    <p style="font-size: 0.78rem; color: var(--civ-green); font-weight: 700; margin-top: 4px;" id="finish-class-display">Classe : CE2</p>
                 </div>
-                <button class="btn btn-primary btn-block" onclick="showView('participant-home-view')">
+                <button class="btn btn-orange btn-block" onclick="showView('participant-home-view')">
                     <i class="fa-solid fa-house"></i> Retour à l'accueil
                 </button>
             </div>
@@ -767,34 +796,93 @@
     <!-- MODALES                                                            -->
     <!-- =================================================================== -->
 
-    <!-- Modale Mot de passe oublié -->
-    <div class="modal" id="modal-forgot-password">
-        <div class="modal-content" style="max-width: 400px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3><i class="fa-solid fa-key" style="color: var(--accent);"></i> Mot de passe oublié</h3>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-forgot-password')"><i class="fa-solid fa-xmark"></i></button>
+    <!-- Modale Créateur de l'application (ZakariaTV) -->
+    <div class="modal" id="modal-creator">
+        <div class="modal-content" style="max-width: 480px; text-align: center; border: 2px solid var(--civ-orange);">
+            <div style="display: flex; justify-content: flex-end;">
+                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-creator')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <div id="forgot-step-1">
-                <div class="form-group">
-                    <label class="form-label">Saisissez votre numéro WhatsApp</label>
-                    <input type="tel" id="forgot-phone-input" class="form-control" placeholder="+225..." required>
-                </div>
-                <button class="btn btn-primary btn-block" onclick="verifyForgotPhone()">Rechercher mon compte</button>
+            <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 1rem; align-items: center;">
+                <img src="https://i.postimg.cc/Ss5J8Kwk/file-000000009dc8724699d54da957936110.png" alt="Niampa Zakaria" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--civ-orange); box-shadow: 0 0 15px rgba(255, 130, 0, 0.5);">
+                <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" alt="ZTV Logo" style="width: 80px; height: 80px; border-radius: 16px; object-fit: cover; border: 2px solid var(--civ-green);">
             </div>
 
-            <div id="forgot-step-2" style="display: none; text-align: center;">
-                <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 0.8rem;">Est-ce bien votre compte ?</p>
-                <div style="background: var(--card-alt); padding: 12px; border-radius: 10px; border: 1px solid var(--border); text-align: left; font-size: 0.85rem; margin-bottom: 1rem;">
-                    <p><strong>Nom :</strong> <span id="forgot-found-lastname"></span></p>
-                    <p><strong>Prénom :</strong> <span id="forgot-found-firstname"></span></p>
-                    <p><strong>Ville :</strong> <span id="forgot-found-city"></span></p>
-                    <p><strong>Pays :</strong> <span id="forgot-found-country"></span></p>
+            <h2 style="color: var(--civ-orange); font-size: 1.4rem;">Niampa Zakaria</h2>
+            <p style="color: var(--civ-green); font-weight: 800; font-size: 0.9rem; margin-top: 2px;">Créateur de ZakariaTV (ZTV)</p>
+
+            <div style="background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin: 1rem 0; text-align: left; font-size: 0.88rem; line-height: 1.6;">
+                <p><i class="fa-solid fa-user-graduate" style="color:var(--civ-orange);"></i> <strong>Statut :</strong> Élève en classe de 3e</p>
+                <p><i class="fa-solid fa-school" style="color:var(--civ-orange);"></i> <strong>Établissement :</strong> Lycée Moderne de Bangolo</p>
+                <p><i class="fa-solid fa-cake-candles" style="color:var(--civ-orange);"></i> <strong>Âge :</strong> 15 ans</p>
+                <p><i class="fa-solid fa-video" style="color:var(--civ-orange);"></i> <strong>Activité :</strong> Créateur de contenus sur les phénomènes mystérieux</p>
+                <p><i class="fa-solid fa-tv" style="color:var(--civ-orange);"></i> <strong>Nom de marque :</strong> ZakariaTV (ZTV)</p>
+                <p><i class="fa-brands fa-tiktok" style="color:var(--civ-orange);"></i> <strong>Compte TikTok :</strong> zakaria tv</p>
+            </div>
+
+            <p style="font-size: 0.8rem; color: var(--text-sub); font-style: italic;">« Plateforme éducative conçue pour inspirer et faire réussir la jeunesse ivoirienne. »</p>
+        </div>
+    </div>
+
+    <!-- Modale Top 5 des Meilleurs Élèves -->
+    <div class="modal" id="modal-top5">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h3 style="color: var(--civ-orange); font-size: 1.1rem;"><i class="fa-solid fa-trophy"></i> Top 5 des meilleurs élèves</h3>
+                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-top5')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Nom & Prénom</th>
+                            <th>Établissement / Ville</th>
+                            <th>Classe</th>
+                            <th>Concours</th>
+                            <th>Points</th>
+                            <th>Moy.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="top5-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale Tableau de bord personnel « Mes concours » -->
+    <div class="modal" id="modal-my-contests">
+        <div class="modal-content" style="max-width: 650px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h3 style="color: var(--civ-green); font-size: 1.1rem;"><i class="fa-solid fa-chart-pie"></i> Mes concours</h3>
+                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-my-contests')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Grand Cercle Moderne des Points -->
+            <div class="circle-points-container">
+                <div class="circle-points-inner">
+                    <span style="font-size: 2.2rem; font-weight: 900; color: var(--civ-orange);" id="my-total-points">0</span>
+                    <span style="font-size: 0.68rem; font-weight: 800; color: var(--civ-green); text-transform: uppercase;">Points Totaux</span>
                 </div>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn btn-success btn-block" onclick="confirmResetRequest()">Oui, c'est moi</button>
-                    <button class="btn btn-secondary btn-block" onclick="closeModal('modal-forgot-password')">Annuler</button>
-                </div>
+            </div>
+
+            <p style="text-align: center; font-size: 0.82rem; color: var(--text-sub); margin-bottom: 1rem;">
+                Nombre total de concours effectués : <strong style="color:#FFF;" id="my-total-count">0</strong>
+            </p>
+
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Concours</th>
+                            <th>Classe</th>
+                            <th>Date</th>
+                            <th>Note /10</th>
+                            <th>Rang</th>
+                        </tr>
+                    </thead>
+                    <tbody id="my-contests-table-body"></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -803,26 +891,27 @@
     <div class="modal" id="modal-profile">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3><i class="fa-solid fa-user" style="color: var(--accent);"></i> Mon Profil Participant</h3>
+                <h3><i class="fa-solid fa-user" style="color: var(--civ-orange);"></i> Mon Profil Participant</h3>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-profile')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div style="text-align: center; margin-bottom: 1.2rem;">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" id="prof-modal-avatar" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--accent); margin-bottom: 0.5rem; object-fit: cover;">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" id="prof-modal-avatar" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--civ-orange); margin-bottom: 0.5rem; object-fit: cover;">
                 <h3 id="prof-name">Élève</h3>
-                <span id="prof-sub-badge" style="font-size: 0.75rem; color: var(--success); background: rgba(16,185,129,0.15); padding: 2px 8px; border-radius: 20px;">Statut : Gratuit</span>
+                <span id="prof-sub-badge" style="font-size: 0.75rem; color: var(--civ-green); background: rgba(0,154,68,0.15); padding: 2px 8px; border-radius: 20px;">Statut : Gratuit</span>
             </div>
             
             <div style="background: var(--card-alt); padding: 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; margin-bottom: 1rem;">
                 <p style="margin-bottom: 6px;"><strong>Nom :</strong> <span id="prof-lastname"></span></p>
                 <p style="margin-bottom: 6px;"><strong>Prénom :</strong> <span id="prof-firstname"></span></p>
-                <p style="margin-bottom: 6px;"><strong>Ville :</strong> <span id="prof-city"></span></p>
-                <p style="margin-bottom: 6px;"><strong>Pays :</strong> <span id="prof-country"></span></p>
+                <p style="margin-bottom: 6px;"><strong>Établissement :</strong> <span id="prof-school"></span></p>
+                <p style="margin-bottom: 6px;"><strong>Classe :</strong> <span id="prof-class"></span></p>
+                <p style="margin-bottom: 6px;"><strong>Ville / Pays :</strong> <span id="prof-location"></span></p>
                 <p style="margin-bottom: 6px;"><strong>Numéro WhatsApp :</strong> <span id="prof-phone"></span></p>
             </div>
 
             <!-- Formulaire Modification du Mot de passe -->
             <div class="card" style="background: var(--card-alt); padding: 1rem;">
-                <h4 style="font-size: 0.85rem; margin-bottom: 0.8rem; color: var(--accent);"><i class="fa-solid fa-lock"></i> Modifier mon mot de passe</h4>
+                <h4 style="font-size: 0.85rem; margin-bottom: 0.8rem; color: var(--civ-orange);"><i class="fa-solid fa-lock"></i> Modifier mon mot de passe</h4>
                 <form onsubmit="handleChangePassword(event)">
                     <div class="form-group">
                         <label class="form-label">Mot de passe actuel</label>
@@ -836,7 +925,7 @@
                         <label class="form-label">Confirmation du nouveau mot de passe</label>
                         <input type="password" id="pass-conf" class="form-control" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
+                    <button type="submit" class="btn btn-green btn-block">Enregistrer</button>
                 </form>
             </div>
 
@@ -844,11 +933,103 @@
         </div>
     </div>
 
+    <!-- Modale Mot de passe oublié -->
+    <div class="modal" id="modal-forgot-password">
+        <div class="modal-content" style="max-width: 400px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3><i class="fa-solid fa-key" style="color: var(--civ-orange);"></i> Mot de passe oublié</h3>
+                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-forgot-password')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div id="forgot-step-1">
+                <div class="form-group">
+                    <label class="form-label">Saisissez votre numéro WhatsApp</label>
+                    <input type="tel" id="forgot-phone-input" class="form-control" placeholder="+225..." required>
+                </div>
+                <button class="btn btn-orange btn-block" onclick="verifyForgotPhone()">Rechercher mon compte</button>
+            </div>
+
+            <div id="forgot-step-2" style="display: none; text-align: center;">
+                <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 0.8rem;">Est-ce bien votre compte ?</p>
+                <div style="background: var(--card-alt); padding: 12px; border-radius: 10px; border: 1px solid var(--border); text-align: left; font-size: 0.85rem; margin-bottom: 1rem;">
+                    <p><strong>Nom :</strong> <span id="forgot-found-lastname"></span></p>
+                    <p><strong>Prénom :</strong> <span id="forgot-found-firstname"></span></p>
+                    <p><strong>Établissement :</strong> <span id="forgot-found-school"></span></p>
+                    <p><strong>Ville :</strong> <span id="forgot-found-city"></span></p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-green btn-block" onclick="confirmResetRequest()">Oui, c'est moi</button>
+                    <button class="btn btn-secondary btn-block" onclick="closeModal('modal-forgot-password')">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale Édition / Création de Concours -->
+    <div class="modal" id="modal-edit-contest">
+        <div class="modal-content" style="max-width: 650px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h4 id="modal-contest-title">Créer un Concours (Analyse Automatique)</h4>
+                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-edit-contest')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleSaveContest(event)">
+                <input type="hidden" id="edit-contest-id">
+                <div class="form-group">
+                    <label class="form-label">Titre du Concours</label>
+                    <input type="text" id="edit-title" class="form-control" placeholder="Ex: Histoire – La Révolution" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <div class="form-group">
+                        <label class="form-label">Catégorie</label>
+                        <select id="edit-category" class="form-control" onchange="updateLevelOptions()">
+                            <option value="Primaire">Primaire</option>
+                            <option value="Collège">Collège</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Classe Concernée</label>
+                        <select id="edit-level" class="form-control"></select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <div class="form-group">
+                        <label class="form-label">Type du Concours</label>
+                        <select id="edit-type" class="form-control">
+                            <option value="Gratuit">Gratuit</option>
+                            <option value="Payant">Payant</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lien de l'image (URL)</label>
+                        <input type="url" id="edit-image" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <label class="form-label" style="margin: 0;">Questions du concours (Coller les 10 questions ici)</label>
+                        <button type="button" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.7rem;" onclick="verifyQuestionsText()"><i class="fa-solid fa-magnifying-glass"></i> Vérifier le contenu</button>
+                    </div>
+                    <textarea id="edit-questions-raw" class="form-control" rows="11" style="font-family: monospace; font-size: 0.82rem;" placeholder="Question 1...
+A) Réponse A
+B) Réponse B
+C) Réponse C
+D) Réponse D
+Réponse : B..."></textarea>
+                </div>
+
+                <div id="parse-feedback" style="margin-bottom: 0.8rem; font-size: 0.8rem;"></div>
+
+                <button type="submit" class="btn btn-green btn-block">Enregistrer et Publier le Concours</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Modale Demande d'Abonnement -->
     <div class="modal" id="modal-buy-subscription">
         <div class="modal-content" style="max-width: 420px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3><i class="fa-solid fa-gem" style="color: var(--accent);"></i> Souscrire un Abonnement</h3>
+                <h3><i class="fa-solid fa-gem" style="color: var(--civ-orange);"></i> Souscrire un Abonnement</h3>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-buy-subscription')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="handleSubscriptionRequest(event)">
@@ -875,88 +1056,25 @@
                         <option value="Terminale">Terminale</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Valider ma demande d'abonnement</button>
+                <button type="submit" class="btn btn-green btn-block">Valider ma demande d'abonnement</button>
             </form>
         </div>
     </div>
 
-    <!-- Modale Édition / Création de Concours (Nouveau Système Copier-Coller 10 Questions) -->
-    <div class="modal" id="modal-edit-contest">
-        <div class="modal-content" style="max-width: 650px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4 id="modal-contest-title">Créer un Concours (Analyse Automatique)</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-edit-contest')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form onsubmit="handleSaveContest(event)">
-                <input type="hidden" id="edit-contest-id">
-                <div class="form-group">
-                    <label class="form-label">Titre du Concours</label>
-                    <input type="text" id="edit-title" class="form-control" placeholder="Ex: Histoire – La Révolution" required>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                    <div class="form-group">
-                        <label class="form-label">Catégorie</label>
-                        <select id="edit-category" class="form-control" onchange="updateLevelOptions()">
-                            <option value="Primaire">Primaire</option>
-                            <option value="Collège">Collège</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Niveau</label>
-                        <select id="edit-level" class="form-control"></select>
-                    </div>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                    <div class="form-group">
-                        <label class="form-label">Type du Concours</label>
-                        <select id="edit-type" class="form-control">
-                            <option value="Gratuit">Gratuit</option>
-                            <option value="Payant">Payant</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Lien de l'image (URL)</label>
-                        <input type="url" id="edit-image" class="form-control" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <label class="form-label" style="margin: 0;">Questions du concours (Coller les 10 questions ici)</label>
-                        <button type="button" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.7rem;" onclick="verifyQuestionsText()"><i class="fa-solid fa-magnifying-glass"></i> Vérifier le contenu</button>
-                    </div>
-                    <textarea id="edit-questions-raw" class="form-control" rows="12" style="font-family: monospace; font-size: 0.82rem;" placeholder="Question 1...
-A) Réponse A
-B) Réponse B
-C) Réponse C
-D) Réponse D
-Réponse : B
-
-Question 2...
-..."></textarea>
-                </div>
-
-                <div id="parse-feedback" style="margin-bottom: 0.8rem; font-size: 0.8rem;"></div>
-
-                <button type="submit" class="btn btn-primary btn-block">Enregistrer et Publier le Concours</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modale Participants / Comptes Créés (Admin) -->
+    <!-- Modale Admin : Participants -->
     <div class="modal" id="modal-admin-users">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-users" style="color: var(--accent);"></i> Liste des Participants</h4>
+                <h4><i class="fa-solid fa-users" style="color: var(--civ-orange);"></i> Liste des Participants</h4>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-users')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div style="overflow-x: auto;">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Photo</th>
                             <th>Nom & Prénom</th>
-                            <th>Ville/Pays</th>
+                            <th>Établissement / Classe</th>
+                            <th>Ville</th>
                             <th>WhatsApp</th>
                             <th>Action</th>
                         </tr>
@@ -967,11 +1085,11 @@ Question 2...
         </div>
     </div>
 
-    <!-- Modale Résultats Globaux (Admin) -->
+    <!-- Modale Admin : Résultats Globaux -->
     <div class="modal" id="modal-admin-results">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-square-poll-vertical" style="color: var(--accent);"></i> Résultats Globaux</h4>
+                <h4><i class="fa-solid fa-square-poll-vertical" style="color: var(--civ-orange);"></i> Résultats & Statistiques Globale</h4>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-results')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div style="overflow-x: auto;">
@@ -980,7 +1098,9 @@ Question 2...
                         <tr>
                             <th>Participant</th>
                             <th>Concours</th>
-                            <th>Score</th>
+                            <th>Classe Concours</th>
+                            <th>Date</th>
+                            <th>Note /10</th>
                         </tr>
                     </thead>
                     <tbody id="admin-results-table"></tbody>
@@ -989,23 +1109,23 @@ Question 2...
         </div>
     </div>
 
-    <!-- Modale Demandes Mdp (Admin) -->
+    <!-- Modale Admin : Mots de passe -->
     <div class="modal" id="modal-admin-resets">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-key" style="color: var(--accent);"></i> Demandes de Réinitialisation</h4>
+                <h4><i class="fa-solid fa-key" style="color: var(--civ-orange);"></i> Demandes de Réinitialisation</h4>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-resets')"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 0.75rem; color: var(--text-sub); margin-bottom: 0.8rem;">Cliquer sur Réinitialiser réinitialise le mot de passe de l'élève par défaut à <strong>5555</strong>.</p>
+            <p style="font-size: 0.75rem; color: var(--text-sub); margin-bottom: 0.8rem;">Cliquer sur Réinitialiser pour définir le mot de passe par défaut à <strong>5555</strong>.</p>
             <div id="admin-resets-list"></div>
         </div>
     </div>
 
-    <!-- Modale Gestion des Abonnements & Paiements (Admin) -->
+    <!-- Modale Admin : Abonnements -->
     <div class="modal" id="modal-admin-subscription">
         <div class="modal-content" style="max-width: 650px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-crown" style="color: var(--accent);"></i> Gestion des Abonnements & Paiements</h4>
+                <h4><i class="fa-solid fa-crown" style="color: var(--civ-orange);"></i> Abonnements & Paiements</h4>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-subscription')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div style="overflow-x: auto;">
@@ -1025,65 +1145,37 @@ Question 2...
         </div>
     </div>
 
-    <!-- Modale Classement -->
-    <div class="modal" id="modal-ranking">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-trophy" style="color: var(--accent);"></i> Classement Général</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-ranking')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="ranking-list"></div>
-        </div>
-    </div>
-
-    <!-- Modale Avis -->
+    <!-- Modale Avis (Élève) -->
     <div class="modal" id="modal-review">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-star" style="color: var(--accent);"></i> Donnez votre avis</h4>
+                <h4><i class="fa-solid fa-star" style="color: var(--civ-orange);"></i> Donnez votre avis</h4>
                 <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-review')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="handleReviewSubmit(event)">
-                <div class="stars-rating" id="star-rating-box">
-                    <i class="fa-solid fa-star active" onclick="setRating(1)"></i>
-                    <i class="fa-solid fa-star active" onclick="setRating(2)"></i>
-                    <i class="fa-solid fa-star active" onclick="setRating(3)"></i>
-                    <i class="fa-solid fa-star active" onclick="setRating(4)"></i>
-                    <i class="fa-solid fa-star active" onclick="setRating(5)"></i>
+                <div style="display: flex; gap: 8px; font-size: 1.4rem; color: var(--text-sub); cursor: pointer; margin-bottom: 1rem; justify-content: center;" id="star-rating-box">
+                    <i class="fa-solid fa-star active" style="color:var(--civ-orange);" onclick="setRating(1)"></i>
+                    <i class="fa-solid fa-star active" style="color:var(--civ-orange);" onclick="setRating(2)"></i>
+                    <i class="fa-solid fa-star active" style="color:var(--civ-orange);" onclick="setRating(3)"></i>
+                    <i class="fa-solid fa-star active" style="color:var(--civ-orange);" onclick="setRating(4)"></i>
+                    <i class="fa-solid fa-star active" style="color:var(--civ-orange);" onclick="setRating(5)"></i>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Votre commentaire</label>
                     <textarea class="form-control" id="review-comment" rows="3" placeholder="Application excellente !" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Publier mon avis</button>
+                <button type="submit" class="btn btn-green btn-block">Publier mon avis</button>
             </form>
-
-            <h5 style="margin: 1.2rem 0 0.6rem; color: var(--accent);">Mes avis publiés</h5>
-            <div id="user-my-reviews-list"></div>
         </div>
     </div>
-
-    <!-- Modale Historique Élève -->
-    <div class="modal" id="modal-results">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4><i class="fa-solid fa-chart-line" style="color: var(--accent);"></i> Mes Résultats</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-results')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="user-results-history"></div>
-        </div>
-    </div>
-
-    <!-- Notification Toast -->
-    <div class="toast-notification" id="app-toast"></div>
 
     <!-- =================================================================== -->
-    <!-- LOGIQUE JS COMPLÈTE ET SÉCURISÉE                                    -->
+    <!-- LOGIQUE JAVASCRIPT                                                  -->
     <!-- =================================================================== -->
     <script>
         const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80";
 
-        // Base de Données LocalStorage
+        // Base de Données LocalStorage (Sécurisée)
         const DB = {
             getContests: () => JSON.parse(localStorage.getItem('ztv_db_contests')) || [
                 {
@@ -1140,18 +1232,28 @@ Question 2...
             updateLevelOptions();
 
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('portal') === 'participant') {
+            
+            // Connexion automatique persistante
+            if (currentUserPhone) {
+                showView('participant-home-view');
+            } else if (urlParams.get('portal') === 'participant') {
                 showView('participant-auth-view');
             } else {
                 showView('admin-login-view');
             }
         });
 
-        function showToast(message) {
-            const toast = document.getElementById('app-toast');
-            toast.innerHTML = message;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 6000);
+        // TOAST VERTE MODERNE HAUT DROITE
+        function showToastGreen(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast-green';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check" style="font-size:1.1rem;"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
         }
 
         function showView(viewId) {
@@ -1169,8 +1271,8 @@ Question 2...
         function switchAuthTab(tab) {
             document.getElementById('participant-login-form').style.display = tab === 'login' ? 'block' : 'none';
             document.getElementById('participant-register-form').style.display = tab === 'register' ? 'block' : 'none';
-            document.getElementById('tab-login-btn').className = tab === 'login' ? 'btn btn-primary btn-block' : 'btn btn-secondary btn-block';
-            document.getElementById('tab-register-btn').className = tab === 'register' ? 'btn btn-primary btn-block' : 'btn btn-secondary btn-block';
+            document.getElementById('tab-login-btn').className = tab === 'login' ? 'btn btn-orange btn-block' : 'btn btn-secondary btn-block';
+            document.getElementById('tab-register-btn').className = tab === 'register' ? 'btn btn-orange btn-block' : 'btn btn-secondary btn-block';
         }
 
         function handleParticipantRegister(e) {
@@ -1179,6 +1281,8 @@ Question 2...
             const firstname = document.getElementById('part-reg-firstname').value.trim();
             const city = document.getElementById('part-reg-city').value.trim();
             const country = document.getElementById('part-reg-country').value.trim();
+            const school = document.getElementById('part-reg-school').value.trim();
+            const userClass = document.getElementById('part-reg-class').value;
             const phone = document.getElementById('part-reg-phone').value.trim();
             const avatar = document.getElementById('part-reg-avatar').value || DEFAULT_AVATAR;
             const pass = document.getElementById('part-reg-pass').value;
@@ -1190,14 +1294,18 @@ Question 2...
             }
 
             const newUser = {
-                lastname, firstname, name: `${firstname} ${lastname}`, city, country, phone, pass, avatar,
+                lastname, firstname, name: `${firstname} ${lastname}`, school, class: userClass,
+                city, country, phone, pass, avatar,
                 subscription: { active: false, expiresAt: null }
             };
 
             users.push(newUser);
             DB.saveUsers(users);
+            
             currentUserPhone = phone;
-            localStorage.setItem('ztv_session_user_phone', phone);
+            localStorage.setItem('ztv_session_user_phone', phone); // Connexion automatique
+            
+            showToastGreen("✅ Compte créé avec succès.");
             showView('participant-home-view');
         }
 
@@ -1211,7 +1319,8 @@ Question 2...
 
             if (user) {
                 currentUserPhone = phone;
-                localStorage.setItem('ztv_session_user_phone', phone);
+                localStorage.setItem('ztv_session_user_phone', phone); // Connexion automatique
+                showToastGreen("✅ Connexion réussie.");
                 showView('participant-home-view');
             } else {
                 alert("Numéro WhatsApp ou mot de passe incorrect.");
@@ -1222,6 +1331,7 @@ Question 2...
             closeModal('modal-profile');
             currentUserPhone = null;
             localStorage.removeItem('ztv_session_user_phone');
+            showToastGreen("Déconnexion effectuée.");
             showView('participant-auth-view');
         }
 
@@ -1243,8 +1353,8 @@ Question 2...
             if (foundUserForReset) {
                 document.getElementById('forgot-found-lastname').innerText = foundUserForReset.lastname || '';
                 document.getElementById('forgot-found-firstname').innerText = foundUserForReset.firstname || foundUserForReset.name;
+                document.getElementById('forgot-found-school').innerText = foundUserForReset.school || 'N/A';
                 document.getElementById('forgot-found-city').innerText = foundUserForReset.city || 'N/A';
-                document.getElementById('forgot-found-country').innerText = foundUserForReset.country || 'N/A';
                 
                 document.getElementById('forgot-step-1').style.display = 'none';
                 document.getElementById('forgot-step-2').style.display = 'block';
@@ -1262,12 +1372,12 @@ Question 2...
                     date: new Date().toLocaleDateString('fr-FR')
                 });
                 DB.saveResets(resets);
-                alert("Votre demande de réinitialisation a été envoyée à l'administrateur.");
                 closeModal('modal-forgot-password');
+                showToastGreen("✅ Demande de réinitialisation envoyée.");
             }
         }
 
-        // --- MODIFICATION MOT DE PASSE EN PROFIL ---
+        // --- MODIFICATION MOT DE PASSE ---
         function handleChangePassword(e) {
             e.preventDefault();
             const curr = document.getElementById('pass-curr').value;
@@ -1283,18 +1393,18 @@ Question 2...
                     return;
                 }
                 if (newP !== conf) {
-                    alert("Le nouveau mot de passe et sa confirmation ne correspondent pas.");
+                    alert("Les mots de passe ne correspondent pas.");
                     return;
                 }
 
                 u.pass = newP;
                 DB.saveUsers(users);
-                alert("Mot de passe modifié avec succès !");
                 closeModal('modal-profile');
+                showToastGreen("✅ Informations mises à jour.");
             }
         }
 
-        // --- ACCUEIL CONCOURS & FILTRES ---
+        // --- ACCUEIL CONCOURS ---
         function setCategoryFilter(cat) {
             selectedCategoryFilter = cat;
             selectedLevelFilter = "Tous";
@@ -1334,35 +1444,30 @@ Question 2...
 
         function renderParticipantHome() {
             const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève", phone: "", avatar: DEFAULT_AVATAR };
+            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève", school: "Établissement", class: "Classe", avatar: DEFAULT_AVATAR };
             
             document.getElementById('user-display-name').innerText = u.name;
+            document.getElementById('user-display-details').innerText = `${u.school || 'Établissement non renseigné'} • Classe : ${u.class || 'N/A'}`;
             document.getElementById('home-user-avatar').src = u.avatar || DEFAULT_AVATAR;
 
             // Statut Abonnement
             const isSubActive = checkUserSubscription(u);
             const statusBadge = document.getElementById('user-sub-status-badge');
             statusBadge.innerText = isSubActive ? "STATUT : PREMIUM ACTIF" : "STATUT : GRATUIT";
-            statusBadge.style.background = isSubActive ? "var(--accent)" : "var(--card-alt)";
+            statusBadge.style.background = isSubActive ? "var(--civ-orange)" : "var(--card-alt)";
             statusBadge.style.color = isSubActive ? "#000" : "#FFF";
-
-            renderTop5();
 
             const list = document.getElementById('participant-contest-list');
             list.innerHTML = '';
             
             let contests = DB.getContests().filter(c => c.online);
 
-            if (selectedCategoryFilter !== 'Tous') {
-                contests = contests.filter(c => c.category === selectedCategoryFilter);
-            }
-            if (selectedLevelFilter !== 'Tous') {
-                contests = contests.filter(c => c.level === selectedLevelFilter);
-            }
+            if (selectedCategoryFilter !== 'Tous') contests = contests.filter(c => c.category === selectedCategoryFilter);
+            if (selectedLevelFilter !== 'Tous') contests = contests.filter(c => c.level === selectedLevelFilter);
 
             if (contests.length === 0) {
                 list.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 2rem; background: var(--card-bg); border-radius:10px; border:1px solid var(--border);">
-                    <p style="color:var(--text-sub); font-size:0.9rem;">«« Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard. »»</p>
+                    <p style="color:var(--text-sub); font-size:0.9rem;">Aucun concours n'est disponible pour le moment dans ce niveau.</p>
                 </div>`;
                 return;
             }
@@ -1373,11 +1478,14 @@ Question 2...
                     <div class="contest-card">
                         <img src="${c.image}" alt="${c.title}" style="width:100%; height:120px; object-fit:cover; border-radius:10px; margin-bottom:8px;">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-size:0.7rem; color:var(--accent); font-weight:700;">${c.category} • ${c.level || ''}</span>
+                            <span class="badge badge-class"><i class="fa-solid fa-graduation-cap"></i> Classe : ${c.level || 'Toutes'}</span>
                             <span class="badge ${isPaid ? 'badge-paid' : 'badge-free'}">${c.type}</span>
                         </div>
                         <div class="contest-title">${c.title}</div>
-                        <button class="btn btn-primary btn-block" onclick="startWaitingCountdown(${c.id})">
+                        <div style="font-size:0.72rem; color:var(--text-sub); margin-bottom:8px;">
+                            <i class="fa-regular fa-calendar"></i> Publié le : ${c.createdAt || 'Récent'}
+                        </div>
+                        <button class="btn btn-green btn-block" onclick="startWaitingCountdown(${c.id})">
                             Participer <i class="fa-solid fa-play"></i>
                         </button>
                     </div>
@@ -1395,7 +1503,7 @@ Question 2...
             return true;
         }
 
-        // --- SYSTEME DE CRÉATION DE CONCOURS PAR ANALYSE AUTOMATIQUE (10 QUESTIONS) ---
+        // --- CREATION DE CONCOURS ---
         function updateLevelOptions() {
             const cat = document.getElementById('edit-category').value;
             const lvlSelect = document.getElementById('edit-level');
@@ -1411,30 +1519,28 @@ Question 2...
         function verifyQuestionsText() {
             const rawText = document.getElementById('edit-questions-raw').value.trim();
             const feedback = document.getElementById('parse-feedback');
-
             const parseResult = parseRawQuestions(rawText);
+
             if (parseResult.success) {
-                feedback.innerHTML = `<span style="color:var(--success); font-weight:700;">«« Toutes les questions sont valides et prêtes à être publiées. »» (${parseResult.questions.length} questions détectées)</span>`;
+                feedback.innerHTML = `<span style="color:var(--civ-green); font-weight:700;">✅ Les ${parseResult.questions.length} questions sont valides.</span>`;
             } else {
                 feedback.innerHTML = `<span style="color:var(--danger); font-weight:700;">Erreur : ${parseResult.error}</span>`;
             }
         }
 
         function parseRawQuestions(text) {
-            if (!text) return { success: false, error: "Le champ des questions est vide." };
+            if (!text) return { success: false, error: "Champ vide." };
 
             const blocks = text.split(/\n\s*\n/).filter(b => b.trim().length > 0);
             if (blocks.length !== 10) {
-                return { success: false, error: `Exactement 10 questions requises. Vous en avez fourni ${blocks.length}.` };
+                return { success: false, error: `Exactement 10 questions requises (${blocks.length} détectées).` };
             }
 
             const questions = [];
 
             for (let i = 0; i < blocks.length; i++) {
                 const lines = blocks[i].split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                if (lines.length < 6) {
-                    return { success: false, error: `Question ${i + 1} incomplete. Format requis : Intitulé, A), B), C), D) et Réponse : X.` };
-                }
+                if (lines.length < 6) return { success: false, error: `Question ${i + 1} incomplète.` };
 
                 const qText = lines[0];
                 let optA = "", optB = "", optC = "", optD = "", answer = -1;
@@ -1454,7 +1560,7 @@ Question 2...
                 });
 
                 if (!optA || !optB || !optC || !optD || answer === -1) {
-                    return { success: false, error: `Erreur à la Question ${i + 1}. Vérifiez les options A, B, C, D et le champ Réponse : X.` };
+                    return { success: false, error: `Erreur dans la Question ${i + 1}.` };
                 }
 
                 questions.push({ q: qText, options: [optA, optB, optC, optD], answer });
@@ -1469,7 +1575,7 @@ Question 2...
             const parseResult = parseRawQuestions(rawText);
 
             if (!parseResult.success) {
-                alert("Erreur de validation des questions :\n" + parseResult.error);
+                alert("Erreur de validation :\n" + parseResult.error);
                 return;
             }
 
@@ -1484,9 +1590,8 @@ Question 2...
                 level: document.getElementById('edit-level').value,
                 type: document.getElementById('edit-type').value,
                 createdAt: now.toISOString().split('T')[0],
-                createdTime: now.toTimeString().split(' ')[0].substring(0, 5),
-                image: document.getElementById('edit-image').value,
                 online: true,
+                image: document.getElementById('edit-image').value,
                 questions: parseResult.questions
             };
 
@@ -1500,10 +1605,10 @@ Question 2...
             DB.saveContests(contests);
             closeModal('modal-edit-contest');
             renderAdminDashboard();
-            alert("Concours enregistré et publié avec succès !");
+            showToastGreen("✅ Concours enregistré.");
         }
 
-        // --- DEROULEMENT DU QUIZ (10 SECONDES + LECTURE VOCALE COMPLÈTE) ---
+        // --- DEROULEMENT QUIZ (CHRONOMÈTRE 30S & AUDIO CONTINU) ---
         function startWaitingCountdown(id) {
             currentQuiz = DB.getContests().find(c => c.id === id);
             
@@ -1511,7 +1616,7 @@ Question 2...
                 const users = DB.getUsers();
                 const u = users.find(item => item.phone === currentUserPhone);
                 if (!checkUserSubscription(u)) {
-                    alert("Ce concours est Payant. Veuillez souscrire à un abonnement Premium pour y accéder.");
+                    alert("Ce concours est réservé aux abonnés Premium.");
                     openBuySubscriptionModal();
                     return;
                 }
@@ -1548,12 +1653,13 @@ Question 2...
 
         function loadQuestion() {
             clearInterval(timerInterval);
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             selectedOption = null;
 
             const totalQ = currentQuiz.questions.length;
             const qData = currentQuiz.questions[currentQuestionIdx];
 
-            document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIdx + 1} / ${totalQ}`;
+            document.getElementById('quiz-progress').innerText = `Question ${currentQuestionIdx + 1} / ${totalQ} • Classe : ${currentQuiz.level}`;
             document.getElementById('quiz-question-text').innerText = qData.q;
 
             const optionsBox = document.getElementById('quiz-options-container');
@@ -1569,8 +1675,8 @@ Question 2...
                 `;
             });
 
-            // Chronomètre rouge de 10 secondes
-            let timeLeft = 10;
+            // Chronomètre Rouge de 30 Secondes
+            let timeLeft = 30;
             const timerEl = document.getElementById('question-timer');
             timerEl.innerText = timeLeft;
 
@@ -1605,23 +1711,32 @@ Question 2...
             } else {
                 const results = DB.getResults();
                 const users = DB.getUsers();
-                const u = users.find(item => item.phone === currentUserPhone) || { name: "Anonyme" };
+                const u = users.find(item => item.phone === currentUserPhone) || { name: "Anonyme", school: "N/A", class: "N/A", city: "N/A" };
 
+                // Enregistrement des résultats complets avec Classe et Date
                 results.unshift({
                     userName: u.name,
+                    userFirstname: u.firstname || u.name,
+                    userLastname: u.lastname || '',
                     userPhone: currentUserPhone,
+                    userSchool: u.school || 'Non renseigné',
+                    userClass: u.class || 'N/A',
+                    userCity: u.city || 'Non renseignée',
                     contestTitle: currentQuiz.title,
+                    contestClass: currentQuiz.level || 'CE2',
                     score: score,
-                    maxScore: currentQuiz.questions.length,
+                    maxScore: 10,
                     date: new Date().toLocaleDateString('fr-FR')
                 });
                 DB.saveResults(results);
 
-                document.getElementById('finish-score-display').innerText = `${score} / ${currentQuiz.questions.length}`;
+                document.getElementById('finish-score-display').innerText = `${score} / 10`;
+                document.getElementById('finish-class-display').innerText = `Concours Niveau : ${currentQuiz.level} • Date : ${new Date().toLocaleDateString('fr-FR')}`;
                 showView('participant-finish-view');
             }
         }
 
+        // LECTURE VOCALE CONTINU : Question -> Option A -> B -> C -> D
         function playAudioQuestion() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -1647,7 +1762,94 @@ Question 2...
             }
         }
 
-        // --- ABONNEMENT PARTICIPANT (PROCÉDURE COMPLÈTE) ---
+        // --- TOP 5 DES MEILLEURS ÉLÈVES ---
+        function openTop5Modal() {
+            const results = DB.getResults();
+            const users = DB.getUsers();
+
+            const statsMap = {};
+
+            results.forEach(r => {
+                const key = r.userPhone || r.userName;
+                if (!statsMap[key]) {
+                    const u = users.find(user => user.phone === key || user.name === key);
+                    statsMap[key] = {
+                        name: u ? u.lastname || '' : '',
+                        firstname: u ? u.firstname || u.name : r.userName,
+                        school: u ? u.school || 'Lycée' : r.userSchool || 'N/A',
+                        city: u ? u.city || 'Abidjan' : r.userCity || 'N/A',
+                        class: u ? u.class || '3e' : r.userClass || 'N/A',
+                        totalContests: 0,
+                        totalPoints: 0
+                    };
+                }
+                statsMap[key].totalContests += 1;
+                statsMap[key].totalPoints += r.score;
+            });
+
+            const sorted = Object.values(statsMap)
+                .sort((a, b) => b.totalPoints - a.totalPoints)
+                .slice(0, 5);
+
+            const tbody = document.getElementById('top5-table-body');
+            tbody.innerHTML = '';
+
+            if (sorted.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7">Aucun classement disponible.</td></tr>`;
+            } else {
+                sorted.forEach((item, idx) => {
+                    const avg = (item.totalPoints / item.totalContests).toFixed(1);
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
+                            <td><strong>${item.firstname} ${item.name}</strong></td>
+                            <td>${item.school} (${item.city})</td>
+                            <td><span class="badge badge-class">${item.class}</span></td>
+                            <td>${item.totalContests}</td>
+                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
+                            <td><strong>${avg} /10</strong></td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById('modal-top5').classList.add('active');
+        }
+
+        // --- TABLEAU DE BORD « MES CONCOURS » ---
+        function openMyContestsModal() {
+            const results = DB.getResults().filter(r => r.userPhone === currentUserPhone);
+            const tbody = document.getElementById('my-contests-table-body');
+            tbody.innerHTML = '';
+
+            let totalPts = 0;
+            results.forEach(r => {
+                totalPts += r.score;
+            });
+
+            document.getElementById('my-total-points').innerText = totalPts;
+            document.getElementById('my-total-count').innerText = results.length;
+
+            if (results.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5">Vous n'avez effectué aucun concours pour le moment.</td></tr>`;
+            } else {
+                results.forEach((r, idx) => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${r.contestTitle}</strong></td>
+                            <td><span class="badge badge-class">${r.contestClass || 'CE2'}</span></td>
+                            <td>${r.date}</td>
+                            <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
+                            <td>#${idx + 1}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById('modal-my-contests').classList.add('active');
+        }
+
+        // --- ABONNEMENT ---
         function openBuySubscriptionModal() {
             const users = DB.getUsers();
             const u = users.find(item => item.phone === currentUserPhone);
@@ -1665,26 +1867,23 @@ Question 2...
             const userClass = document.getElementById('sub-req-class').value;
 
             const subs = DB.getSubscriptions();
-            const now = new Date();
-
             subs.push({
                 id: Date.now(),
                 name, phone, class: userClass,
                 status: 'EN_ATTENTE',
-                date: now.toLocaleDateString('fr-FR'),
-                time: now.toTimeString().split(' ')[0].substring(0, 5)
+                date: new Date().toLocaleDateString('fr-FR')
             });
 
             DB.saveSubscriptions(subs);
             closeModal('modal-buy-subscription');
-
-            showToast(`«« Votre demande a été enregistrée avec succès. Vous serez contacté au numéro WhatsApp que vous avez renseigné afin de finaliser votre paiement. Merci d'utiliser notre application et bonne révision ! »»`);
+            showToastGreen("✅ Abonnement activé ou demande reçue.");
         }
 
-        // --- ADMINISTRATION COMPLÈTE ---
+        // --- ADMINISTRATION ---
         function handleAdminLogin(e) {
             e.preventDefault();
-            if (document.getElementById('admin-user').value === 'admin' && document.getElementById('admin-pass').value === 'admin') {
+            if (document.getElementById('admin-user').value === 'ZakariaTV' && document.getElementById('admin-pass').value === '55250031') {
+                showToastGreen("✅ Connexion Administrateur réussie.");
                 showView('admin-dashboard-view');
             } else {
                 alert("Identifiants administration incorrects.");
@@ -1710,18 +1909,14 @@ Question 2...
             const list = document.getElementById('admin-contest-list');
             list.innerHTML = '';
             contests.forEach(c => {
-                const participantsCount = results.filter(r => r.contestTitle === c.title).length;
                 list.innerHTML += `
                     <div class="contest-card">
                         <img src="${c.image}" alt="${c.title}" style="width:100%; height:110px; object-fit:cover; border-radius:10px; margin-bottom:8px;">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-size:0.7rem; color:var(--accent); font-weight:700;">${c.category} (${c.level || ''})</span>
+                            <span class="badge badge-class">Classe : ${c.level}</span>
                             <span class="badge ${c.online ? 'badge-online' : 'badge-offline'}">${c.online ? 'En ligne' : 'Masqué'}</span>
                         </div>
                         <div class="contest-title">${c.title}</div>
-                        <div style="font-size:0.75rem; color:var(--text-sub); margin-bottom:6px;">
-                            Participants : <strong>${participantsCount}</strong>
-                        </div>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px;">
                             <button class="btn btn-secondary" style="padding:4px;" onclick="toggleContestStatus(${c.id})">${c.online ? 'Masquer' : 'Publier'}</button>
                             <button class="btn btn-danger" style="padding:4px;" onclick="deleteContest(${c.id})"><i class="fa-solid fa-trash"></i> Supprimer</button>
@@ -1729,6 +1924,20 @@ Question 2...
                     </div>
                 `;
             });
+
+            // Avis Utilisateurs pour l'administrateur
+            const reviews = DB.getReviews();
+            const reviewsList = document.getElementById('admin-reviews-list');
+            reviewsList.innerHTML = reviews.map(r => `
+                <div style="background:var(--card-alt); padding:8px 12px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); font-size:0.82rem;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong>${r.name}</strong>
+                        <span style="color:var(--text-sub); font-size:0.75rem;">${r.date || 'Récent'}</span>
+                    </div>
+                    <div style="color:var(--civ-orange); font-size:0.75rem;">${'★'.repeat(r.stars)}</div>
+                    <div style="color:var(--text-main); margin-top:2px;">"${r.comment}"</div>
+                </div>
+            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucun avis pour le moment.</p>';
         }
 
         function openCreateContestModal() {
@@ -1748,13 +1957,15 @@ Question 2...
                 c.online = !c.online;
                 DB.saveContests(contests);
                 renderAdminDashboard();
+                showToastGreen("✅ Informations mises à jour.");
             }
         }
 
         function deleteContest(id) {
-            if (confirm("Voulez-vous supprimer ce concours ?")) {
+            if (confirm("Supprimer ce concours ?")) {
                 DB.saveContests(DB.getContests().filter(c => c.id !== id));
                 renderAdminDashboard();
+                showToastGreen("✅ Concours supprimé.");
             }
         }
 
@@ -1762,9 +1973,9 @@ Question 2...
             const users = DB.getUsers();
             document.getElementById('admin-users-table').innerHTML = users.map(u => `
                 <tr>
-                    <td><img src="${u.avatar || DEFAULT_AVATAR}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;"></td>
                     <td><strong>${u.name}</strong></td>
-                    <td>${u.city || ''} (${u.country || ''})</td>
+                    <td>${u.school || 'N/A'} (${u.class || 'N/A'})</td>
+                    <td>${u.city || ''}</td>
                     <td>${u.phone}</td>
                     <td><button class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="deleteUser('${u.phone}')">Supprimer</button></td>
                 </tr>
@@ -1777,6 +1988,7 @@ Question 2...
                 DB.saveUsers(DB.getUsers().filter(u => u.phone !== phone));
                 openAdminUsersModal();
                 renderAdminDashboard();
+                showToastGreen("✅ Utilisateur supprimé.");
             }
         }
 
@@ -1786,9 +1998,11 @@ Question 2...
                 <tr>
                     <td><strong>${r.userName}</strong></td>
                     <td>${r.contestTitle}</td>
-                    <td><strong style="color:var(--accent);">${r.score} / ${r.maxScore || 10}</strong></td>
+                    <td><span class="badge badge-class">${r.contestClass || 'CE2'}</span></td>
+                    <td>${r.date}</td>
+                    <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
                 </tr>
-            `).join('') || '<tr><td colspan="3">Aucun résultat.</td></tr>';
+            `).join('') || '<tr><td colspan="5">Aucun résultat.</td></tr>';
             document.getElementById('modal-admin-results').classList.add('active');
         }
 
@@ -1797,9 +2011,9 @@ Question 2...
             document.getElementById('admin-resets-list').innerHTML = resets.map((r, i) => `
                 <div style="background:var(--card-alt); padding:8px; border-radius:6px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem;">
                     <div>Demande de : <strong>${r.name}</strong> (${r.phone})</div>
-                    <button class="btn btn-success" style="padding:2px 8px; font-size:0.75rem;" onclick="processResetPassword('${r.phone}', ${i})">Réinitialiser (5555)</button>
+                    <button class="btn btn-green" style="padding:2px 8px; font-size:0.75rem;" onclick="processResetPassword('${r.phone}', ${i})">Réinitialiser (5555)</button>
                 </div>
-            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucune demande de réinitialisation.</p>';
+            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucune demande.</p>';
             document.getElementById('modal-admin-resets').classList.add('active');
         }
 
@@ -1815,25 +2029,22 @@ Question 2...
             DB.saveResets(resets);
             openAdminResetsModal();
             renderAdminDashboard();
-            alert(`Mot de passe réinitialisé à : 5555`);
+            showToastGreen("✅ Mot de passe réinitialisé à 5555.");
         }
 
         function openAdminSubscriptionModal() {
             const subs = DB.getSubscriptions();
-            document.getElementById('admin-subscriptions-table').innerHTML = subs.map((s, i) => {
-                const messageWA = encodeURIComponent(`Bonjour ${s.name}, nous avons bien reçu votre demande d'abonnement. Pour activer votre compte pendant un mois, merci d'effectuer le dépôt via Wave, Orange Money, MTN Mobile Money ou tout autre service Mobile Money au numéro 05 85 97 19 41, puis de nous envoyer le reçu de paiement sur WhatsApp.`);
-                return `
+            document.getElementById('admin-subscriptions-table').innerHTML = subs.map((s, i) => `
                 <tr>
                     <td><strong>${s.name}</strong></td>
                     <td>${s.phone}</td>
                     <td>${s.class}</td>
                     <td><span class="badge ${s.status === 'ACTIF' ? 'badge-online' : 'badge-offline'}">${s.status}</span></td>
-                    <td style="display:flex; gap:4px;">
-                        <a class="btn btn-secondary" style="padding:2px 6px; font-size:0.7rem; background:#25D366; color:#000;" href="https://wa.me/${s.phone.replace(/[^0-9]/g,'')}?text=${messageWA}" target="_blank"><i class="fa-brands fa-whatsapp"></i> Contacter</a>
-                        ${s.status === 'EN_ATTENTE' ? `<button class="btn btn-success" style="padding:2px 6px; font-size:0.7rem;" onclick="activateSubscription(${i})">Activer</button>` : ''}
+                    <td>
+                        ${s.status === 'EN_ATTENTE' ? `<button class="btn btn-green" style="padding:2px 6px; font-size:0.7rem;" onclick="activateSubscription(${i})">Activer</button>` : ''}
                     </td>
                 </tr>
-            `}).join('') || '<tr><td colspan="5">Aucune demande d\'abonnement.</td></tr>';
+            `).join('') || '<tr><td colspan="5">Aucune demande.</td></tr>';
             document.getElementById('modal-admin-subscription').classList.add('active');
         }
 
@@ -1855,14 +2066,14 @@ Question 2...
             }
 
             openAdminSubscriptionModal();
-            alert(`Abonnement activé pour 30 jours pour ${sub.name}.`);
+            showToastGreen("✅ Abonnement activé.");
         }
 
         function resetAllData() {
-            if (confirm("⚠️ Réinitialiser toutes les données de l'application ?")) {
+            if (confirm("Réinitialiser toutes les données de l'application ?")) {
                 localStorage.clear();
-                alert("Données réinitialisées.");
-                location.reload();
+                showToastGreen("✅ Données réinitialisées.");
+                setTimeout(() => location.reload(), 1000);
             }
         }
 
@@ -1870,10 +2081,12 @@ Question 2...
             const copyText = document.getElementById("unique-share-link");
             copyText.select();
             document.execCommand("copy");
-            alert("Lien unique copié !");
+            showToastGreen("✅ Lien copié !");
         }
 
         // --- AUTRES MODALES PARTICIPANT ---
+        function openCreatorModal() { document.getElementById('modal-creator').classList.add('active'); }
+
         function openProfileModal() {
             const users = DB.getUsers();
             const u = users.find(item => item.phone === currentUserPhone);
@@ -1881,116 +2094,27 @@ Question 2...
 
             document.getElementById('prof-lastname').innerText = u.lastname || '';
             document.getElementById('prof-firstname').innerText = u.firstname || u.name;
-            document.getElementById('prof-city').innerText = u.city || 'Non renseignée';
-            document.getElementById('prof-country').innerText = u.country || 'Non renseigné';
+            document.getElementById('prof-school').innerText = u.school || 'Non renseigné';
+            document.getElementById('prof-class').innerText = u.class || 'N/A';
+            document.getElementById('prof-location').innerText = `${u.city || ''}, ${u.country || ''}`;
             document.getElementById('prof-phone').innerText = u.phone;
             document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
 
             const isSub = checkUserSubscription(u);
             const badge = document.getElementById('prof-sub-badge');
             badge.innerText = isSub ? 'Statut : Premium Actif' : 'Statut : Gratuit';
-            badge.style.background = isSub ? 'rgba(245, 158, 11, 0.2)' : 'rgba(16,185,129,0.15)';
-            badge.style.color = isSub ? 'var(--accent)' : 'var(--success)';
 
             document.getElementById('modal-profile').classList.add('active');
         }
 
-        function renderTop5() {
-            const results = DB.getResults();
-            const users = DB.getUsers();
-            
-            const scoresMap = {};
-            results.forEach(r => {
-                const key = r.userPhone || r.userName;
-                scoresMap[key] = (scoresMap[key] || 0) + r.score;
-            });
-
-            const sorted = Object.keys(scoresMap)
-                .map(key => {
-                    const u = users.find(user => user.phone === key || user.name === key);
-                    return {
-                        name: u ? u.name : key,
-                        score: scoresMap[key],
-                        avatar: u && u.avatar ? u.avatar : DEFAULT_AVATAR
-                    };
-                })
-                .sort((a, b) => b.score - a.score)
-                .slice(0, 5);
-
-            const container = document.getElementById('top-5-container');
-            if (sorted.length === 0) {
-                container.innerHTML = `<span style="font-size:0.75rem; color:var(--text-sub);">Aucun classement actuellement.</span>`;
-                return;
-            }
-
-            container.innerHTML = sorted.map((item, idx) => `
-                <div style="display:flex; align-items:center; gap:6px; background:var(--card-alt); padding:4px 10px; border-radius:30px; border:1px solid var(--border); flex-shrink:0;">
-                    <span style="font-weight:800; font-size:0.75rem; color:var(--accent);">#${idx + 1}</span>
-                    <img src="${item.avatar}" style="width:22px; height:22px; border-radius:50%; object-fit:cover;">
-                    <span style="font-size:0.78rem; font-weight:700;">${item.name}</span>
-                    <span style="font-size:0.7rem; color:var(--accent); font-weight:800;">${item.score} pts</span>
-                </div>
-            `).join('');
-        }
-
-        function openRankingModal() {
-            const results = DB.getResults();
-            const sorted = [...results].sort((a, b) => b.score - a.score);
-
-            document.getElementById('ranking-list').innerHTML = sorted.map((r, i) => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:var(--card-alt); border-radius:10px; margin-bottom:6px; border:1px solid var(--border);">
-                    <span style="font-weight:800; color:var(--accent); width:28px;">#${i + 1}</span>
-                    <span style="flex:1; font-weight: 700; font-size: 0.85rem;">${r.userName}</span>
-                    <span style="color: var(--accent); font-weight: 800; font-size: 0.85rem;">${r.score} pts</span>
-                </div>
-            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucun classement disponible.</p>';
-
-            document.getElementById('modal-ranking').classList.add('active');
-        }
-
         function openReviewModal() {
-            renderMyReviews();
             document.getElementById('modal-review').classList.add('active');
-        }
-
-        function renderMyReviews() {
-            const reviews = DB.getReviews();
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève" };
-
-            const myReviews = reviews.filter(r => r.phone === currentUserPhone || r.name === u.name);
-            const container = document.getElementById('user-my-reviews-list');
-
-            if (myReviews.length === 0) {
-                container.innerHTML = `<p style="font-size:0.75rem; color:var(--text-sub);">Vous n'avez pas encore publié d'avis.</p>`;
-                return;
-            }
-
-            container.innerHTML = myReviews.map((r, index) => `
-                <div style="background:var(--card-alt); padding:8px 10px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <div style="color:var(--accent); font-size:0.75rem;">${'★'.repeat(r.stars)}</div>
-                        <div style="font-size:0.8rem; color:var(--text-main); margin-top:2px;">"${r.comment}"</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function openUserResultsModal() {
-            const results = DB.getResults().filter(r => r.userPhone === currentUserPhone);
-            document.getElementById('user-results-history').innerHTML = results.map(r => `
-                <div style="background:var(--card-alt); padding:8px 12px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); font-size:0.85rem;">
-                    <div style="font-weight:700;">${r.contestTitle}</div>
-                    <div style="color:var(--accent); font-weight:800; font-size:0.95rem; margin-top:2px;">Score : ${r.score} / ${r.maxScore || 10}</div>
-                </div>
-            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucun résultat disponible.</p>';
-            document.getElementById('modal-results').classList.add('active');
         }
 
         function setRating(r) {
             currentRating = r;
             document.querySelectorAll('#star-rating-box .fa-star').forEach((s, idx) => {
-                s.className = idx < r ? 'fa-solid fa-star active' : 'fa-solid fa-star';
+                s.style.color = idx < r ? 'var(--civ-orange)' : 'var(--text-sub)';
             });
         }
 
@@ -2005,12 +2129,13 @@ Question 2...
                 name: u.name,
                 phone: currentUserPhone,
                 stars: currentRating,
-                comment: document.getElementById('review-comment').value
+                comment: document.getElementById('review-comment').value,
+                date: new Date().toLocaleDateString('fr-FR')
             });
             DB.saveReviews(reviews);
             document.getElementById('review-comment').value = '';
-            alert("Merci pour votre avis !");
-            renderMyReviews();
+            closeModal('modal-review');
+            showToastGreen("✅ Avis enregistré.");
         }
     </script>
 </body>
