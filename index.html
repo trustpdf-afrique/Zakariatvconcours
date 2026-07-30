@@ -8,7 +8,7 @@
   <style>
     :root {
       --bg-dark: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.8);
+      --card-bg: rgba(30, 41, 59, 0.85);
       --accent: #6366f1;
       --accent-hover: #4f46e5;
       --gold: #f59e0b;
@@ -16,7 +16,7 @@
       --success: #10b981;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.1);
+      --border: rgba(255, 255, 255, 0.12);
       --radius: 16px;
     }
 
@@ -24,67 +24,189 @@
     body { background: radial-gradient(circle at top left, #1e1b4b, #0f172a); color: var(--text); min-height: 100vh; padding: 15px; }
     .container { max-width: 1100px; margin: 0 auto; }
 
-    /* UI Components */
     header { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .logo-box { width: 42px; height: 42px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
     
-    .btn { background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+    .btn { background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none; }
     .btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
     .btn-gold { background: linear-gradient(135deg, #f59e0b, #d97706); }
     .btn-danger { background: var(--danger); }
     .btn-secondary { background: rgba(255,255,255,0.1); }
+    .btn-sm { padding: 5px 10px; font-size: 0.85rem; }
     
     .card { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
     .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+    .clickable-card { cursor: pointer; transition: 0.2s; }
+    .clickable-card:hover { border-color: var(--accent); transform: translateY(-3px); }
     .stat-val { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
 
-    input, select { width: 100%; padding: 12px; margin: 8px 0 15px 0; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; color: white; }
+    input, select, textarea { width: 100%; padding: 12px; margin: 8px 0 15px 0; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; color: white; }
     .hidden { display: none !important; }
 
-    /* Timer & Quiz */
-    .timer { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--danger); color: var(--danger); font-size: 1.8rem; font-weight: bold; display: flex; align-items: center; justify-content: center; margin: 10px auto; animation: pulse 1s infinite alternate; }
+    /* Timer 15s */
+    .timer { width: 85px; height: 85px; border-radius: 50%; border: 4px solid var(--danger); color: var(--danger); font-size: 2.2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; margin: 15px auto; animation: pulse 1s infinite alternate; }
     @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
-    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
     
-    /* Badges */
-    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; display: inline-block; }
-    .badge-pending { background: rgba(245, 158, 11, 0.2); color: var(--gold); }
-    .badge-paid { background: rgba(16, 185, 129, 0.2); color: var(--success); }
-    .badge-cheat { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+    /* Modale */
+    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-content { background: #1e293b; border: 1px solid var(--border); border-radius: var(--radius); width: 90%; max-width: 650px; max-height: 85vh; overflow-y: auto; padding: 25px; }
+
+    .banner-placeholder { width: 100%; height: 120px; background: linear-gradient(135deg, #4f46e5, #9333ea); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+    
+    .stars { color: var(--gold); font-size: 1.2rem; }
   </style>
 </head>
 <body>
 
 <div class="container">
   
-  <!-- EN-TÊTE GLOBAL -->
+  <!-- EN-TÊTE -->
   <header>
     <div style="display:flex; align-items:center; gap:12px;">
       <div class="logo-box">ZTV</div>
-      <h2 style="font-size: 1.2rem;">ZakariaTV Concours</h2>
+      <div>
+        <h2 style="font-size: 1.2rem;">ZakariaTV Concours</h2>
+        <small style="color:var(--text-muted)" id="header-subtitle">Plateforme éducative</small>
+      </div>
     </div>
     <div style="display:flex; gap:10px; align-items:center;">
-      <button class="btn btn-gold" onclick="alert('Note globale : 4.9/5 ★★★★★ (120 avis)')">
-        <i class="fa-solid fa-star"></i> Avis
+      <button class="btn btn-gold" onclick="openReviewsModal()">
+        <i class="fa-solid fa-star"></i> Avis (<span id="header-rating-avg">5.0</span>★)
       </button>
-      <button class="btn btn-secondary" id="nav-btn" onclick="switchView('login-choice')">
-        <i class="fa-solid fa-user"></i> Connexion
+      <button class="btn btn-secondary hidden" id="participant-logout-btn" onclick="logoutParticipant()">
+        <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
       </button>
     </div>
   </header>
 
-  <!-- SELECTION RÔLE / CONNEXION -->
-  <div id="view-login-choice" class="card" style="max-width: 450px; margin: 40px auto; text-align:center;">
-    <h3 style="margin-bottom:20px;">Bienvenue sur ZakariaTV</h3>
-    <button class="btn" style="width:100%; margin-bottom:12px;" onclick="switchView('register')">Créer un compte Participant</button>
-    <button class="btn btn-secondary" style="width:100%; margin-bottom:12px;" onclick="switchView('login-participant')">Connexion Participant</button>
+  <!-- ==================== A) ACCÈS ADMIN SEUL ==================== -->
+  <div id="view-login-admin" class="card" style="max-width: 420px; margin: 50px auto;">
+    <h3 style="margin-bottom: 15px; text-align:center;"><i class="fa-solid fa-shield-halved"></i> Espace Administrateur</h3>
+    <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px; text-align:center;">Veuillez vous identifier pour gérer la plateforme.</p>
+    <input type="text" id="admin-user" placeholder="Nom d'utilisateur (ZakariaTV)">
+    <input type="password" id="admin-pass" placeholder="Mot de passe">
+    <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="handleLoginAdmin()">Connexion Administration</button>
+  </div>
+
+  <!-- DASHBOARD ADMIN -->
+  <div id="view-admin-dashboard" class="hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+      <h3>Tableau de Bord de Gestion</h3>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-gold" onclick="switchView('admin-create-concours')"><i class="fa-solid fa-plus"></i> Créer un concours</button>
+        <button class="btn btn-secondary" onclick="logoutAdmin()"><i class="fa-solid fa-power-off"></i> Déconnexion</button>
+      </div>
+    </div>
+
+    <!-- LIEN UNIQUE PARTICIPANTS -->
+    <div class="card" style="border: 1px solid var(--accent);">
+      <h4 style="color:var(--accent); margin-bottom:10px;"><i class="fa-solid fa-link"></i> Lien Unique pour les Participants</h4>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">Partagez ce lien unique avec vos élèves. Toutes vos modifications s'y appliquent directement.</p>
+      <div style="display:flex; gap:10px;">
+        <input type="text" id="admin-unique-link" readonly style="margin:0;">
+        <button class="btn btn-gold" onclick="copyUniqueLink()"><i class="fa-solid fa-copy"></i> Copier</button>
+      </div>
+    </div>
+
+    <!-- 8 CARTES DE STATISTIQUES INTERACTIVES -->
+    <div class="grid-4">
+      <div class="card clickable-card" onclick="openStatDetails('concours_crees')">
+        <span style="color:var(--text-muted)">Total Concours Créés</span>
+        <div class="stat-val" id="stat-created">0</div>
+        <small style="color:var(--accent)">Cliquer pour voir la liste →</small>
+      </div>
+      <div class="card clickable-card" onclick="openStatDetails('concours_effectues')">
+        <span style="color:var(--text-muted)">Total Effectués</span>
+        <div class="stat-val" id="stat-completed">0</div>
+        <small style="color:var(--accent)">Cliquer pour voir la liste →</small>
+      </div>
+      <div class="card clickable-card" onclick="openStatDetails('comptes')">
+        <span style="color:var(--text-muted)">Comptes Créés</span>
+        <div class="stat-val" id="stat-accounts">0</div>
+        <small style="color:var(--accent)">Cliquer pour voir la liste →</small>
+      </div>
+      <div class="card clickable-card" onclick="openStatDetails('participants')">
+        <span style="color:var(--text-muted)">Total Participants</span>
+        <div class="stat-val" id="stat-participants">0</div>
+        <small style="color:var(--accent)">Cliquer pour voir la liste →</small>
+      </div>
+      <div class="card clickable-card" onclick="openStatDetails('gagnants')">
+        <span style="color:var(--text-muted)">Top Élèves (Scores 5/5)</span>
+        <div class="stat-val" style="color:var(--success);" id="stat-winners">0</div>
+        <small style="color:var(--accent)">Cliquer pour voir la liste →</small>
+      </div>
+      <div class="card clickable-card" onclick="openStatDetails('demandes_mdp')">
+        <span style="color:var(--text-muted)">Demandes MDP Oublié</span>
+        <div class="stat-val" style="color:var(--gold);" id="stat-requests">0</div>
+        <small style="color:var(--accent)">Cliquer pour voir la liste →</small>
+      </div>
+      <div class="card clickable-card" onclick="openStatDetails('en_cours')">
+        <span style="color:var(--text-muted)">Concours en ligne</span>
+        <div class="stat-val" style="color:#3b82f6;" id="stat-online">0</div>
+        <small style="color:var(--accent)">Cliquer pour voir la liste →</small>
+      </div>
+      <div class="card clickable-card" onclick="openStatDetails('avis')">
+        <span style="color:var(--text-muted)">Avis Reçus</span>
+        <div class="stat-val" style="color:var(--gold);" id="stat-reviews-count">0</div>
+        <small style="color:var(--accent)">Cliquer pour lire/supprimer →</small>
+      </div>
+    </div>
+
+    <!-- GESTION DES CONCOURS EXISTANTS -->
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h4>Gestion Globale des Concours</h4>
+      </div>
+      <div id="admin-concours-list"></div>
+    </div>
+  </div>
+
+  <!-- CRÉATION / MODIFICATION D'UN CONCOURS -->
+  <div id="view-admin-create-concours" class="card hidden" style="max-width: 650px; margin:0 auto;">
+    <button class="btn btn-secondary" onclick="switchView('admin-dashboard')" style="margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+    <h3>Créer / Modifier un Concours</h3>
+    
+    <label>Catégorie :</label>
+    <select id="c-cat" onchange="updateClassOptions()">
+      <option value="Primaire">Primaire</option>
+      <option value="Collège">Collège</option>
+    </select>
+
+    <label>Classe concernée :</label>
+    <select id="c-classe"></select>
+
+    <label>Titre / Sujet du Concours :</label>
+    <input type="text" id="c-title" placeholder="Ex: Révisions de Mathématiques / Histoire">
+
     <hr style="border-color:var(--border); margin:15px 0;">
-    <button class="btn btn-gold" style="width:100%;" onclick="switchView('login-admin')"><i class="fa-solid fa-lock"></i> Espace Administrateur</button>
+    <h4>Configuration des 5 Questions</h4>
+
+    <div id="questions-builder-container"></div>
+
+    <button class="btn btn-gold" style="width:100%; justify-content:center; margin-top:15px;" onclick="saveConcours()"><i class="fa-solid fa-floppy-disk"></i> Enregistrer et Publier</button>
+  </div>
+
+
+  <!-- ==================== B) ESPACE PARTICIPANTS (ACCESSIBLE VIA LIEN UNIQUE) ==================== -->
+  
+  <!-- CONNEXION PARTICIPANT -->
+  <div id="view-p-login" class="card hidden" style="max-width: 420px; margin: 30px auto;">
+    <h3 style="text-align:center; margin-bottom:15px;">Connexion Participant</h3>
+    <input type="text" id="p-login-fullname" placeholder="Nom et Prénom complets">
+    <input type="password" id="p-login-pass" maxlength="4" placeholder="Mot de passe (4 chiffres)">
+    <button class="btn" style="width:100%; justify-content:center; margin-bottom:12px;" onclick="handleLoginParticipant()">Se connecter</button>
+    
+    <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+      <a href="#" style="color:var(--text-muted);" onclick="switchView('p-forgot')">Mot de passe oublié ?</a>
+      <a href="#" style="color:var(--accent);" onclick="switchView('p-register')">Créer un compte</a>
+    </div>
   </div>
 
   <!-- INSCRIPTION PARTICIPANT -->
-  <div id="view-register" class="card hidden" style="max-width: 450px; margin: 0 auto;">
-    <h3>Créer un compte</h3>
+  <div id="view-p-register" class="card hidden" style="max-width: 450px; margin: 20px auto;">
+    <button class="btn btn-secondary" onclick="switchView('p-login')" style="margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+    <h3>Inscription Participant</h3>
     <input type="text" id="reg-nom" placeholder="Nom">
     <input type="text" id="reg-prenom" placeholder="Prénom">
     <input type="text" id="reg-ville" placeholder="Ville">
@@ -94,173 +216,547 @@
       <option value="Mali">Mali</option>
       <option value="Burkina Faso">Burkina Faso</option>
       <option value="Cameroun">Cameroun</option>
+      <option value="Autre">Autre</option>
     </select>
     <input type="tel" id="reg-whatsapp" placeholder="Contact WhatsApp">
-    <input type="password" id="reg-pass" maxlength="4" placeholder="Mot de passe (4 chiffres)">
-    <button class="btn" style="width:100%;" onclick="handleRegister()">Terminer</button>
-  </div>
-
-  <!-- CONNEXION PARTICIPANT -->
-  <div id="view-login-participant" class="card hidden" style="max-width: 450px; margin: 0 auto;">
-    <h3>Connexion Participant</h3>
-    <input type="text" id="login-p-nom" placeholder="Nom complet (Nom Prénom)">
-    <input type="password" id="login-p-pass" placeholder="Mot de passe">
-    <button class="btn" style="width:100%; margin-bottom:10px;" onclick="handleLoginParticipant()">Se connecter</button>
-    <p style="text-align:center;"><a href="#" style="color:var(--text-muted);" onclick="switchView('forgot-pass')">Mot de passe oublié ?</a></p>
+    <input type="password" id="reg-pass" maxlength="4" placeholder="Mot de passe (4 chiffres uniquement)">
+    <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="handleRegisterParticipant()">Terminer l'inscription</button>
   </div>
 
   <!-- MOT DE PASSE OUBLIÉ -->
-  <div id="view-forgot-pass" class="card hidden" style="max-width: 450px; margin: 0 auto;">
-    <h3>Récupération de compte</h3>
+  <div id="view-p-forgot" class="card hidden" style="max-width: 420px; margin: 30px auto;">
+    <button class="btn btn-secondary" onclick="switchView('p-login')" style="margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+    <h3>Mot de passe oublié</h3>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">Saisissez votre numéro WhatsApp pour vérifier votre compte.</p>
     <input type="tel" id="forgot-phone" placeholder="Numéro WhatsApp">
-    <button class="btn" style="width:100%;" onclick="checkForgotPhone()">Vérifier</button>
-    
-    <div id="forgot-confirm" class="hidden" style="margin-top:15px; border-top:1px solid var(--border); padding-top:15px;">
-      <p id="forgot-user-info"></p>
-      <div style="display:flex; gap:10px; margin-top:10px;">
-        <button class="btn" style="flex:1;" onclick="sendResetRequest()">Oui, c'est moi</button>
-        <button class="btn btn-danger" style="flex:1;" onclick="switchView('login-participant')">Annuler</button>
+    <button class="btn" style="width:100%; justify-content:center;" onclick="checkForgotPhone()">Rechercher</button>
+
+    <div id="forgot-confirm-box" class="hidden" style="margin-top:15px; border-top:1px solid var(--border); padding-top:15px;">
+      <p id="forgot-user-details" style="font-size:0.9rem; margin-bottom:12px;"></p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-gold" style="flex:1;" onclick="submitForgotRequest()">Oui, c'est moi</button>
+        <button class="btn btn-danger" style="flex:1;" onclick="switchView('p-login')">Annuler</button>
       </div>
     </div>
   </div>
 
-  <!-- CONNEXION ADMIN -->
-  <div id="view-login-admin" class="card hidden" style="max-width: 400px; margin: 0 auto;">
-    <h3>Connexion Admin</h3>
-    <input type="text" id="admin-user" placeholder="Nom d'utilisateur">
-    <input type="password" id="admin-pass" placeholder="Mot de passe">
-    <button class="btn btn-gold" style="width:100%;" onclick="handleLoginAdmin()">Accéder au Dashboard</button>
-  </div>
-
-  <!-- DASHBOARD ADMIN -->
-  <div id="view-admin-dashboard" class="hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-      <h3>Tableau de bord Administrateur</h3>
-      <button class="btn btn-gold" onclick="switchView('admin-premium')"><i class="fa-solid fa-crown"></i> Espace Premium</button>
-    </div>
-
-    <div class="grid-4">
-      <div class="card"><span style="color:var(--text-muted)">Total Concours Créés</span><div class="stat-val">12</div></div>
-      <div class="card"><span style="color:var(--text-muted)">Concours Effectués</span><div class="stat-val">10</div></div>
-      <div class="card"><span style="color:var(--text-muted)">Comptes Créés</span><div class="stat-val" id="stat-accounts">0</div></div>
-      <div class="card"><span style="color:var(--text-muted)">Demandes MDP Oublié</span><div class="stat-val" style="color:var(--gold);" id="stat-requests">0</div></div>
-      <div class="card"><span style="color:var(--text-muted)">Total Participants</span><div class="stat-val" id="stat-participants">0</div></div>
-      <div class="card"><span style="color:var(--text-muted)">Nombre de Gagnants</span><div class="stat-val" style="color:var(--success);">3</div></div>
-      <div class="card"><span style="color:var(--text-muted)">Concours en cours</span><div class="stat-val" style="color:#3b82f6;">1</div></div>
-      <div class="card"><span style="color:var(--text-muted)">Concours terminés</span><div class="stat-val">9</div></div>
-    </div>
-
-    <!-- Demandes MDP Oublié -->
+  <!-- ACCUEIL CONCOURS PARTICIPANTS -->
+  <div id="view-p-home" class="hidden">
     <div class="card">
-      <h4>Demandes de réinitialisation MDP</h4>
-      <div id="admin-reset-list" style="margin-top:10px;"></div>
-    </div>
-  </div>
-
-  <!-- ESPACE PREMIUM ADMIN -->
-  <div id="view-admin-premium" class="hidden">
-    <button class="btn btn-secondary" onclick="switchView('admin-dashboard')" style="margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
-    <div class="card">
-      <h3>Espace Premium Administrateur</h3>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin:15px 0;">
-        <button class="btn" onclick="alert('Formulaire de création activé')">1. Créer un concours</button>
-        <button class="btn" onclick="alert('3 Meilleurs Résultats : 1. Kouassi A. (5/5) | 2. Koné M. (5/5) | 3. Yao B. (4/5)')">2. Voir Top 3 Résultats</button>
-        <button class="btn" onclick="alert('Affichage de la liste globale des participants')">3. Voir tous les participants</button>
-        <button class="btn" onclick="alert('Concours mis en ligne avec succès !')">4. Mettre en ligne</button>
-        <button class="btn" onclick="showAllAccounts()">5. Voir tous les comptes</button>
-      </div>
-      <div id="accounts-display-list"></div>
-    </div>
-  </div>
-
-  <!-- ACCUEIL DES CONCOURS (PARTICIPANT) -->
-  <div id="view-home-concours" class="hidden">
-    <div class="card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 id="user-welcome">Bienvenue</h3>
-        <button class="btn btn-secondary" onclick="switchView('participant-profile')"><i class="fa-solid fa-user-gear"></i> Mon Profil</button>
-      </div>
+      <div class="banner-placeholder">📚 Espace Révisions & Concours Éducatifs</div>
       
-      <div style="display:flex; gap:10px; margin:20px 0;">
-        <button class="btn" onclick="filterCategory('all')">Tous</button>
-        <button class="btn btn-secondary" onclick="filterCategory('primaire')">Primaire</button>
-        <button class="btn btn-secondary" onclick="filterCategory('college')">Collège</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+        <div>
+          <h3 id="p-welcome-msg">Bienvenue !</h3>
+          <p style="color:var(--text-muted); font-size:0.85rem;">Sélectionnez votre niveau pour réviser.</p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-secondary" onclick="openMyResults()"><i class="fa-solid fa-square-poll-vertical"></i> Mes Résultats</button>
+          <button class="btn btn-gold" onclick="openTop5Modal()"><i class="fa-solid fa-trophy"></i> Top 5 Élèves</button>
+          <button class="btn btn-secondary" onclick="switchView('p-profile')"><i class="fa-solid fa-user-gear"></i> Mon Profil</button>
+        </div>
       </div>
 
-      <div id="sub-levels" class="hidden" style="margin-bottom:15px;"></div>
-
-      <div id="concours-list-container">
-        <!-- Message par défaut si rien n'est sélectionné/disponible -->
-        <p style="color:var(--text-muted); text-align:center; padding:20px;">
-          Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard.
-        </p>
+      <!-- Filtres -->
+      <div style="display:flex; gap:10px; margin-bottom:15px;">
+        <button class="btn" onclick="filterParticipantConcours('all')">Tous</button>
+        <button class="btn btn-secondary" onclick="filterParticipantConcours('Primaire')">Primaire</button>
+        <button class="btn btn-secondary" onclick="filterParticipantConcours('Collège')">Collège</button>
       </div>
+
+      <div id="level-subbuttons" class="hidden" style="margin-bottom:15px; display:flex; gap:8px; flex-wrap:wrap;"></div>
+
+      <!-- Liste des concours -->
+      <div id="p-concours-cards-list"></div>
     </div>
   </div>
 
   <!-- PROFIL PARTICIPANT -->
-  <div id="view-participant-profile" class="card hidden" style="max-width: 500px; margin: 0 auto;">
-    <button class="btn btn-secondary" onclick="switchView('home-concours')" style="margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+  <div id="view-p-profile" class="card hidden" style="max-width: 480px; margin:0 auto;">
+    <button class="btn btn-secondary" onclick="switchView('p-home')" style="margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
     <h3>Mon Profil</h3>
-    <div id="profile-info" style="margin:15px 0; line-height:1.8;"></div>
+    <div id="profile-info-box" style="margin:15px 0; line-height:1.8; font-size:0.95rem;"></div>
     
     <hr style="border-color:var(--border); margin:15px 0;">
-    <h4>Changer le mot de passe</h4>
-    <input type="password" id="old-pass" placeholder="Mot de passe actuel">
-    <input type="password" id="new-pass" placeholder="Nouveau mot de passe (4 chiffres)">
-    <button class="btn" onclick="changePassword()">Enregistrer</button>
-    <button class="btn btn-danger" style="width:100%; margin-top:15px;" onclick="logout()">Déconnexion</button>
+    <h4>Modifier mon mot de passe</h4>
+    <input type="password" id="prof-old-pass" placeholder="Mot de passe actuel">
+    <input type="password" id="prof-new-pass" maxlength="4" placeholder="Nouveau mot de passe (4 chiffres)">
+    <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="changeParticipantPassword()">Enregistrer le nouveau mot de passe</button>
   </div>
 
-  <!-- ECRAN DU QUIZ -->
-  <div id="view-quiz" class="card hidden" style="max-width:600px; margin:0 auto; text-align:center;">
+  <!-- COMPTE À REBOURS AVANT TEST (20s) -->
+  <div id="view-p-waiting" class="card hidden" style="max-width: 500px; margin: 40px auto; text-align:center;">
+    <h3>Préparation du Concours</h3>
+    <p style="margin:15px 0; font-size:1.1rem; color:var(--gold);">Le concours commencera dans 20 secondes. Préparez-vous.</p>
+    <div class="timer" id="wait-timer-display" style="border-color:var(--gold); color:var(--gold);">20</div>
+  </div>
+
+  <!-- ÉCRAN DU QUIZ (15s PAR QUESTION) -->
+  <div id="view-p-quiz" class="card hidden" style="max-width: 600px; margin:0 auto; text-align:center;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-      <span class="badge badge-pending" id="quiz-level-tag">Niveau 3e</span>
-      <button class="btn btn-secondary" style="padding:5px 10px;" onclick="speakQuestion()"><i class="fa-solid fa-volume-high"></i> Écouter</button>
+      <span class="btn btn-secondary btn-sm" id="quiz-tag-class">3e</span>
+      <button class="btn btn-gold btn-sm" onclick="speakQuestionInstant()"><i class="fa-solid fa-volume-high"></i> Écouter immédiatement</button>
     </div>
 
-    <div class="timer" id="quiz-timer">10</div>
+    <div class="timer" id="quiz-timer-display">15</div>
 
-    <h3 id="quiz-question-text" style="margin:15px 0;">Chargement de la question...</h3>
+    <h3 id="quiz-q-title" style="margin:15px 0; font-size:1.2rem;">Intitulé de la question</h3>
 
-    <div class="options-grid" id="quiz-options"></div>
+    <div class="options-grid" id="quiz-options-box"></div>
   </div>
 
-  <!-- ECRAN CLASSEMENT & RECOMPENSES -->
-  <div id="view-results" class="card hidden" style="max-width:600px; margin:0 auto; text-align:center;">
-    <h3>Fin du Concours</h3>
-    <p style="margin:10px 0; color:var(--text-muted);">Merci d'avoir participé à ce concours. Veuillez retourner à l'accueil.</p>
+  <!-- ÉCRAN DE FIN DE CONCOURS -->
+  <div id="view-p-end" class="card hidden" style="max-width: 550px; margin:20px auto; text-align:center;">
+    <h3>Concours Terminé !</h3>
+    <p style="margin:15px 0; line-height:1.6; color:var(--text-muted);">
+      Merci d'avoir participé à ce concours. Veuillez revenir à la page précédente pour consulter vos résultats et votre classement.
+    </p>
     
-    <div id="reward-banner" class="hidden" style="background:rgba(16, 185, 129, 0.1); border:1px solid var(--success); padding:15px; border-radius:12px; margin:15px 0; text-align:left;">
-      <h4 style="color:var(--success);">Félicitations ! Vous faites partie des trois premiers.</h4>
-      <p style="font-size:0.85rem; margin-top:5px;">Votre récompense est affichée ci-dessous. Vous recevrez un message WhatsApp dans un délai de 15 minutes pour votre paiement. Si vous ne recevez aucun message après ce délai, veuillez contacter le : <strong>0799591024</strong> ou <strong>0585971941</strong>.</p>
-      <div style="margin-top:10px;">Statut : <span class="badge badge-pending" id="reward-badge">En cours de paiement</span></div>
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap;">
+      <button class="btn btn-gold" onclick="openMyResults()"><i class="fa-solid fa-square-poll-vertical"></i> Voir mes résultats et mon classement</button>
+      <button class="btn btn-secondary" onclick="openTop5Modal()"><i class="fa-solid fa-trophy"></i> Top 5 des meilleurs élèves</button>
+      <button class="btn btn-secondary" onclick="openAddReviewModal()"><i class="fa-solid fa-comment-dots"></i> Donner mon avis</button>
+      <button class="btn" style="width:100%; margin-top:10px;" onclick="switchView('p-home')"><i class="fa-solid fa-arrow-left"></i> Retour à l'accueil</button>
     </div>
-
-    <button class="btn" onclick="switchView('home-concours')">Retourner à l'accueil</button>
   </div>
 
 </div>
 
+
+<!-- ==================== MODALES (POP-UPS) ==================== -->
+
+<!-- MODALE DÉTAILS DES STATISTIQUES (ADMIN) -->
+<div id="modal-stats" class="modal hidden">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3 id="modal-stats-title">Détails Statistiques</h3>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-stats')">X</button>
+    </div>
+    <div id="modal-stats-body"></div>
+  </div>
+</div>
+
+<!-- MODALE TOP 5 MEILLEURS ÉLÈVES -->
+<div id="modal-top5" class="modal hidden">
+  <div class="modal-content" style="text-align:center;">
+    <h3 style="color:var(--gold); margin-bottom:15px;"><i class="fa-solid fa-trophy"></i> Classement des 5 Meilleurs Élèves</h3>
+    <div id="top5-list-body"></div>
+    <button class="btn btn-secondary" style="margin-top:15px; width:100%; justify-content:center;" onclick="closeModal('modal-top5')">Fermer</button>
+  </div>
+</div>
+
+<!-- MODALE MES RÉSULTATS (PARTICIPANT) -->
+<div id="modal-results" class="modal hidden">
+  <div class="modal-content">
+    <h3 style="margin-bottom:15px;"><i class="fa-solid fa-square-poll-vertical"></i> Historique de mes Résultats</h3>
+    <div id="my-results-body"></div>
+    <button class="btn btn-secondary" style="margin-top:15px; width:100%; justify-content:center;" onclick="closeModal('modal-results')">Fermer</button>
+  </div>
+</div>
+
+<!-- MODALE DONNER UN AVIS -->
+<div id="modal-add-review" class="modal hidden">
+  <div class="modal-content" style="max-width:450px;">
+    <h3>Donner mon avis</h3>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">Partagez votre expérience sur l'application.</p>
+    
+    <label>Note :</label>
+    <select id="review-stars">
+      <option value="5">5 Étoiles (Excellent ★★★★★)</option>
+      <option value="4">4 Étoiles (Très bien ★★★★)</option>
+      <option value="3">3 Étoiles (Bien ★★★)</option>
+      <option value="2">2 Étoiles (Moyen ★★)</option>
+      <option value="1">1 Étoile (A améliorer ★)</option>
+    </select>
+
+    <label>Commentaire :</label>
+    <textarea id="review-comment" rows="3" placeholder="Votre message..."></textarea>
+
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-gold" style="flex:1; justify-content:center;" onclick="submitReview()">Envoyer</button>
+      <button class="btn btn-secondary" style="flex:1; justify-content:center;" onclick="closeModal('modal-add-review')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE VOIR TOUS LES AVIS -->
+<div id="modal-reviews-list" class="modal hidden">
+  <div class="modal-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h3>Avis et Notes des Utilisateurs</h3>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-reviews-list')">X</button>
+    </div>
+    <div id="reviews-list-body"></div>
+  </div>
+</div>
+
+
 <script>
-  /* STATE STORAGE (LOCALSTORAGE) */
-  let db = JSON.parse(localStorage.getItem('ztv_db')) || {
-    users: [],
-    resetRequests: [],
-    currentUser: null,
-    cheated: false
+  /* ==========================================
+     BASE DE DONNÉES & INITIALISATION
+  ========================================== */
+  let db = JSON.parse(localStorage.getItem('ztv_app_db')) || {
+    users: [],          // Accounts
+    concours: [],       // Quizzes created
+    results: [],        // Participant test scores
+    resetRequests: [],  // Password reset requests
+    reviews: [],        // User feedback
+    currentParticipant: null
   };
 
-  function saveData() { localStorage.setItem('ztv_db', JSON.stringify(db)); updateStats(); }
-
-  /* ROUTER INTERFACE */
-  function switchView(viewName) {
-    document.querySelectorAll('.container > div[id^="view-"]').forEach(div => div.classList.add('hidden'));
-    document.getElementById(`view-${viewName}`).classList.remove('hidden');
+  function saveData() {
+    localStorage.setItem('ztv_app_db', JSON.stringify(db));
+    updateAdminStats();
+    updateHeaderRating();
   }
 
-  /* LOGIQUE D'INSCRIPTION & CONNEXION */
-  function handleRegister() {
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+  }
+
+  function switchView(viewId) {
+    document.querySelectorAll('.container > div[id^="view-"]').forEach(div => div.classList.add('hidden'));
+    document.getElementById(`view-${viewId}`).classList.remove('hidden');
+  }
+
+  // Détection du mode d'ouverture (Admin VS Participant par lien unique)
+  window.addEventListener('DOMContentLoaded', () => {
+    buildQuestionFields();
+    updateClassOptions();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('ref') === 'quiz') {
+      // ACCÈS PAR LINK UNIQUE PARTICIPANTS
+      document.getElementById('header-subtitle').textContent = "Espace Élèves & Révisons";
+      if (db.currentParticipant) {
+        openParticipantHome();
+      } else {
+        switchView('p-login');
+      }
+    } else {
+      // ACCÈS DE BASE : RESERVE EXCLUSIVEMENT À L'ADMIN
+      document.getElementById('header-subtitle').textContent = "Espace Administrateur";
+      switchView('login-admin');
+    }
+
+    saveData();
+  });
+
+
+  /* ==========================================
+     1. ADMINISTRATION (ZakariaTV / 55250031)
+  ========================================== */
+  function handleLoginAdmin() {
+    const u = document.getElementById('admin-user').value.trim();
+    const p = document.getElementById('admin-pass').value.trim();
+
+    if (u === "ZakariaTV" && p === "55250031") {
+      document.getElementById('admin-user').value = '';
+      document.getElementById('admin-pass').value = '';
+      
+      // Génération du lien unique
+      const uniqueUrl = window.location.origin + window.location.pathname + '?ref=quiz';
+      document.getElementById('admin-unique-link').value = uniqueUrl;
+
+      switchView('admin-dashboard');
+      renderAdminConcoursList();
+      updateAdminStats();
+    } else {
+      alert("Identifiants Administrateur incorrects !");
+    }
+  }
+
+  function logoutAdmin() {
+    switchView('login-admin');
+  }
+
+  function copyUniqueLink() {
+    const input = document.getElementById('admin-unique-link');
+    input.select();
+    document.execCommand('copy');
+    alert("Lien unique copié dans le presse-papier !");
+  }
+
+  function updateAdminStats() {
+    document.getElementById('stat-created').textContent = db.concours.length;
+    document.getElementById('stat-completed').textContent = db.results.length;
+    document.getElementById('stat-accounts').textContent = db.users.length;
+    document.getElementById('stat-participants').textContent = db.users.length;
+    
+    const winnersCount = db.results.filter(r => r.score === 5).length;
+    document.getElementById('stat-winners').textContent = winnersCount;
+    
+    document.getElementById('stat-requests').textContent = db.resetRequests.length;
+    document.getElementById('stat-online').textContent = db.concours.filter(c => c.online).length;
+    document.getElementById('stat-reviews-count').textContent = db.reviews.length;
+  }
+
+  /* MODALE INTERACTIVE POUR TOUTES LES STATISTIQUES */
+  function openStatDetails(type) {
+    const modal = document.getElementById('modal-stats');
+    const title = document.getElementById('modal-stats-title');
+    const body = document.getElementById('modal-stats-body');
+    body.innerHTML = '';
+
+    if (type === 'comptes' || type === 'participants') {
+      title.textContent = "Liste complète des Utilisateurs / Participants";
+      if (db.users.length === 0) body.innerHTML = "<p style='color:var(--text-muted)'>Aucun participant inscrit.</p>";
+      db.users.forEach((u, i) => {
+        const userResults = db.results.filter(r => r.userWhatsapp === u.whatsapp);
+        body.innerHTML += `
+          <div style="border-bottom:1px solid var(--border); padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>${u.nom} ${u.prenom}</strong> (${u.ville}, ${u.pays})<br>
+              <small style="color:var(--text-muted)">WhatsApp: ${u.whatsapp} | Inscrit le: ${u.dateInscription || 'Récemment'}</small><br>
+              <small style="color:var(--accent)">Concours effectués: ${userResults.length}</small>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteUser(${i})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        `;
+      });
+    } 
+    else if (type === 'demandes_mdp') {
+      title.textContent = "Demandes de Réinitialisation Mot de Passe";
+      if (db.resetRequests.length === 0) body.innerHTML = "<p style='color:var(--text-muted)'>Aucune demande reçue.</p>";
+      db.resetRequests.forEach((req, idx) => {
+        body.innerHTML += `
+          <div style="border-bottom:1px solid var(--border); padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>${req.nom} ${req.prenom}</strong> (${req.ville})<br>
+              <small style="color:var(--text-muted)">WhatsApp: ${req.whatsapp}</small>
+            </div>
+            <div style="display:flex; gap:5px;">
+              <button class="btn btn-gold btn-sm" onclick="acceptReset('${req.whatsapp}', ${idx})">Réinitialiser (5555)</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteResetRequest(${idx})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      });
+    }
+    else if (type === 'concours_crees' || type === 'en_cours') {
+      title.textContent = type === 'en_cours' ? "Concours Actuellement en Ligne" : "Tous les Concours Créés";
+      const list = type === 'en_cours' ? db.concours.filter(c => c.online) : db.concours;
+      if (list.length === 0) body.innerHTML = "<p style='color:var(--text-muted)'>Aucun concours trouvé.</p>";
+      list.forEach((c, i) => {
+        body.innerHTML += `
+          <div style="border-bottom:1px solid var(--border); padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>[${c.classe}] ${c.title}</strong> (${c.catégorie})<br>
+              <small style="color:var(--text-muted)">Créé le: ${c.dateCreated} | Statut: ${c.online ? 'En ligne' : 'Hors ligne'}</small>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteConcours(${i})"><i class="fa-solid fa-trash"></i> Supprimer</button>
+          </div>
+        `;
+      });
+    }
+    else if (type === 'concours_effectues' || type === 'gagnants') {
+      title.textContent = type === 'gagnants' ? "Top Élèves (Gagnants 5/5)" : "Historique de Tous les Tests Passés";
+      const resList = type === 'gagnants' ? db.results.filter(r => r.score === 5) : db.results;
+      if (resList.length === 0) body.innerHTML = "<p style='color:var(--text-muted)'>Aucun résultat enregistré.</p>";
+      resList.forEach((r, i) => {
+        body.innerHTML += `
+          <div style="border-bottom:1px solid var(--border); padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>${r.userName}</strong> - ${r.concoursTitle} [${r.classe}]<br>
+              <small style="color:var(--gold)">Score: ${r.score}/5 ${r.cheated ? '(TRICHE DÉTECTÉE)' : ''}</small>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteResult(${i})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        `;
+      });
+    }
+    else if (type === 'avis') {
+      title.textContent = "Gestion des Avis Reçus";
+      if (db.reviews.length === 0) body.innerHTML = "<p style='color:var(--text-muted)'>Aucun avis disponible.</p>";
+      db.reviews.forEach((rev, i) => {
+        body.innerHTML += `
+          <div style="border-bottom:1px solid var(--border); padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>${rev.userName}</strong> <span class="stars">${'★'.repeat(rev.stars)}</span><br>
+              <p style="font-size:0.85rem;">"${rev.comment}"</p>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteReview(${i})"><i class="fa-solid fa-trash"></i> Supprimer</button>
+          </div>
+        `;
+      });
+    }
+
+    modal.classList.remove('hidden');
+  }
+
+  /* ACTIONS DE SUPPRESSION PAR L'ADMINISTRATEUR */
+  function deleteUser(index) {
+    if (confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
+      db.users.splice(index, 1);
+      saveData();
+      openStatDetails('comptes');
+    }
+  }
+
+  function deleteResetRequest(index) {
+    db.resetRequests.splice(index, 1);
+    saveData();
+    openStatDetails('demandes_mdp');
+  }
+
+  function acceptReset(whatsapp, idx) {
+    const user = db.users.find(u => u.whatsapp === whatsapp);
+    if (user) {
+      user.pass = "5555";
+      db.resetRequests.splice(idx, 1);
+      saveData();
+      openStatDetails('demandes_mdp');
+      const msg = encodeURIComponent("Votre demande de réinitialisation a été acceptée. Votre nouveau mot de passe provisoire est 5555. Veuillez vous connecter puis modifier ce mot de passe depuis votre profil.");
+      window.open(`https://wa.me/${whatsapp}?text=${msg}`, '_blank');
+    }
+  }
+
+  function deleteConcours(index) {
+    if (confirm("Supprimer définitivement ce concours ?")) {
+      db.concours.splice(index, 1);
+      saveData();
+      renderAdminConcoursList();
+      closeModal('modal-stats');
+    }
+  }
+
+  function deleteResult(index) {
+    db.results.splice(index, 1);
+    saveData();
+    openStatDetails('concours_effectues');
+  }
+
+  function deleteReview(index) {
+    db.reviews.splice(index, 1);
+    saveData();
+    openStatDetails('avis');
+  }
+
+  function toggleConcoursOnline(index) {
+    db.concours[index].online = !db.concours[index].online;
+    saveData();
+    renderAdminConcoursList();
+  }
+
+  function renderAdminConcoursList() {
+    const container = document.getElementById('admin-concours-list');
+    container.innerHTML = '';
+
+    if (db.concours.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-muted)">Aucun concours créé pour le moment.</p>';
+      return;
+    }
+
+    db.concours.forEach((c, idx) => {
+      const div = document.createElement('div');
+      div.style.cssText = "display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding:12px 0; flex-wrap:wrap; gap:10px;";
+      div.innerHTML = `
+        <div>
+          <strong>[${c.classe}] ${c.title}</strong> (${c.catégorie})<br>
+          <small style="color:var(--text-muted)">Créé le: ${c.dateCreated} | Questions: 5</small>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-sm ${c.online ? 'btn-gold' : 'btn-secondary'}" onclick="toggleConcoursOnline(${idx})">
+            ${c.online ? 'En Ligne' : 'Hors Ligne'}
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="deleteConcours(${idx})"><i class="fa-solid fa-trash"></i> Supprimer</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  /* CRÉATION D'UN CONCOURS */
+  function updateClassOptions() {
+    const cat = document.getElementById('c-cat').value;
+    const select = document.getElementById('c-classe');
+    select.innerHTML = '';
+    
+    const options = cat === 'Primaire' 
+      ? ['CE2', 'CM1', 'CM2']
+      : ['6e', '5e', '4e', '3e', 'Seconde', 'Première', 'Terminale'];
+
+    options.forEach(opt => {
+      select.innerHTML += `<option value="${opt}">${opt}</option>`;
+    });
+  }
+
+  function buildQuestionFields() {
+    const container = document.getElementById('questions-builder-container');
+    container.innerHTML = '';
+
+    for (let i = 1; i <= 5; i++) {
+      container.innerHTML += `
+        <div style="background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid var(--border);">
+          <strong style="color:var(--gold)">Question ${i} :</strong>
+          <input type="text" id="q${i}-text" placeholder="Intitulé de la question ${i}">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <input type="text" id="q${i}-a" placeholder="Réponse A">
+            <input type="text" id="q${i}-b" placeholder="Réponse B">
+            <input type="text" id="q${i}-c" placeholder="Réponse C">
+            <input type="text" id="q${i}-d" placeholder="Réponse D">
+          </div>
+          <label style="font-size:0.85rem;">Bonne Réponse :</label>
+          <select id="q${i}-ans">
+            <option value="0">A</option>
+            <option value="1">B</option>
+            <option value="2">C</option>
+            <option value="3">D</option>
+          </select>
+        </div>
+      `;
+    }
+  }
+
+  function saveConcours() {
+    const title = document.getElementById('c-title').value.trim();
+    const cat = document.getElementById('c-cat').value;
+    const classe = document.getElementById('c-classe').value;
+
+    if (!title) {
+      alert("Veuillez donner un titre au concours.");
+      return;
+    }
+
+    let questions = [];
+    for (let i = 1; i <= 5; i++) {
+      const qText = document.getElementById(`q${i}-text`).value.trim();
+      const a = document.getElementById(`q${i}-a`).value.trim();
+      const b = document.getElementById(`q${i}-b`).value.trim();
+      const c = document.getElementById(`q${i}-c`).value.trim();
+      const d = document.getElementById(`q${i}-d`).value.trim();
+      const ans = parseInt(document.getElementById(`q${i}-ans`).value);
+
+      if (!qText || !a || !b || !c || !d) {
+        alert(`Veuillez remplir complètement la question ${i} et ses 4 réponses.`);
+        return;
+      }
+      questions.push({ q: qText, options: [a, b, c, d], ans: ans });
+    }
+
+    const newConcours = {
+      id: Date.now(),
+      title: title,
+      catégorie: cat,
+      classe: classe,
+      dateCreated: new Date().toLocaleDateString('fr-FR'),
+      online: true,
+      questions: questions
+    };
+
+    db.concours.push(newConcours);
+    saveData();
+    alert("Concours créé et mis en ligne avec succès !");
+    document.getElementById('c-title').value = '';
+    switchView('admin-dashboard');
+    renderAdminConcoursList();
+  }
+
+
+  /* ==========================================
+     2. GESTION DES PARTICIPANTS & REVISIONAL
+  ========================================== */
+  function handleRegisterParticipant() {
     const nom = document.getElementById('reg-nom').value.trim();
     const prenom = document.getElementById('reg-prenom').value.trim();
     const ville = document.getElementById('reg-ville').value.trim();
@@ -268,258 +764,396 @@
     const whatsapp = document.getElementById('reg-whatsapp').value.trim();
     const pass = document.getElementById('reg-pass').value.trim();
 
-    if(!nom || !prenom || !whatsapp || pass.length !== 4) {
-      alert("Veuillez remplir tous les champs correctement (Mot de passe à 4 chiffres).");
+    if (!nom || !prenom || !whatsapp || pass.length !== 4) {
+      alert("Remplissez tous les champs. Le mot de passe doit comporter exactement 4 chiffres.");
       return;
     }
 
-    if(db.users.find(u => u.whatsapp === whatsapp)) {
+    if (db.users.find(u => u.whatsapp === whatsapp)) {
       alert("Un compte existe déjà avec ce numéro WhatsApp.");
       return;
     }
 
-    const newUser = { nom, prenom, ville, pays, whatsapp, pass };
+    const newUser = {
+      nom, prenom, ville, pays, whatsapp, pass,
+      dateInscription: new Date().toLocaleDateString('fr-FR')
+    };
+
     db.users.push(newUser);
-    db.currentUser = newUser;
+    db.currentParticipant = newUser;
     saveData();
-    
+
     alert("Compte créé avec succès !");
-    openHome();
+    openParticipantHome();
   }
 
   function handleLoginParticipant() {
-    const nomComplet = document.getElementById('login-p-nom').value.trim().toLowerCase();
-    const pass = document.getElementById('login-p-pass').value.trim();
+    const fn = document.getElementById('p-login-fullname').value.trim().toLowerCase();
+    const pass = document.getElementById('p-login-pass').value.trim();
 
-    const user = db.users.find(u => `${u.nom} ${u.prenom}`.toLowerCase() === nomComplet && u.pass === pass);
-    if(user) {
-      db.currentUser = user;
+    const user = db.users.find(u => `${u.nom} ${u.prenom}`.toLowerCase() === fn && u.pass === pass);
+
+    if (user) {
+      db.currentParticipant = user;
       saveData();
-      openHome();
+      openParticipantHome();
     } else {
-      alert("Informations incorrectes !");
+      alert("Nom complet ou mot de passe incorrect.");
     }
   }
 
-  function openHome() {
-    document.getElementById('user-welcome').textContent = `Bonjour, ${db.currentUser.prenom}`;
-    document.getElementById('nav-btn').innerHTML = `<i class="fa-solid fa-user"></i> ${db.currentUser.prenom}`;
-    switchView('home-concours');
+  function openParticipantHome() {
+    document.getElementById('p-welcome-msg').textContent = `Bonjour, ${db.currentParticipant.prenom} ${db.currentParticipant.nom}`;
+    document.getElementById('participant-logout-btn').classList.remove('hidden');
+    switchView('p-home');
+    filterParticipantConcours('all');
   }
 
-  function logout() {
-    db.currentUser = null;
+  function logoutParticipant() {
+    db.currentParticipant = null;
     saveData();
     location.reload();
   }
 
-  /* REPERTOIRE CATEGORIES/CLASSES */
-  function filterCategory(cat) {
-    const subDiv = document.getElementById('sub-levels');
-    subDiv.classList.remove('hidden');
-    
-    if(cat === 'primaire') {
-      subDiv.innerHTML = `
-        <button class="btn btn-secondary" onclick="startDemoQuiz('CE2')">CE2</button>
-        <button class="btn btn-secondary" onclick="startDemoQuiz('CM1')">CM1</button>
-        <button class="btn btn-secondary" onclick="startDemoQuiz('CM2')">CM2</button>
-      `;
-    } else if(cat === 'college') {
-      subDiv.innerHTML = `
-        <button class="btn btn-secondary" onclick="startDemoQuiz('6e')">6e</button>
-        <button class="btn btn-secondary" onclick="startDemoQuiz('5e')">5e</button>
-        <button class="btn btn-secondary" onclick="startDemoQuiz('4e')">4e</button>
-        <button class="btn btn-secondary" onclick="startDemoQuiz('3e')">3e</button>
-        <button class="btn btn-secondary" onclick="startDemoQuiz('Seconde')">Seconde</button>
-        <button class="btn btn-secondary" onclick="startDemoQuiz('Première')">Première</button>
-        <button class="btn btn-secondary" onclick="startDemoQuiz('Terminale')">Terminale</button>
-      `;
-    } else {
-      subDiv.classList.add('hidden');
-    }
-  }
-
-  /* MOTEUR DE QUIZ & CHRONOMÈTRE */
-  let currentQuestion = 0;
-  let timerInterval;
-  let score = 0;
-
-  const demoQuestions = [
-    { q: "Quelle est la capitale politique de la Côte d'Ivoire ?", options: ["Abidjan", "Yamoussoukro", "Bouaké", "San-Pédro"], ans: 1 },
-    { q: "Combien font 7 x 8 ?", options: ["54", "56", "64", "48"], ans: 1 },
-    { q: "Quel est le plus grand fleuve d'Afrique ?", options: ["Le Niger", "Le Congo", "Le Nil", "Le Zambèze"], ans: 2 }
-  ];
-
-  function startDemoQuiz(level) {
-    db.cheated = false;
-    currentQuestion = 0;
-    score = 0;
-    document.getElementById('quiz-level-tag').textContent = `Niveau ${level}`;
-    switchView('quiz');
-    loadQuestion();
-  }
-
-  function loadQuestion() {
-    if(currentQuestion >= demoQuestions.length) {
-      endQuiz();
-      return;
-    }
-    
-    const qData = demoQuestions[currentQuestion];
-    document.getElementById('quiz-question-text').textContent = qData.q;
-    
-    const optionsContainer = document.getElementById('quiz-options');
-    optionsContainer.innerHTML = '';
-    
-    qData.options.forEach((opt, idx) => {
-      const btn = document.createElement('button');
-      btn.className = 'btn btn-secondary';
-      btn.style.textAlign = 'left';
-      btn.textContent = `${String.fromCharCode(65 + idx)}) ${opt}`;
-      btn.onclick = () => { if(idx === qData.ans) score++; nextQuestion(); };
-      optionsContainer.appendChild(btn);
-    });
-
-    startTimer();
-  }
-
-  function startTimer() {
-    clearInterval(timerInterval);
-    let time = 10;
-    const timerDisplay = document.getElementById('quiz-timer');
-    timerDisplay.textContent = time;
-
-    timerInterval = setInterval(() => {
-      time--;
-      timerDisplay.textContent = time;
-      if(time <= 0) {
-        clearInterval(timerInterval);
-        nextQuestion();
-      }
-    }, 1000);
-  }
-
-  function nextQuestion() {
-    clearInterval(timerInterval);
-    currentQuestion++;
-    loadQuestion();
-  }
-
-  function speakQuestion() {
-    const text = document.getElementById('quiz-question-text').textContent;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'fr-FR';
-    window.speechSynthesis.speak(utterance);
-  }
-
-  function endQuiz() {
-    switchView('results');
-    if(!db.cheated) {
-      document.getElementById('reward-banner').classList.remove('hidden');
-    }
-  }
-
-  /* PROTECTION ANTI-TRICHE */
-  document.addEventListener("visibilitychange", function() {
-    if (document.hidden && !document.getElementById('view-quiz').classList.contains('hidden')) {
-      db.cheated = true;
-      clearInterval(timerInterval);
-      alert("TRICHE DÉTECTÉE ! Vous avez quitté le concours. Votre résultat est annulé.");
-      switchView('results');
-      document.getElementById('reward-banner').classList.add('hidden');
-    }
-  });
-
-  /* GESTION COMPTE ADMIN */
-  function handleLoginAdmin() {
-    const user = document.getElementById('admin-user').value.trim();
-    const pass = document.getElementById('admin-pass').value.trim();
-
-    if(user === "ZakariaTV" && pass === "55250031") {
-      switchView('admin-dashboard');
-      updateAdminResetList();
-    } else {
-      alert("Identifiants Administrateur incorrects !");
-    }
-  }
-
-  function updateStats() {
-    document.getElementById('stat-accounts').textContent = db.users.length;
-    document.getElementById('stat-participants').textContent = db.users.length;
-    document.getElementById('stat-requests').textContent = db.resetRequests.length;
-  }
-
-  /* RECUPERATION MOT DE PASSE */
   function checkForgotPhone() {
     const phone = document.getElementById('forgot-phone').value.trim();
     const user = db.users.find(u => u.whatsapp === phone);
-    
-    if(user) {
-      document.getElementById('forgot-user-info').innerHTML = `<strong>Compte trouvé :</strong><br>${user.nom} ${user.prenom} (${user.ville}, ${user.pays})`;
-      document.getElementById('forgot-confirm').classList.remove('hidden');
+
+    if (user) {
+      document.getElementById('forgot-user-details').innerHTML = `<strong>Compte identifié :</strong><br>${user.nom} ${user.prenom} (${user.ville}, ${user.pays})`;
+      document.getElementById('forgot-confirm-box').classList.remove('hidden');
     } else {
       alert("Aucun compte associé à ce numéro.");
     }
   }
 
-  function sendResetRequest() {
+  function submitForgotRequest() {
     const phone = document.getElementById('forgot-phone').value.trim();
     const user = db.users.find(u => u.whatsapp === phone);
-    
-    if(!db.resetRequests.find(r => r.whatsapp === phone)) {
+
+    if (!db.resetRequests.find(r => r.whatsapp === phone)) {
       db.resetRequests.push(user);
       saveData();
     }
-    alert("Demande envoyée à l'administrateur !");
-    switchView('login-participant');
+    alert("Demande transmise à l'administrateur !");
+    switchView('p-login');
   }
 
-  function updateAdminResetList() {
-    const container = document.getElementById('admin-reset-list');
-    container.innerHTML = '';
-    
-    if(db.resetRequests.length === 0) {
-      container.innerHTML = '<p style="color:var(--text-muted)">Aucune demande en attente.</p>';
+  function changeParticipantPassword() {
+    const oldP = document.getElementById('prof-old-pass').value.trim();
+    const newP = document.getElementById('prof-new-pass').value.trim();
+
+    if (oldP !== db.currentParticipant.pass) {
+      alert("Mot de passe actuel incorrect.");
       return;
     }
 
-    db.resetRequests.forEach((req, idx) => {
-      const div = document.createElement('div');
-      div.style.cssText = "display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding:10px 0;";
-      div.innerHTML = `
-        <div>
-          <strong>${req.nom} ${req.prenom}</strong> (${req.ville}, ${req.pays})<br>
-          <small style="color:var(--text-muted)">WhatsApp: ${req.whatsapp}</small>
-        </div>
-        <button class="btn btn-gold" onclick="resetUserPassword('${req.whatsapp}', ${idx})">Réinitialiser (5555)</button>
-      `;
-      container.appendChild(div);
-    });
+    if (newP.length !== 4) {
+      alert("Le nouveau mot de passe doit comporter 4 chiffres.");
+      return;
+    }
+
+    db.currentParticipant.pass = newP;
+    const u = db.users.find(x => x.whatsapp === db.currentParticipant.whatsapp);
+    if (u) u.pass = newP;
+
+    saveData();
+    alert("Mot de passe mis à jour avec succès !");
+    switchView('p-home');
   }
 
-  function resetUserPassword(whatsapp, idx) {
-    const user = db.users.find(u => u.whatsapp === whatsapp);
-    if(user) {
-      user.pass = "5555";
-      db.resetRequests.splice(idx, 1);
-      saveData();
-      updateAdminResetList();
-      
-      const msg = encodeURIComponent("Votre demande de réinitialisation a été acceptée. Votre nouveau mot de passe provisoire est 5555. Veuillez vous connecter puis modifier ce mot de passe depuis votre profil.");
-      window.open(`https://wa.me/${whatsapp}?text=${msg}`, '_blank');
+
+  /* ==========================================
+     3. RECHERCHE & AFFICHAGE CONCOURS (ÉLÈVES)
+  ========================================== */
+  function filterParticipantConcours(cat) {
+    const subDiv = document.getElementById('level-subbuttons');
+    subDiv.innerHTML = '';
+    
+    if (cat === 'Primaire') {
+      subDiv.classList.remove('hidden');
+      ['CE2', 'CM1', 'CM2'].forEach(lvl => {
+        subDiv.innerHTML += `<button class="btn btn-secondary btn-sm" onclick="renderConcoursByLevel('${lvl}')">${lvl}</button>`;
+      });
+    } else if (cat === 'Collège') {
+      subDiv.classList.remove('hidden');
+      ['6e', '5e', '4e', '3e', 'Seconde', 'Première', 'Terminale'].forEach(lvl => {
+        subDiv.innerHTML += `<button class="btn btn-secondary btn-sm" onclick="renderConcoursByLevel('${lvl}')">${lvl}</button>`;
+      });
+    } else {
+      subDiv.classList.add('hidden');
+      renderConcoursCards(db.concours.filter(c => c.online));
     }
   }
 
-  function showAllAccounts() {
-    const container = document.getElementById('accounts-display-list');
-    container.innerHTML = '<h4 style="margin-top:15px;">Comptes Utilisateurs</h4>';
-    db.users.forEach(u => {
-      container.innerHTML += `<div style="padding:5px 0; border-bottom:1px solid var(--border); font-size:0.9rem;">${u.nom} ${u.prenom} | ${u.ville}, ${u.pays} | WhatsApp: ${u.whatsapp}</div>`;
+  function renderConcoursByLevel(level) {
+    const filtered = db.concours.filter(c => c.online && c.classe === level);
+    renderConcoursCards(filtered);
+  }
+
+  function renderConcoursCards(list) {
+    const container = document.getElementById('p-concours-cards-list');
+    container.innerHTML = '';
+
+    if (!list || list.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center; padding:30px; color:var(--text-muted);">
+          Veuillez nous excuser, aucun concours n'est disponible pour le moment dans ce niveau. Merci de choisir un autre niveau ou de revenir plus tard.
+        </div>
+      `;
+      return;
+    }
+
+    list.forEach(c => {
+      container.innerHTML += `
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <span class="btn btn-secondary btn-sm" style="margin-bottom:5px;">Niveau ${c.classe}</span>
+            <h4 style="margin:5px 0;">${c.title}</h4>
+            <small style="color:var(--text-muted)">Catégorie: ${c.catégorie} | 5 Questions</small>
+          </div>
+          <button class="btn btn-gold" onclick="launchWaitingScreen(${c.id})"><i class="fa-solid fa-play"></i> Participer</button>
+        </div>
+      `;
     });
   }
 
-  // Initialisation
-  updateStats();
+
+  /* ==========================================
+     4. MOTEUR DU TEST (WAITING 20s -> QUIZ 15s)
+  ========================================== */
+  let activeConcours = null;
+  let currentQuestionIdx = 0;
+  let activeScore = 0;
+  let waitInterval = null;
+  let quizTimerInterval = null;
+  let isCheated = false;
+
+  function launchWaitingScreen(concoursId) {
+    activeConcours = db.concours.find(c => c.id === concoursId);
+    if (!activeConcours) return;
+
+    isCheated = false;
+    switchView('p-waiting');
+
+    let timeLeft = 20;
+    const display = document.getElementById('wait-timer-display');
+    display.textContent = timeLeft;
+
+    clearInterval(waitInterval);
+    waitInterval = setInterval(() => {
+      timeLeft--;
+      display.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(waitInterval);
+        startActualQuiz();
+      }
+    }, 1000);
+  }
+
+  function startActualQuiz() {
+    currentQuestionIdx = 0;
+    activeScore = 0;
+    document.getElementById('quiz-tag-class').textContent = `Niveau ${activeConcours.classe}`;
+    switchView('p-quiz');
+    loadQuizQuestion();
+  }
+
+  function loadQuizQuestion() {
+    if (currentQuestionIdx >= activeConcours.questions.length) {
+      finishQuiz();
+      return;
+    }
+
+    const qData = activeConcours.questions[currentQuestionIdx];
+    document.getElementById('quiz-q-title').textContent = qData.q;
+
+    const container = document.getElementById('quiz-options-box');
+    container.innerHTML = '';
+
+    qData.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-secondary';
+      btn.style.textAlign = 'left';
+      btn.textContent = `${String.fromCharCode(65 + idx)}) ${opt}`;
+      btn.onclick = () => {
+        if (idx === qData.ans) activeScore++;
+        nextQuizQuestion();
+      };
+      container.appendChild(btn);
+    });
+
+    // Lancement instantané de l'audio si souhaité + Chrono 15s
+    startQuizTimer();
+  }
+
+  function startQuizTimer() {
+    clearInterval(quizTimerInterval);
+    let time = 15;
+    const timerDisplay = document.getElementById('quiz-timer-display');
+    timerDisplay.textContent = time;
+
+    quizTimerInterval = setInterval(() => {
+      time--;
+      timerDisplay.textContent = time;
+      if (time <= 0) {
+        clearInterval(quizTimerInterval);
+        nextQuizQuestion();
+      }
+    }, 1000);
+  }
+
+  function nextQuizQuestion() {
+    clearInterval(quizTimerInterval);
+    currentQuestionIdx++;
+    loadQuizQuestion();
+  }
+
+  function speakQuestionInstant() {
+    window.speechSynthesis.cancel(); // Annule la lecture précédente pour démarrer immédiatement
+    const text = document.getElementById('quiz-q-title').textContent;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'fr-FR';
+    utterance.rate = 1.0;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function finishQuiz() {
+    clearInterval(quizTimerInterval);
+    
+    // Enregistrement du résultat
+    const resultEntry = {
+      userWhatsapp: db.currentParticipant.whatsapp,
+      userName: `${db.currentParticipant.nom} ${db.currentParticipant.prenom}`,
+      concoursTitle: activeConcours.title,
+      classe: activeConcours.classe,
+      score: activeScore,
+      cheated: isCheated,
+      date: new Date().toLocaleDateString('fr-FR')
+    };
+
+    db.results.push(resultEntry);
+    saveData();
+
+    switchView('p-end');
+  }
+
+  /* DETECTEUR ANTI-TRICHE */
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && !document.getElementById('view-p-quiz').classList.contains('hidden')) {
+      isCheated = true;
+      clearInterval(quizTimerInterval);
+      alert("TRICHE DÉTECTÉE ! Vous avez quitté l'application pendant le concours. Votre test est annulé.");
+      finishQuiz();
+    }
+  });
+
+
+  /* ==========================================
+     5. RÉSULTATS, CLASSEMENT TOP 5 & AVIS
+  ========================================== */
+  function openMyResults() {
+    const body = document.getElementById('my-results-body');
+    body.innerHTML = '';
+
+    const myRes = db.results.filter(r => r.userWhatsapp === db.currentParticipant.whatsapp);
+
+    if (myRes.length === 0) {
+      body.innerHTML = '<p style="color:var(--text-muted)">Vous n\'avez effectué aucun concours pour le moment.</p>';
+    } else {
+      myRes.forEach(r => {
+        body.innerHTML += `
+          <div style="border-bottom:1px solid var(--border); padding:10px 0;">
+            <strong>${r.concoursTitle}</strong> [${r.classe}]<br>
+            <span style="color:var(--gold)">Score: ${r.score} / 5</span> ${r.cheated ? '<span style="color:var(--danger)">(TRICHE)</span>' : ''}<br>
+            <small style="color:var(--text-muted)">Date: ${r.date}</small>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('modal-results').classList.remove('hidden');
+  }
+
+  function openTop5Modal() {
+    const body = document.getElementById('top5-list-body');
+    body.innerHTML = '';
+
+    // Tri des résultats par score décroissant
+    const sorted = [...db.results].sort((a, b) => b.score - a.score).slice(0, 5);
+
+    if (sorted.length === 0) {
+      body.innerHTML = '<p style="color:var(--text-muted)">Aucun classement disponible pour le moment.</p>';
+    } else {
+      sorted.forEach((r, idx) => {
+        body.innerHTML += `
+          <div style="border-bottom:1px solid var(--border); padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="color:var(--gold)">#${idx + 1} ${r.userName}</strong><br>
+              <small style="color:var(--text-muted)">Concours: ${r.concoursTitle} [${r.classe}]</small>
+            </div>
+            <span class="btn btn-gold btn-sm">${r.score}/5</span>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('modal-top5').classList.remove('hidden');
+  }
+
+  /* AVIS UTILISATEURS */
+  function openAddReviewModal() {
+    document.getElementById('modal-add-review').classList.remove('hidden');
+  }
+
+  function submitReview() {
+    const stars = parseInt(document.getElementById('review-stars').value);
+    const comment = document.getElementById('review-comment').value.trim();
+
+    if (!comment) {
+      alert("Veuillez saisir un petit commentaire.");
+      return;
+    }
+
+    db.reviews.push({
+      userName: db.currentParticipant ? `${db.currentParticipant.nom} ${db.currentParticipant.prenom}` : "Participant",
+      stars: stars,
+      comment: comment
+    });
+
+    saveData();
+    alert("Merci pour votre avis !");
+    closeModal('modal-add-review');
+    document.getElementById('review-comment').value = '';
+  }
+
+  function openReviewsModal() {
+    const body = document.getElementById('reviews-list-body');
+    body.innerHTML = '';
+
+    if (db.reviews.length === 0) {
+      body.innerHTML = '<p style="color:var(--text-muted)">Aucun avis publié pour le moment.</p>';
+    } else {
+      db.reviews.forEach(r => {
+        body.innerHTML += `
+          <div style="border-bottom:1px solid var(--border); padding:10px 0;">
+            <strong>${r.userName}</strong> <span class="stars">${'★'.repeat(r.stars)}</span>
+            <p style="font-size:0.9rem; margin-top:4px;">"${r.comment}"</p>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('modal-reviews-list').classList.remove('hidden');
+  }
+
+  function updateHeaderRating() {
+    if (db.reviews.length === 0) return;
+    const sum = db.reviews.reduce((acc, r) => acc + r.stars, 0);
+    const avg = (sum / db.reviews.length).toFixed(1);
+    document.getElementById('header-rating-avg').textContent = avg;
+  }
 </script>
+
 </body>
 </html>
