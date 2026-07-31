@@ -2310,16 +2310,16 @@ Réponse : B..."></textarea>
                 <tr>
                     <td><strong>${u.name}</strong></td>
                     <td>${u.school || 'N/A'} (${u.class || 'N/A'})</td>
-                    <td>${u.city || ''}</td>
+                    <td>${u.city || 'N/A'}</td>
                     <td>${u.phone}</td>
-                    <td><button class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="deleteUser('${u.phone}')">Supprimer</button></td>
+                    <td><button class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem;" onclick="deleteUser('${u.phone}')"><i class="fa-solid fa-trash"></i> Supprimer</button></td>
                 </tr>
-            `).join('') || '<tr><td colspan="5">Aucun participant inscrit.</td></tr>';
+            `).join('') || `<tr><td colspan="5" style="text-align:center;">Aucun utilisateur inscrit.</td></tr>`;
             document.getElementById('modal-admin-users').classList.add('active');
         }
 
         function deleteUser(phone) {
-            if (confirm("Supprimer ce participant ?")) {
+            if (confirm("Supprimer cet utilisateur ?")) {
                 DB.saveUsers(DB.getUsers().filter(u => u.phone !== phone));
                 openAdminUsersModal();
                 renderAdminDashboard();
@@ -2334,143 +2334,162 @@ Réponse : B..."></textarea>
                     <td><strong>${r.userName}</strong></td>
                     <td>${r.contestTitle}</td>
                     <td><span class="badge badge-class">${r.contestClass || 'CE2'}</span></td>
-                    <td>${r.date}</td>
-                    <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
+                    <td>${r.date || 'Inconnue'}</td>
+                    <td><strong style="color:var(--civ-orange);">${r.score} / ${r.maxScore}</strong></td>
                 </tr>
-            `).join('') || '<tr><td colspan="5">Aucun résultat.</td></tr>';
+            `).join('') || `<tr><td colspan="5" style="text-align:center;">Aucun résultat pour le moment.</td></tr>`;
             document.getElementById('modal-admin-results').classList.add('active');
         }
 
         function openAdminResetsModal() {
             const resets = DB.getResets();
-            document.getElementById('admin-resets-list').innerHTML = resets.map((r, i) => `
-                <div style="background:var(--card-alt); padding:8px; border-radius:6px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem;">
-                    <div>Demande de : <strong>${r.name}</strong> (${r.phone})</div>
-                    <button class="btn btn-green" style="padding:2px 8px; font-size:0.75rem;" onclick="processResetPassword('${r.phone}', ${i})">Réinitialiser (5555)</button>
-                </div>
-            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucune demande.</p>';
+            const container = document.getElementById('admin-resets-list');
+            
+            if (resets.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-sub); font-size:0.85rem; text-align:center;">Aucune demande de réinitialisation.</p>`;
+            } else {
+                container.innerHTML = resets.map((r, idx) => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--card-alt); padding:10px; border-radius:8px; margin-bottom:8px; border:1px solid var(--border);">
+                        <div>
+                            <strong>${r.name}</strong> (${r.phone})
+                            <div style="font-size:0.75rem; color:var(--text-sub);">Demande du ${r.date}</div>
+                        </div>
+                        <button class="btn btn-orange" style="padding:4px 10px; font-size:0.75rem;" onclick="resetUserPassword('${r.phone}', ${idx})">
+                            Réinitialiser (5555)
+                        </button>
+                    </div>
+                `).join('');
+            }
             document.getElementById('modal-admin-resets').classList.add('active');
         }
 
-        function processResetPassword(phone, idx) {
+        function resetUserPassword(phone, resetIndex) {
             const users = DB.getUsers();
             const u = users.find(user => user.phone === phone);
+            
             if (u) {
                 u.pass = "5555";
                 DB.saveUsers(users);
+                
+                const resets = DB.getResets();
+                resets.splice(resetIndex, 1);
+                DB.saveResets(resets);
+
+                openAdminResetsModal();
+                renderAdminDashboard();
+                showToastGreen("✅ Mot de passe réinitialisé à 5555.");
             }
-            const resets = DB.getResets();
-            resets.splice(idx, 1);
-            DB.saveResets(resets);
-            openAdminResetsModal();
-            renderAdminDashboard();
-            showToastGreen("✅ Mot de passe réinitialisé à 5555.");
         }
 
         function openAdminSubscriptionModal() {
             const subs = DB.getSubscriptions();
-            document.getElementById('admin-subscriptions-table').innerHTML = subs.map((s, i) => `
+            const tbody = document.getElementById('admin-subscriptions-table');
+            
+            tbody.innerHTML = subs.map(s => `
                 <tr>
                     <td><strong>${s.name}</strong></td>
                     <td>${s.phone}</td>
-                    <td>${s.class}</td>
-                    <td><span class="badge ${s.status === 'ACTIF' ? 'badge-online' : 'badge-offline'}">${s.status}</span></td>
+                    <td><span class="badge badge-class">${s.class}</span></td>
+                    <td><span class="badge ${s.status === 'VALIDE' ? 'badge-online' : 'badge-paid'}">${s.status}</span></td>
                     <td>
-                        ${s.status === 'EN_ATTENTE' ? `<button class="btn btn-green" style="padding:2px 6px; font-size:0.7rem;" onclick="activateSubscription(${i})">Activer</button>` : ''}
+                        ${s.status === 'EN_ATTENTE' ? `<button class="btn btn-green" style="padding:2px 8px; font-size:0.7rem;" onclick="approveSubscription('${s.phone}', ${s.id})"><i class="fa-solid fa-check"></i> Valider</button>` : 'Actif'}
                     </td>
                 </tr>
-            `).join('') || '<tr><td colspan="5">Aucune demande.</td></tr>';
+            `).join('') || `<tr><td colspan="5" style="text-align:center;">Aucune demande d'abonnement.</td></tr>`;
+
             document.getElementById('modal-admin-subscription').classList.add('active');
         }
 
-        function activateSubscription(subIdx) {
-            const subs = DB.getSubscriptions();
-            const sub = subs[subIdx];
-            if (!sub) return;
-
-            sub.status = 'ACTIF';
-            DB.saveSubscriptions(subs);
-
+        function approveSubscription(phone, subId) {
             const users = DB.getUsers();
-            const u = users.find(user => user.phone === sub.phone);
+            const u = users.find(item => item.phone === phone);
+
             if (u) {
-                const expiry = new Date();
-                expiry.setDate(expiry.getDate() + 30);
-                u.subscription = { active: true, expiresAt: expiry.toISOString() };
+                const nextMonth = new Date();
+                nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+                u.subscription = {
+                    active: true,
+                    expiresAt: nextMonth.toISOString()
+                };
                 DB.saveUsers(users);
-            }
 
-            openAdminSubscriptionModal();
-            showToastGreen("✅ Abonnement activé.");
-        }
+                const subs = DB.getSubscriptions();
+                const sub = subs.find(s => s.id === subId);
+                if (sub) sub.status = 'VALIDE';
+                DB.saveSubscriptions(subs);
 
-        function resetAllData() {
-            if (confirm("Réinitialiser toutes les données de l'application ?")) {
-                localStorage.clear();
-                showToastGreen("✅ Données réinitialisées.");
-                setTimeout(() => location.reload(), 1000);
+                openAdminSubscriptionModal();
+                renderAdminDashboard();
+                showToastGreen("✅ Abonnement activé pour 1 mois.");
             }
         }
 
         function copyUniqueLink() {
-            const copyText = document.getElementById("unique-share-link");
-            copyText.select();
-            document.execCommand("copy");
-            showToastGreen("✅ Lien copié !");
+            const input = document.getElementById('unique-share-link');
+            input.select();
+            document.execCommand('copy');
+            showToastGreen("✅ Lien copié dans le presse-papier.");
         }
 
-        // --- AUTRES MODALES PARTICIPANT ---
         function openCreatorModal() { document.getElementById('modal-creator').classList.add('active'); }
-
+        
         function openProfileModal() {
             const users = DB.getUsers();
             const u = users.find(item => item.phone === currentUserPhone);
-            if (!u) return;
+            if (u) {
+                document.getElementById('prof-name').innerText = u.name;
+                document.getElementById('prof-lastname').innerText = u.lastname || 'Non renseigné';
+                document.getElementById('prof-firstname').innerText = u.firstname || u.name;
+                document.getElementById('prof-school').innerText = u.school || 'Non renseigné';
+                document.getElementById('prof-class').innerText = u.class || 'N/A';
+                document.getElementById('prof-location').innerText = `${u.city || 'N/A'}, ${u.country || "Côte d'Ivoire"}`;
+                document.getElementById('prof-phone').innerText = u.phone;
+                document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
 
-            document.getElementById('prof-lastname').innerText = u.lastname || '';
-            document.getElementById('prof-firstname').innerText = u.firstname || u.name;
-            document.getElementById('prof-school').innerText = u.school || 'Non renseigné';
-            document.getElementById('prof-class').innerText = u.class || 'N/A';
-            document.getElementById('prof-location').innerText = `${u.city || ''}, ${u.country || ''}`;
-            document.getElementById('prof-phone').innerText = u.phone;
-            document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
-
-            const isSub = checkUserSubscription(u);
-            const badge = document.getElementById('prof-sub-badge');
-            badge.innerText = isSub ? 'Statut : Premium Actif' : 'Statut : Gratuit';
-
+                const isSubActive = checkUserSubscription(u);
+                const subBadge = document.getElementById('prof-sub-badge');
+                subBadge.innerText = isSubActive ? "Statut : Premium Actif" : "Statut : Gratuit";
+                subBadge.style.color = isSubActive ? "var(--civ-orange)" : "var(--civ-green)";
+            }
             document.getElementById('modal-profile').classList.add('active');
         }
 
-        function openReviewModal() {
-            document.getElementById('modal-review').classList.add('active');
-        }
+        function openReviewModal() { document.getElementById('modal-review').classList.add('active'); }
 
         function setRating(r) {
             currentRating = r;
-            document.querySelectorAll('#star-rating-box .fa-star').forEach((s, idx) => {
+            const stars = document.querySelectorAll('#star-rating-box i');
+            stars.forEach((s, idx) => {
                 s.style.color = idx < r ? 'var(--civ-orange)' : 'var(--text-sub)';
             });
         }
 
         function handleReviewSubmit(e) {
             e.preventDefault();
+            const comment = document.getElementById('review-comment').value;
             const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève" };
+            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève Anonyme" };
 
             const reviews = DB.getReviews();
             reviews.unshift({
-                id: Date.now(),
                 name: u.name,
-                phone: currentUserPhone,
                 stars: currentRating,
-                comment: document.getElementById('review-comment').value,
+                comment,
                 date: new Date().toLocaleDateString('fr-FR')
             });
+
             DB.saveReviews(reviews);
-            document.getElementById('review-comment').value = '';
             closeModal('modal-review');
-            showToastGreen("✅ Avis enregistré.");
+            document.getElementById('review-comment').value = '';
+            showToastGreen("✅ Votre avis a été enregistré.");
+        }
+
+        function resetAllData() {
+            if (confirm("ATTENTION : Voulez-vous réinitialiser toutes les données de l'application ?")) {
+                localStorage.clear();
+                location.reload();
+            }
         }
     </script>
 </body>
