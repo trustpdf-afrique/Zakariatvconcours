@@ -292,7 +292,7 @@
                     </select>
                 </div>
                 <div id="student-concours-list" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:15px;">
-                    <!-- Injecté en temps réel par Firestore -->
+                    <!-- Synchronisé en temps réel via Firestore -->
                 </div>
             </div>
 
@@ -311,7 +311,7 @@
                         </tr>
                     </thead>
                     <tbody id="top-students-table">
-                        <!-- Injecté en temps réel par Firestore -->
+                        <!-- Synchronisé en temps réel via Firestore -->
                     </tbody>
                 </table>
             </div>
@@ -335,7 +335,7 @@
 
                 <h3>Gestion des Concours</h3>
                 <div id="admin-concours-list" style="margin-top:15px;">
-                    <!-- Injecté en temps réel par Firestore -->
+                    <!-- Synchronisé en temps réel via Firestore -->
                 </div>
             </div>
 
@@ -345,7 +345,7 @@
                     <h3><i class="fa-solid fa-clock-rotate-left" style="color:var(--civ-orange);"></i> Journal d'Activité (Logs Firestore)</h3>
                 </div>
                 <div id="admin-logs-list" style="max-height: 200px; overflow-y: auto; font-family: monospace; font-size:0.85rem;">
-                    <!-- Logs Firestore -->
+                    <!-- Synchronisé en temps réel via Firestore -->
                 </div>
             </div>
         </div>
@@ -417,7 +417,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Coller les 10 Questions au format texte</label>
+                    <label>Coller les Questions au format texte</label>
                     <textarea id="contest-questions-raw" class="form-control" rows="8" placeholder="Format: 1. Question? / A) Rep1 / B) Rep2 / C) Rep3 / Reponse: A" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-orange" style="width:100%;">Enregistrer et Publier sur Firestore</button>
@@ -477,7 +477,7 @@
 
     <div id="toast-container"></div>
 
-    <!-- SDK FIREBASE v12 MODULAR -->
+    <!-- SDK FIREBASE v12 MODULAR ET LOGIQUE FIRESTORE TEMPS RÉEL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { 
@@ -486,21 +486,22 @@
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         // ==========================================
-        // 1. CONFIGURATION FIREBASE
+        // 1. CONFIGURATION OFFICIELLE FIREBASE ZTV
         // ==========================================
         const firebaseConfig = {
-            apiKey: "VOTRE_API_KEY",
-            authDomain: "votre-projet.firebaseapp.com",
-            projectId: "votre-projet",
-            storageBucket: "votre-projet.appspot.com",
-            messagingSenderId: "XXXXXX",
-            appId: "XXXXXX"
+            apiKey: "AIzaSyBdhNasDmYqVPxoaJRx1kMFQscsCXfiyDg",
+            authDomain: "zakariatv-concours.firebaseapp.com",
+            projectId: "zakariatv-concours",
+            storageBucket: "zakariatv-concours.firebasestorage.app",
+            messagingSenderId: "638507512255",
+            appId: "1:638507512255:web:829dd70f6fa2cb09d7f10a",
+            measurementId: "G-7GP7L5EG5B"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // State Global de l'Application (Synchronisé via Firestore onSnapshot)
+        // État applicatif synchronisé en temps réel
         let state = {
             users: [],
             concours: [],
@@ -518,43 +519,43 @@
         let quizScore = 0;
 
         // ==========================================
-        // 2. ÉCOUTEURS TEMPS RÉEL FIRESTORE (onSnapshot)
+        // 2. ÉCOUTEURS EN TEMPS RÉEL (onSnapshot)
         // ==========================================
         function initFirestoreListeners() {
-            // Collection users
+            // Collection 'users'
             onSnapshot(collection(db, "users"), (snapshot) => {
                 state.users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAdminUsersTable();
                 renderTopStudents();
             });
 
-            // Collection concours
+            // Collection 'concours'
             onSnapshot(collection(db, "concours"), (snapshot) => {
                 state.concours = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderStudentConcours();
                 renderAdminDashboard();
             });
 
-            // Collection participations
+            // Collection 'participations'
             onSnapshot(collection(db, "participations"), (snapshot) => {
                 state.participations = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAdminResultsTable();
                 renderTopStudents();
             });
 
-            // Collection subscriptions
+            // Collection 'subscriptions'
             onSnapshot(collection(db, "subscriptions"), (snapshot) => {
                 state.subscriptions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAdminSubscriptionsTable();
             });
 
-            // Collection logs
+            // Collection 'logs' (Triés par date décroissante)
             onSnapshot(query(collection(db, "logs"), orderBy("timestamp", "desc")), (snapshot) => {
                 state.logs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAdminLogsUI();
             });
 
-            // Collection resets
+            // Collection 'resets'
             onSnapshot(collection(db, "resets"), (snapshot) => {
                 state.resets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAdminResetsUI();
@@ -562,7 +563,7 @@
         }
 
         // ==========================================
-        // 3. FONCTIONS SAUVEGARDE FIRESTORE
+        // 3. FONCTIONS D'ÉCRITURE FIRESTORE
         // ==========================================
         async function logAction(desc) {
             try {
@@ -570,7 +571,7 @@
                     action: desc,
                     timestamp: serverTimestamp()
                 });
-            } catch (e) { console.error("Erreur log:", e); }
+            } catch (e) { console.error("Erreur log Firestore:", e); }
         }
 
         window.handleRegisterSubmit = async function(e) {
@@ -591,13 +592,13 @@
 
             try {
                 await setDoc(doc(db, "users", phone), userData, { merge: true });
-                await logAction(`Nouvel élève inscrit : ${userData.name} (${phone})`);
+                await logAction(`Nouveau compte créé : ${userData.name} (${phone})`);
                 currentUser = userData;
                 updateUIAfterLogin();
                 closeModal('modal-register');
-                showToastGreen("Inscription réussie et sauvegardée dans Firestore !");
+                showToastGreen("Inscription enregistrée en ligne avec succès !");
             } catch (err) {
-                alert("Erreur lors de l'inscription dans Firestore : " + err.message);
+                alert("Erreur lors de l'enregistrement dans Firestore : " + err.message);
             }
         };
 
@@ -633,12 +634,13 @@
                     await addDoc(collection(db, "resets"), {
                         name: user.name,
                         phone: phone,
-                        date: new Date().toLocaleDateString('fr-FR')
+                        date: new Date().toLocaleDateString('fr-FR'),
+                        createdAt: serverTimestamp()
                     });
-                    await logAction(`Demande de réinitialisation de mot de passe pour ${phone}`);
+                    await logAction(`Demande réinitialisation mot de passe pour ${phone}`);
                     showToastGreen("Demande envoyée à l'administrateur.");
                 } else {
-                    alert("Numéro non trouvé.");
+                    alert("Numéro non trouvé dans les utilisateurs enregistrés.");
                 }
             }
         };
@@ -649,7 +651,6 @@
             const targetClass = document.getElementById('contest-class').value;
             const rawText = document.getElementById('contest-questions-raw').value;
 
-            // Parser basique des questions
             const questions = parseQuestionsRaw(rawText);
 
             const concoursData = {
@@ -662,16 +663,15 @@
 
             try {
                 await addDoc(collection(db, "concours"), concoursData);
-                await logAction(`Nouveau concours créé : ${title} (${targetClass})`);
+                await logAction(`Concours publié : ${title} (${targetClass})`);
                 closeModal('modal-create-contest');
-                showToastGreen("Concours publié sur Firestore !");
+                showToastGreen("Concours créé et synchronisé en temps réel !");
             } catch (err) {
-                alert("Erreur lors de la création du concours : " + err.message);
+                alert("Erreur création concours : " + err.message);
             }
         };
 
         function parseQuestionsRaw(raw) {
-            // Découpage automatique
             return [
                 { q: "Question 1 d'évaluation", options: ["A) Option 1", "B) Option 2", "C) Option 3"], answer: 0 },
                 { q: "Question 2 d'évaluation", options: ["A) Reponse A", "B) Reponse B", "C) Reponse C"], answer: 1 }
@@ -681,12 +681,12 @@
         window.toggleContestStatus = async function(id, currentStatus) {
             try {
                 await updateDoc(doc(db, "concours", id), { online: !currentStatus });
-                await logAction(`Statut concours ${id} modifié : ${!currentStatus}`);
+                await logAction(`Visibilité concours ${id} modifiée.`);
             } catch(e) { console.error(e); }
         };
 
         window.deleteContest = async function(id) {
-            if(confirm("Supprimer définitivement ce concours ?")) {
+            if(confirm("Voulez-vous supprimer ce concours ?")) {
                 try {
                     await deleteDoc(doc(db, "concours", id));
                     await logAction(`Concours ${id} supprimé.`);
@@ -695,7 +695,7 @@
         };
 
         // ==========================================
-        // 4. MOTEUR DU QUIZ & PARTICIPATION FIRESTORE
+        // 4. PARTICIPATIONS ET CALCUL DES SCORES
         // ==========================================
         window.startQuiz = function(contestId) {
             if (!currentUser) {
@@ -706,7 +706,7 @@
 
             activeQuiz = state.concours.find(c => c.id === contestId);
             if (!activeQuiz || !activeQuiz.questions || activeQuiz.questions.length === 0) {
-                alert("Ce concours ne contient aucune question.");
+                alert("Ce concours ne contient actuellement aucune question.");
                 return;
             }
 
@@ -774,15 +774,15 @@
                     createdAt: serverTimestamp()
                 });
 
-                await logAction(`Participation enregistrée : ${currentUser.name} à ${activeQuiz.title} (Note: ${scoreFinal}/10)`);
-                showToastGreen(`Concours terminé ! Votre note : ${scoreFinal} / 10 (Enregistrée dans Firestore)`);
+                await logAction(`Participation terminée : ${currentUser.name} sur ${activeQuiz.title} (Note: ${scoreFinal}/10)`);
+                showToastGreen(`Concours terminé ! Votre note : ${scoreFinal} / 10`);
             } catch(e) {
-                alert("Erreur lors de l'enregistrement du score : " + e.message);
+                alert("Erreur lors de l'enregistrement du résultat : " + e.message);
             }
         }
 
         // ==========================================
-        // 5. RENDU DE L'INTERFACE UTILISATEUR
+        // 5. MOTEUR D'AFFICHAGE ET DE RENDU DYNAMIQUE
         // ==========================================
         function updateUIAfterLogin() {
             if (currentUser) {
@@ -818,7 +818,7 @@
                     <p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:15px;">Questions : ${c.questions ? c.questions.length : 0}</p>
                     <button class="btn btn-orange" style="width:100%;" onclick="startQuiz('${c.id}')">Participer au Concours</button>
                 </div>
-            `).join('') || '<p style="color:var(--text-sub);">Aucun concours disponible pour cette classe.</p>';
+            `).join('') || '<p style="color:var(--text-sub);">Aucun concours disponible.</p>';
         }
 
         function renderAdminDashboard() {
@@ -841,9 +841,8 @@
 
         function renderTopStudents() {
             const tbody = document.getElementById('top-students-table');
-            
-            // Calcul des totaux par participant
             const userScores = {};
+
             state.participations.forEach(p => {
                 if (!userScores[p.userId]) {
                     userScores[p.userId] = { name: p.userName, total: 0, count: 0 };
@@ -861,7 +860,7 @@
                     <td>-</td>
                     <td><strong style="color:var(--civ-orange);">${s.total} pts</strong> (${s.count} participations)</td>
                 </tr>
-            `).join('') || '<tr><td colspan="4">Aucun classement disponible.</td></tr>';
+            `).join('') || '<tr><td colspan="4">Aucun résultat enregistré.</td></tr>';
         }
 
         function renderAdminUsersTable() {
@@ -900,7 +899,7 @@
                     <td><span class="badge badge-paid">${s.status || 'En attente'}</span></td>
                     <td><button class="btn btn-green" style="padding:2px 8px;">Valider</button></td>
                 </tr>
-            `).join('') || '<tr><td colspan="5">Aucune demande d\'abonnement.</td></tr>';
+            `).join('') || '<tr><td colspan="5">Aucune demande.</td></tr>';
         }
 
         function renderAdminLogsUI() {
@@ -926,13 +925,13 @@
             try {
                 await updateDoc(doc(db, "users", phone), { pass: "5555" });
                 await deleteDoc(doc(db, "resets", resetDocId));
-                await logAction(`Mot de passe réinitialisé à 5555 pour ${phone}`);
+                await logAction(`Mot de passe réinitialisé à 5555 pour le compte ${phone}`);
                 showToastGreen("Mot de passe réinitialisé à 5555.");
             } catch(e) { console.error(e); }
         };
 
         // ==========================================
-        // 6. UTILITAIRES & MODALS
+        // 6. MODALES ET GESTION DE VUE
         // ==========================================
         window.openLoginModal = () => document.getElementById('modal-login').classList.add('active');
         window.openRegisterModal = () => document.getElementById('modal-register').classList.add('active');
@@ -971,7 +970,7 @@
             setTimeout(() => toast.remove(), 4000);
         };
 
-        // Démarrage et initialisation de Firestore
+        // Initialisation des écouteurs Firestore
         initFirestoreListeners();
     </script>
 </body>
