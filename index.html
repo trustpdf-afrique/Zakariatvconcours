@@ -2166,7 +2166,7 @@ Réponse : B..."></textarea>
             document.getElementById('my-total-count').innerText = results.length;
 
             if (results.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5">Vous n'avez effectué aucun concours pour le moment.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Vous n'avez effectué aucun concours pour le moment.</td></tr>`;
             } else {
                 results.forEach((r, idx) => {
                     tbody.innerHTML += `
@@ -2310,17 +2310,18 @@ Réponse : B..."></textarea>
                 <tr>
                     <td><strong>${u.name}</strong></td>
                     <td>${u.school || 'N/A'} (${u.class || 'N/A'})</td>
-                    <td>${u.city || 'N/A'}</td>
-                    <td>${u.phone}</td>
+                    <td>${u.city || ''}</td>
+                    <td>${u.phone || ''}</td>
                     <td><button class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem;" onclick="deleteUser('${u.phone}')"><i class="fa-solid fa-trash"></i> Supprimer</button></td>
                 </tr>
-            `).join('') || `<tr><td colspan="5" style="text-align:center;">Aucun utilisateur inscrit.</td></tr>`;
+            `).join('') || '<tr><td colspan="5" style="text-align:center;">Aucun utilisateur trouvé.</td></tr>';
             document.getElementById('modal-admin-users').classList.add('active');
         }
 
         function deleteUser(phone) {
             if (confirm("Supprimer cet utilisateur ?")) {
-                DB.saveUsers(DB.getUsers().filter(u => u.phone !== phone));
+                const users = DB.getUsers().filter(u => u.phone !== phone);
+                DB.saveUsers(users);
                 openAdminUsersModal();
                 renderAdminDashboard();
                 showToastGreen("✅ Utilisateur supprimé.");
@@ -2331,30 +2332,29 @@ Réponse : B..."></textarea>
             const results = DB.getResults();
             document.getElementById('admin-results-table').innerHTML = results.map(r => `
                 <tr>
-                    <td><strong>${r.userName}</strong></td>
+                    <td><strong>${r.userName}</strong> (${r.userPhone || ''})</td>
                     <td>${r.contestTitle}</td>
-                    <td><span class="badge badge-class">${r.contestClass || 'CE2'}</span></td>
-                    <td>${r.date || 'Inconnue'}</td>
-                    <td><strong style="color:var(--civ-orange);">${r.score} / ${r.maxScore}</strong></td>
+                    <td><span class="badge badge-class">${r.contestClass || 'N/A'}</span></td>
+                    <td>${r.date || ''}</td>
+                    <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
                 </tr>
-            `).join('') || `<tr><td colspan="5" style="text-align:center;">Aucun résultat pour le moment.</td></tr>`;
+            `).join('') || '<tr><td colspan="5" style="text-align:center;">Aucun résultat enregistré.</td></tr>';
             document.getElementById('modal-admin-results').classList.add('active');
         }
 
         function openAdminResetsModal() {
             const resets = DB.getResets();
-            const container = document.getElementById('admin-resets-list');
-            
+            const list = document.getElementById('admin-resets-list');
             if (resets.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-sub); font-size:0.85rem; text-align:center;">Aucune demande de réinitialisation.</p>`;
+                list.innerHTML = '<p style="color:var(--text-sub); font-size:0.85rem;">Aucune demande de réinitialisation en attente.</p>';
             } else {
-                container.innerHTML = resets.map((r, idx) => `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--card-alt); padding:10px; border-radius:8px; margin-bottom:8px; border:1px solid var(--border);">
+                list.innerHTML = resets.map((r, idx) => `
+                    <div style="background:var(--card-alt); border:1px solid var(--border); padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
                         <div>
-                            <strong>${r.name}</strong> (${r.phone})
-                            <div style="font-size:0.75rem; color:var(--text-sub);">Demande du ${r.date}</div>
+                            <strong>${r.name}</strong> (${r.phone})<br>
+                            <span style="font-size:0.75rem; color:var(--text-sub);">Date : ${r.date}</span>
                         </div>
-                        <button class="btn btn-orange" style="padding:4px 10px; font-size:0.75rem;" onclick="resetUserPassword('${r.phone}', ${idx})">
+                        <button class="btn btn-orange" style="font-size:0.75rem; padding:4px 10px;" onclick="approveReset('${r.phone}', ${idx})">
                             Réinitialiser (5555)
                         </button>
                     </div>
@@ -2363,132 +2363,122 @@ Réponse : B..."></textarea>
             document.getElementById('modal-admin-resets').classList.add('active');
         }
 
-        function resetUserPassword(phone, resetIndex) {
+        function approveReset(phone, idx) {
             const users = DB.getUsers();
-            const u = users.find(user => user.phone === phone);
-            
+            const u = users.find(item => item.phone === phone);
             if (u) {
                 u.pass = "5555";
                 DB.saveUsers(users);
-                
-                const resets = DB.getResets();
-                resets.splice(resetIndex, 1);
-                DB.saveResets(resets);
-
-                openAdminResetsModal();
-                renderAdminDashboard();
-                showToastGreen("✅ Mot de passe réinitialisé à 5555.");
             }
+            const resets = DB.getResets();
+            resets.splice(idx, 1);
+            DB.saveResets(resets);
+            openAdminResetsModal();
+            renderAdminDashboard();
+            showToastGreen("✅ Mot de passe réinitialisé à 5555.");
         }
 
         function openAdminSubscriptionModal() {
             const subs = DB.getSubscriptions();
-            const tbody = document.getElementById('admin-subscriptions-table');
-            
-            tbody.innerHTML = subs.map(s => `
+            document.getElementById('admin-subscriptions-table').innerHTML = subs.map(s => `
                 <tr>
                     <td><strong>${s.name}</strong></td>
                     <td>${s.phone}</td>
                     <td><span class="badge badge-class">${s.class}</span></td>
-                    <td><span class="badge ${s.status === 'VALIDE' ? 'badge-online' : 'badge-paid'}">${s.status}</span></td>
+                    <td><span class="badge ${s.status === 'ACTIF' ? 'badge-online' : 'badge-paid'}">${s.status}</span></td>
                     <td>
-                        ${s.status === 'EN_ATTENTE' ? `<button class="btn btn-green" style="padding:2px 8px; font-size:0.7rem;" onclick="approveSubscription('${s.phone}', ${s.id})"><i class="fa-solid fa-check"></i> Valider</button>` : 'Actif'}
+                        ${s.status !== 'ACTIF' ? `<button class="btn btn-green" style="padding:2px 8px; font-size:0.7rem;" onclick="activateSubscription('${s.phone}', ${s.id})">Activer</button>` : '<span style="color:var(--civ-green); font-size:0.75rem; font-weight:700;">Actif</span>'}
                     </td>
                 </tr>
-            `).join('') || `<tr><td colspan="5" style="text-align:center;">Aucune demande d'abonnement.</td></tr>`;
-
+            `).join('') || '<tr><td colspan="5" style="text-align:center;">Aucune souscription enregistrée.</td></tr>';
             document.getElementById('modal-admin-subscription').classList.add('active');
         }
 
-        function approveSubscription(phone, subId) {
+        function activateSubscription(phone, subId) {
             const users = DB.getUsers();
             const u = users.find(item => item.phone === phone);
-
             if (u) {
-                const nextMonth = new Date();
-                nextMonth.setMonth(nextMonth.getMonth() + 1);
-
-                u.subscription = {
-                    active: true,
-                    expiresAt: nextMonth.toISOString()
-                };
+                const expires = new Date();
+                expires.setMonth(expires.getMonth() + 1);
+                u.subscription = { active: true, expiresAt: expires.toISOString() };
                 DB.saveUsers(users);
-
-                const subs = DB.getSubscriptions();
-                const sub = subs.find(s => s.id === subId);
-                if (sub) sub.status = 'VALIDE';
-                DB.saveSubscriptions(subs);
-
-                openAdminSubscriptionModal();
-                renderAdminDashboard();
-                showToastGreen("✅ Abonnement activé pour 1 mois.");
             }
+            const subs = DB.getSubscriptions();
+            const sub = subs.find(item => item.id === subId);
+            if (sub) sub.status = 'ACTIF';
+            DB.saveSubscriptions(subs);
+            openAdminSubscriptionModal();
+            renderAdminDashboard();
+            showToastGreen("✅ Abonnement activé pour 1 mois.");
         }
 
-        function copyUniqueLink() {
-            const input = document.getElementById('unique-share-link');
-            input.select();
-            document.execCommand('copy');
-            showToastGreen("✅ Lien copié dans le presse-papier.");
+        // --- AVIS & UTILITAIRES ---
+        function openReviewModal() {
+            document.getElementById('review-comment').value = '';
+            setRating(5);
+            document.getElementById('modal-review').classList.add('active');
         }
 
-        function openCreatorModal() { document.getElementById('modal-creator').classList.add('active'); }
-        
-        function openProfileModal() {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone);
-            if (u) {
-                document.getElementById('prof-name').innerText = u.name;
-                document.getElementById('prof-lastname').innerText = u.lastname || 'Non renseigné';
-                document.getElementById('prof-firstname').innerText = u.firstname || u.name;
-                document.getElementById('prof-school').innerText = u.school || 'Non renseigné';
-                document.getElementById('prof-class').innerText = u.class || 'N/A';
-                document.getElementById('prof-location').innerText = `${u.city || 'N/A'}, ${u.country || "Côte d'Ivoire"}`;
-                document.getElementById('prof-phone').innerText = u.phone;
-                document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
-
-                const isSubActive = checkUserSubscription(u);
-                const subBadge = document.getElementById('prof-sub-badge');
-                subBadge.innerText = isSubActive ? "Statut : Premium Actif" : "Statut : Gratuit";
-                subBadge.style.color = isSubActive ? "var(--civ-orange)" : "var(--civ-green)";
+        function setRating(val) {
+            currentRating = val;
+            const stars = document.getElementById('star-rating-box').children;
+            for (let i = 0; i < stars.length; i++) {
+                stars[i].style.color = i < val ? 'var(--civ-orange)' : 'var(--text-sub)';
             }
-            document.getElementById('modal-profile').classList.add('active');
-        }
-
-        function openReviewModal() { document.getElementById('modal-review').classList.add('active'); }
-
-        function setRating(r) {
-            currentRating = r;
-            const stars = document.querySelectorAll('#star-rating-box i');
-            stars.forEach((s, idx) => {
-                s.style.color = idx < r ? 'var(--civ-orange)' : 'var(--text-sub)';
-            });
         }
 
         function handleReviewSubmit(e) {
             e.preventDefault();
-            const comment = document.getElementById('review-comment').value;
+            const comment = document.getElementById('review-comment').value.trim();
             const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève Anonyme" };
+            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève" };
 
             const reviews = DB.getReviews();
             reviews.unshift({
                 name: u.name,
                 stars: currentRating,
-                comment,
+                comment: comment,
                 date: new Date().toLocaleDateString('fr-FR')
             });
-
             DB.saveReviews(reviews);
             closeModal('modal-review');
-            document.getElementById('review-comment').value = '';
-            showToastGreen("✅ Votre avis a été enregistré.");
+            showToastGreen("✅ Votre avis a été enregistré avec succès !");
+        }
+
+        function openCreatorModal() { document.getElementById('modal-creator').classList.add('active'); }
+
+        function openProfileModal() {
+            const users = DB.getUsers();
+            const u = users.find(item => item.phone === currentUserPhone);
+            if (u) {
+                document.getElementById('prof-name').innerText = u.name;
+                document.getElementById('prof-lastname').innerText = u.lastname || 'N/A';
+                document.getElementById('prof-firstname').innerText = u.firstname || u.name;
+                document.getElementById('prof-school').innerText = u.school || 'N/A';
+                document.getElementById('prof-class').innerText = u.class || 'N/A';
+                document.getElementById('prof-location').innerText = `${u.city || 'Abidjan'}, ${u.country || "Côte d'Ivoire"}`;
+                document.getElementById('prof-phone').innerText = u.phone || 'N/A';
+                document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
+
+                const isSub = checkUserSubscription(u);
+                document.getElementById('prof-sub-badge').innerText = isSub ? "Statut : Premium Actif" : "Statut : Gratuit";
+            }
+            document.getElementById('modal-profile').classList.add('active');
+        }
+
+        function copyUniqueLink() {
+            const copyText = document.getElementById("unique-share-link");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            showToastGreen("📋 Lien unique copié dans le presse-papier !");
         }
 
         function resetAllData() {
-            if (confirm("ATTENTION : Voulez-vous réinitialiser toutes les données de l'application ?")) {
+            if (confirm("⚠️ ATTENTION : Voulez-vous vraiment réinitialiser TOUTES les données de l'application (Concours, Utilisateurs, Résultats, Avis) ?")) {
                 localStorage.clear();
-                location.reload();
+                showToastGreen("✅ Données réinitialisées.");
+                setTimeout(() => location.reload(), 1000);
             }
         }
     </script>
