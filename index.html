@@ -2150,5 +2150,21 @@ const supabase = window.supabase.createClient(
   supabaseKey
 );
 </script>
+    <script>
+async function testerConnexion() {
+  const { data, error } = await supabase
+    .from("admins")
+    .select("*");
+
+  if (error) {
+    console.log("Erreur :", error);
+  } else {
+    console.log("Connexion à Supabase réussie !");
+    console.log(data);
+  }
+}
+
+testerConnexion();
+    </script>
 </body>
 </html>
