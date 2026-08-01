@@ -2167,7 +2167,20 @@ async function testerConnexion() {
 testerConnexion();
     </script>
     <script>
-alert("Supabase est bien chargé !");
+async function testSupabase() {
+  const { data, error } = await supabase
+    .from("admins")
+    .select("*");
+
+  if (error) {
+    alert("Erreur : " + error.message);
+  } else {
+    alert("Connexion à Supabase réussie !");
+    console.log(data);
+  }
+}
+
+testSupabase();
     </script>
 </body>
 </html>
