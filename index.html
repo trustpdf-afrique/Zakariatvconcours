@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZTV - Plateforme Educative & Concours</title>
+    <title>ZakariaTV - Plateforme Educative & Concours</title>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -460,7 +460,7 @@
     <nav class="navbar">
         <a href="#" class="brand-logo">
             <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" alt="ZTV Logo" class="logo-img">
-            <span>ZTV</span>
+            <span>ZakariaTV</span>
         </a>
         <div style="display: flex; gap: 8px;">
             <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.75rem;" onclick="openCreatorModal()">
@@ -481,7 +481,7 @@
                 <div class="card" style="text-align: center;">
                     <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" style="width:70px; height:70px; border-radius:12px; margin-bottom:0.8rem; border:2px solid var(--civ-orange);">
                     <h3>Espace Administration</h3>
-                    <p style="color: var(--text-sub); font-size: 0.8rem; margin-top: 4px; margin-bottom: 1.2rem;">Plateforme Éducative ZTV</p>
+                    <p style="color: var(--text-sub); font-size: 0.8rem; margin-top: 4px; margin-bottom: 1.2rem;">Plateforme Éducative ZakariaTV</p>
                     
                     <form onsubmit="handleAdminLogin(event)">
                         <div class="form-group">
@@ -561,8 +561,6 @@
             <!-- Boutons de Gestion Administrateur -->
             <div style="display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap;">
                 <button class="btn btn-secondary" onclick="openAdminUsersModal()"><i class="fa-solid fa-users"></i> Comptes créés (<span id="users-count-badge">0</span>)</button>
-                <button class="btn btn-orange" onclick="openTop10ModalAdmin()"><i class="fa-solid fa-trophy"></i> Top 10 des meilleurs élèves</button>
-                <button class="btn btn-green" onclick="openGeneralRankingModalAdmin()"><i class="fa-solid fa-list-ol"></i> Classement général</button>
                 <button class="btn btn-secondary" onclick="openAdminResultsModal()"><i class="fa-solid fa-square-poll-vertical"></i> Résultats & Statistiques</button>
                 <button class="btn btn-secondary" onclick="openAdminResetsModal()"><i class="fa-solid fa-key"></i> Mots de passe (<span id="reset-badge-count">0</span>)</button>
                 <button class="btn btn-secondary" onclick="openAdminSubscriptionModal()"><i class="fa-solid fa-crown" style="color:var(--civ-orange);"></i> Abonnements (<span id="sub-badge-count">0</span>)</button>
@@ -590,7 +588,7 @@
             <div class="participant-banner">
                 <img src="https://i.postimg.cc/3NmBfMMB/1000280085-1024x1024.png" alt="ZTV Logo" class="profile-thumb">
                 <div>
-                    <h2 style="font-size: 1.3rem;">ZTV Concours</h2>
+                    <h2 style="font-size: 1.3rem;">ZakariaTV Concours</h2>
                     <p style="color: var(--civ-orange); font-size: 0.82rem; font-weight: 700;">Plateforme éducative aux couleurs de la Côte d'Ivoire</p>
                 </div>
             </div>
@@ -689,8 +687,7 @@
                     
                     <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
                         <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openProfileModal()"><i class="fa-solid fa-user-gear" style="color:var(--civ-orange);"></i> Mon Profil</button>
-                        <button class="btn btn-orange" style="padding:4px 10px; font-size:0.75rem;" onclick="openTop10Modal()"><i class="fa-solid fa-trophy"></i> Top 10 des meilleurs élèves</button>
-                        <button class="btn btn-green" style="padding:4px 10px; font-size:0.75rem;" onclick="openGeneralRankingModal()"><i class="fa-solid fa-list-ol"></i> Classement général</button>
+                        <button class="btn btn-orange" style="padding:4px 10px; font-size:0.75rem;" onclick="openTop5Modal()"><i class="fa-solid fa-trophy"></i> Top 5 des meilleurs élèves</button>
                         <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openMyContestsModal()"><i class="fa-solid fa-chart-line" style="color:var(--civ-green);"></i> Mes concours</button>
                         <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="openReviewModal()"><i class="fa-solid fa-comment"></i> Avis</button>
                     </div>
@@ -799,7 +796,7 @@
     <!-- MODALES                                                            -->
     <!-- =================================================================== -->
 
-    <!-- Modale Créateur de l'application (ZTV) -->
+    <!-- Modale Créateur de l'application (ZakariaTV) -->
     <div class="modal" id="modal-creator">
         <div class="modal-content" style="max-width: 480px; text-align: center; border: 2px solid var(--civ-orange);">
             <div style="display: flex; justify-content: flex-end;">
@@ -812,14 +809,14 @@
             </div>
 
             <h2 style="color: var(--civ-orange); font-size: 1.4rem;">Niampa Zakaria</h2>
-            <p style="color: var(--civ-green); font-weight: 800; font-size: 0.9rem; margin-top: 2px;">Créateur de ZTV</p>
+            <p style="color: var(--civ-green); font-weight: 800; font-size: 0.9rem; margin-top: 2px;">Créateur de ZakariaTV (ZTV)</p>
 
             <div style="background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin: 1rem 0; text-align: left; font-size: 0.88rem; line-height: 1.6;">
                 <p><i class="fa-solid fa-user-graduate" style="color:var(--civ-orange);"></i> <strong>Statut :</strong> Élève en classe de 3e</p>
                 <p><i class="fa-solid fa-school" style="color:var(--civ-orange);"></i> <strong>Établissement :</strong> Lycée Moderne de Bangolo</p>
                 <p><i class="fa-solid fa-cake-candles" style="color:var(--civ-orange);"></i> <strong>Âge :</strong> 15 ans</p>
                 <p><i class="fa-solid fa-video" style="color:var(--civ-orange);"></i> <strong>Activité :</strong> Créateur de contenus sur les phénomènes mystérieux</p>
-                <p><i class="fa-solid fa-tv" style="color:var(--civ-orange);"></i> <strong>Nom de marque :</strong> ZTV</p>
+                <p><i class="fa-solid fa-tv" style="color:var(--civ-orange);"></i> <strong>Nom de marque :</strong> ZakariaTV (ZTV)</p>
                 <p><i class="fa-brands fa-tiktok" style="color:var(--civ-orange);"></i> <strong>Compte TikTok :</strong> zakaria tv</p>
             </div>
 
@@ -827,154 +824,27 @@
         </div>
     </div>
 
-    <!-- Modale Top 10 des Meilleurs Élèves (Participant) -->
-    <div class="modal" id="modal-top10">
-        <div class="modal-content" style="max-width: 700px;">
+    <!-- Modale Top 5 des Meilleurs Élèves -->
+    <div class="modal" id="modal-top5">
+        <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h3 style="color: var(--civ-orange); font-size: 1.1rem;"><i class="fa-solid fa-trophy"></i> Top 10 des meilleurs élèves</h3>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-top10')"><i class="fa-solid fa-xmark"></i></button>
+                <h3 style="color: var(--civ-orange); font-size: 1.1rem;"><i class="fa-solid fa-trophy"></i> Top 5 des meilleurs élèves</h3>
+                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-top5')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div style="overflow-x: auto;">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Rang</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Établissement</th>
+                            <th>Pos</th>
+                            <th>Nom & Prénom</th>
+                            <th>Établissement / Ville</th>
                             <th>Classe</th>
-                            <th>Ville</th>
-                            <th>Total Points</th>
+                            <th>Concours</th>
+                            <th>Points</th>
+                            <th>Moy.</th>
                         </tr>
                     </thead>
-                    <tbody id="top10-table-body"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modale Classement Général (Participant) -->
-    <div class="modal" id="modal-general-ranking">
-        <div class="modal-content" style="max-width: 750px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h3 style="color: var(--civ-green); font-size: 1.1rem;"><i class="fa-solid fa-list-ol"></i> Classement Général</h3>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-general-ranking')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="filter-bar" style="margin-bottom: 1rem;">
-                <button class="btn btn-secondary active" id="btn-rank-mode-level" onclick="switchRankingTab('level')">Classement par niveau</button>
-                <button class="btn btn-secondary" id="btn-rank-mode-global" onclick="switchRankingTab('global')">Classement global</button>
-            </div>
-
-            <!-- Sous-filtres par niveau -->
-            <div id="ranking-level-select-box" style="margin-bottom: 1rem;">
-                <label class="form-label">Sélectionner la classe :</label>
-                <select id="ranking-class-select" class="form-control" onchange="renderParticipantLevelRanking()">
-                    <option value="CE2">CE2</option>
-                    <option value="CM1">CM1</option>
-                    <option value="CM2">CM2</option>
-                    <option value="6e">6e</option>
-                    <option value="5e">5e</option>
-                    <option value="4e">4e</option>
-                    <option value="3e" selected>3e</option>
-                    <option value="Seconde">Seconde</option>
-                    <option value="Première">Première</option>
-                    <option value="Terminale">Terminale</option>
-                </select>
-            </div>
-
-            <div style="overflow-x: auto;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Rang</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Établissement</th>
-                            <th>Ville</th>
-                            <th>Classe</th>
-                            <th>Points Totaux</th>
-                        </tr>
-                    </thead>
-                    <tbody id="general-ranking-table-body"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modale Top 10 Admin -->
-    <div class="modal" id="modal-admin-top10">
-        <div class="modal-content" style="max-width: 800px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4 style="color: var(--civ-orange);"><i class="fa-solid fa-trophy"></i> Top 10 des meilleurs élèves (Administration)</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-top10')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div style="overflow-x: auto;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Rang</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Établissement</th>
-                            <th>Ville</th>
-                            <th>Classe</th>
-                            <th>Concours joués</th>
-                            <th>Total Points</th>
-                            <th>Moyenne</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-top10-table-body"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modale Classement Général Admin -->
-    <div class="modal" id="modal-admin-general-ranking">
-        <div class="modal-content" style="max-width: 850px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
-                <h4 style="color: var(--civ-green);"><i class="fa-solid fa-list-ol"></i> Classement Général (Administration)</h4>
-                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-admin-general-ranking')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div class="filter-bar" style="margin-bottom: 1rem;">
-                <button class="btn btn-secondary active" id="btn-admin-rank-mode-level" onclick="switchAdminRankingTab('level')">Classement par niveau</button>
-                <button class="btn btn-secondary" id="btn-admin-rank-mode-global" onclick="switchAdminRankingTab('global')">Classement global</button>
-            </div>
-
-            <div id="admin-ranking-level-select-box" style="margin-bottom: 1rem;">
-                <label class="form-label">Sélectionner la classe :</label>
-                <select id="admin-ranking-class-select" class="form-control" onchange="renderAdminLevelRanking()">
-                    <option value="CE2">CE2</option>
-                    <option value="CM1">CM1</option>
-                    <option value="CM2">CM2</option>
-                    <option value="6e">6e</option>
-                    <option value="5e">5e</option>
-                    <option value="4e">4e</option>
-                    <option value="3e" selected>3e</option>
-                    <option value="Seconde">Seconde</option>
-                    <option value="Première">Première</option>
-                    <option value="Terminale">Terminale</option>
-                </select>
-            </div>
-
-            <div style="overflow-x: auto;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Rang</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Établissement</th>
-                            <th>Ville</th>
-                            <th>Classe</th>
-                            <th>Concours joués</th>
-                            <th>Total Points</th>
-                            <th>Moyenne</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-general-ranking-table-body"></tbody>
+                    <tbody id="top5-table-body"></tbody>
                 </table>
             </div>
         </div>
@@ -1892,38 +1762,23 @@ Réponse : B..."></textarea>
             }
         }
 
-        // --- CALCUL CENTRALISÉ DES CLASSEMENTS ---
-        function computeUserAggregatedStats() {
+        // --- TOP 5 DES MEILLEURS ÉLÈVES ---
+        function openTop5Modal() {
             const results = DB.getResults();
             const users = DB.getUsers();
+
             const statsMap = {};
 
-            // Initialiser les données pour tous les utilisateurs enregistrés
-            users.forEach(u => {
-                const key = u.phone;
-                statsMap[key] = {
-                    phone: u.phone,
-                    lastname: u.lastname || '',
-                    firstname: u.firstname || u.name,
-                    school: u.school || 'Non renseigné',
-                    city: u.city || 'Non renseignée',
-                    class: u.class || 'CE2',
-                    totalContests: 0,
-                    totalPoints: 0
-                };
-            });
-
-            // Cumuler les résultats des concours joués
             results.forEach(r => {
-                const key = r.userPhone;
+                const key = r.userPhone || r.userName;
                 if (!statsMap[key]) {
+                    const u = users.find(user => user.phone === key || user.name === key);
                     statsMap[key] = {
-                        phone: key || 'Inconnu',
-                        lastname: r.userLastname || '',
-                        firstname: r.userFirstname || r.userName,
-                        school: r.userSchool || 'Non renseigné',
-                        city: r.userCity || 'Non renseignée',
-                        class: r.userClass || 'CE2',
+                        name: u ? u.lastname || '' : '',
+                        firstname: u ? u.firstname || u.name : r.userName,
+                        school: u ? u.school || 'Lycée' : r.userSchool || 'N/A',
+                        city: u ? u.city || 'Abidjan' : r.userCity || 'N/A',
+                        class: u ? u.class || '3e' : r.userClass || 'N/A',
                         totalContests: 0,
                         totalPoints: 0
                     };
@@ -1932,133 +1787,368 @@ Réponse : B..."></textarea>
                 statsMap[key].totalPoints += r.score;
             });
 
-            return Object.values(statsMap);
-        }
+            const sorted = Object.values(statsMap)
+                .sort((a, b) => b.totalPoints - a.totalPoints)
+                .slice(0, 5);
 
-        // --- TOP 10 DES MEILLEURS ÉLÈVES (PARTICIPANT) ---
-        function openTop10Modal() {
-            const stats = computeUserAggregatedStats();
-            const sorted = stats.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 10);
-
-            const tbody = document.getElementById('top10-table-body');
-            tbody.innerHTML = '';
-
-            if (sorted.length === 0 || sorted.every(s => s.totalPoints === 0)) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Aucun résultat enregistré.</td></tr>`;
-            } else {
-                sorted.forEach((item, idx) => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                            <td><strong>${item.lastname}</strong></td>
-                            <td>${item.firstname}</td>
-                            <td>${item.school}</td>
-                            <td><span class="badge badge-class">${item.class}</span></td>
-                            <td>${item.city}</td>
-                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
-                        </tr>
-                    `;
-                });
-            }
-
-            document.getElementById('modal-top10').classList.add('active');
-        }
-
-        // --- CLASSEMENT GÉNÉRAL (PARTICIPANT) ---
-        let currentParticipantRankMode = 'level';
-
-        function openGeneralRankingModal() {
-            switchRankingTab('level');
-            document.getElementById('modal-general-ranking').classList.add('active');
-        }
-
-        function switchRankingTab(mode) {
-            currentParticipantRankMode = mode;
-            document.getElementById('btn-rank-mode-level').className = mode === 'level' ? 'btn btn-secondary active' : 'btn btn-secondary';
-            document.getElementById('btn-rank-mode-global').className = mode === 'global' ? 'btn btn-secondary active' : 'btn btn-secondary';
-            
-            document.getElementById('ranking-level-select-box').style.display = mode === 'level' ? 'block' : 'none';
-
-            if (mode === 'level') {
-                renderParticipantLevelRanking();
-            } else {
-                renderParticipantGlobalRanking();
-            }
-        }
-
-        function renderParticipantLevelRanking() {
-            const selectedClass = document.getElementById('ranking-class-select').value;
-            const stats = computeUserAggregatedStats();
-            const filtered = stats.filter(s => s.class === selectedClass).sort((a, b) => b.totalPoints - a.totalPoints);
-
-            const tbody = document.getElementById('general-ranking-table-body');
-            tbody.innerHTML = '';
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Aucun élève trouvé pour la classe de ${selectedClass}.</td></tr>`;
-            } else {
-                filtered.forEach((item, idx) => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                            <td><strong>${item.lastname}</strong></td>
-                            <td>${item.firstname}</td>
-                            <td>${item.school}</td>
-                            <td>${item.city}</td>
-                            <td><span class="badge badge-class">${item.class}</span></td>
-                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
-                        </tr>
-                    `;
-                });
-            }
-        }
-
-        function renderParticipantGlobalRanking() {
-            const stats = computeUserAggregatedStats();
-            const sorted = stats.sort((a, b) => b.totalPoints - a.totalPoints);
-
-            const tbody = document.getElementById('general-ranking-table-body');
+            const tbody = document.getElementById('top5-table-body');
             tbody.innerHTML = '';
 
             if (sorted.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Aucun élève trouvé.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7">Aucun classement disponible.</td></tr>`;
             } else {
                 sorted.forEach((item, idx) => {
+                    const avg = (item.totalPoints / item.totalContests).toFixed(1);
                     tbody.innerHTML += `
                         <tr>
                             <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                            <td><strong>${item.lastname}</strong></td>
-                            <td>${item.firstname}</td>
-                            <td>${item.school}</td>
-                            <td>${item.city}</td>
+                            <td><strong>${item.firstname} ${item.name}</strong></td>
+                            <td>${item.school} (${item.city})</td>
                             <td><span class="badge badge-class">${item.class}</span></td>
+                            <td>${item.totalContests}</td>
                             <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
+                            <td><strong>${avg} /10</strong></td>
                         </tr>
                     `;
                 });
             }
+
+            document.getElementById('modal-top5').classList.add('active');
+        }
+
+        // --- TABLEAU DE BORD « MES CONCOURS » ---
+        function openMyContestsModal() {
+            const results = DB.getResults().filter(r => r.userPhone === currentUserPhone);
+            const tbody = document.getElementById('my-contests-table-body');
+            tbody.innerHTML = '';
+
+            let totalPts = 0;
+            results.forEach(r => {
+                totalPts += r.score;
+            });
+
+            document.getElementById('my-total-points').innerText = totalPts;
+            document.getElementById('my-total-count').innerText = results.length;
+
+            if (results.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5">Vous n'avez effectué aucun concours pour le moment.</td></tr>`;
+            } else {
+                results.forEach((r, idx) => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${r.contestTitle}</strong></td>
+                            <td><span class="badge badge-class">${r.contestClass || 'CE2'}</span></td>
+                            <td>${r.date}</td>
+                            <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
+                            <td>#${idx + 1}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById('modal-my-contests').classList.add('active');
+        }
+
+        // --- ABONNEMENT ---
+        function openBuySubscriptionModal() {
+            const users = DB.getUsers();
+            const u = users.find(item => item.phone === currentUserPhone);
+            if (u) {
+                document.getElementById('sub-req-name').value = u.name;
+                document.getElementById('sub-req-phone').value = u.phone;
+            }
+            document.getElementById('modal-buy-subscription').classList.add('active');
+        }
+
+        function handleSubscriptionRequest(e) {
+            e.preventDefault();
+            const name = document.getElementById('sub-req-name').value;
+            const phone = document.getElementById('sub-req-phone').value;
+            const userClass = document.getElementById('sub-req-class').value;
+
+            const subs = DB.getSubscriptions();
+            subs.push({
+                id: Date.now(),
+                name, phone, class: userClass,
+                status: 'EN_ATTENTE',
+                date: new Date().toLocaleDateString('fr-FR')
+            });
+
+            DB.saveSubscriptions(subs);
+            closeModal('modal-buy-subscription');
+            showToastGreen("✅ Abonnement activé ou demande reçue.");
+        }
+
+        // --- ADMINISTRATION ---
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            if (document.getElementById('admin-user').value === 'ZakariaTV' && document.getElementById('admin-pass').value === '55250031') {
+                showToastGreen("✅ Connexion Administrateur réussie.");
+                showView('admin-dashboard-view');
+            } else {
+                alert("Identifiants administration incorrects.");
+            }
+        }
+
+        function renderAdminDashboard() {
+            const contests = DB.getContests();
+            const users = DB.getUsers();
+            const results = DB.getResults();
+            const resets = DB.getResets();
+            const subs = DB.getSubscriptions();
+
+            document.getElementById('stat-contests').innerText = contests.length;
+            document.getElementById('stat-users').innerText = users.length;
+            document.getElementById('stat-participations').innerText = results.length;
+            document.getElementById('stat-resets').innerText = resets.length;
+            
+            document.getElementById('users-count-badge').innerText = users.length;
+            document.getElementById('reset-badge-count').innerText = resets.length;
+            document.getElementById('sub-badge-count').innerText = subs.filter(s => s.status === 'EN_ATTENTE').length;
+
+            const list = document.getElementById('admin-contest-list');
+            list.innerHTML = '';
+            contests.forEach(c => {
+                list.innerHTML += `
+                    <div class="contest-card">
+                        <img src="${c.image}" alt="${c.title}" style="width:100%; height:110px; object-fit:cover; border-radius:10px; margin-bottom:8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="badge badge-class">Classe : ${c.level}</span>
+                            <span class="badge ${c.online ? 'badge-online' : 'badge-offline'}">${c.online ? 'En ligne' : 'Masqué'}</span>
+                        </div>
+                        <div class="contest-title">${c.title}</div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px;">
+                            <button class="btn btn-secondary" style="padding:4px;" onclick="toggleContestStatus(${c.id})">${c.online ? 'Masquer' : 'Publier'}</button>
+                            <button class="btn btn-danger" style="padding:4px;" onclick="deleteContest(${c.id})"><i class="fa-solid fa-trash"></i> Supprimer</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Avis Utilisateurs pour l'administrateur
+            const reviews = DB.getReviews();
+            const reviewsList = document.getElementById('admin-reviews-list');
+            reviewsList.innerHTML = reviews.map(r => `
+                <div style="background:var(--card-alt); padding:8px 12px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); font-size:0.82rem;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong>${r.name}</strong>
+                        <span style="color:var(--text-sub); font-size:0.75rem;">${r.date || 'Récent'}</span>
+                    </div>
+                    <div style="color:var(--civ-orange); font-size:0.75rem;">${'★'.repeat(r.stars)}</div>
+                    <div style="color:var(--text-main); margin-top:2px;">"${r.comment}"</div>
+                </div>
+            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucun avis pour le moment.</p>';
+        }
+
+        function openCreateContestModal() {
+            document.getElementById('edit-contest-id').value = '';
+            document.getElementById('edit-title').value = '';
+            document.getElementById('edit-image').value = 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80';
+            document.getElementById('edit-questions-raw').value = '';
+            document.getElementById('parse-feedback').innerHTML = '';
+            updateLevelOptions();
+            document.getElementById('modal-edit-contest').classList.add('active');
+        }
+
+        function toggleContestStatus(id) {
+            const contests = DB.getContests();
+            const c = contests.find(item => item.id === id);
+            if (c) {
+                c.online = !c.online;
+                DB.saveContests(contests);
+                renderAdminDashboard();
+                showToastGreen("✅ Informations mises à jour.");
+            }
+        }
+
+        function deleteContest(id) {
+            if (confirm("Supprimer ce concours ?")) {
+                DB.saveContests(DB.getContests().filter(c => c.id !== id));
+                renderAdminDashboard();
+                showToastGreen("✅ Concours supprimé.");
+            }
+        }
+
+        function openAdminUsersModal() {
+            const users = DB.getUsers();
+            document.getElementById('admin-users-table').innerHTML = users.map(u => `
+                <tr>
+                    <td><strong>${u.name}</strong></td>
+                    <td>${u.school || 'N/A'} (${u.class || 'N/A'})</td>
+                    <td>${u.city || ''}</td>
+                    <td>${u.phone}</td>
+                    <td><button class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="deleteUser('${u.phone}')">Supprimer</button></td>
+                </tr>
+            `).join('') || '<tr><td colspan="5">Aucun participant inscrit.</td></tr>';
+            document.getElementById('modal-admin-users').classList.add('active');
+        }
+
+        function deleteUser(phone) {
+            if (confirm("Supprimer ce participant ?")) {
+                DB.saveUsers(DB.getUsers().filter(u => u.phone !== phone));
+                openAdminUsersModal();
+                renderAdminDashboard();
+                showToastGreen("✅ Utilisateur supprimé.");
+            }
+        }
+
+        function openAdminResultsModal() {
+            const results = DB.getResults();
+            document.getElementById('admin-results-table').innerHTML = results.map(r => `
+                <tr>
+                    <td><strong>${r.userName}</strong></td>
+                    <td>${r.contestTitle}</td>
+                    <td><span class="badge badge-class">${r.contestClass || 'CE2'}</span></td>
+                    <td>${r.date}</td>
+                    <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
+                </tr>
+            `).join('') || '<tr><td colspan="5">Aucun résultat.</td></tr>';
+            document.getElementById('modal-admin-results').classList.add('active');
+        }
+
+        function openAdminResetsModal() {
+            const resets = DB.getResets();
+            document.getElementById('admin-resets-list').innerHTML = resets.map((r, i) => `
+                <div style="background:var(--card-alt); padding:8px; border-radius:6px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem;">
+                    <div>Demande de : <strong>${r.name}</strong> (${r.phone})</div>
+                    <button class="btn btn-green" style="padding:2px 8px; font-size:0.75rem;" onclick="processResetPassword('${r.phone}', ${i})">Réinitialiser (5555)</button>
+                </div>
+            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucune demande.</p>';
+            document.getElementById('modal-admin-resets').classList.add('active');
+        }
+
+        function processResetPassword(phone, idx) {
+            const users = DB.getUsers();
+            const u = users.find(user => user.phone === phone);
+            if (u) {
+                u.pass = "5555";
+                DB.saveUsers(users);
+            }
+            const resets = DB.getResets();
+            resets.splice(idx, 1);
+            DB.saveResets(resets);
+            openAdminResetsModal();
+            renderAdminDashboard();
+            showToastGreen("✅ Mot de passe réinitialisé à 5555.");
+        }
+
+        function openAdminSubscriptionModal() {
+            const subs = DB.getSubscriptions();
+            document.getElementById('admin-subscriptions-table').innerHTML = subs.map((s, i) => `
+                <tr>
+                    <td><strong>${s.name}</strong></td>
+                    <td>${s.phone}</td>
+                    <td>${s.class}</td>
+                    <td><span class="badge ${s.status === 'ACTIF' ? 'badge-online' : 'badge-offline'}">${s.status}</span></td>
+                    <td>
+                        ${s.status === 'EN_ATTENTE' ? `<button class="btn btn-green" style="padding:2px 6px; font-size:0.7rem;" onclick="activateSubscription(${i})">Activer</button>` : ''}
+                    </td>
+                </tr>
+            `).join('') || '<tr><td colspan="5">Aucune demande.</td></tr>';
+            document.getElementById('modal-admin-subscription').classList.add('active');
+        }
+
+        function activateSubscription(subIdx) {
+            const subs = DB.getSubscriptions();
+            const sub = subs[subIdx];
+            if (!sub) return;
+
+            sub.status = 'ACTIF';
+            DB.saveSubscriptions(subs);
+
+            const users = DB.getUsers();
+            const u = users.find(user => user.phone === sub.phone);
+            if (u) {
+                const expiry = new Date();
+                expiry.setDate(expiry.getDate() + 30);
+                u.subscription = { active: true, expiresAt: expiry.toISOString() };
+                DB.saveUsers(users);
+            }
+
+            openAdminSubscriptionModal();
+            showToastGreen("✅ Abonnement activé.");
+        }
+
+        function resetAllData() {
+            if (confirm("Réinitialiser toutes les données de l'application ?")) {
+                localStorage.clear();
+                showToastGreen("✅ Données réinitialisées.");
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+
+        function copyUniqueLink() {
+            const copyText = document.getElementById("unique-share-link");
+            copyText.select();
+            document.execCommand("copy");
+            showToastGreen("✅ Lien copié !");
+        }
+
+        // --- AUTRES MODALES PARTICIPANT ---
+        function openCreatorModal() { document.getElementById('modal-creator').classList.add('active'); }
+
+        function openProfileModal() {
+            const users = DB.getUsers();
+            const u = users.find(item => item.phone === currentUserPhone);
+            if (!u) return;
+
+            document.getElementById('prof-lastname').innerText = u.lastname || '';
+            document.getElementById('prof-firstname').innerText = u.firstname || u.name;
+            document.getElementById('prof-school').innerText = u.school || 'Non renseigné';
+            document.getElementById('prof-class').innerText = u.class || 'N/A';
+            document.getElementById('prof-location').innerText = `${u.city || ''}, ${u.country || ''}`;
+            document.getElementById('prof-phone').innerText = u.phone;
+            document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
+
+            const isSub = checkUserSubscription(u);
+            const badge = document.getElementById('prof-sub-badge');
+            badge.innerText = isSub ? 'Statut : Premium Actif' : 'Statut : Gratuit';
+
+            document.getElementById('modal-profile').classList.add('active');
+        }
+
+        function openReviewModal() {
+            document.getElementById('modal-review').classList.add('active');
+        }
+
+        function setRating(r) {
+            currentRating = r;
+            document.querySelectorAll('#star-rating-box .fa-star').forEach((s, idx) => {
+                s.style.color = idx < r ? 'var(--civ-orange)' : 'var(--text-sub)';
+            });
+        }
+
+        function handleReviewSubmit(e) {
+            e.preventDefault();
+            const users = DB.getUsers();
+            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève" };
+
+            const reviews = DB.getReviews();
+            reviews.unshift({
+                id: Date.now(),
+                name: u.name,
+                phone: currentUserPhone,
+                stars: currentRating,
+                comment: document.getElementById('review-comment').value,
+                date: new Date().toLocaleDateString('fr-FR')
+            });
+            DB.saveReviews(reviews);
+            document.getElementById('review-comment').value = '';
+            closeModal('modal-review');
+            showToastGreen("✅ Avis enregistré.");
         }
     </script>
-
-    <!-- Supabase SDK & Initialization -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script>
-    const supabaseUrl = "https://zdwgkemcnbxustonfnyw.supabase.co";
+<script>
+const supabaseUrl = "https://zdwgkemcnbxustonfnyw.supabase.co";
 
-    const supabaseKey = "sb_publishable_HSFWoiOBZe5g6fnO8__Lhw_l7jOlm9l";
+const supabaseKey = "sb_publishable_HSFWoiOBZe5g6fnO8__Lhw_l7jOlm9l";
 
-    const supabase = window.supabase.createClient(
-      supabaseUrl,
-      supabaseKey
-    );
-
-    // Verification of initialization
-    if (supabase) {
-      console.log("Supabase SDK initialized successfully.");
-    } else {
-      console.error("Failed to initialize Supabase SDK.");
-    }
-    </script>
+const supabase = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
+</script>
 </body>
 </html>
