@@ -8,6 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDKs v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         :root {
             /* Palette aux couleurs de la Côte d'Ivoire */
@@ -1303,44 +1308,129 @@ Réponse : B..."></textarea>
     <!-- LOGIQUE JAVASCRIPT                                                  -->
     <!-- =================================================================== -->
     <script>
+        // CONFIGURATION FIREBASE
+        const firebaseConfig = {
+            apiKey: "VOTRE_API_KEY",
+            authDomain: "VOTRE_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://VOTRE_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "VOTRE_PROJECT_ID",
+            storageBucket: "VOTRE_PROJECT_ID.appspot.com",
+            messagingSenderId: "VOTRE_SENDER_ID",
+            appId: "VOTRE_APP_ID"
+        };
+
+        // Initialisation de Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const database = firebase.database();
+
         const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80";
 
-        // Base de Données LocalStorage (Sécurisée)
+        // Adaptateur Firebase Realtime Database
         const DB = {
-            getContests: () => JSON.parse(localStorage.getItem('ztv_db_contests')) || [
-                {
-                    id: 1,
-                    title: "Histoire - Le Temps et la Société",
-                    category: "Collège",
-                    level: "3e",
-                    type: "Gratuit",
-                    createdAt: "2026-07-30",
-                    createdTime: "10:00",
-                    online: true,
-                    image: "https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=500&q=80",
-                    questions: Array(10).fill({
-                        q: "Quelle est la capitale politique de la Côte d'Ivoire ?",
-                        options: ["Abidjan", "Yamoussoukro", "Bouaké", "San-Pedro"],
-                        answer: 1
-                    })
-                }
-            ],
-            saveContests: (data) => localStorage.setItem('ztv_db_contests', JSON.stringify(data)),
+            getContests: () => {
+                return new Promise((resolve) => {
+                    database.ref('contests').once('value', (snapshot) => {
+                        const data = snapshot.val();
+                        if (!data) {
+                            const defaultContests = [
+                                {
+                                    id: 1,
+                                    title: "Histoire - Le Temps et la Société",
+                                    category: "Collège",
+                                    level: "3e",
+                                    type: "Gratuit",
+                                    createdAt: "2026-07-30",
+                                    createdTime: "10:00",
+                                    online: true,
+                                    image: "https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=500&q=80",
+                                    questions: Array(10).fill({
+                                        q: "Quelle est la capitale politique de la Côte d'Ivoire ?",
+                                        options: ["Abidjan", "Yamoussoukro", "Bouaké", "San-Pedro"],
+                                        answer: 1
+                                    })
+                                }
+                            ];
+                            database.ref('contests').set(defaultContests);
+                            resolve(defaultContests);
+                        } else {
+                            resolve(Array.isArray(data) ? data : Object.values(data));
+                        }
+                    });
+                });
+            },
+            saveContests: (data) => database.ref('contests').set(data),
             
-            getUsers: () => JSON.parse(localStorage.getItem('ztv_db_users')) || [],
-            saveUsers: (data) => localStorage.setItem('ztv_db_users', JSON.stringify(data)),
+            getUsers: () => {
+                return new Promise((resolve) => {
+                    database.ref('users').once('value', (snapshot) => {
+                        const data = snapshot.val();
+                        if (!data) {
+                            resolve([]);
+                        } else {
+                            resolve(Object.values(data));
+                        }
+                    });
+                });
+            },
             
-            getResults: () => JSON.parse(localStorage.getItem('ztv_db_results')) || [],
-            saveResults: (data) => localStorage.setItem('ztv_db_results', JSON.stringify(data)),
+            getResults: () => {
+                return new Promise((resolve) => {
+                    database.ref('results').once('value', (snapshot) => {
+                        const data = snapshot.val();
+                        if (!data) {
+                            resolve([]);
+                        } else {
+                            resolve(Object.values(data));
+                        }
+                    });
+                });
+            },
+            saveResults: (data) => database.ref('results').set(data),
             
-            getReviews: () => JSON.parse(localStorage.getItem('ztv_db_reviews')) || [],
-            saveReviews: (data) => localStorage.setItem('ztv_db_reviews', JSON.stringify(data)),
+            getReviews: () => {
+                return new Promise((resolve) => {
+                    database.ref('reviews').once('value', (snapshot) => {
+                        const data = snapshot.val();
+                        if (!data) {
+                            resolve([]);
+                        } else {
+                            resolve(Object.values(data));
+                        }
+                    });
+                });
+            },
+            saveReviews: (data) => database.ref('reviews').set(data),
 
-            getResets: () => JSON.parse(localStorage.getItem('ztv_db_resets')) || [],
-            saveResets: (data) => localStorage.setItem('ztv_db_resets', JSON.stringify(data)),
+            getResets: () => {
+                return new Promise((resolve) => {
+                    database.ref('resets').once('value', (snapshot) => {
+                        const data = snapshot.val();
+                        if (!data) {
+                            resolve([]);
+                        } else {
+                            resolve(Object.values(data));
+                        }
+                    });
+                });
+            },
+            saveResets: (data) => database.ref('resets').set(data),
 
-            getSubscriptions: () => JSON.parse(localStorage.getItem('ztv_db_subscriptions')) || [],
-            saveSubscriptions: (data) => localStorage.setItem('ztv_db_subscriptions', JSON.stringify(data))
+            getSubscriptions: () => {
+                return new Promise((resolve) => {
+                    database.ref('subscriptions').once('value', (snapshot) => {
+                        const data = snapshot.val();
+                        if (!data) {
+                            resolve([]);
+                        } else {
+                            resolve(Object.values(data));
+                        }
+                    });
+                });
+            },
+            saveSubscriptions: (data) => database.ref('subscriptions').set(data)
         };
 
         let currentQuiz = null;
@@ -1349,7 +1439,14 @@ Réponse : B..."></textarea>
         let score = 0;
         let timerInterval = null;
         let currentRating = 5;
-        let currentUserPhone = localStorage.getItem('ztv_session_user_phone') || null;
+        let currentUserPhone = null;
+        let currentUserData = null;
+
+        // Fonction utilitaire pour générer une adresse email Firebase à partir du numéro
+        function phoneToEmail(phone) {
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            return `user_${cleanPhone}@ztv.ci`;
+        }
 
         // Filtres
         let selectedCategoryFilter = "Tous";
@@ -1363,14 +1460,26 @@ Réponse : B..."></textarea>
 
             const urlParams = new URLSearchParams(window.location.search);
             
-            // Connexion automatique persistante
-            if (currentUserPhone) {
-                showView('participant-home-view');
-            } else if (urlParams.get('portal') === 'participant') {
-                showView('participant-auth-view');
-            } else {
-                showView('admin-login-view');
-            }
+            // Écoute de l'état d'authentification Firebase
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    database.ref('users/' + user.uid).once('value', (snapshot) => {
+                        currentUserData = snapshot.val();
+                        if (currentUserData) {
+                            currentUserPhone = currentUserData.phone;
+                            showView('participant-home-view');
+                        } else if (urlParams.get('portal') === 'participant') {
+                            showView('participant-auth-view');
+                        } else {
+                            showView('admin-login-view');
+                        }
+                    });
+                } else if (urlParams.get('portal') === 'participant') {
+                    showView('participant-auth-view');
+                } else {
+                    showView('admin-login-view');
+                }
+            });
         });
 
         // TOAST VERTE MODERNE HAUT DROITE
@@ -1405,7 +1514,7 @@ Réponse : B..."></textarea>
             document.getElementById('tab-register-btn').className = tab === 'register' ? 'btn btn-orange btn-block' : 'btn btn-secondary btn-block';
         }
 
-        function handleParticipantRegister(e) {
+        async function handleParticipantRegister(e) {
             e.preventDefault();
             const lastname = document.getElementById('part-reg-lastname').value.trim();
             const firstname = document.getElementById('part-reg-firstname').value.trim();
@@ -1417,50 +1526,72 @@ Réponse : B..."></textarea>
             const avatar = document.getElementById('part-reg-avatar').value || DEFAULT_AVATAR;
             const pass = document.getElementById('part-reg-pass').value;
 
-            const users = DB.getUsers();
-            if (users.find(u => u.phone === phone)) {
-                alert("Un compte existe déjà avec ce numéro WhatsApp.");
-                return;
+            const email = phoneToEmail(phone);
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, pass);
+                const user = userCredential.user;
+
+                const newUser = {
+                    uid: user.uid,
+                    lastname,
+                    firstname,
+                    name: `${firstname} ${lastname}`,
+                    school,
+                    class: userClass,
+                    city,
+                    country,
+                    phone,
+                    avatar,
+                    createdAt: new Date().toISOString(),
+                    subscription: { active: false, expiresAt: null }
+                };
+
+                await database.ref('users/' + user.uid).set(newUser);
+
+                currentUserData = newUser;
+                currentUserPhone = phone;
+
+                showToastGreen("✅ Compte créé avec succès.");
+                showView('participant-home-view');
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    alert("Un compte existe déjà avec ce numéro WhatsApp.");
+                } else if (error.code === 'auth/weak-password') {
+                    alert("Le mot de passe doit contenir au moins 6 caractères.");
+                } else {
+                    alert("Erreur d'inscription : " + error.message);
+                }
             }
-
-            const newUser = {
-                lastname, firstname, name: `${firstname} ${lastname}`, school, class: userClass,
-                city, country, phone, pass, avatar,
-                subscription: { active: false, expiresAt: null }
-            };
-
-            users.push(newUser);
-            DB.saveUsers(users);
-            
-            currentUserPhone = phone;
-            localStorage.setItem('ztv_session_user_phone', phone); // Connexion automatique
-            
-            showToastGreen("✅ Compte créé avec succès.");
-            showView('participant-home-view');
         }
 
-        function handleParticipantLogin(e) {
+        async function handleParticipantLogin(e) {
             e.preventDefault();
             const phone = document.getElementById('part-login-phone').value.trim();
             const pass = document.getElementById('part-login-pass').value;
 
-            const users = DB.getUsers();
-            const user = users.find(u => u.phone === phone && u.pass === pass);
+            const email = phoneToEmail(phone);
 
-            if (user) {
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, pass);
+                const user = userCredential.user;
+
+                const snapshot = await database.ref('users/' + user.uid).once('value');
+                currentUserData = snapshot.val();
                 currentUserPhone = phone;
-                localStorage.setItem('ztv_session_user_phone', phone); // Connexion automatique
+
                 showToastGreen("✅ Connexion réussie.");
                 showView('participant-home-view');
-            } else {
+            } catch (error) {
                 alert("Numéro WhatsApp ou mot de passe incorrect.");
             }
         }
 
-        function logoutUser() {
+        async function logoutUser() {
             closeModal('modal-profile');
+            await auth.signOut();
             currentUserPhone = null;
-            localStorage.removeItem('ztv_session_user_phone');
+            currentUserData = null;
             showToastGreen("Déconnexion effectuée.");
             showView('participant-auth-view');
         }
@@ -1468,16 +1599,16 @@ Réponse : B..."></textarea>
         // --- MOT DE PASSE OUBLIÉ ---
         let foundUserForReset = null;
 
-        function openForgotPasswordModal() {
+        async function openForgotPasswordModal() {
             document.getElementById('forgot-step-1').style.display = 'block';
             document.getElementById('forgot-step-2').style.display = 'none';
             document.getElementById('forgot-phone-input').value = '';
             document.getElementById('modal-forgot-password').classList.add('active');
         }
 
-        function verifyForgotPhone() {
+        async function verifyForgotPhone() {
             const phone = document.getElementById('forgot-phone-input').value.trim();
-            const users = DB.getUsers();
+            const users = await DB.getUsers();
             foundUserForReset = users.find(u => u.phone === phone);
 
             if (foundUserForReset) {
@@ -1493,44 +1624,45 @@ Réponse : B..."></textarea>
             }
         }
 
-        function confirmResetRequest() {
+        async function confirmResetRequest() {
             if (foundUserForReset) {
-                const resets = DB.getResets();
+                const resets = await DB.getResets();
                 resets.push({
                     phone: foundUserForReset.phone,
                     name: `${foundUserForReset.firstname || ''} ${foundUserForReset.lastname || ''}`,
                     date: new Date().toLocaleDateString('fr-FR')
                 });
-                DB.saveResets(resets);
+                await DB.saveResets(resets);
                 closeModal('modal-forgot-password');
                 showToastGreen("✅ Demande de réinitialisation envoyée.");
             }
         }
 
         // --- MODIFICATION MOT DE PASSE ---
-        function handleChangePassword(e) {
+        async function handleChangePassword(e) {
             e.preventDefault();
             const curr = document.getElementById('pass-curr').value;
             const newP = document.getElementById('pass-new').value;
             const conf = document.getElementById('pass-conf').value;
 
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone);
+            if (newP !== conf) {
+                alert("Les mots de passe ne correspondent pas.");
+                return;
+            }
 
-            if (u) {
-                if (u.pass !== curr) {
-                    alert("Mot de passe actuel incorrect.");
-                    return;
+            const user = auth.currentUser;
+            if (user) {
+                const email = user.email;
+                const credential = firebase.auth.EmailAuthProvider.credential(email, curr);
+                
+                try {
+                    await user.reauthenticateWithCredential(credential);
+                    await user.updatePassword(newP);
+                    closeModal('modal-profile');
+                    showToastGreen("✅ Informations mises à jour.");
+                } catch (error) {
+                    alert("Mot de passe actuel incorrect ou erreur de mise à jour.");
                 }
-                if (newP !== conf) {
-                    alert("Les mots de passe ne correspondent pas.");
-                    return;
-                }
-
-                u.pass = newP;
-                DB.saveUsers(users);
-                closeModal('modal-profile');
-                showToastGreen("✅ Informations mises à jour.");
             }
         }
 
@@ -1572,9 +1704,8 @@ Réponse : B..."></textarea>
             renderParticipantHome();
         }
 
-        function renderParticipantHome() {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève", school: "Établissement", class: "Classe", avatar: DEFAULT_AVATAR };
+        async function renderParticipantHome() {
+            const u = currentUserData || { name: "Élève", school: "Établissement", class: "Classe", avatar: DEFAULT_AVATAR };
             
             document.getElementById('user-display-name').innerText = u.name;
             document.getElementById('user-display-details').innerText = `${u.school || 'Établissement non renseigné'} • Classe : ${u.class || 'N/A'}`;
@@ -1590,7 +1721,8 @@ Réponse : B..."></textarea>
             const list = document.getElementById('participant-contest-list');
             list.innerHTML = '';
             
-            let contests = DB.getContests().filter(c => c.online);
+            let allContests = await DB.getContests();
+            let contests = allContests.filter(c => c.online);
 
             if (selectedCategoryFilter !== 'Tous') contests = contests.filter(c => c.category === selectedCategoryFilter);
             if (selectedLevelFilter !== 'Tous') contests = contests.filter(c => c.level === selectedLevelFilter);
@@ -1627,7 +1759,9 @@ Réponse : B..."></textarea>
             if (!user || !user.subscription || !user.subscription.active) return false;
             if (new Date(user.subscription.expiresAt) < new Date()) {
                 user.subscription.active = false;
-                DB.saveUsers(DB.getUsers());
+                if (user.uid) {
+                    database.ref('users/' + user.uid + '/subscription/active').set(false);
+                }
                 return false;
             }
             return true;
@@ -1699,7 +1833,7 @@ Réponse : B..."></textarea>
             return { success: true, questions };
         }
 
-        function handleSaveContest(e) {
+        async function handleSaveContest(e) {
             e.preventDefault();
             const rawText = document.getElementById('edit-questions-raw').value.trim();
             const parseResult = parseRawQuestions(rawText);
@@ -1710,7 +1844,7 @@ Réponse : B..."></textarea>
             }
 
             const id = document.getElementById('edit-contest-id').value;
-            const contests = DB.getContests();
+            const contests = await DB.getContests();
             const now = new Date();
 
             const contestData = {
@@ -1732,19 +1866,19 @@ Réponse : B..."></textarea>
                 contests.push(contestData);
             }
 
-            DB.saveContests(contests);
+            await DB.saveContests(contests);
             closeModal('modal-edit-contest');
             renderAdminDashboard();
             showToastGreen("✅ Concours enregistré.");
         }
 
         // --- DEROULEMENT QUIZ (CHRONOMÈTRE 30S & AUDIO CONTINU) ---
-        function startWaitingCountdown(id) {
-            currentQuiz = DB.getContests().find(c => c.id === id);
+        async function startWaitingCountdown(id) {
+            const contests = await DB.getContests();
+            currentQuiz = contests.find(c => c.id === id);
             
             if (currentQuiz.type === 'Payant') {
-                const users = DB.getUsers();
-                const u = users.find(item => item.phone === currentUserPhone);
+                const u = currentUserData;
                 if (!checkUserSubscription(u)) {
                     alert("Ce concours est réservé aux abonnés Premium.");
                     openBuySubscriptionModal();
@@ -1828,7 +1962,7 @@ Réponse : B..."></textarea>
             });
         }
 
-        function submitAnswer() {
+        async function submitAnswer() {
             clearInterval(timerInterval);
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 
@@ -1839,9 +1973,8 @@ Réponse : B..."></textarea>
             if (currentQuestionIdx < currentQuiz.questions.length) {
                 loadQuestion();
             } else {
-                const results = DB.getResults();
-                const users = DB.getUsers();
-                const u = users.find(item => item.phone === currentUserPhone) || { name: "Anonyme", school: "N/A", class: "N/A", city: "N/A" };
+                const results = await DB.getResults();
+                const u = currentUserData || { name: "Anonyme", school: "N/A", class: "N/A", city: "N/A" };
 
                 // Enregistrement des résultats complets avec Classe et Date
                 results.unshift({
@@ -1858,7 +1991,7 @@ Réponse : B..."></textarea>
                     maxScore: 10,
                     date: new Date().toLocaleDateString('fr-FR')
                 });
-                DB.saveResults(results);
+                await DB.saveResults(results);
 
                 document.getElementById('finish-score-display').innerText = `${score} / 10`;
                 document.getElementById('finish-class-display').innerText = `Concours Niveau : ${currentQuiz.level} • Date : ${new Date().toLocaleDateString('fr-FR')}`;
@@ -1893,9 +2026,9 @@ Réponse : B..."></textarea>
         }
 
         // --- CALCUL CENTRALISÉ DES CLASSEMENTS ---
-        function computeUserAggregatedStats() {
-            const results = DB.getResults();
-            const users = DB.getUsers();
+        async function computeUserAggregatedStats() {
+            const results = await DB.getResults();
+            const users = await DB.getUsers();
             const statsMap = {};
 
             // Initialiser les données pour tous les utilisateurs enregistrés
@@ -1936,8 +2069,8 @@ Réponse : B..."></textarea>
         }
 
         // --- TOP 10 DES MEILLEURS ÉLÈVES (PARTICIPANT) ---
-        function openTop10Modal() {
-            const stats = computeUserAggregatedStats();
+        async function openTop10Modal() {
+            const stats = await computeUserAggregatedStats();
             const sorted = stats.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 10);
 
             const tbody = document.getElementById('top10-table-body');
@@ -1986,9 +2119,9 @@ Réponse : B..."></textarea>
             }
         }
 
-        function renderParticipantLevelRanking() {
+        async function renderParticipantLevelRanking() {
             const selectedClass = document.getElementById('ranking-class-select').value;
-            const stats = computeUserAggregatedStats();
+            const stats = await computeUserAggregatedStats();
             const filtered = stats.filter(s => s.class === selectedClass).sort((a, b) => b.totalPoints - a.totalPoints);
 
             const tbody = document.getElementById('general-ranking-table-body');
@@ -2013,15 +2146,15 @@ Réponse : B..."></textarea>
             }
         }
 
-        function renderParticipantGlobalRanking() {
-            const stats = computeUserAggregatedStats();
+        async function renderParticipantGlobalRanking() {
+            const stats = await computeUserAggregatedStats();
             const sorted = stats.sort((a, b) => b.totalPoints - a.totalPoints);
 
             const tbody = document.getElementById('general-ranking-table-body');
             tbody.innerHTML = '';
 
             if (sorted.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Aucun élève trouvé dans le classement global.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Aucun élève enregistré.</td></tr>`;
             } else {
                 sorted.forEach((item, idx) => {
                     tbody.innerHTML += `
@@ -2039,39 +2172,395 @@ Réponse : B..."></textarea>
             }
         }
 
-        // --- TOP 10 & CLASSEMENT GÉNÉRAL (ADMINISTRATEUR) ---
-        function openTop10ModalAdmin() {
-            const stats = computeUserAggregatedStats();
+        // --- MES CONCOURS (PARTICIPANT) ---
+        async function openMyContestsModal() {
+            const results = await DB.getResults();
+            const myResults = results.filter(r => r.userPhone === currentUserPhone);
+
+            let totalPts = 0;
+            myResults.forEach(r => totalPts += r.score);
+
+            document.getElementById('my-total-points').innerText = totalPts;
+            document.getElementById('my-total-count').innerText = myResults.length;
+
+            const tbody = document.getElementById('my-contests-table-body');
+            tbody.innerHTML = '';
+
+            if (myResults.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Vous n'avez pas encore effectué de concours.</td></tr>`;
+            } else {
+                myResults.forEach(r => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${r.contestTitle}</strong></td>
+                            <td><span class="badge badge-class">${r.contestClass || 'N/A'}</span></td>
+                            <td>${r.date || 'Récent'}</td>
+                            <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
+                            <td><span class="badge badge-free">Terminé</span></td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById('modal-my-contests').classList.add('active');
+        }
+
+        // --- PROFIL PARTICIPANT ---
+        function openProfileModal() {
+            const u = currentUserData || { name: "Élève", firstname: "Élève", lastname: "", school: "N/A", class: "N/A", city: "N/A", country: "Côte d'Ivoire", phone: "N/A", avatar: DEFAULT_AVATAR };
+
+            document.getElementById('prof-name').innerText = u.name;
+            document.getElementById('prof-lastname').innerText = u.lastname || 'Non renseigné';
+            document.getElementById('prof-firstname').innerText = u.firstname || u.name;
+            document.getElementById('prof-school').innerText = u.school || 'Non renseigné';
+            document.getElementById('prof-class').innerText = u.class || 'N/A';
+            document.getElementById('prof-location').innerText = `${u.city || 'Non renseignée'}, ${u.country || "Côte d'Ivoire"}`;
+            document.getElementById('prof-phone').innerText = u.phone || 'Non renseigné';
+            document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
+
+            const isSub = checkUserSubscription(u);
+            document.getElementById('prof-sub-badge').innerText = isSub ? "Statut : Premium Actif" : "Statut : Gratuit";
+
+            document.getElementById('modal-profile').classList.add('active');
+        }
+
+        // --- ABONNEMENTS ---
+        function openBuySubscriptionModal() {
+            const u = currentUserData || { name: "Élève", phone: "", class: "3e" };
+
+            document.getElementById('sub-req-name').value = u.name;
+            document.getElementById('sub-req-phone').value = u.phone;
+            document.getElementById('sub-req-class').value = u.class || '3e';
+
+            document.getElementById('modal-buy-subscription').classList.add('active');
+        }
+
+        async function handleSubscriptionRequest(e) {
+            e.preventDefault();
+            const subs = await DB.getSubscriptions();
+            const phone = document.getElementById('sub-req-phone').value.trim();
+            const name = document.getElementById('sub-req-name').value;
+            const reqClass = document.getElementById('sub-req-class').value;
+
+            subs.push({
+                phone, name, class: reqClass,
+                status: "En attente",
+                date: new Date().toLocaleDateString('fr-FR')
+            });
+
+            await DB.saveSubscriptions(subs);
+            closeModal('modal-buy-subscription');
+            showToastGreen("✅ Demande d'abonnement enregistrée.");
+        }
+
+        // --- AVIS PARTICIPANTS ---
+        function openReviewModal() {
+            document.getElementById('review-comment').value = '';
+            setRating(5);
+            document.getElementById('modal-review').classList.add('active');
+        }
+
+        function setRating(r) {
+            currentRating = r;
+            const stars = document.querySelectorAll('#star-rating-box i');
+            stars.forEach((s, idx) => {
+                s.style.color = idx < r ? 'var(--civ-orange)' : 'var(--text-sub)';
+            });
+        }
+
+        async function handleReviewSubmit(e) {
+            e.preventDefault();
+            const reviews = await DB.getReviews();
+            const u = currentUserData || { name: "Élève" };
+
+            reviews.unshift({
+                userName: u.name,
+                userPhone: currentUserPhone,
+                rating: currentRating,
+                comment: document.getElementById('review-comment').value.trim(),
+                date: new Date().toLocaleDateString('fr-FR')
+            });
+
+            await DB.saveReviews(reviews);
+            closeModal('modal-review');
+            showToastGreen("✅ Votre avis a été publié.");
+        }
+
+        // --- LOGIQUE ADMINISTRATION ---
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user').value.trim();
+            const p = document.getElementById('admin-pass').value;
+
+            if (u === "ZakariaTV" && p === "55250031") {
+                showToastGreen("Bienvenue Administrateur.");
+                showView('admin-dashboard-view');
+            } else {
+                alert("Identifiants administration incorrects.");
+            }
+        }
+
+        async function renderAdminDashboard() {
+            const contests = await DB.getContests();
+            const users = await DB.getUsers();
+            const results = await DB.getResults();
+            const resets = await DB.getResets();
+            const subs = await DB.getSubscriptions();
+            const reviews = await DB.getReviews();
+
+            document.getElementById('stat-contests').innerText = contests.length;
+            document.getElementById('stat-users').innerText = users.length;
+            document.getElementById('stat-participations').innerText = results.length;
+            document.getElementById('stat-resets').innerText = resets.length;
+
+            document.getElementById('users-count-badge').innerText = users.length;
+            document.getElementById('reset-badge-count').innerText = resets.length;
+            document.getElementById('sub-badge-count').innerText = subs.filter(s => s.status === 'En attente').length;
+
+            // Render Contest List Admin
+            const adminContestList = document.getElementById('admin-contest-list');
+            adminContestList.innerHTML = '';
+
+            contests.forEach(c => {
+                adminContestList.innerHTML += `
+                    <div class="contest-card">
+                        <img src="${c.image}" style="width:100%; height:110px; object-fit:cover; border-radius:10px; margin-bottom:8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="badge ${c.online ? 'badge-online' : 'badge-offline'}">${c.online ? 'En Ligne' : 'Hors Ligne'}</span>
+                            <span class="badge badge-class">${c.level}</span>
+                        </div>
+                        <div class="contest-title">${c.title}</div>
+                        <div style="display:flex; gap:6px; margin-top:8px;">
+                            <button class="btn btn-secondary" style="flex:1; padding:4px; font-size:0.75rem;" onclick="toggleContestStatus(${c.id})">
+                                ${c.online ? 'Désactiver' : 'Activer'}
+                            </button>
+                            <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteContest(${c.id})">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Render Reviews Admin (Avec Date & Nom)
+            const reviewsBox = document.getElementById('admin-reviews-list');
+            reviewsBox.innerHTML = '';
+            if (reviews.length === 0) {
+                reviewsBox.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">Aucun avis pour le moment.</p>`;
+            } else {
+                reviews.forEach(r => {
+                    let starsHtml = '';
+                    for (let i = 0; i < 5; i++) {
+                        starsHtml += `<i class="fa-solid fa-star" style="color:${i < r.rating ? 'var(--civ-orange)' : 'var(--text-sub)'}; font-size:0.75rem;"></i>`;
+                    }
+                    reviewsBox.innerHTML += `
+                        <div style="background:var(--card-alt); padding:8px 12px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <strong>${r.userName}</strong>
+                                <div>${starsHtml} <span style="font-size:0.7rem; color:var(--text-sub); margin-left:6px;">${r.date || ''}</span></div>
+                            </div>
+                            <p style="font-size:0.8rem; color:var(--text-main);">${r.comment}</p>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        async function toggleContestStatus(id) {
+            const contests = await DB.getContests();
+            const c = contests.find(item => item.id === id);
+            if (c) {
+                c.online = !c.online;
+                await DB.saveContests(contests);
+                renderAdminDashboard();
+            }
+        }
+
+        async function deleteContest(id) {
+            if (confirm("Supprimer ce concours ?")) {
+                let contests = await DB.getContests();
+                contests = contests.filter(item => item.id !== id);
+                await DB.saveContests(contests);
+                renderAdminDashboard();
+            }
+        }
+
+        function openCreateContestModal() {
+            document.getElementById('edit-contest-id').value = '';
+            document.getElementById('edit-title').value = '';
+            document.getElementById('edit-image').value = '';
+            document.getElementById('edit-questions-raw').value = '';
+            document.getElementById('parse-feedback').innerHTML = '';
+            document.getElementById('modal-edit-contest').classList.add('active');
+        }
+
+        async function openAdminUsersModal() {
+            const users = await DB.getUsers();
+            const tbody = document.getElementById('admin-users-table');
+            tbody.innerHTML = '';
+
+            users.forEach(u => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${u.name}</strong></td>
+                        <td>${u.school || 'N/A'} (${u.class || 'N/A'})</td>
+                        <td>${u.city || 'N/A'}</td>
+                        <td>${u.phone}</td>
+                        <td>
+                            <button class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem;" onclick="deleteUser('${u.uid || u.phone}')">Supprimer</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('modal-admin-users').classList.add('active');
+        }
+
+        async function deleteUser(userKey) {
+            if (confirm("Supprimer cet utilisateur ?")) {
+                let users = await DB.getUsers();
+                const u = users.find(item => item.uid === userKey || item.phone === userKey);
+                if (u && u.uid) {
+                    await database.ref('users/' + u.uid).remove();
+                }
+                openAdminUsersModal();
+                renderAdminDashboard();
+            }
+        }
+
+        async function openAdminResultsModal() {
+            const results = await DB.getResults();
+            const tbody = document.getElementById('admin-results-table');
+            tbody.innerHTML = '';
+
+            results.forEach(r => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${r.userName}</strong> (${r.userPhone})</td>
+                        <td>${r.contestTitle}</td>
+                        <td><span class="badge badge-class">${r.contestClass || 'N/A'}</span></td>
+                        <td>${r.date || 'N/A'}</td>
+                        <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('modal-admin-results').classList.add('active');
+        }
+
+        async function openAdminResetsModal() {
+            const resets = await DB.getResets();
+            const list = document.getElementById('admin-resets-list');
+            list.innerHTML = '';
+
+            if (resets.length === 0) {
+                list.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">Aucune demande en attente.</p>`;
+            } else {
+                resets.forEach((r, idx) => {
+                    list.innerHTML += `
+                        <div style="background:var(--card-alt); padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong>${r.name}</strong> (${r.phone})
+                                <div style="font-size:0.72rem; color:var(--text-sub);">Demandé le : ${r.date}</div>
+                            </div>
+                            <button class="btn btn-green" style="padding:4px 10px; font-size:0.75rem;" onclick="executePasswordReset('${r.phone}', ${idx})">Réinitialiser (5555)</button>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('modal-admin-resets').classList.add('active');
+        }
+
+        async function executePasswordReset(phone, index) {
+            const users = await DB.getUsers();
+            const u = users.find(item => item.phone === phone);
+            
+            // Notification administrative
+            let resets = await DB.getResets();
+            resets.splice(index, 1);
+            await DB.saveResets(resets);
+
+            alert(`Remarque : Pour Firebase Authentication, veuillez réinitialiser le mot de passe de ${phone} via la console Firebase ou demander à l'utilisateur d'utiliser son nouveau mot de passe.`);
+
+            openAdminResetsModal();
+            renderAdminDashboard();
+            showToastGreen("Demande traitée.");
+        }
+
+        async function openAdminSubscriptionModal() {
+            const subs = await DB.getSubscriptions();
+            const tbody = document.getElementById('admin-subscriptions-table');
+            tbody.innerHTML = '';
+
+            subs.forEach((s, idx) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${s.name}</strong></td>
+                        <td>${s.phone}</td>
+                        <td><span class="badge badge-class">${s.class}</span></td>
+                        <td><span class="badge ${s.status === 'Actif' ? 'badge-online' : 'badge-paid'}">${s.status}</span></td>
+                        <td>
+                            ${s.status !== 'Actif' ? `<button class="btn btn-green" style="padding:2px 8px; font-size:0.7rem;" onclick="activateSubscription('${s.phone}', ${idx})">Activer 1 Mois</button>` : 'Actif'}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('modal-admin-subscription').classList.add('active');
+        }
+
+        async function activateSubscription(phone, index) {
+            const users = await DB.getUsers();
+            const u = users.find(item => item.phone === phone);
+
+            if (u) {
+                const expires = new Date();
+                expires.setMonth(expires.getMonth() + 1);
+
+                u.subscription = { active: true, expiresAt: expires.toISOString() };
+                if (u.uid) {
+                    await database.ref('users/' + u.uid + '/subscription').set(u.subscription);
+                }
+
+                let subs = await DB.getSubscriptions();
+                subs[index].status = 'Actif';
+                await DB.saveSubscriptions(subs);
+
+                openAdminSubscriptionModal();
+                showToastGreen("Abonnement activé pour 1 mois.");
+            } else {
+                alert("Utilisateur non trouvé.");
+            }
+        }
+
+        // --- TOP 10 & CLASSEMENT ADMIN ---
+        async function openTop10ModalAdmin() {
+            const stats = await computeUserAggregatedStats();
             const sorted = stats.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 10);
 
             const tbody = document.getElementById('admin-top10-table-body');
             tbody.innerHTML = '';
 
-            if (sorted.length === 0 || sorted.every(s => s.totalPoints === 0)) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Aucun classement disponible.</td></tr>`;
-            } else {
-                sorted.forEach((item, idx) => {
-                    const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : "0.0";
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                            <td><strong>${item.lastname}</strong></td>
-                            <td>${item.firstname}</td>
-                            <td>${item.school}</td>
-                            <td>${item.city}</td>
-                            <td><span class="badge badge-class">${item.class}</span></td>
-                            <td>${item.totalContests}</td>
-                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
-                            <td><strong>${avg} /10</strong></td>
-                        </tr>
-                    `;
-                });
-            }
+            sorted.forEach((item, idx) => {
+                const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : '0';
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
+                        <td><strong>${item.lastname}</strong></td>
+                        <td>${item.firstname}</td>
+                        <td>${item.school}</td>
+                        <td>${item.city}</td>
+                        <td><span class="badge badge-class">${item.class}</span></td>
+                        <td>${item.totalContests}</td>
+                        <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
+                        <td>${avg} / 10</td>
+                    </tr>
+                `;
+            });
 
             document.getElementById('modal-admin-top10').classList.add('active');
         }
-
-        let currentAdminRankMode = 'level';
 
         function openGeneralRankingModalAdmin() {
             switchAdminRankingTab('level');
@@ -2079,7 +2568,6 @@ Réponse : B..."></textarea>
         }
 
         function switchAdminRankingTab(mode) {
-            currentAdminRankMode = mode;
             document.getElementById('btn-admin-rank-mode-level').className = mode === 'level' ? 'btn btn-secondary active' : 'btn btn-secondary';
             document.getElementById('btn-admin-rank-mode-global').className = mode === 'global' ? 'btn btn-secondary active' : 'btn btn-secondary';
             
@@ -2092,378 +2580,63 @@ Réponse : B..."></textarea>
             }
         }
 
-        function renderAdminLevelRanking() {
+        async function renderAdminLevelRanking() {
             const selectedClass = document.getElementById('admin-ranking-class-select').value;
-            const stats = computeUserAggregatedStats();
+            const stats = await computeUserAggregatedStats();
             const filtered = stats.filter(s => s.class === selectedClass).sort((a, b) => b.totalPoints - a.totalPoints);
 
             const tbody = document.getElementById('admin-general-ranking-table-body');
             tbody.innerHTML = '';
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Aucun élève dans la classe de ${selectedClass}.</td></tr>`;
-            } else {
-                filtered.forEach((item, idx) => {
-                    const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : "0.0";
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                            <td><strong>${item.lastname}</strong></td>
-                            <td>${item.firstname}</td>
-                            <td>${item.school}</td>
-                            <td>${item.city}</td>
-                            <td><span class="badge badge-class">${item.class}</span></td>
-                            <td>${item.totalContests}</td>
-                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
-                            <td><strong>${avg} /10</strong></td>
-                        </tr>
-                    `;
-                });
-            }
+            filtered.forEach((item, idx) => {
+                const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : '0';
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
+                        <td><strong>${item.lastname}</strong></td>
+                        <td>${item.firstname}</td>
+                        <td>${item.school}</td>
+                        <td>${item.city}</td>
+                        <td><span class="badge badge-class">${item.class}</span></td>
+                        <td>${item.totalContests}</td>
+                        <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
+                        <td>${avg} / 10</td>
+                    </tr>
+                `;
+            });
         }
 
-        function renderAdminGlobalRanking() {
-            const stats = computeUserAggregatedStats();
+        async function renderAdminGlobalRanking() {
+            const stats = await computeUserAggregatedStats();
             const sorted = stats.sort((a, b) => b.totalPoints - a.totalPoints);
 
             const tbody = document.getElementById('admin-general-ranking-table-body');
             tbody.innerHTML = '';
 
-            if (sorted.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Aucun élève enregistré.</td></tr>`;
-            } else {
-                sorted.forEach((item, idx) => {
-                    const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : "0.0";
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                            <td><strong>${item.lastname}</strong></td>
-                            <td>${item.firstname}</td>
-                            <td>${item.school}</td>
-                            <td>${item.city}</td>
-                            <td><span class="badge badge-class">${item.class}</span></td>
-                            <td>${item.totalContests}</td>
-                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
-                            <td><strong>${avg} /10</strong></td>
-                        </tr>
-                    `;
-                });
-            }
-        }
-
-        // --- TABLEAU DE BORD « MES CONCOURS » ---
-        function openMyContestsModal() {
-            const results = DB.getResults().filter(r => r.userPhone === currentUserPhone);
-            const tbody = document.getElementById('my-contests-table-body');
-            tbody.innerHTML = '';
-
-            let totalPts = 0;
-            results.forEach(r => {
-                totalPts += r.score;
-            });
-
-            document.getElementById('my-total-points').innerText = totalPts;
-            document.getElementById('my-total-count').innerText = results.length;
-
-            if (results.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Vous n'avez effectué aucun concours pour le moment.</td></tr>`;
-            } else {
-                results.forEach((r, idx) => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><strong>${r.contestTitle}</strong></td>
-                            <td><span class="badge badge-class">${r.contestClass || 'CE2'}</span></td>
-                            <td>${r.date}</td>
-                            <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
-                            <td>#${idx + 1}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-            document.getElementById('modal-my-contests').classList.add('active');
-        }
-
-        // --- ABONNEMENT ---
-        function openBuySubscriptionModal() {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone);
-            if (u) {
-                document.getElementById('sub-req-name').value = u.name;
-                document.getElementById('sub-req-phone').value = u.phone;
-            }
-            document.getElementById('modal-buy-subscription').classList.add('active');
-        }
-
-        function handleSubscriptionRequest(e) {
-            e.preventDefault();
-            const name = document.getElementById('sub-req-name').value;
-            const phone = document.getElementById('sub-req-phone').value;
-            const userClass = document.getElementById('sub-req-class').value;
-
-            const subs = DB.getSubscriptions();
-            subs.push({
-                id: Date.now(),
-                name, phone, class: userClass,
-                status: 'EN_ATTENTE',
-                date: new Date().toLocaleDateString('fr-FR')
-            });
-
-            DB.saveSubscriptions(subs);
-            closeModal('modal-buy-subscription');
-            showToastGreen("✅ Abonnement activé ou demande reçue.");
-        }
-
-        // --- ADMINISTRATION ---
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            if (document.getElementById('admin-user').value === 'ZakariaTV' && document.getElementById('admin-pass').value === '55250031') {
-                showToastGreen("✅ Connexion Administrateur réussie.");
-                showView('admin-dashboard-view');
-            } else {
-                alert("Identifiants administration incorrects.");
-            }
-        }
-
-        function renderAdminDashboard() {
-            const contests = DB.getContests();
-            const users = DB.getUsers();
-            const results = DB.getResults();
-            const resets = DB.getResets();
-            const subs = DB.getSubscriptions();
-
-            document.getElementById('stat-contests').innerText = contests.length;
-            document.getElementById('stat-users').innerText = users.length;
-            document.getElementById('stat-participations').innerText = results.length;
-            document.getElementById('stat-resets').innerText = resets.length;
-            
-            document.getElementById('users-count-badge').innerText = users.length;
-            document.getElementById('reset-badge-count').innerText = resets.length;
-            document.getElementById('sub-badge-count').innerText = subs.filter(s => s.status === 'EN_ATTENTE').length;
-
-            const list = document.getElementById('admin-contest-list');
-            list.innerHTML = '';
-            contests.forEach(c => {
-                list.innerHTML += `
-                    <div class="contest-card">
-                        <img src="${c.image}" alt="${c.title}" style="width:100%; height:110px; object-fit:cover; border-radius:10px; margin-bottom:8px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span class="badge badge-class">Classe : ${c.level}</span>
-                            <span class="badge ${c.online ? 'badge-online' : 'badge-offline'}">${c.online ? 'En ligne' : 'Masqué'}</span>
-                        </div>
-                        <div class="contest-title">${c.title}</div>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px;">
-                            <button class="btn btn-secondary" style="padding:4px;" onclick="toggleContestStatus(${c.id})">${c.online ? 'Masquer' : 'Publier'}</button>
-                            <button class="btn btn-danger" style="padding:4px;" onclick="deleteContest(${c.id})"><i class="fa-solid fa-trash"></i> Supprimer</button>
-                        </div>
-                    </div>
+            sorted.forEach((item, idx) => {
+                const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : '0';
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
+                        <td><strong>${item.lastname}</strong></td>
+                        <td>${item.firstname}</td>
+                        <td>${item.school}</td>
+                        <td>${item.city}</td>
+                        <td><span class="badge badge-class">${item.class}</span></td>
+                        <td>${item.totalContests}</td>
+                        <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
+                        <td>${avg} / 10</td>
+                    </tr>
                 `;
             });
-
-            // Avis Utilisateurs pour l'administrateur
-            const reviews = DB.getReviews();
-            const reviewsList = document.getElementById('admin-reviews-list');
-            reviewsList.innerHTML = reviews.map(r => `
-                <div style="background:var(--card-alt); padding:8px 12px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border); font-size:0.82rem;">
-                    <div style="display:flex; justify-content:space-between;">
-                        <strong>${r.name}</strong>
-                        <span style="color:var(--text-sub); font-size:0.75rem;">${r.date || 'Récent'}</span>
-                    </div>
-                    <div style="color:var(--civ-orange); font-size:0.75rem;">${'★'.repeat(r.stars)}</div>
-                    <div style="color:var(--text-main); margin-top:2px;">"${r.comment}"</div>
-                </div>
-            `).join('') || '<p style="color:var(--text-sub); font-size:0.8rem;">Aucun avis pour le moment.</p>';
         }
 
-        function openCreateContestModal() {
-            document.getElementById('edit-contest-id').value = '';
-            document.getElementById('edit-title').value = '';
-            document.getElementById('edit-image').value = 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80';
-            document.getElementById('edit-questions-raw').value = '';
-            document.getElementById('parse-feedback').innerHTML = '';
-            updateLevelOptions();
-            document.getElementById('modal-edit-contest').classList.add('active');
-        }
-
-        function toggleContestStatus(id) {
-            const contests = DB.getContests();
-            const c = contests.find(item => item.id === id);
-            if (c) {
-                c.online = !c.online;
-                DB.saveContests(contests);
-                renderAdminDashboard();
-                showToastGreen("✅ Informations mises à jour.");
+        async function resetAllData() {
+            if (confirm("ATTENTION : Reinitialiser toutes les données de l'application (Concours, Utilisateurs, Résultats) ?")) {
+                await database.ref().remove();
+                alert("Toutes les données ont été réinitialisées.");
+                location.reload();
             }
-        }
-
-        function deleteContest(id) {
-            if (confirm("Supprimer ce concours ?")) {
-                DB.saveContests(DB.getContests().filter(c => c.id !== id));
-                renderAdminDashboard();
-                showToastGreen("✅ Concours supprimé.");
-            }
-        }
-
-        function openAdminUsersModal() {
-            const users = DB.getUsers();
-            document.getElementById('admin-users-table').innerHTML = users.map(u => `
-                <tr>
-                    <td><strong>${u.name}</strong></td>
-                    <td>${u.school || 'N/A'} (${u.class || 'N/A'})</td>
-                    <td>${u.city || ''}</td>
-                    <td>${u.phone || ''}</td>
-                    <td><button class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem;" onclick="deleteUser('${u.phone}')"><i class="fa-solid fa-trash"></i> Supprimer</button></td>
-                </tr>
-            `).join('') || '<tr><td colspan="5" style="text-align:center;">Aucun utilisateur trouvé.</td></tr>';
-            document.getElementById('modal-admin-users').classList.add('active');
-        }
-
-        function deleteUser(phone) {
-            if (confirm("Supprimer cet utilisateur ?")) {
-                const users = DB.getUsers().filter(u => u.phone !== phone);
-                DB.saveUsers(users);
-                openAdminUsersModal();
-                renderAdminDashboard();
-                showToastGreen("✅ Utilisateur supprimé.");
-            }
-        }
-
-        function openAdminResultsModal() {
-            const results = DB.getResults();
-            document.getElementById('admin-results-table').innerHTML = results.map(r => `
-                <tr>
-                    <td><strong>${r.userName}</strong> (${r.userPhone || ''})</td>
-                    <td>${r.contestTitle}</td>
-                    <td><span class="badge badge-class">${r.contestClass || 'N/A'}</span></td>
-                    <td>${r.date || ''}</td>
-                    <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
-                </tr>
-            `).join('') || '<tr><td colspan="5" style="text-align:center;">Aucun résultat enregistré.</td></tr>';
-            document.getElementById('modal-admin-results').classList.add('active');
-        }
-
-        function openAdminResetsModal() {
-            const resets = DB.getResets();
-            const list = document.getElementById('admin-resets-list');
-            if (resets.length === 0) {
-                list.innerHTML = '<p style="color:var(--text-sub); font-size:0.85rem;">Aucune demande de réinitialisation en attente.</p>';
-            } else {
-                list.innerHTML = resets.map((r, idx) => `
-                    <div style="background:var(--card-alt); border:1px solid var(--border); padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <strong>${r.name}</strong> (${r.phone})<br>
-                            <span style="font-size:0.75rem; color:var(--text-sub);">Date : ${r.date}</span>
-                        </div>
-                        <button class="btn btn-orange" style="font-size:0.75rem; padding:4px 10px;" onclick="approveReset('${r.phone}', ${idx})">
-                            Réinitialiser (5555)
-                        </button>
-                    </div>
-                `).join('');
-            }
-            document.getElementById('modal-admin-resets').classList.add('active');
-        }
-
-        function approveReset(phone, idx) {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === phone);
-            if (u) {
-                u.pass = "5555";
-                DB.saveUsers(users);
-            }
-            const resets = DB.getResets();
-            resets.splice(idx, 1);
-            DB.saveResets(resets);
-            openAdminResetsModal();
-            renderAdminDashboard();
-            showToastGreen("✅ Mot de passe réinitialisé à 5555.");
-        }
-
-        function openAdminSubscriptionModal() {
-            const subs = DB.getSubscriptions();
-            document.getElementById('admin-subscriptions-table').innerHTML = subs.map(s => `
-                <tr>
-                    <td><strong>${s.name}</strong></td>
-                    <td>${s.phone}</td>
-                    <td><span class="badge badge-class">${s.class}</span></td>
-                    <td><span class="badge ${s.status === 'ACTIF' ? 'badge-online' : 'badge-paid'}">${s.status}</span></td>
-                    <td>
-                        ${s.status !== 'ACTIF' ? `<button class="btn btn-green" style="padding:2px 8px; font-size:0.7rem;" onclick="activateSubscription('${s.phone}', ${s.id})">Activer</button>` : '<span style="color:var(--civ-green); font-size:0.75rem; font-weight:700;">Actif</span>'}
-                    </td>
-                </tr>
-            `).join('') || '<tr><td colspan="5" style="text-align:center;">Aucune souscription enregistrée.</td></tr>';
-            document.getElementById('modal-admin-subscription').classList.add('active');
-        }
-
-        function activateSubscription(phone, subId) {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === phone);
-            if (u) {
-                const expires = new Date();
-                expires.setMonth(expires.getMonth() + 1);
-                u.subscription = { active: true, expiresAt: expires.toISOString() };
-                DB.saveUsers(users);
-            }
-            const subs = DB.getSubscriptions();
-            const sub = subs.find(item => item.id === subId);
-            if (sub) sub.status = 'ACTIF';
-            DB.saveSubscriptions(subs);
-            openAdminSubscriptionModal();
-            renderAdminDashboard();
-            showToastGreen("✅ Abonnement activé pour 1 mois.");
-        }
-
-        // --- AVIS & UTILITAIRES ---
-        function openReviewModal() {
-            document.getElementById('review-comment').value = '';
-            setRating(5);
-            document.getElementById('modal-review').classList.add('active');
-        }
-
-        function setRating(val) {
-            currentRating = val;
-            const stars = document.getElementById('star-rating-box').children;
-            for (let i = 0; i < stars.length; i++) {
-                stars[i].style.color = i < val ? 'var(--civ-orange)' : 'var(--text-sub)';
-            }
-        }
-
-        function handleReviewSubmit(e) {
-            e.preventDefault();
-            const comment = document.getElementById('review-comment').value.trim();
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone) || { name: "Élève" };
-
-            const reviews = DB.getReviews();
-            reviews.unshift({
-                name: u.name,
-                stars: currentRating,
-                comment: comment,
-                date: new Date().toLocaleDateString('fr-FR')
-            });
-            DB.saveReviews(reviews);
-            closeModal('modal-review');
-            showToastGreen("✅ Votre avis a été enregistré avec succès !");
-        }
-
-        function openCreatorModal() { document.getElementById('modal-creator').classList.add('active'); }
-
-        function openProfileModal() {
-            const users = DB.getUsers();
-            const u = users.find(item => item.phone === currentUserPhone);
-            if (u) {
-                document.getElementById('prof-name').innerText = u.name;
-                document.getElementById('prof-lastname').innerText = u.lastname || 'N/A';
-                document.getElementById('prof-firstname').innerText = u.firstname || u.name;
-                document.getElementById('prof-school').innerText = u.school || 'N/A';
-                document.getElementById('prof-class').innerText = u.class || 'N/A';
-                document.getElementById('prof-location').innerText = `${u.city || 'Abidjan'}, ${u.country || "Côte d'Ivoire"}`;
-                document.getElementById('prof-phone').innerText = u.phone || 'N/A';
-                document.getElementById('prof-modal-avatar').src = u.avatar || DEFAULT_AVATAR;
-
-                const isSub = checkUserSubscription(u);
-                document.getElementById('prof-sub-badge').innerText = isSub ? "Statut : Premium Actif" : "Statut : Gratuit";
-            }
-            document.getElementById('modal-profile').classList.add('active');
         }
 
         function copyUniqueLink() {
@@ -2471,40 +2644,10 @@ Réponse : B..."></textarea>
             copyText.select();
             copyText.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(copyText.value);
-            showToastGreen("📋 Lien unique copié dans le presse-papier !");
+            showToastGreen("Lien copié dans le presse-papier !");
         }
 
-        function resetAllData() {
-            if (confirm("⚠️ ATTENTION : Voulez-vous vraiment réinitialiser TOUTES les données de l'application (Concours, Utilisateurs, Résultats, Avis) ?")) {
-                localStorage.clear();
-                showToastGreen("✅ Données réinitialisées.");
-                setTimeout(() => location.reload(), 1000);
-            }
-        }
-    </script>
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCdJBT-uLhaNkzHn9SJWE9OM_EOGwlD4aI",
-    authDomain: "ztv-concours-36a45.firebaseapp.com",
-    databaseURL: "https://ztv-concours-36a45-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "ztv-concours-36a45",
-    storageBucket: "ztv-concours-36a45.firebasestorage.app",
-    messagingSenderId: "327142162801",
-    appId: "1:327142162801:web:2f312db2cc9f4cfd21f6d0",
-    measurementId: "G-ZPWGP4D9E0"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+        function openCreatorModal() { document.getElementById('modal-creator').classList.add('active'); }
     </script>
 </body>
 </html>
