@@ -700,7 +700,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Lien / URL Photo de profil (Optionnel)</label>
-                        <input type="url" id="part-reg-avatar" class="form-control" placeholder="https://i.postimg.cc/BQMkfNt0/file-000000008a6081f9a7552dfe57d5c70d.png">
+                        <input type="url" id="part-reg-avatar" class="form-control" placeholder="https://...">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Mot de passe</label>
@@ -870,7 +870,7 @@
 
             <div style="background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin: 1rem 0; text-align: left; font-size: 0.88rem; line-height: 1.6;">
                 <p><i class="fa-solid fa-user-graduate" style="color:var(--civ-orange);"></i> <strong>Statut :</strong> Élève en classe de 3e</p>
-                <p><i class="fa-solid fa-school" style="color:var(--civ-orange);"></i> <strong>Établissement :</strong> Lycée Moderne de Bangolo ( CÔTE D'IVOIRE 🇨🇮</p>
+                <p><i class="fa-solid fa-school" style="color:var(--civ-orange);"></i> <strong>Établissement :</strong> Lycée Moderne de Bangolo ( CÔTE D'IVOIRE 🇨🇮 )</p>
                 <p><i class="fa-solid fa-cake-candles" style="color:var(--civ-orange);"></i> <strong>Âge :</strong> 15 ans</p>
                 <p><i class="fa-solid fa-video" style="color:var(--civ-orange);"></i> <strong>Activité :</strong> Créateur de contenus sur les phénomènes mystérieux</p>
                 <p><i class="fa-solid fa-tv" style="color:var(--civ-orange);"></i> <strong>Nom de marque :</strong> ZTV</p>
@@ -1240,7 +1240,7 @@ Réponse : B..."></textarea>
                         <option value="Terminale">Terminale</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-green btn-block">Valider ma demande d'abonnement</button>
+                <button type="submit" class="btn btn-green btn-block">Valider ma demande d'abonnement (500 FCFA)</button>
             </form>
         </div>
     </div>
@@ -2360,11 +2360,7 @@ Réponse : B..."></textarea>
 
             await DB.saveSubscriptions(subs);
             closeModal('modal-buy-subscription');
-            showToastGreen("✅ 🎉 Votre demande d'abonnement a été envoyée avec succès.
-Merci de la confiance que vous accordez à ZakariaTV Concours.
-Notre équipe vous contactera dans les plus brefs délais via WhatsApp afin de finaliser votre abonnement.
-En cas de difficulté ou si vous avez une question, n'hésitez pas à contacter notre assistance WhatsApp. Nous serons ravis de vous aider.
-Merci et à très bientôt !.");
+            showToastGreen("✅ Demande d'abonnement enregistrée.");
         }
 
         // --- AVIS PARTICIPANTS ---
