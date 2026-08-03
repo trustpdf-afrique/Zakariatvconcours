@@ -454,12 +454,41 @@
             margin-bottom: 0.8rem;
             flex-wrap: wrap;
         }
+
+        /* --- Bouton d'Assistance WhatsApp Flottant (Rond) --- */
+        .whatsapp-float {
+            position: fixed;
+            width: 55px;
+            height: 55px;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
 
     <!-- Container Toast Notifications Vertes -->
     <div class="toast-container" id="toast-container"></div>
+
+    <!-- Bouton d'Assistance WhatsApp (Visible Uniquement pour les Participants / Élèves) -->
+    <a href="https://wa.me/2250799591024" class="whatsapp-float" id="whatsapp-btn" target="_blank" title="Assistance WhatsApp" style="display: none;">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <!-- Barre supérieure de navigation -->
     <nav class="navbar">
@@ -779,7 +808,7 @@
             </div>
         </section>
 
-        <!-- Fin de Concours -->
+        <!-- Fin de Concours avec Bouton Correction -->
         <section id="participant-finish-view" class="view-section">
             <div class="card" style="text-align: center; max-width: 480px; margin: 2rem auto;">
                 <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--civ-green); margin-bottom: 1rem;"></i>
@@ -792,8 +821,12 @@
                     <h1 style="color: var(--civ-orange); font-size: 2.5rem; font-weight: 800;" id="finish-score-display">0 / 10</h1>
                     <p style="font-size: 0.78rem; color: var(--civ-green); font-weight: 700; margin-top: 4px;" id="finish-class-display">Classe : CE2</p>
                 </div>
+                <!-- Nouveau Bouton Voir la correction -->
+                <button class="btn btn-secondary btn-block" style="margin-bottom: 0.8rem; border-color: var(--civ-orange); color: var(--civ-orange);" onclick="openCorrectionModal()">
+                    📖 Voir la correction
+                </button>
                 <button class="btn btn-orange btn-block" onclick="showView('participant-home-view')">
-                    <i class="fa-solid fa-house"></i> Retour à l'accueil
+                    <i class="fa-solid fa-house"></i> Retour au tableau de bord
                 </button>
             </div>
         </section>
@@ -803,6 +836,22 @@
     <!-- =================================================================== -->
     <!-- MODALES                                                            -->
     <!-- =================================================================== -->
+
+    <!-- Modale Correction du Concours -->
+    <div class="modal" id="modal-correction">
+        <div class="modal-content" style="max-width: 700px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: var(--civ-orange);"><i class="fa-solid fa-book-open"></i> Correction du Concours</h3>
+                <button class="btn btn-secondary" style="padding: 2px 8px;" onclick="closeModal('modal-correction')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div id="correction-list-container" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.2rem;"></div>
+
+            <button class="btn btn-orange btn-block" onclick="closeModal('modal-correction'); showView('participant-home-view');">
+                🏠 Retour au tableau de bord
+            </button>
+        </div>
+    </div>
 
     <!-- Modale Créateur de l'application (ZTV) -->
     <div class="modal" id="modal-creator">
@@ -1310,15 +1359,15 @@ Réponse : B..."></textarea>
     <script>
         // CONFIGURATION FIREBASE
         const firebaseConfig = {
-  apiKey: "AIzaSyCdJBT-uLhaNkzHn9SJWE9OM_EOGwlD4aI",
-  authDomain: "ztv-concours-36a45.firebaseapp.com",
-  databaseURL: "https://ztv-concours-36a45-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "ztv-concours-36a45",
-  storageBucket: "ztv-concours-36a45.firebasestorage.app",
-  messagingSenderId: "327142162801",
-  appId: "1:327142162801:web:2f312db2cc9f4cfd21f6d0",
-  measurementId: "G-ZPWGP4D9E0"
-};
+            apiKey: "AIzaSyCdJBT-uLhaNkzHn9SJWE9OM_EOGwlD4aI",
+            authDomain: "ztv-concours-36a45.firebaseapp.com",
+            databaseURL: "https://ztv-concours-36a45-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "ztv-concours-36a45",
+            storageBucket: "ztv-concours-36a45.firebasestorage.app",
+            messagingSenderId: "327142162801",
+            appId: "1:327142162801:web:2f312db2cc9f4cfd21f6d0",
+            measurementId: "G-ZPWGP4D9E0"
+        };
 
         // Initialisation de Firebase
         if (!firebase.apps.length) {
@@ -1437,6 +1486,7 @@ Réponse : B..."></textarea>
         let currentQuiz = null;
         let currentQuestionIdx = 0;
         let selectedOption = null;
+        let userAnswers = []; // Stockage des réponses pour la correction
         let score = 0;
         let timerInterval = null;
         let currentRating = 5;
@@ -1500,6 +1550,14 @@ Réponse : B..."></textarea>
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             const target = document.getElementById(viewId);
             if (target) target.classList.add('active');
+
+            // Gestion de l'affichage du bouton d'assistance WhatsApp (Élèves uniquement)
+            const waBtn = document.getElementById('whatsapp-btn');
+            if (viewId.startsWith('participant') && viewId !== 'participant-quiz-view') {
+                waBtn.style.display = 'flex';
+            } else {
+                waBtn.style.display = 'none';
+            }
 
             if (viewId === 'admin-dashboard-view') renderAdminDashboard();
             if (viewId === 'participant-home-view') renderParticipantHome();
@@ -1912,6 +1970,7 @@ Réponse : B..."></textarea>
         function launchQuiz() {
             currentQuestionIdx = 0;
             score = 0;
+            userAnswers = [];
             showView('participant-quiz-view');
             loadQuestion();
         }
@@ -1939,6 +1998,9 @@ Réponse : B..."></textarea>
                     </div>
                 `;
             });
+
+            // Lancement automatique de la synthèse vocale
+            setTimeout(() => { playAudioQuestion(); }, 300);
 
             // Chronomètre Rouge de 30 Secondes
             let timeLeft = 30;
@@ -1968,7 +2030,12 @@ Réponse : B..."></textarea>
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 
             const qData = currentQuiz.questions[currentQuestionIdx];
-            if (selectedOption === qData.answer) score++;
+            
+            // Stockage de la réponse choisie par l'élève (-1 si aucune option sélectionnée)
+            const chosen = (selectedOption !== null) ? selectedOption : -1;
+            userAnswers.push(chosen);
+
+            if (chosen === qData.answer) score++;
 
             currentQuestionIdx++;
             if (currentQuestionIdx < currentQuiz.questions.length) {
@@ -2014,8 +2081,50 @@ Réponse : B..."></textarea>
 
                 const utterance = new SpeechSynthesisUtterance(textToRead);
                 utterance.lang = 'fr-FR';
+                utterance.rate = 0.95;
                 window.speechSynthesis.speak(utterance);
             }
+        }
+
+        // --- AFFICHAGE DE LA CORRECTION DU CONCOURS ---
+        function openCorrectionModal() {
+            if (!currentQuiz || !currentQuiz.questions) return;
+
+            const container = document.getElementById('correction-list-container');
+            container.innerHTML = '';
+            const labels = ['A', 'B', 'C', 'D'];
+
+            currentQuiz.questions.forEach((qData, idx) => {
+                const userChoiceIdx = userAnswers[idx];
+                const isCorrect = (userChoiceIdx === qData.answer);
+                
+                const userChoiceText = (userChoiceIdx !== -1 && userChoiceIdx !== undefined) 
+                    ? `${labels[userChoiceIdx]}) ${qData.options[userChoiceIdx]}` 
+                    : "Aucune réponse (Temps écoulé)";
+                
+                const correctChoiceText = `${labels[qData.answer]}) ${qData.options[qData.answer]}`;
+
+                container.innerHTML += `
+                    <div style="background: var(--card-alt); border: 1px solid ${isCorrect ? 'var(--civ-green)' : 'var(--danger)'}; border-radius: var(--radius-md); padding: 1rem; text-align: left;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong style="color: var(--civ-orange);">Question ${idx + 1} / ${currentQuiz.questions.length}</strong>
+                            <span class="badge ${isCorrect ? 'badge-online' : 'badge-offline'}">
+                                ${isCorrect ? '✅ Correct' : '❌ Incorrect'}
+                            </span>
+                        </div>
+                        <p style="font-size: 0.95rem; font-weight: 700; color: #FFF; margin-bottom: 0.8rem;">${qData.q}</p>
+                        
+                        <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 0.3rem;">
+                            <strong>Votre réponse :</strong> <span style="color: ${isCorrect ? '#00FF66' : 'var(--danger)'}; font-weight: 700;">${userChoiceText}</span>
+                        </p>
+                        <p style="font-size: 0.85rem; color: var(--text-sub);">
+                            <strong>Bonne réponse :</strong> <span style="color: var(--civ-green); font-weight: 700;">${correctChoiceText}</span>
+                        </p>
+                    </div>
+                `;
+            });
+
+            document.getElementById('modal-correction').classList.add('active');
         }
 
         function confirmExitQuiz() {
@@ -2346,21 +2455,23 @@ Réponse : B..."></textarea>
             // Render Reviews Admin (Avec Date & Nom)
             const reviewsBox = document.getElementById('admin-reviews-list');
             reviewsBox.innerHTML = '';
+
             if (reviews.length === 0) {
-                reviewsBox.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">Aucun avis pour le moment.</p>`;
+                reviewsBox.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">Aucun avis posté pour le moment.</p>`;
             } else {
                 reviews.forEach(r => {
-                    let starsHtml = '';
+                    let stars = '';
                     for (let i = 0; i < 5; i++) {
-                        starsHtml += `<i class="fa-solid fa-star" style="color:${i < r.rating ? 'var(--civ-orange)' : 'var(--text-sub)'}; font-size:0.75rem;"></i>`;
+                        stars += `<i class="fa-solid fa-star" style="color:${i < r.rating ? 'var(--civ-orange)' : 'var(--border)'}; font-size:0.75rem;"></i>`;
                     }
                     reviewsBox.innerHTML += `
-                        <div style="background:var(--card-alt); padding:8px 12px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border);">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                                <strong>${r.userName}</strong>
-                                <div>${starsHtml} <span style="font-size:0.7rem; color:var(--text-sub); margin-left:6px;">${r.date || ''}</span></div>
+                        <div style="background:var(--card-alt); padding:8px 12px; border-radius:8px; border:1px solid var(--border); margin-bottom:6px; font-size:0.8rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <strong>${r.userName || 'Élève'} (${r.userPhone || 'N/A'})</strong>
+                                <div>${stars}</div>
                             </div>
-                            <p style="font-size:0.8rem; color:var(--text-main);">${r.comment}</p>
+                            <p style="color:var(--text-main); margin:4px 0;">« ${r.comment} »</p>
+                            <span style="font-size:0.68rem; color:var(--text-sub);">${r.date || 'Récent'}</span>
                         </div>
                     `;
                 });
@@ -2374,58 +2485,62 @@ Réponse : B..."></textarea>
                 c.online = !c.online;
                 await DB.saveContests(contests);
                 renderAdminDashboard();
+                showToastGreen("Statut du concours mis à jour.");
             }
         }
 
         async function deleteContest(id) {
-            if (confirm("Supprimer ce concours ?")) {
+            if (confirm("Voulez-vous supprimer ce concours ?")) {
                 let contests = await DB.getContests();
                 contests = contests.filter(item => item.id !== id);
                 await DB.saveContests(contests);
                 renderAdminDashboard();
+                showToastGreen("Concours supprimé.");
             }
         }
 
         function openCreateContestModal() {
             document.getElementById('edit-contest-id').value = '';
             document.getElementById('edit-title').value = '';
-            document.getElementById('edit-image').value = '';
+            document.getElementById('edit-category').value = 'Collège';
+            updateLevelOptions();
+            document.getElementById('edit-type').value = 'Gratuit';
+            document.getElementById('edit-image').value = 'https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=500&q=80';
             document.getElementById('edit-questions-raw').value = '';
             document.getElementById('parse-feedback').innerHTML = '';
+            
             document.getElementById('modal-edit-contest').classList.add('active');
         }
 
+        // --- GESTION DES MODALES ADMIN ---
         async function openAdminUsersModal() {
             const users = await DB.getUsers();
             const tbody = document.getElementById('admin-users-table');
             tbody.innerHTML = '';
 
-            users.forEach(u => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${u.name}</strong></td>
-                        <td>${u.school || 'N/A'} (${u.class || 'N/A'})</td>
-                        <td>${u.city || 'N/A'}</td>
-                        <td>${u.phone}</td>
-                        <td>
-                            <button class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem;" onclick="deleteUser('${u.uid || u.phone}')">Supprimer</button>
-                        </td>
-                    </tr>
-                `;
-            });
-
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Aucun utilisateur inscrit.</td></tr>`;
+            } else {
+                users.forEach(u => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${u.name}</strong></td>
+                            <td>${u.school || 'N/A'} (${u.class || 'N/A'})</td>
+                            <td>${u.city || 'N/A'}</td>
+                            <td>${u.phone}</td>
+                            <td><button class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem;" onclick="deleteUser('${u.uid}')"><i class="fa-solid fa-trash"></i></button></td>
+                        </tr>
+                    `;
+                });
+            }
             document.getElementById('modal-admin-users').classList.add('active');
         }
 
-        async function deleteUser(userKey) {
+        async function deleteUser(uid) {
             if (confirm("Supprimer cet utilisateur ?")) {
-                let users = await DB.getUsers();
-                const u = users.find(item => item.uid === userKey || item.phone === userKey);
-                if (u && u.uid) {
-                    await database.ref('users/' + u.uid).remove();
-                }
+                await database.ref('users/' + uid).remove();
                 openAdminUsersModal();
-                renderAdminDashboard();
+                showToastGreen("Utilisateur supprimé.");
             }
         }
 
@@ -2434,59 +2549,59 @@ Réponse : B..."></textarea>
             const tbody = document.getElementById('admin-results-table');
             tbody.innerHTML = '';
 
-            results.forEach(r => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${r.userName}</strong> (${r.userPhone})</td>
-                        <td>${r.contestTitle}</td>
-                        <td><span class="badge badge-class">${r.contestClass || 'N/A'}</span></td>
-                        <td>${r.date || 'N/A'}</td>
-                        <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
-                    </tr>
-                `;
-            });
-
+            if (results.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Aucun résultat disponible.</td></tr>`;
+            } else {
+                results.forEach(r => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${r.userName}</strong> (${r.userSchool})</td>
+                            <td>${r.contestTitle}</td>
+                            <td><span class="badge badge-class">${r.contestClass || 'N/A'}</span></td>
+                            <td>${r.date || 'N/A'}</td>
+                            <td><strong style="color:var(--civ-orange);">${r.score} / 10</strong></td>
+                        </tr>
+                    `;
+                });
+            }
             document.getElementById('modal-admin-results').classList.add('active');
         }
 
         async function openAdminResetsModal() {
             const resets = await DB.getResets();
-            const list = document.getElementById('admin-resets-list');
-            list.innerHTML = '';
+            const box = document.getElementById('admin-resets-list');
+            box.innerHTML = '';
 
             if (resets.length === 0) {
-                list.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">Aucune demande en attente.</p>`;
+                box.innerHTML = `<p style="font-size:0.8rem; color:var(--text-sub);">Aucune demande de réinitialisation.</p>`;
             } else {
                 resets.forEach((r, idx) => {
-                    list.innerHTML += `
-                        <div style="background:var(--card-alt); padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                    box.innerHTML += `
+                        <div style="background:var(--card-alt); padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:8px; display:flex; justify-space-between; align-items:center;">
                             <div>
                                 <strong>${r.name}</strong> (${r.phone})
-                                <div style="font-size:0.72rem; color:var(--text-sub);">Demandé le : ${r.date}</div>
+                                <div style="font-size:0.7rem; color:var(--text-sub);">Date : ${r.date}</div>
                             </div>
-                            <button class="btn btn-green" style="padding:4px 10px; font-size:0.75rem;" onclick="executePasswordReset('${r.phone}', ${idx})">Réinitialiser (5555)</button>
+                            <button class="btn btn-orange" style="padding:4px 10px; font-size:0.75rem;" onclick="processReset(${idx})">
+                                Réinitialiser à 5555
+                            </button>
                         </div>
                     `;
                 });
             }
-
             document.getElementById('modal-admin-resets').classList.add('active');
         }
 
-        async function executePasswordReset(phone, index) {
-            const users = await DB.getUsers();
-            const u = users.find(item => item.phone === phone);
+        async function processReset(idx) {
+            const resets = await DB.getResets();
+            const target = resets[idx];
             
-            // Notification administrative
-            let resets = await DB.getResets();
-            resets.splice(index, 1);
-            await DB.saveResets(resets);
-
-            alert(`Remarque : Pour Firebase Authentication, veuillez réinitialiser le mot de passe de ${phone} via la console Firebase ou demander à l'utilisateur d'utiliser son nouveau mot de passe.`);
-
-            openAdminResetsModal();
-            renderAdminDashboard();
-            showToastGreen("Demande traitée.");
+            if (target) {
+                resets.splice(idx, 1);
+                await DB.saveResets(resets);
+                openAdminResetsModal();
+                showToastGreen(`Mot de passe réinitialisé pour ${target.name}.`);
+            }
         }
 
         async function openAdminSubscriptionModal() {
@@ -2494,48 +2609,52 @@ Réponse : B..."></textarea>
             const tbody = document.getElementById('admin-subscriptions-table');
             tbody.innerHTML = '';
 
-            subs.forEach((s, idx) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${s.name}</strong></td>
-                        <td>${s.phone}</td>
-                        <td><span class="badge badge-class">${s.class}</span></td>
-                        <td><span class="badge ${s.status === 'Actif' ? 'badge-online' : 'badge-paid'}">${s.status}</span></td>
-                        <td>
-                            ${s.status !== 'Actif' ? `<button class="btn btn-green" style="padding:2px 8px; font-size:0.7rem;" onclick="activateSubscription('${s.phone}', ${idx})">Activer 1 Mois</button>` : 'Actif'}
-                        </td>
-                    </tr>
-                `;
-            });
-
+            if (subs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Aucun abonnement enregistré.</td></tr>`;
+            } else {
+                subs.forEach((s, idx) => {
+                    const isPending = s.status === 'En attente';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${s.name}</strong></td>
+                            <td>${s.phone}</td>
+                            <td><span class="badge badge-class">${s.class}</span></td>
+                            <td><span class="badge ${isPending ? 'badge-paid' : 'badge-online'}">${s.status}</span></td>
+                            <td>
+                                ${isPending ? `<button class="btn btn-green" style="padding:2px 8px; font-size:0.7rem;" onclick="approveSubscription(${idx})">Valider 1 Mois</button>` : 'Actif'}
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
             document.getElementById('modal-admin-subscription').classList.add('active');
         }
 
-        async function activateSubscription(phone, index) {
-            const users = await DB.getUsers();
-            const u = users.find(item => item.phone === phone);
-
-            if (u) {
-                const expires = new Date();
-                expires.setMonth(expires.getMonth() + 1);
-
-                u.subscription = { active: true, expiresAt: expires.toISOString() };
-                if (u.uid) {
-                    await database.ref('users/' + u.uid + '/subscription').set(u.subscription);
-                }
-
-                let subs = await DB.getSubscriptions();
-                subs[index].status = 'Actif';
+        async function approveSubscription(idx) {
+            const subs = await DB.getSubscriptions();
+            const sub = subs[idx];
+            if (sub) {
+                sub.status = "Actif";
                 await DB.saveSubscriptions(subs);
 
+                // Mise à jour sur la fiche utilisateur
+                const users = await DB.getUsers();
+                const u = users.find(item => item.phone === sub.phone);
+                if (u && u.uid) {
+                    const expiresAt = new Date();
+                    expiresAt.setMonth(expiresAt.getMonth() + 1);
+                    await database.ref('users/' + u.uid + '/subscription').set({
+                        active: true,
+                        expiresAt: expiresAt.toISOString()
+                    });
+                }
+
                 openAdminSubscriptionModal();
-                showToastGreen("Abonnement activé pour 1 mois.");
-            } else {
-                alert("Utilisateur non trouvé.");
+                showToastGreen(`Abonnement validé pour ${sub.name}.`);
             }
         }
 
-        // --- TOP 10 & CLASSEMENT ADMIN ---
+        // Top 10 & Classement Général Admin
         async function openTop10ModalAdmin() {
             const stats = await computeUserAggregatedStats();
             const sorted = stats.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 10);
@@ -2543,25 +2662,30 @@ Réponse : B..."></textarea>
             const tbody = document.getElementById('admin-top10-table-body');
             tbody.innerHTML = '';
 
-            sorted.forEach((item, idx) => {
-                const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : '0';
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                        <td><strong>${item.lastname}</strong></td>
-                        <td>${item.firstname}</td>
-                        <td>${item.school}</td>
-                        <td>${item.city}</td>
-                        <td><span class="badge badge-class">${item.class}</span></td>
-                        <td>${item.totalContests}</td>
-                        <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
-                        <td>${avg} / 10</td>
-                    </tr>
-                `;
-            });
-
+            if (sorted.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Aucune donnée disponible.</td></tr>`;
+            } else {
+                sorted.forEach((item, idx) => {
+                    const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : 0;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
+                            <td><strong>${item.lastname}</strong></td>
+                            <td>${item.firstname}</td>
+                            <td>${item.school}</td>
+                            <td>${item.city}</td>
+                            <td><span class="badge badge-class">${item.class}</span></td>
+                            <td>${item.totalContests}</td>
+                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
+                            <td>${avg} / 10</td>
+                        </tr>
+                    `;
+                });
+            }
             document.getElementById('modal-admin-top10').classList.add('active');
         }
+
+        let currentAdminRankMode = 'level';
 
         function openGeneralRankingModalAdmin() {
             switchAdminRankingTab('level');
@@ -2569,6 +2693,7 @@ Réponse : B..."></textarea>
         }
 
         function switchAdminRankingTab(mode) {
+            currentAdminRankMode = mode;
             document.getElementById('btn-admin-rank-mode-level').className = mode === 'level' ? 'btn btn-secondary active' : 'btn btn-secondary';
             document.getElementById('btn-admin-rank-mode-global').className = mode === 'global' ? 'btn btn-secondary active' : 'btn btn-secondary';
             
@@ -2589,22 +2714,26 @@ Réponse : B..."></textarea>
             const tbody = document.getElementById('admin-general-ranking-table-body');
             tbody.innerHTML = '';
 
-            filtered.forEach((item, idx) => {
-                const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : '0';
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                        <td><strong>${item.lastname}</strong></td>
-                        <td>${item.firstname}</td>
-                        <td>${item.school}</td>
-                        <td>${item.city}</td>
-                        <td><span class="badge badge-class">${item.class}</span></td>
-                        <td>${item.totalContests}</td>
-                        <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
-                        <td>${avg} / 10</td>
-                    </tr>
-                `;
-            });
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Aucun élève trouvé pour la classe de ${selectedClass}.</td></tr>`;
+            } else {
+                filtered.forEach((item, idx) => {
+                    const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : 0;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
+                            <td><strong>${item.lastname}</strong></td>
+                            <td>${item.firstname}</td>
+                            <td>${item.school}</td>
+                            <td>${item.city}</td>
+                            <td><span class="badge badge-class">${item.class}</span></td>
+                            <td>${item.totalContests}</td>
+                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
+                            <td>${avg} / 10</td>
+                        </tr>
+                    `;
+                });
+            }
         }
 
         async function renderAdminGlobalRanking() {
@@ -2614,41 +2743,50 @@ Réponse : B..."></textarea>
             const tbody = document.getElementById('admin-general-ranking-table-body');
             tbody.innerHTML = '';
 
-            sorted.forEach((item, idx) => {
-                const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : '0';
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
-                        <td><strong>${item.lastname}</strong></td>
-                        <td>${item.firstname}</td>
-                        <td>${item.school}</td>
-                        <td>${item.city}</td>
-                        <td><span class="badge badge-class">${item.class}</span></td>
-                        <td>${item.totalContests}</td>
-                        <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
-                        <td>${avg} / 10</td>
-                    </tr>
-                `;
-            });
-        }
-
-        async function resetAllData() {
-            if (confirm("ATTENTION : Reinitialiser toutes les données de l'application (Concours, Utilisateurs, Résultats) ?")) {
-                await database.ref().remove();
-                alert("Toutes les données ont été réinitialisées.");
-                location.reload();
+            if (sorted.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Aucune donnée.</td></tr>`;
+            } else {
+                sorted.forEach((item, idx) => {
+                    const avg = item.totalContests > 0 ? (item.totalPoints / item.totalContests).toFixed(1) : 0;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong style="color:var(--civ-orange);">#${idx + 1}</strong></td>
+                            <td><strong>${item.lastname}</strong></td>
+                            <td>${item.firstname}</td>
+                            <td>${item.school}</td>
+                            <td>${item.city}</td>
+                            <td><span class="badge badge-class">${item.class}</span></td>
+                            <td>${item.totalContests}</td>
+                            <td><strong style="color:var(--civ-green);">${item.totalPoints} pts</strong></td>
+                            <td>${avg} / 10</td>
+                        </tr>
+                    `;
+                });
             }
         }
 
         function copyUniqueLink() {
-            const copyText = document.getElementById("unique-share-link");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
+            const linkInput = document.getElementById('unique-share-link');
+            linkInput.select();
+            document.execCommand('copy');
             showToastGreen("Lien copié dans le presse-papier !");
         }
 
-        function openCreatorModal() { document.getElementById('modal-creator').classList.add('active'); }
+        async function resetAllData() {
+            if (confirm("⚠️ Êtes-vous sur de vouloir réinitialiser TOUTES les données de l'application ?")) {
+                await database.ref('contests').remove();
+                await database.ref('results').remove();
+                await database.ref('reviews').remove();
+                await database.ref('resets').remove();
+                await database.ref('subscriptions').remove();
+                showToastGreen("Toutes les données ont été réinitialisées.");
+                renderAdminDashboard();
+            }
+        }
+
+        function openCreatorModal() {
+            document.getElementById('modal-creator').classList.add('active');
+        }
     </script>
 </body>
 </html>
