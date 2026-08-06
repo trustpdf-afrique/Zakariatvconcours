@@ -2069,42 +2069,23 @@ Réponse : B..."></textarea>
 
         // LECTURE VOCALE CONTINU : Question -> Option A -> B -> C -> D
         function playAudioQuestion() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const qData = currentQuiz.questions[currentQuestionIdx];
+                const labels = ['Réponse A', 'Réponse B', 'Réponse C', 'Réponse D'];
+                
+                let textToRead = qData.q + ". ";
+                qData.options.forEach((opt, idx) => {
+                    textToRead += `${labels[idx]} : ${opt}. `;
+                });
 
-    if (!('speechSynthesis' in window)) {
-        alert("Votre navigateur ne prend pas en charge la lecture vocale.");
-        return;
-    }
-
-    if (!currentQuiz || !currentQuiz.questions || !currentQuiz.questions[currentQuestionIdx]) {
-        alert("Impossible de lire cette question.");
-        return;
-    }
-
-    window.speechSynthesis.cancel();
-
-    const qData = currentQuiz.questions[currentQuestionIdx];
-    const labels = ["Réponse A", "Réponse B", "Réponse C", "Réponse D"];
-
-    let textToRead = qData.q + ". ";
-
-    qData.options.forEach((opt, idx) => {
-        textToRead += `${labels[idx]} : ${opt}. `;
-    });
-
-    const utterance = new SpeechSynthesisUtterance(textToRead);
-    utterance.lang = "fr-FR";
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-
-    const voices = window.speechSynthesis.getVoices();
-    const frenchVoice = voices.find(v => v.lang.startsWith("fr"));
-    if (frenchVoice) {
-        utterance.voice = frenchVoice;
-    }
-
-    window.speechSynthesis.speak(utterance);
-        }
-
+                const utterance = new SpeechSynthesisUtterance(textToRead);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            }
+                    }
+        
         // --- AFFICHAGE DE LA CORRECTION DU CONCOURS ---
         function openCorrectionModal() {
             if (!currentQuiz || !currentQuiz.questions) return;
