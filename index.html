@@ -2067,24 +2067,10 @@ Réponse : B..."></textarea>
             }
         }
 
-        // LECTURE VOCALE CONTINU : Question -> Option A -> B -> C -> D
-        function playAudioQuestion() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const qData = currentQuiz.questions[currentQuestionIdx];
-                const labels = ['Réponse A', 'Réponse B', 'Réponse C', 'Réponse D'];
-                
-                let textToRead = qData.q + ". ";
-                qData.options.forEach((opt, idx) => {
-                    textToRead += `${labels[idx]} : ${opt}. `;
-                });
-
-                const utterance = new SpeechSynthesisUtterance(textToRead);
-                utterance.lang = 'fr-FR';
-                utterance.rate = 0.95;
-                window.speechSynthesis.speak(utterance);
-            }
-                    }
+        // LECTURE VOCALE (Temporairement indisponible)
+function playAudioQuestion() {
+    alert("🔊 La lecture vocale sera disponible dans une prochaine mise à jour.\n\nEn attendant, veuillez lire les questions et les réponses directement à l'écran.\n\nMerci pour votre compréhension.");
+}
         
         // --- AFFICHAGE DE LA CORRECTION DU CONCOURS ---
         function openCorrectionModal() {
